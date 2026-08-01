@@ -1,13 +1,13 @@
 ---
 doc_kind: project-material
-status: canonical
+status: deprecated
 version: 2026-08-01_v1
 canonical_path: ~/projects/personal/products/bidpilot/docs/WINNING-STRATEGY_2026-08-01_v1.md
 ---
 
 # BidPilot Winning Strategy
 
-BidPilot을 Snowflake CoCo CLI Hackathon의 B2G Revenue Agent로 출품하기 위한 제품, 시연, 기술 실행, 제출 기준을 고정합니다.
+이 문서는 초기 전략안입니다. 현재 정본은 [Winning Strategy v2](https://docs.svvys.com/projects/personal/products/bidpilot/docs/WINNING-STRATEGY_2026-08-01_v2.md)입니다.
 
 **목차** — 1 Winning thesis · 2 Product experience · 3 Snowflake necessity · 4 Rubric strategy · 5 Demo script · 6 Submission assets · 7 Execution gates · 8 Change history
 
@@ -139,4 +139,5 @@ Do not claim technical execution until the Snowflake run exists. Do not present 
 
 ## 8 Change history
 
+- 2026-08-01 v1: Superseded by [Winning Strategy v2](https://docs.svvys.com/projects/personal/products/bidpilot/docs/WINNING-STRATEGY_2026-08-01_v2.md) after independent product, rubric, architecture, and implementation QA.
 - 2026-08-01 v1: Fixed BidPilot as a Snowflake-native B2G Revenue Agent and defined the winning thesis, rubric proof, demo, assets, and execution gates.
