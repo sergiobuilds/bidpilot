@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en" data-seed-color-mode="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bid Room — Public data quality and API continuity service | BidPilot</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <g id="i-check"><path d="M3.5 8.5 7 12l7.5-7.5"/></g>
+    <g id="i-dot"><circle cx="9" cy="9" r="3.25"/></g>
+    <g id="i-hollow"><circle cx="9" cy="9" r="5.5"/></g>
+    <g id="i-arrow"><path d="M3 9h11.5M10 4.5 14.5 9 10 13.5"/></g>
+    <g id="i-left"><path d="M11 4 6 9l5 5"/></g>
+    <g id="i-right"><path d="M7 4l5 5-5 5"/></g>
+    <g id="i-alert"><path d="M9 2.75 16.5 15.5h-15z"/><path d="M9 7v3.5"/><path d="M9 13h.01"/></g>
+    <g id="i-lock"><rect x="3.5" y="8" width="11" height="7.5" rx="1.5"/><path d="M6 8V5.75a3 3 0 0 1 6 0V8"/></g>
+    <g id="i-doc"><path d="M4.5 2.5h6L14 6v9.5h-9.5z"/><path d="M10.5 2.5V6H14"/><path d="M7 9.5h4M7 12h4"/></g>
+    <g id="i-archive"><rect x="3" y="4" width="12" height="3.5" rx="1"/><path d="M4.25 7.5v6.75a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V7.5"/><path d="M7.5 10.5h3"/></g>
+    <g id="i-replay"><path d="M15 9a6 6 0 1 1-1.9-4.4"/><path d="M15 2.5V6h-3.5"/></g>
+    <g id="i-source"><path d="M2.75 5.25 9 2l6.25 3.25L9 8.5z"/><path d="M2.75 9 9 12.25 15.25 9"/><path d="M2.75 12.5 9 15.75l6.25-3.25"/></g>
+    <g id="i-user"><circle cx="9" cy="6.25" r="2.75"/><path d="M3.75 15.25a5.25 5.25 0 0 1 10.5 0"/></g>
+    <g id="i-scale"><path d="M9 3v12"/><path d="M3.5 6h11"/><path d="M3.5 6 1.5 10.5h4z"/><path d="M14.5 6l-2 4.5h4z"/></g>
+    <g id="i-flag"><path d="M4.5 15.5V3h9l-1.75 3L13.5 9h-9"/></g>
+  </defs>
+</svg>
+
+<a class="bp-skip" href="#bp-main">Skip to bid room</a>
+
+<header class="bp-appbar">
+  <div class="bp-appbar__inner">
+    <div class="bp-brand">
+      <span class="bp-brand__mark" aria-hidden="true"></span>
+      <span class="bp-brand__name">BidPilot</span>
+      <span class="bp-brand__sep" aria-hidden="true"></span>
+      <span class="bp-brand__ctx">Bid Room</span>
+    </div>
+
+    <dl class="bp-runid" aria-label="Saved run identity">
+      <div class="bp-runid__pair">
+        <dt>Run</dt>
+        <dd id="runIdShort">7c41e2b9</dd>
+      </div>
+      <div class="bp-runid__pair">
+        <dt>Opportunity version</dt>
+        <dd>fixture:G2B-REPLAY-DATA-QUALITY:v1</dd>
+      </div>
+      <div class="bp-runid__pair">
+        <dt>Policy</dt>
+        <dd>2026-08-02.v1</dd>
+      </div>
+    </dl>
+
+    <div class="bp-appbar__actions">
+      <button type="button" class="seed-action-button seed-action-button--variant_ghost seed-action-button--size_small seed-action-button--size_small-layout_withText bp-btn-oninverse" id="replayTop">
+        <svg class="bp-i" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-replay"/></svg>
+        Replay saved run
+      </button>
+      <button type="button" class="seed-action-button seed-action-button--variant_brandSolid seed-action-button--size_small seed-action-button--size_small-layout_withText" id="primaryTop" data-primary>
+        <span data-primary-label>Build proposal from selected strategy</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="bp-main">
+
+  <!-- ══ ROOM HEADER + SOURCE SNAPSHOT ══ -->
+  <section class="bp-room" aria-labelledby="roomTitle" style="--i:0">
+    <div class="bp-wrap bp-room__inner">
+      <div class="bp-room__lead">
+        <p class="bp-eyebrow">Saved bid room · G2B-REPLAY-DATA-QUALITY</p>
+        <h1 class="bp-room__title" id="roomTitle">Public data quality and API&nbsp;continuity service</h1>
+        <p class="bp-room__objective">Improve public-data reliability while keeping citizen-facing APIs stable.</p>
+        <ul class="bp-snapshot" aria-label="Source snapshot and selected supplier">
+          <li>
+            <svg class="bp-i" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-source"/></svg>
+            <span class="bp-snapshot__k">Source snapshot</span>
+            <span class="bp-snapshot__v">Fixture tender record · no document retrieved</span>
+          </li>
+          <li>
+            <svg class="bp-i" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-user"/></svg>
+            <span class="bp-snapshot__k">Supplier profile</span>
+            <span class="bp-snapshot__v">Northstar Systems <span class="bp-dim">supplier-northstar</span></span>
+          </li>
+          <li>
+            <svg class="bp-i" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-scale"/></svg>
+            <span class="bp-snapshot__k">Planned effort</span>
+            <span class="bp-snapshot__v">720 h required · 900 h available</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bp-room__status">
+        <p class="bp-eyebrow">Pursuit status</p>
+        <p class="bp-verdict" id="verdictWord">PURSUE</p>
+        <p class="bp-verdict__note">All eligibility and capacity gates passed under policy 2026-08-02.v1. Proposal generation is unlocked.</p>
+        <span class="seed-badge__root seed-badge__root--size_medium seed-badge__root--variant_weak seed-badge__root--tone_positive">
+          <span class="seed-badge__label">Drafting unlocked</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ STAGE NAVIGATOR ══ -->
+  <nav class="bp-rail" aria-label="Bid room stages" style="--i:1">
+    <div class="bp-wrap">
+      <!-- desktop / tablet: full ledger spine -->
+      <ol class="bp-stages" id="stageList">
+        <li class="bp-stage" data-state="complete">
+          <button type="button" class="bp-stage__btn" data-stage="0" data-target="sec-source">
+            <span class="bp-stage__top"><span class="bp-stage__n">01</span><svg class="bp-i bp-stage__ico" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-check"/></svg></span>
+            <span class="bp-stage__name">Intake</span>
+            <span class="bp-stage__state"><b class="bp-stage__sw">Complete</b><span class="bp-stage__sd"> · tender record versioned</span></span>
+          </button>
+        </li>
+        <li class="bp-stage" data-state="complete">
+          <button type="button" class="bp-stage__btn" data-stage="1" data-target="sec-decision">
+            <span class="bp-stage__top"><span class="bp-stage__n">02</span><svg class="bp-i bp-stage__ico" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-check"/></svg></span>
+            <span class="bp-stage__name">Qualify</span>
+            <span class="bp-stage__state"><b class="bp-stage__sw">Complete</b><span class="bp-stage__sd"> · PURSUE</span></span>
+          </button>
+        </li>
+        <li class="bp-stage" data-state="active">
+          <button type="button" class="bp-stage__btn" data-stage="2" data-target="sec-position" aria-current="step">
+            <span class="bp-stage__top"><span class="bp-stage__n">03</span><svg class="bp-i bp-stage__ico" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-dot"/></svg></span>
+            <span class="bp-stage__name">Position</span>
+            <span class="bp-stage__state"><b class="bp-stage__sw">Active</b><span class="bp-stage__sd"> · 1 of 3 selected</span></span>
+          </button>
+        </li>
+        <li class="bp-stage" data-state="complete">
+          <button type="button" class="bp-stage__btn" data-stage="3" data-target="sec-draft">
+            <span class="bp-stage__top"><span class="bp-stage__n">04</span><svg class="bp-i bp-stage__ico" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-check"/></svg></span>
+            <span class="bp-stage__name">Draft</span>
+            <span class="bp-stage__state"><b class="bp-stage__sw">Complete</b><span class="bp-stage__sd"> · 4 of 4 sections</span></span>
+          </button>
+        </li>
+        <li class="bp-stage" data-state="complete">
+          <button type="button" class="bp-stage__btn" data-stage="4" data-target="sec-redteam">
+            <span class="bp-stage__top"><span class="bp-stage__n">05</span><svg class="bp-i bp-stage__ico" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-check"/></svg></span>
+            <span class="bp-stage__name">Review</span>
+            <span class="bp-stage__state"><b class="bp-stage__sw">Complete</b><span class="bp-stage__sd"> · 0 open findings</span></span>
+          </button>
+        </li>
+        <li class="bp-stage" data-state="pending">
+          <button type="button" class="bp-stage__btn" data-stage="5" data-target="sec-tasks">
+            <span class="bp-stage__top"><span class="bp-stage__n">06</span><svg class="bp-i bp-stage__ico" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-hollow"/></svg></span>
+            <span class="bp-stage__name">Assign</span>
+            <span class="bp-stage__state"><b class="bp-stage__sw">Pending</b><span class="bp-stage__sd"> · 4 owned tasks open</span></span>
+          </button>
+        </li>
+      </ol>
+
+      <!-- mobile: compact progress control -->
+      <div class="bp-railc" role="group" aria-label="Bid room stage progress">
+        <button type="button" class="seed-action-button seed-action-button--variant_neutralOutline seed-action-button--size_small seed-action-button--size_small-layout_iconOnly" id="stagePrev" aria-label="Previous stage">
+          <svg class="bp-i" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-left"/></svg>
+        </button>
+        <div class="bp-railc__body">
+          <p class="bp-railc__meta"><span id="railcIndex">Stage 3 of 6</span> · <span id="railcState">Active</span></p>
+          <p class="bp-railc__name" id="railcName" aria-live="polite">Position</p>
+          <div class="bp-railc__meter" role="img" aria-label="3 of 6 stages reached">
+            <span class="bp-railc__fill" id="railcFill" style="width:50%"></span>
+          </div>
+        </div>
+        <button type="button" class="seed-action-button seed-action-button--variant_neutralOutline seed-action-button--size_small seed-action-button--size_small-layout_iconOnly" id="stageNext" aria-label="Next stage">
+          <svg class="bp-i" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-right"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══ EXECUTION STRIP ══ -->
+  <section class="bp-wrap bp-strip" aria-label="Run continuity summary" style="--i:2">
+    <article class="bp-tile">
+      <p class="bp-eyebrow">Selected Win Position</p>
+      <p class="bp-tile__v" id="tilePosition">Technical approach</p>
+      <p class="bp-tile__s" id="tilePositionSub">Targets Technical approach · Comparable delivery</p>
+    </article>
+    <article class="bp-tile">
+      <p class="bp-eyebrow">Proposal draft</p>
+      <p class="bp-tile__v" id="tileDraft">4 / 4 <span class="bp-tile__u">criterion sections</span></p>
+      <p class="bp-tile__s" id="tileDraftSub">Strategy-led draft written from the selected position</p>
+    </article>
+    <article class="bp-tile">
+      <p class="bp-eyebrow">Open red-team findings</p>
+      <p class="bp-tile__v" id="tileFindings">0 <span class="bp-tile__u">open</span></p>
+      <p class="bp-tile__s" id="tileFindingsSub">4 score-bearing checks passed</p>
+    </article>
+    <article class="bp-tile">
+      <p class="bp-eyebrow">Owned tasks</p>
+      <p class="bp-tile__v" id="tileTasks">4 <span class="bp-tile__u">open</span></p>
+      <p class="bp-tile__s" id="tileTasksSub">Solution lead 2 · Bid manager 2</p>
+    </article>
+  </section>
+
+  <div class="bp-wrap bp-cols">
+
+    <!-- ══════════ MAIN COLUMN ══════════ -->
+    <div class="bp-main">
+
+      <!-- 01 pursuit decision -->
+      <section class="bp-card" id="sec-decision" aria-labelledby="h-decision" style="--i:3">
+        <header class="bp-card__head">
+          <p class="bp-eyebrow">Stage 02 · Qualify</p>
+          <h2 class="bp-h" id="h-decision">Pursuit decision</h2>
+          <p class="bp-card__sub">Deterministic gates from policy <b>2026-08-02.v1</b>. Any missing credential or capacity gap returns NO-GO.</p>
+        </header>
+        <ul class="bp-gates">
+          <li class="bp-gate" data-tone="positive">
+            <div class="bp-gate__head">
+              <span class="bp-gate__name">Eligibility</span>
+              <span class="seed-badge__root seed-badge__root--size_medium seed-badge__root--variant_weak seed-badge__root--tone_positive"><span class="seed-badge__label">Pass</span></span>
+            </div>
+            <p class="bp-gate__obs">0 missing of 2 required credentials</p>
+            <p class="bp-gate__detail">SME confirmation · Information-system maintenance certificate</p>
+          </li>
+          <li class="bp-gate" data-tone="positive">
+            <div class="bp-gate__head">
+              <span class="bp-gate__name">Capacity</span>
+              <span class="seed-badge__root seed-badge__root--size_medium seed-badge__root--variant_weak seed-badge__root--tone_positive"><span class="seed-badge__label">Pass</span></span>
+            </div>
+            <p class="bp-gate__obs">0 h gap</p>
+            <p class="bp-gate__detail">900 h available covers 720 h of planned delivery</p>
+          </li>
+          <li class="bp-gate" data-tone="neutral">
+            <div class="bp-gate__head">
+              <span class="bp-gate__name">Commercial fit</span>
+              <span class="seed-badge__root seed-badge__root--size_medium seed-badge__root--variant_weak seed-badge__root--tone_neutral"><span class="seed-badge__label">Not evaluated</span></span>
+            </div>
+            <p class="bp-gate__obs">No margin gate on this record</p>
+            <p class="bp-gate__detail">Price is a 10-point evaluation criterion answered in the blueprint. This tender record carries no contract value, so no margin policy runs.</p>
+          </li>
+          <li class="bp-gate" data-tone="positive">
+            <div class="bp-gate__head">
+              <span class="bp-gate__name">Evidence strength</span>
+              <span class="seed-badge__root seed-badge__root--size_medium seed-badge__root--variant_weak seed-badge__root--tone_positive"><span class="seed-badge__label">Pass</span></span>
+            </div>
+            <p class="bp-gate__obs">2 comparable delivery records</p>
+            <p class="bp-gate__detail">Matched on public-data, data-quality, api-operations</p>
+          </li>
+        </ul>
+        <ol class="bp-nextactions" aria-label="Next actions">
+          <li>Select a Win Position.</li>
+          <li>Assign the proposal blueprint owners.</li>
+        </ol>
+      </section>
+
+      <!-- 02 win position -->
+      <section class="bp-card bp-card--active" id="sec-position" aria-labelledby="h-position" style="--i:4">
+        <header class="bp-card__head">
+          <p class="bp-eyebrow bp-eyebrow--brand">Stage 03 · Position — active</p>
+          <h2 class="bp-h" id="h-position">Win Position</h2>
+          <p class="bp-card__sub">Selecting a position rewrites every blueprint claim, the draft, and the saved-run match. Use the arrow keys to move between positions.</p>
+        </header>
+
+        <div class="bp-choices" role="radiogroup" aria-labelledby="h-position" id="positionGroup">
+          <button type="button" role="radio" aria-checked="true" class="bp-choice" data-pos="0" tabindex="0">
+            <span class="bp-choice__mark" aria-hidden="true"></span>
+            <span class="bp-choice__body">
+              <span class="bp-choice__title">Technical approach</span>
+              <span class="bp-choice__targets">Technical approach&nbsp;40 · Comparable delivery&nbsp;30</span>
+              <span class="bp-choice__cover">70 / 100 points targeted</span>
+            </span>
+          </button>
+          <button type="button" role="radio" aria-checked="false" class="bp-choice" data-pos="1" tabindex="-1">
+            <span class="bp-choice__mark" aria-hidden="true"></span>
+            <span class="bp-choice__body">
+              <span class="bp-choice__title">Operational continuity</span>
+              <span class="bp-choice__targets">Comparable delivery&nbsp;30 · Delivery team&nbsp;20</span>
+              <span class="bp-choice__cover">50 / 100 points targeted</span>
+            </span>
+          </button>
+          <button type="button" role="radio" aria-checked="false" class="bp-choice" data-pos="2" tabindex="-1">
+            <span class="bp-choice__mark" aria-hidden="true"></span>
+            <span class="bp-choice__body">
+              <span class="bp-choice__title">Delivery team</span>
+              <span class="bp-choice__targets">Delivery team&nbsp;20 · Price&nbsp;10</span>
+              <span class="bp-choice__cover">30 / 100 points targeted</span>
+            </span>
+          </button>
+        </div>
+        <p class="bp-footnote">The pursuit generator returns two positions for this tender. The third is extended by the same criterion-rotation rule and is shown here to complete the selectable set.</p>
+
+        <div class="bp-selected" aria-live="polite">
+          <p class="bp-eyebrow">Position statement</p>
+          <p class="bp-statement" id="posStatement">Win technical approach with City Open Data Reliability Program, Citizen API Service Transition: Northstar Systems will deliver a measured data-quality improvement and a maintained api operating model.</p>
+
+          <p class="bp-eyebrow bp-mt">Proof cards from the selected supplier profile</p>
+          <ul class="bp-proofs">
+            <li class="bp-proof">
+              <span class="seed-badge__root seed-badge__root--size_medium seed-badge__root--variant_outline seed-badge__root--tone_neutral"><span class="seed-badge__label">Past project</span></span>
+              <p class="bp-proof__label">City Open Data Reliability Program</p>
+              <p class="bp-proof__detail">Reduced recurring data defects and introduced API change control.</p>
+            </li>
+            <li class="bp-proof">
+              <span class="seed-badge__root seed-badge__root--size_medium seed-badge__root--variant_outline seed-badge__root--tone_neutral"><span class="seed-badge__label">Past project</span></span>
+              <p class="bp-proof__label">Citizen API Service Transition</p>
+              <p class="bp-proof__detail">Transferred API support without a public-service interruption.</p>
+            </li>
+            <li class="bp-proof">
+              <span class="seed-badge__root seed-badge__root--size_medium seed-badge__root--variant_outline seed-badge__root--tone_neutral"><span class="seed-badge__label">Credential</span></span>
+              <p class="bp-proof__label">SME confirmation</p>
+              <p class="bp-proof__detail">Available in the selected supplier profile</p>
+            </li>
+          </ul>
+
+          <div class="bp-weak" id="posWeak">
+            <div class="seed-callout__root seed-callout__root--tone_positive">
+              <svg class="bp-i bp-i--20" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-check"/></svg>
+              <div class="seed-callout__content">
+                <span class="seed-callout__title seed-callout__title--tone_positive">No recorded weakness.</span>
+                <span class="seed-callout__description seed-callout__description--tone_positive">Two directly comparable delivery records were matched, so the generator recorded no weakness and no mitigation for this position.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 score map -->
+      <section class="bp-card" id="sec-scoremap" aria-labelledby="h-scoremap" style="--i:5">
+        <header class="bp-card__head">
+          <p class="bp-eyebrow">Official evaluation criteria</p>
+          <h2 class="bp-h" id="h-scoremap">Evaluation score map</h2>
+          <p class="bp-card__sub">Published weights from the tender notice. Coverage reflects the criteria targeted by the selected Win Position.</p>
+        </header>
+        <ul class="bp-score" id="scoreMap">
+          <li class="bp-score__row" data-crit="Technical approach">
+            <span class="bp-score__name">Technical approach</span>
+            <span class="bp-score__meter"><span class="bp-score__fill" style="width:40%"></span></span>
+            <span class="bp-score__w">40<span class="bp-score__u">pts</span></span>
+            <span class="bp-score__cov" data-cov></span>
+          </li>
+          <li class="bp-score__row" data-crit="Comparable delivery">
+            <span class="bp-score__name">Comparable delivery</span>
+            <span class="bp-score__meter"><span class="bp-score__fill" style="width:30%"></span></span>
+            <span class="bp-score__w">30<span class="bp-score__u">pts</span></span>
+            <span class="bp-score__cov" data-cov></span>
+          </li>
+          <li class="bp-score__row" data-crit="Delivery team">
+            <span class="bp-score__name">Delivery team</span>
+            <span class="bp-score__meter"><span class="bp-score__fill" style="width:20%"></span></span>
+            <span class="bp-score__w">20<span class="bp-score__u">pts</span></span>
+            <span class="bp-score__cov" data-cov></span>
+          </li>
+          <li class="bp-score__row" data-crit="Price">
+            <span class="bp-score__name">Price</span>
+            <span class="bp-score__meter"><span class="bp-score__fill" style="width:10%"></span></span>
+            <span class="bp-score__w">10<span class="bp-score__u">pts</span></span>
+            <span class="bp-score__cov" data-cov></span>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- ══════════ COMPANION COLUMN ══════════ -->
+    <aside class="bp-aside" aria-label="Run activity and ownership">
+
+      <section class="bp-card bp-card--tight" id="sec-source" aria-labelledby="h-trace" style="--i:4">
+        <header class="bp-card__head">
+          <p class="bp-eyebrow">Companion</p>
+          <h2 class="bp-h bp-h--sm" id="h-trace">Run activity</h2>
+        </header>
+
+        <div class="seed-segmented-control__root bp-seg" role="tablist" aria-label="Run activity view" style="--segment-count:2;--segment-index:0" id="asideSeg">
+          <span class="seed-segmented-control__indicator" aria-hidden="true"></span>
+          <button type="button" role="tab" id="tab-trace" aria-controls="panel-trace" aria-selected="true" class="seed-segmented-control__item" data-checked data-seg="0">Run trace</button>
+          <button type="button" role="tab" id="tab-tasks" aria-controls="panel-tasks" aria-selected="false" tabindex="-1" class="seed-segmented-control__item" data-seg="1">Task ownership</button>
+        </div>
+
+        <div id="panel-trace" role="tabpanel" aria-labelledby="tab-trace" tabindex="0" class="bp-panel">
+          <div class="seed-inline-banner__root seed-inline-banner__root--variant_neutralWeak bp-provenance">
+            <svg class="bp-i" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-lock"/></svg>
+            <div class="seed-inline-banner__content">
+              <span class="seed-inline-banner__title seed-inline-banner__title--variant_neutralWeak">Local development adapter.</span>
+              <span class="seed-inline-banner__description seed-inline-banner__description--variant_neutralWeak">These steps were recorded on this machine. No authenticated Snowflake or CoCo execution has occurred.</span>
+            </div>
+          </div>
+          <ol class="bp-trace">
+            <li class="bp-trace__step"><span class="bp-trace__k">pursuit</span><span class="bp-trace__v">Policy 2026-08-02.v1 returned PURSUE</span></li>
+            <li class="bp-trace__step"><span class="bp-trace__k">strategy</span><span class="bp-trace__v" id="traceStrategy">Win Position bound: Technical approach</span></li>
+            <li class="bp-trace__step" data-step="proposal"><span class="bp-trace__k">proposal</span><span class="bp-trace__v">Strategy-led markdown written for 4 weighted criteria</span></li>
+            <li class="bp-trace__step" data-step="red-team"><span class="bp-trace__k">red-team</span><span class="bp-trace__v">4 score-bearing sections reviewed, 0 findings</span></li>
+            <li class="bp-trace__step" data-step="task-plan"><span class="bp-trace__k">task-plan</span><span class="bp-trace__v">4 criterion tasks created and owned</span></li>
+          </ol>
+        </div>
+
+        <div id="panel-tasks" role="tabpanel" aria-labelledby="tab-tasks" tabindex="0" class="bp-panel" hidden>
+          <div id="tasksHost">
+          <ul class="bp-tasks" id="sec-tasks">
+            <li class="seed-list-item__root bp-task">
+              <span class="seed-list-item__content">
+                <span class="seed-list-item__title">Develop Technical approach response</span>
+                <span class="seed-list-item__detail">Solution lead · 40 pts</span>
+              </span>
+              <span class="seed-list-item__suffix"><span class="seed-badge__root seed-badge__root--size_medium seed-badge__root--variant_weak seed-badge__root--tone_warning"><span class="seed-badge__label">Open</span></span></span>
+            </li>
+            <li class="seed-list-item__root bp-task">
+              <span class="seed-list-item__content">
+                <span class="seed-list-item__title">Develop Comparable delivery response</span>
+                <span class="seed-list-item__detail">Solution lead · 30 pts</span>
+              </span>
+              <span class="seed-list-item__suffix"><span class="seed-badge__root seed-badge__root--size_medium seed-badge__root--variant_weak seed-badge__root--tone_warning"><span class="seed-badge__label">Open</span></span></span>
+            </li>
+            <li class="seed-list-item__root bp-task">
+              <span class="seed-list-item__content">
+                <span class="seed-list-item__title">Develop Delivery team response</span>
+                <span class="seed-list-item__detail">Bid manager · 20 pts</span>
+              </span>
+              <span class="seed-list-item__suffix"><span class="seed-badge__root seed-badge__root--size_medium seed-badge__root--variant_weak seed-badge__root--tone_warning"><span class="seed-badge__label">Open</span></span></span>
+            </li>
+            <li class="seed-list-item__root bp-task">
+              <span class="seed-list-item__content">
+                <span class="seed-list-item__title">Develop Price response</span>
+                <span class="seed-list-item__detail">Bid manager · 10 pts</span>
+              </span>
+              <span class="seed-list-item__suffix"><span class="seed-badge__root seed-badge__root--size_medium seed-badge__root--variant_weak seed-badge__root--tone_warning"><span class="seed-badge__label">Open</span></span></span>
+            </li>
+          </ul>
+          <p class="bp-footnote">Task ownership comes from the blueprint. Criteria weighted 30 or more are owned by the Solution lead.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="bp-card bp-card--tight" aria-labelledby="h-saved" style="--i:6">
+        <header class="bp-card__head">
+          <p class="bp-eyebrow">Stage 06 · persisted run</p>
+          <h2 class="bp-h bp-h--sm" id="h-saved">Saved run</h2>
+        </header>
+        <div id="savedRun" aria-live="polite"></div>
+        <p class="bp-replaystatus" id="replayStatus" role="status"></p>
+      </section>
+
+      <section class="bp-card bp-card--tight" aria-labelledby="h-stagesum" style="--i:8">
+        <header class="bp-card__head">
+          <p class="bp-eyebrow">Continuity</p>
+          <h2 class="bp-h bp-h--sm" id="h-stagesum">Stage summary</h2>
+        </header>
+        <dl class="bp-stagesum">
+          <div><dt>Completed</dt><dd id="sumComplete">Intake, Qualify, Draft, Review — 4 of 6</dd></div>
+          <div><dt>Active</dt><dd id="sumActive">Position — 1 of 3 selected</dd></div>
+          <div><dt>Pending</dt><dd id="sumPending">Assign — 4 owned tasks still open</dd></div>
+        </dl>
+      </section>
+    </aside>
+  </div>
+
+  <!-- ══ OUTPUT BAND — full width below the workbench columns ══ -->
+  <div class="bp-wrap bp-band">
+      <section class="bp-card" id="sec-blueprint" aria-labelledby="h-blueprint" style="--i:6">
+        <header class="bp-card__head">
+          <p class="bp-eyebrow">Criterion → claim → owner</p>
+          <h2 class="bp-h" id="h-blueprint">Proposal blueprint</h2>
+          <p class="bp-card__sub">Every claim is prefixed with the selected Win Position, so switching position rewrites the whole blueprint.</p>
+        </header>
+        <div class="bp-tablewrap">
+          <table class="bp-table" id="blueprintTable">
+            <caption class="bp-sr">Proposal blueprint rows: criterion, weight, claim, delivery assets, and proposal owner</caption>
+            <thead>
+              <tr>
+                <th scope="col">Criterion</th>
+                <th scope="col" class="bp-num">Weight</th>
+                <th scope="col">Claim</th>
+                <th scope="col">Delivery assets</th>
+                <th scope="col">Owner</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    <div class="bp-band__split">
+      <section class="bp-card" id="sec-draft" aria-labelledby="h-draft" style="--i:7">
+        <header class="bp-card__head bp-card__head--split">
+          <div>
+            <p class="bp-eyebrow">Stage 04 · Draft</p>
+            <h2 class="bp-h" id="h-draft">Generated draft preview</h2>
+            <p class="bp-card__sub">Markdown written by the strategy proposal writer from this exact Pursuit Brief.</p>
+          </div>
+          <span class="seed-badge__root seed-badge__root--size_large seed-badge__root--variant_weak seed-badge__root--tone_neutral"><span class="seed-badge__label" id="draftBadge">14 sections</span></span>
+        </header>
+        <div class="bp-draft">
+          <div class="bp-draft__bar">
+            <svg class="bp-i" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-doc"/></svg>
+            <span id="draftFile">bidpilot-strategy-proposal.md</span>
+            <span class="bp-draft__len" id="draftLen">read-only preview</span>
+          </div>
+          <pre class="bp-draft__body" id="draftBody" tabindex="0" role="region" aria-label="Proposal draft preview, scrollable"></pre>
+        </div>
+      </section>
+      <section class="bp-card" id="sec-redteam" aria-labelledby="h-redteam" style="--i:8">
+        <header class="bp-card__head">
+          <p class="bp-eyebrow">Stage 05 · Review</p>
+          <h2 class="bp-h" id="h-redteam">Red-team findings</h2>
+          <p class="bp-card__sub">The reviewer re-reads only score-bearing sections through the same evaluation matrix.</p>
+        </header>
+
+        <div class="seed-callout__root seed-callout__root--tone_positive bp-mb">
+          <svg class="bp-i bp-i--20" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-check"/></svg>
+          <div class="seed-callout__content">
+            <span class="seed-callout__title seed-callout__title--tone_positive">0 open findings.</span>
+            <span class="seed-callout__description seed-callout__description--tone_positive">Every score-bearing section carries a selected supplier asset, and both high-weight sections carry validation and buyer-outcome detail.</span>
+          </div>
+        </div>
+
+        <ul class="bp-checks">
+          <li class="bp-check">
+            <svg class="bp-i bp-check__ico" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-check"/></svg>
+            <div>
+              <p class="bp-check__t">Technical approach <span class="bp-dim">40 pts · high weight</span></p>
+              <p class="bp-check__d">Section present, asset linked, validation and buyer outcome recorded.</p>
+            </div>
+          </li>
+          <li class="bp-check">
+            <svg class="bp-i bp-check__ico" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-check"/></svg>
+            <div>
+              <p class="bp-check__t">Comparable delivery <span class="bp-dim">30 pts · high weight</span></p>
+              <p class="bp-check__d">Section present, asset linked, validation and buyer outcome recorded.</p>
+            </div>
+          </li>
+          <li class="bp-check">
+            <svg class="bp-i bp-check__ico" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-check"/></svg>
+            <div>
+              <p class="bp-check__t">Delivery team <span class="bp-dim">20 pts</span></p>
+              <p class="bp-check__d">Section present and linked to Mina Lee, Jun Park.</p>
+            </div>
+          </li>
+          <li class="bp-check">
+            <svg class="bp-i bp-check__ico" viewBox="0 0 18 18" aria-hidden="true"><use href="#i-check"/></svg>
+            <div>
+              <p class="bp-check__t">Price <span class="bp-dim">10 pts</span></p>
+              <p class="bp-check__d">Section present and linked to 900 available hours.</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </div>
+      <section class="bp-card" id="sec-states" aria-labelledby="h-states" style="--i:9">
+        <header class="bp-card__head">
+          <p class="bp-eyebrow">Reference specimens</p>
+          <h2 class="bp-h" id="h-states">Screen states</h2>
+          <p class="bp-card__sub">Each specimen is produced by the same policy and writer, driven by a different tender and supplier pairing.</p>
+        </header>
+
+        <div class="bp-chiprow" role="radiogroup" aria-labelledby="h-states" id="stateGroup">
+          <button type="button" role="radio" aria-checked="true" tabindex="0" data-state-key="ready" class="seed-control-chip seed-control-chip--size_small seed-control-chip--size_small-layout_withText" data-checked>Ready</button>
+          <button type="button" role="radio" aria-checked="false" tabindex="-1" data-state-key="loading" class="seed-control-chip seed-control-chip--size_small seed-control-chip--size_small-layout_withText">Loading</button>
+          <button type="button" role="radio" aria-checked="false" tabindex="-1" data-state-key="empty" class="seed-control-chip seed-control-chip--size_small seed-control-chip--size_small-layout_withText">Empty</button>
+          <button type="button" role="radio" aria-checked="false" tabindex="-1" data-state-key="review" class="seed-control-chip seed-control-chip--size_small seed-control-chip--size_small-layout_withText">REVIEW</button>
+          <button type="button" role="radio" aria-checked="false" tabindex="-1" data-state-key="nogo" class="seed-control-chip seed-control-chip--size_small seed-control-chip--size_small-layout_withText">NO-GO</button>
+        </div>
+
+        <div class="bp-specimen" id="specimen" aria-live="polite"></div>
+      </section>
+  </div>
+
+  <footer class="bp-foot">
+    <div class="bp-wrap bp-foot__inner">
+      <p>Bid Room <span id="runIdFull">7c41e2b9-3d0a-4f61-9b52-8e07a1c4d6f2</span></p>
+      <p>Opportunity fixture:G2B-REPLAY-DATA-QUALITY:v1 · supplier-northstar · policy 2026-08-02.v1</p>
+    </div>
+  </footer>
+</main>
+
+<div class="bp-dock">
+  <div class="bp-dock__meta">
+    <span class="bp-dock__k" id="dockLabel">Technical approach</span>
+    <span class="bp-dock__v" id="dockState">Saved run matched</span>
+  </div>
+  <button type="button" class="seed-action-button seed-action-button--variant_brandSolid seed-action-button--size_medium seed-action-button--size_medium-layout_withText bp-dock__btn" data-primary>
+    <span data-primary-label>Build proposal</span>
+  </button>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
