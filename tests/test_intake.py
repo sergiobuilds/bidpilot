@@ -76,3 +76,20 @@ def test_reviewed_snapshot_requires_tags_hours_and_outcome_before_bid_room() -> 
     assert tender["tags"] == ["public-data", "data-quality"]
     with pytest.raises(TenderIntakeError, match="scope tag"):
         build_pursuit_tender(snapshot, tags=(), delivery_hours=720, promised_outcome="Outcome")
+
+
+def test_korean_percentage_evaluation_matrix_is_extracted() -> None:
+    snapshot = intake_tender_bytes(
+        """대전광역시 공고
+용역개요 정보시스템 DB 오류개선 및 오픈API 유지보수
+평가 비중은 기술능력평가 90%(정량적 평가 20%, 정성적 평가 70%), 입찰가격평가 10%로 합니다.
+""".encode(),
+        content_type="text/plain",
+    )
+
+    assert snapshot.tender["evaluation_criteria"] == (
+        {"name": "기술능력평가", "weight": 90},
+        {"name": "정량적 평가", "weight": 20},
+        {"name": "정성적 평가", "weight": 70},
+        {"name": "입찰가격평가", "weight": 10},
+    )
