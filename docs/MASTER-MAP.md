@@ -8,7 +8,7 @@ authority_model: v2
 
 # BidPilot 프로젝트 지도
 
-기업의 RFP와 B2G 공고를 검증하고, 제안서 작성 시작 패킷까지 만드는 해커톤 프로젝트의 정본입니다.
+Snowflake 안에서 B2G 공고를 winning bid strategy와 제안서 초안으로 전환하는 해커톤 프로젝트의 정본입니다.
 
 **목차**: 1 Project Charter · 2 Current Map · 3 Confirmed Scope · 4 Work Tree · 5 Open / Unconfirmed · 6 Canonical Documents · 7 Status · 8 변경 이력
 
@@ -16,30 +16,30 @@ authority_model: v2
 
 ### 1.1 목적
 
-BidPilot은 RFP와 B2G 공고를 회사의 자격, 역량, 인력, 단가, 일정과 함께 분석합니다. 참여 가능성이 확인된 건은 제안 업무 또는 Grant Proposal Engine용 Proposal Start Packet으로 전환합니다.
+BidPilot은 외부 B2G 공고와 회사의 자격, 역량, 인력, 단가, 일정, 과거 수행을 결합합니다. 결과는 pursuit decision, win strategy, editable proposal draft, proposal work plan입니다.
 
 ### 1.2 최종 산출물
 
-1. Snowflake에 적재된 RFP와 회사 운영 데이터
-2. CoCo CLI를 사용한 데이터 및 애플리케이션 작업 증거
-3. 참여 여부, 예상 마진, 수행 위험을 보여주는 Python 기반 판단 흐름
-4. 입력부터 작업 생성까지 실행되는 Streamlit 프로토타입
+1. Snowflake에 적재된 B2G 공고와 회사 운영 데이터
+2. CoCo CLI가 공고와 운영 데이터를 결합한 작업 증거
+3. pursuit decision과 win strategy를 만드는 Python·Snowpark 흐름
+4. 공고 입력부터 editable proposal draft와 작업 생성까지 실행되는 Streamlit 프로토타입
 5. 영어 발표자료, 소스코드, 재현 절차, 시연 영상
 
 ### 1.3 성공 조건
 
 | 공식 심사 항목 | 목표 증거 |
 |---|---|
-| 현실 적합성 30% | 실제 입찰 담당자, 검토 시간, 저수익 수주와 마감 누락 비용을 명시합니다. |
-| 기술 실행 40% | CoCo CLI, Snowflake, Python, Snowpark를 핵심 처리 경로에서 사용합니다. |
-| 솔루션 완성도 30% | RFP 입력, 판단, 승인, 작업 생성까지 한 번에 시연합니다. |
+| 현실 적합성 30% | 실제 B2G 공고에서 pursuit decision과 기술평가 승리 전략을 만듭니다. |
+| 기술 실행 40% | CoCo CLI, Snowflake, Python, Snowpark가 공고와 회사 운영 데이터를 결합합니다. |
+| 솔루션 완성도 30% | 공고 입력, pursuit decision, win strategy, proposal draft, 작업 생성까지 한 번에 시연합니다. |
 
 ### 1.4 가드레일
 
 1. 내부 마감은 2026년 8월 2일로 고정합니다.
 2. 실제 고객 자료, 감사 자료, 비공개 업무자료를 사용하지 않습니다.
 3. 합성 데이터 또는 공개 사용이 허용된 자료만 사용합니다.
-4. 데이터 검증, 출처 추적, 범용 대시보드를 제품 주제로 삼지 않습니다.
+4. 공고 검증과 데이터 결합은 내부 신뢰성 계층으로 두고 제품의 headline으로 삼지 않습니다.
 5. CoCo CLI와 Snowflake가 핵심 가치 경로에서 실제로 작동해야 합니다.
 
 ### 1.5 명시적 비목표
@@ -53,7 +53,7 @@ BidPilot은 RFP와 B2G 공고를 회사의 자격, 역량, 인력, 단가, 일�
 
 | 축 | 현재 상태 | 정본 포인터 |
 |---|---|---|
-| 제품 | RFP 참여 판단 및 제안 업무 실행 Agent로 확정 | [CHRONICLE.md](CHRONICLE.md) |
+| 제품 | Snowflake-native B2G Revenue Agent로 확정 | [CHRONICLE.md](CHRONICLE.md) |
 | 대회 | Snowflake CoCo CLI Hackathon 2026 | [CHRONICLE.md](CHRONICLE.md) |
 | 문제 영역 | Intelligent Workflow Automation Agent | [CHRONICLE.md](CHRONICLE.md) |
 | 저장소 | 비공개 GitHub 저장소 생성 | `sergiobuilds/bidpilot` |
@@ -103,6 +103,7 @@ BidPilot은 RFP와 B2G 공고를 회사의 자격, 역량, 인력, 단가, 일�
 |---|---|---|
 | [MASTER-MAP.md](MASTER-MAP.md) | project-map | 목적, 범위, Work Tree, 상태의 유일한 정본 |
 | [CHRONICLE.md](CHRONICLE.md) | project-decision | append-only 결정 기록 |
+| [WINNING-STRATEGY_2026-08-01_v1.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/WINNING-STRATEGY_2026-08-01_v1.md) | project-material | winning thesis, Snowflake necessity, rubric proof, demo, submission gates |
 | [B2G-QUALIFICATION-INTEGRATION_2026-08-01_v1.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/B2G-QUALIFICATION-INTEGRATION_2026-08-01_v1.md) | project-material | B2G qualification layer와 Proposal Start Packet 경계 |
 | [SUBMISSION-PACKAGE_2026-08-01_v1.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/SUBMISSION-PACKAGE_2026-08-01_v1.md) | project-material | 영어 제출 설명, 90초 데모, 재현 절차 |
 | [../PASSDOWN.md](../PASSDOWN.md) | 인계 | 현재 복귀 지점과 금지사항 |
@@ -111,8 +112,8 @@ BidPilot은 RFP와 B2G 공고를 회사의 자격, 역량, 인력, 단가, 일�
 ## 7 Status
 
 - 마지막 확인 신호: 2026-08-01 KST에 로컬 정책 테스트 4건, 린트, Streamlit health endpoint를 확인했습니다.
-- 진행상황: L1 완료. L2--L6은 계정 연결 전 로컬 구현까지 진행됐고, 실제 공개 G2B 공고에서 evidence-first qualification과 Proposal Start Packet을 생성할 수 있습니다. L7--L8은 제출 패키지 제작 단계입니다.
-- 현재 주장 가능 범위: 로컬 Streamlit, 합성 fixture, 실제 공개 G2B 원문 기반 qualification, inspectable policy trace, Proposal Start Packet, in-session work-plan behavior, SQL과 Snowpark 실행 경로가 준비됐습니다. Snowflake 실행과 CoCo 세션 증거는 아직 없습니다.
+- 진행상황: L1 완료. L2--L6은 계정 연결 전 로컬 구현까지 진행됐고, 공개 G2B 공고에서 pursuit decision과 editable proposal draft를 만드는 흐름을 추가 중입니다. L7--L8은 winning demo와 제출 패키지 제작 단계입니다.
+- 현재 주장 가능 범위: 로컬 Streamlit, 합성 fixture, 실제 공개 G2B 공고 기반 qualification, proposal draft, in-session work-plan behavior, SQL과 Snowpark 실행 경로가 준비됐습니다. Snowflake 실행과 CoCo 세션 증거는 아직 없습니다.
 - 다음 복귀 지점: Snowflake 연결 프로필을 만들고 `snow sql`로 스키마·fixture를 적재한 뒤 CoCo CLI 세션과 Snowpark 결과를 기록합니다.
 
 ## 8 변경 이력
@@ -121,3 +122,4 @@ BidPilot은 RFP와 B2G 공고를 회사의 자격, 역량, 인력, 단가, 일�
 - 2026-08-01 v2: 로컬 프로토타입, 합성 데이터와 Snowflake 실행 경로의 실제 상태를 반영했습니다.
 - 2026-08-01 v3: 판단 근거를 화면에 노출하는 workbench와 제출 패키지의 실제 상태를 반영했습니다.
 - 2026-08-01 v4: BidPilot을 B2G qualification layer로 확장하고 실제 G2B 공고와 Proposal Start Packet 경계를 반영했습니다.
+- 2026-08-01 v5: BidPilot을 Snowflake-native B2G Revenue Agent로 정본화하고 winning strategy와 rubric proof를 반영했습니다.

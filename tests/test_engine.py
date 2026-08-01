@@ -1,6 +1,7 @@
 from bidpilot.engine import create_proposal_tasks, decision_trace, evaluate_bid
 from bidpilot.fixtures import COMPANY, RFPS
 from bidpilot.proposal_packet import build_proposal_start_packet
+from bidpilot.proposal_writer import write_proposal_draft
 from bidpilot.public_tender import PUBLIC_TENDER, assess_public_tender
 
 
@@ -69,3 +70,12 @@ def test_public_tender_packet_locks_proposal_drafting_until_evidence_and_open_st
     assert packet["source"]["sha256"] == PUBLIC_TENDER["source_sha256"]
     assert packet["proposal_strategy"]["writing_gate"] == "LOCKED"
     assert len(packet["qualification"]["missing_evidence"]) == 6
+
+
+def test_proposal_writer_turns_the_public_tender_into_an_editable_english_proposal() -> None:
+    draft = write_proposal_draft(PUBLIC_TENDER, "Northstar Systems", "A public-data delivery team.")
+
+    assert "# Information-system DB quality diagnosis and consulting service" in draft
+    assert "Northstar Systems proposes" in draft
+    assert "Technical approach" in draft
+    assert "Delivery plan" in draft

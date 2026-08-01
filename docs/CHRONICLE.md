@@ -22,3 +22,5 @@ canonical_path: /home/elite/projects/personal/products/bidpilot/docs/CHRONICLE.m
 - 2026-08-01 [submission]: 영어 제출 설명, 90초 시연 순서, 로컬 재현 명령, 증거 경계를 제출 패키지에 고정했습니다. 실제 Snowflake 및 CoCo 세션 증거는 여전히 미완료입니다.
 - 2026-08-01 [product]: BidPilot을 독립 BID/NO-BID 서비스가 아니라 B2G 공고 qualification layer로 확정했습니다. 열린 공고와 닫힌 회사 증거가 확인될 때만 Proposal Start Packet을 통해 Grant Proposal Engine의 제안서 작성 단계로 넘깁니다.
 - 2026-08-01 [evidence]: 공개 G2B 공고 R26BK01490484의 원문 URL, 9쪽 원문 SHA-256, 자격·평가·과업 추출을 실제 사례로 추가했습니다. 이 공고는 마감된 과거 사례이므로 현재 투찰 가능성을 주장하지 않습니다.
+- 2026-08-01 [direction]: BidPilot의 headline을 qualification이나 문서 형식 보존이 아니라 Snowflake-native B2G Revenue Agent로 확정했습니다. 외부 공고와 내부 운영 데이터를 결합해 pursuit decision, win strategy, editable proposal draft, proposal work plan을 만듭니다.
+- 2026-08-01 [strategy]: 심사 시연의 magic moment는 실제 공고가 기술평가 승리 전략과 제안서 초안으로 변하는 장면으로 고정했습니다. 공고 조건과 회사 데이터 대조는 신뢰성 계층으로 유지하되 발표의 전면에는 두지 않습니다.
