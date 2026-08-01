@@ -89,6 +89,12 @@ def _parse_lines(text: str) -> dict:
             scope = line
         if not buyer_objective and any(token in lower for token in ("objective", "purpose", "목적")):
             buyer_objective = line
+    known_criteria = {item["name"] for item in criteria}
+    for name, weight in re.findall(r"((?:기술능력|입찰가격|정량적|정성적)\s*평가)\s*(\d+)\s*%", text):
+        normalized_name = re.sub(r"\s+", " ", name).strip()
+        if normalized_name not in known_criteria:
+            criteria.append({"name": normalized_name, "weight": int(weight)})
+            known_criteria.add(normalized_name)
     return {
         "title": lines[0],
         "scope": scope or "Scope requires review from the source document.",
