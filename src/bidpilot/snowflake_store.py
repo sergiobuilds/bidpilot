@@ -64,6 +64,20 @@ class SnowflakeBidRoomStore:
     def load_run(self, run_id: str) -> dict[str, Any]:
         queries = {
             "run": "SELECT * FROM BIDPILOT_DEMO.BIDPILOT.AGENT_RUNS WHERE run_id = %s",
+            "opportunity": """
+                SELECT o.* FROM BIDPILOT_DEMO.BIDPILOT.OPPORTUNITIES o
+                JOIN BIDPILOT_DEMO.BIDPILOT.AGENT_RUNS a
+                  ON o.tenant_id = a.tenant_id AND o.opportunity_id = a.opportunity_id
+                 AND o.opportunity_version = a.opportunity_version
+                WHERE a.run_id = %s
+            """,
+            "supplier": """
+                SELECT p.* FROM BIDPILOT_DEMO.BIDPILOT.SUPPLIER_PROFILES p
+                JOIN BIDPILOT_DEMO.BIDPILOT.AGENT_RUNS a
+                  ON p.tenant_id = a.tenant_id AND p.supplier_profile_id = a.supplier_profile_id
+                WHERE a.run_id = %s
+                ORDER BY p.created_at DESC LIMIT 1
+            """,
             "decision": "SELECT * FROM BIDPILOT_DEMO.BIDPILOT.PURSUIT_DECISIONS WHERE run_id = %s",
             "strategies": "SELECT * FROM BIDPILOT_DEMO.BIDPILOT.WIN_STRATEGIES WHERE run_id = %s ORDER BY selected DESC, strategy_id",
             "blueprint": "SELECT * FROM BIDPILOT_DEMO.BIDPILOT.RUBRIC_RESPONSE_PLANS WHERE run_id = %s ORDER BY weight DESC",
@@ -76,7 +90,8 @@ class SnowflakeBidRoomStore:
                 for key, sql in queries.items():
                     cursor.execute(sql, (run_id,))
                     rows = self._rows(cursor)
-                    result[key] = rows[0] if key in {"run", "decision"} and rows else (rows if key not in {"run", "decision"} else None)
+                    singular = {"run", "opportunity", "supplier", "decision"}
+                    result[key] = rows[0] if key in singular and rows else (rows if key not in singular else None)
         except SnowflakeBidRoomError:
             raise
         except Exception as error:

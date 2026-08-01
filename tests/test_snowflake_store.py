@@ -16,7 +16,7 @@ def test_authenticated_store_uses_named_connection_and_preserves_provenance(conn
     cursor.description = [("RUN_ID",), ("PROVIDER",), ("TRACE",)]
     cursor.fetchall.side_effect = [
         [("run-1", "CORTEX_CODE_CLI", '{"status":"PURSUE"}')],
-        [], [], [], [], [],
+        [], [], [], [], [], [], [],
     ]
     result = SnowflakeBidRoomStore("contest").load_run("run-1")
     connect.assert_called_with(connection_name="contest")

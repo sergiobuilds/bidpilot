@@ -738,6 +738,8 @@ def render_snowflake_bid_room() -> None:
         return
 
     run = result["run"]
+    opportunity = result.get("opportunity") or {}
+    supplier = result.get("supplier") or {}
     trace = run.get("trace") if isinstance(run.get("trace"), dict) else {}
     decision = result["decision"] or {}
     strategies = result["strategies"] or []
@@ -752,7 +754,7 @@ def render_snowflake_bid_room() -> None:
         ("Provider", run.get("provider")),
         ("Execution state", run.get("state")),
         ("Policy version", run.get("policy_version")),
-        ("Supplier profile", run.get("supplier_profile_id")),
+        ("Supplier", supplier.get("supplier_name") or run.get("supplier_profile_id")),
     ]
     st.markdown(
         '<div class="sx-strip">'
@@ -768,8 +770,8 @@ def render_snowflake_bid_room() -> None:
 
     # 00 · masthead. The tender headline is only shown when the run itself
     # carries it; otherwise the opportunity identifier is the headline.
-    headline = first_key(trace, TRACE_TITLE_KEYS) or run.get("opportunity_id") or selected_id
-    objective = first_key(trace, TRACE_OBJECTIVE_KEYS)
+    headline = opportunity.get("title") or first_key(trace, TRACE_TITLE_KEYS) or run.get("opportunity_id") or selected_id
+    objective = opportunity.get("buyer_objective") or first_key(trace, TRACE_OBJECTIVE_KEYS)
     st.markdown(
         f'<section class="sx-mast"><div><p class="sx-kicker"><span>Authenticated Bid Room</span>'
         f'<span>Opportunity {esc(run.get("opportunity_id") or NOT_RECORDED)}</span></p>'
