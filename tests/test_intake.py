@@ -2,7 +2,13 @@ import socket
 
 import pytest
 
-from bidpilot.intake import MAX_DOCUMENT_BYTES, TenderIntakeError, intake_tender_bytes, intake_tender_url
+from bidpilot.intake import (
+    MAX_DOCUMENT_BYTES,
+    TenderIntakeError,
+    build_pursuit_tender,
+    intake_tender_bytes,
+    intake_tender_url,
+)
 
 
 TENDER_TEXT = b"""Public data reliability service
@@ -23,6 +29,7 @@ def test_text_intake_snapshots_source_and_extracts_tender_structure() -> None:
     assert snapshot.tender["title"] == "Public data reliability service"
     assert snapshot.tender["evaluation_criteria"][0] == {"name": "Technical approach", "weight": 40}
     assert snapshot.tender["submission_items"] == ("Submission: technical proposal and pricing form",)
+    assert snapshot.tender["eligibility_requirements"] == ("SME confirmation",)
 
 
 def test_intake_rejects_empty_oversized_and_unknown_documents() -> None:
@@ -53,3 +60,19 @@ def test_url_intake_blocks_private_network_destinations(monkeypatch: pytest.Monk
 
     with pytest.raises(TenderIntakeError, match="public HTTP"):
         intake_tender_url("https://localhost/tender.pdf")
+
+
+def test_reviewed_snapshot_requires_tags_hours_and_outcome_before_bid_room() -> None:
+    snapshot = intake_tender_bytes(TENDER_TEXT, content_type="text/plain")
+
+    tender = build_pursuit_tender(
+        snapshot,
+        tags=("public-data", "data-quality"),
+        delivery_hours=720,
+        promised_outcome="A public-data reliability handoff",
+    )
+
+    assert tender["source_snapshot"]["sha256"] == snapshot.sha256
+    assert tender["tags"] == ["public-data", "data-quality"]
+    with pytest.raises(TenderIntakeError, match="scope tag"):
+        build_pursuit_tender(snapshot, tags=(), delivery_hours=720, promised_outcome="Outcome")

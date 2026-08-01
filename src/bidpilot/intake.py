@@ -82,7 +82,7 @@ def _parse_lines(text: str) -> dict:
         if match and any(token in lower for token in ("technical", "delivery", "team", "price", "평가", "가격")):
             criteria.append({"name": match.group(1).strip(" -:："), "weight": int(match.group(2))})
         if any(token in lower for token in ("eligibility", "qualification", "자격", "등록", "certificate", "sme")):
-            eligibility.append(line)
+            eligibility.append(re.sub(r"^(eligibility|qualification|자격)\s*[:：-]\s*", "", line, flags=re.I))
         if any(token in lower for token in ("submission", "submit", "제출", "proposal")):
             submissions.append(line)
         if not scope and any(token in lower for token in ("scope", "service", "과업", "용역")):
@@ -96,6 +96,41 @@ def _parse_lines(text: str) -> dict:
         "eligibility_requirements": tuple(eligibility),
         "evaluation_criteria": tuple(criteria),
         "submission_items": tuple(submissions),
+    }
+
+
+def build_pursuit_tender(
+    snapshot: TenderSnapshot,
+    *,
+    tags: tuple[str, ...],
+    delivery_hours: int,
+    promised_outcome: str,
+) -> dict:
+    """Turn reviewed extraction into the explicit input contract for a Bid Room."""
+    if not tags:
+        raise TenderIntakeError("Confirm at least one scope tag before opening a Bid Room.")
+    if delivery_hours <= 0:
+        raise TenderIntakeError("Confirm a positive delivery-hours estimate before opening a Bid Room.")
+    if not snapshot.tender["evaluation_criteria"]:
+        raise TenderIntakeError("Tender evaluation criteria must be extracted or reviewed before opening a Bid Room.")
+    outcome = promised_outcome.strip()
+    if not outcome:
+        raise TenderIntakeError("Confirm the promised buyer outcome before opening a Bid Room.")
+    return {
+        "id": snapshot.tender["id"],
+        "title": snapshot.tender["title"],
+        "buyer_objective": snapshot.tender["buyer_objective"],
+        "promised_outcome": outcome,
+        "tags": list(tags),
+        "eligibility_requirements": list(snapshot.tender["eligibility_requirements"]),
+        "delivery_hours": delivery_hours,
+        "evaluation_criteria": list(snapshot.tender["evaluation_criteria"]),
+        "source_snapshot": {
+            "url": snapshot.source_url,
+            "sha256": snapshot.sha256,
+            "retrieved_at": snapshot.retrieved_at,
+            "instruction_like_content": snapshot.has_instruction_like_content,
+        },
     }
 
 
