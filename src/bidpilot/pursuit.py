@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 
 @dataclass(frozen=True)
@@ -43,6 +43,7 @@ class PursuitBrief:
     win_positions: tuple[WinPosition, ...]
     proposal_blueprint: tuple[BlueprintSection, ...]
     next_actions: tuple[str, ...]
+    selected_position_index: int = 0
 
     @property
     def can_generate_proposal(self) -> bool:
@@ -135,4 +136,18 @@ def build_pursuit_brief(tender: dict, supplier: dict) -> PursuitBrief:
         win_positions=positions,
         proposal_blueprint=_blueprint(tender, supplier, positions[0], projects),
         next_actions=next_actions,
+        selected_position_index=0,
+    )
+
+
+def select_win_position(brief: PursuitBrief, tender: dict, supplier: dict, index: int) -> PursuitBrief:
+    """Bind the selected win position to every proposal-blueprint claim."""
+    if index < 0 or index >= len(brief.win_positions):
+        raise IndexError("Selected win position is outside the pursuit brief.")
+    projects = _matches(tender, supplier)
+    position = brief.win_positions[index]
+    return replace(
+        brief,
+        proposal_blueprint=_blueprint(tender, supplier, position, projects),
+        selected_position_index=index,
     )
