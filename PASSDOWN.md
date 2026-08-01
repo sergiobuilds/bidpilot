@@ -17,7 +17,7 @@ BidPilot 최종 제출 직전 상태의 복귀 지점입니다.
 
 1. 최종 변경분을 QA하고 commit 직후 main에 push합니다.
 2. 비공개 저장소에 공식 심사 계정 접근을 부여하거나 대회 규정이 허용하면 public으로 전환한 뒤 별도 세션에서 clone을 검증합니다.
-3. [제출 패키지](docs/SUBMISSION-PACKAGE_2026-08-02_v2.md)의 90초 순서로 영상을 녹화합니다.
+3. `dev/active/final-forge/bidpilot-demo-90s-draft.mp4`의 90초 authenticated 화면을 검토하고 [제출 패키지](docs/SUBMISSION-PACKAGE_2026-08-02_v2.md)의 영어 voice-over를 입혀 공개 링크로 업로드합니다.
 4. Hack2Skill 로그인은 `jdrnd30@jdac.co.kr`로 OTP를 발송한 상태입니다. 6자리 코드를 입력한 뒤 실제 제출 필드를 확인합니다.
 5. 외부 제출 폼의 최종 버튼은 Sergio가 렌더링 결과를 확인한 뒤 누릅니다.
 

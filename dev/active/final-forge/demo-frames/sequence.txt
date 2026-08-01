@@ -1,0 +1,13 @@
+file '01-verdict.png'
+duration 15
+file '02-score-map.png'
+duration 15
+file '03-win-position.png'
+duration 15
+file '04-proposal.png'
+duration 15
+file '05-owned-work.png'
+duration 15
+file '06-provenance.png'
+duration 15
+file '06-provenance.png'
