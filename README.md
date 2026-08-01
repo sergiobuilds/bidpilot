@@ -12,14 +12,15 @@ The canonical implementation contract is [Winning Strategy v2](docs/WINNING-STRA
 
 ## 2 Current prototype boundary
 
-The repository currently contains an early local prototype:
+The repository currently contains a local, account-independent implementation:
 
-1. Two synthetic RFP hard-gate scenarios.
-2. One historical public G2B tender fixture.
-3. A fixed Markdown proposal template.
-4. Prepared Snowflake SQL and Snowpark sketches without an authenticated run.
+1. URL, PDF, and text tender intake with source hash, bounded download, and instruction-like-content isolation.
+2. Two tender replays and two supplier profiles with projects, credentials, people, availability, and proposal assets.
+3. Deterministic `PURSUE`, `REVIEW`, and `NO-GO` decisions, selectable Win Positions, strategy-led proposals, and matrix tests.
+4. A local SQLite Bid Room that persists versioned strategy, draft, red-team, task, and unexecuted-agent trace data.
+5. Append-safe Snowflake Opportunity Graph SQL and a Snowpark policy path that are account-ready but unexecuted.
 
-It does not yet prove public tender intake, Snowflake retrieval or persistence, CoCo orchestration, strategy-driven proposal generation, or a persistent Bid Room.
+It does not yet prove authenticated Snowflake retrieval or persistence, CoCo orchestration, or a Snowflake-backed Bid Room.
 
 ## 3 Run locally
 
@@ -33,10 +34,12 @@ uv run streamlit run app.py
 
 | Layer | Evidence prepared in this repository | Current runtime state |
 |---|---|---|
-| Data model | `snowflake/sql/01_schema.sql` and `02_seed_fixture.sql` | Prepared, not yet loaded to an account |
-| Decision policy | `snowflake/snowpark_decision.py` | Prepared, awaits authenticated Snowpark execution |
+| Data model | `snowflake/sql/01_schema.sql` and `02_seed_fixture.sql` | Append-safe Opportunity Graph prepared, not yet loaded to an account |
+| Decision policy | `snowflake/snowpark_decision.py` | Versioned policy path prepared, awaits authenticated Snowpark execution |
 | CoCo CLI | CoCo CLI v1.1.52 and Snowflake CLI v3.23.0 installed locally | No Snowflake connection profile yet |
-| User flow | Streamlit decision and in-session work-plan prototype | Local browser flow verified; no persistent store is active |
+| User flow | Streamlit tender intake and persistent local Bid Room | Local browser flow verified; SQLite is a development adapter only |
+
+The account-run procedure is in [snowflake/COCO_RUNBOOK.md](snowflake/COCO_RUNBOOK.md).
 
 ## 5 Canonical project records
 
@@ -47,6 +50,7 @@ uv run streamlit run app.py
 
 ## 6 Change history
 
+- 2026-08-02 v4: Recorded the implemented local intake, strategy-led proposal, persistent Bid Room, and append-safe account-ready Snowflake boundary.
 - 2026-08-01 v3: Replaced the prototype-first repository description with the canonical Bid Room direction and separated unproven prototype behavior from the target implementation.
 - 2026-08-01 v2: Added the synthetic decision prototype, Snowflake schema and Snowpark execution path, local verification commands, and current proof boundary.
 - 2026-08-01 v1: Created the repository and canonical document entry points.

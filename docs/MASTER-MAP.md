@@ -57,8 +57,8 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 | 대회 | Snowflake CoCo CLI Hackathon 2026 | [CHRONICLE.md](CHRONICLE.md) |
 | 문제 영역 | Intelligent Workflow Automation Agent | [CHRONICLE.md](CHRONICLE.md) |
 | 저장소 | 비공개 GitHub 저장소 생성 | `sergiobuilds/bidpilot` |
-| 구현 | 로컬 prototype만 존재. Snowflake·CoCo 실제 run과 전략 주도 생성은 미구현 | 이 문서의 Work Tree |
-| 제출 | in_progress | 기존 제출 문구는 초기안입니다. 실제 run 기반 v2 패키지로 교체해야 합니다. |
+| 구현 | local intake, strategy-led generation, persistent Bid Room 구현. Snowflake·CoCo 실제 run은 미실행 | 이 문서의 Work Tree |
+| 제출 | in_progress | v2 제출 패키지는 local evidence와 account gate를 분리합니다. |
 
 ## 3 Confirmed Scope
 
@@ -83,12 +83,12 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 | 번호 | leaf ID | parent | 상태 | 한 가지 책임 | 완료 증거 | 실패 조건 | 다음 전이 | 기여 |
 |---|---|---|---|---|---|---|---|---|
 | 1 | L1 | root | done | 프로젝트 정본과 저장소 생성 | 이 지도, 결정 로그, 인계 문서, GitHub 저장소 | 정본 검사 또는 push 실패 | Snowflake 연결 확인 | 구현 범위를 고정합니다. |
-| 2 | L2 | root | in_progress | 공개 공고와 공급사 fixture를 신뢰 가능한 입력으로 고정 | 원문·hash·평가표·두 공급사 프로필 | 마감 공고를 현재 공고로 제시하거나 빈 데이터를 생성문으로 보충함 | Opportunity Graph 적재 | 과거 공고 하나와 수동 자격 선택만 있습니다. |
-| 3 | L3 | root | in_progress | Snowflake Opportunity Graph 구축 | append-safe schema, 두 profile run, 재조회 | 공고·회사·run 버전 관계를 표현하지 못함 | policy와 retrieval 구현 | 기존 DDL은 데모 테이블이며 history를 보존하지 않습니다. |
-| 4 | L4 | root | in_progress | pursuit policy와 Win Position Engine 구현 | Python/Snowpark parity, 2×2 전략 변화 | 고정 사례나 고정 전략이 나옴 | proposal blueprint 구현 | 로컬 hard-gate만 검증됐습니다. |
-| 5 | L5 | root | in_progress | 전략 주도 Proposal Builder 구현 | 평가항목별 section, profile별 출력 변화 | 고정 템플릿 또는 NO-GO 생성 | CoCo orchestration | 현재 writer는 고정 Markdown 템플릿입니다. |
-| 6 | L6 | root | in_progress | CoCo run과 persistent Bid Room 구현 | 단계별 trace, sections, tasks 재조회 | 브라우저 state에만 남음 | evaluation과 submission | 현재 CoCo 호출과 Snowflake write는 없습니다. |
-| 7 | L7 | root | in_progress | 실제 run 검증 | input validation, injection isolation, 2×2, replay | 같은 run을 재현하지 못함 | 제출물 제작 | 현재 단위 테스트는 고정 정책과 텍스트만 다룹니다. |
+| 2 | L2 | root | done | 공개 공고와 공급사 fixture를 신뢰 가능한 입력으로 고정 | source hash, input validation, 두 tender·두 supplier profile | 마감 공고를 현재 공고로 제시하거나 빈 데이터를 생성문으로 보충함 | Opportunity Graph 적재 | URL/PDF/text intake와 fixture contract를 local test로 확인했습니다. |
+| 3 | L3 | root | in_progress | Snowflake Opportunity Graph 구축 | append-safe schema, 두 profile run, 재조회 | 공고·회사·run 버전 관계를 표현하지 못함 | policy와 retrieval 구현 | schema와 idempotent seed는 구현됐고 authenticated 적재를 대기합니다. |
+| 4 | L4 | root | done | pursuit policy와 Win Position Engine 구현 | policy vectors, 2×2 전략 변화 | 고정 사례나 고정 전략이 나옴 | proposal blueprint 구현 | Python policy와 strategy contract를 local test로 확인했습니다. |
+| 5 | L5 | root | done | 전략 주도 Proposal Builder 구현 | 평가항목별 section, profile별 출력 변화, NO-GO 차단 | 고정 템플릿 또는 NO-GO 생성 | CoCo orchestration | selected Win Position과 Blueprint를 연결한 local generator를 구현했습니다. |
+| 6 | L6 | root | in_progress | CoCo run과 persistent Bid Room 구현 | 단계별 trace, sections, tasks 재조회 | 브라우저 state에만 남음 | evaluation과 submission | local SQLite Bid Room은 구현됐고 CoCo/Snowflake persistence는 미실행입니다. |
+| 7 | L7 | root | in_progress | 실제 run 검증 | input validation, injection isolation, 2×2, replay | 같은 run을 재현하지 못함 | 제출물 제작 | local test는 intake·matrix·NO-GO·persistence·policy vectors를 다루며 authenticated run은 남았습니다. |
 | 8 | L8 | root | in_progress | 제출물 제작과 제출 | 실제 run 기반 영어 자료, 영상, 제출 확인 | 2026-08-02 안에 제출 불가 | 완료 | 기존 제출 패키지는 초기 hard-gate 데모 기준입니다. |
 
 ## 5 Open / Unconfirmed
@@ -106,16 +106,18 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 | [WINNING-STRATEGY_2026-08-01_v2.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/WINNING-STRATEGY_2026-08-01_v2.md) | project-material | 현재 제품 계약, Snowflake necessity, run trace, demo, implementation gates |
 | [WINNING-STRATEGY_2026-08-01_v1.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/WINNING-STRATEGY_2026-08-01_v1.md) | project-material | deprecated 초기 전략안 |
 | [B2G-QUALIFICATION-INTEGRATION_2026-08-01_v1.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/B2G-QUALIFICATION-INTEGRATION_2026-08-01_v1.md) | project-material | B2G qualification layer와 Proposal Start Packet 경계 |
-| [SUBMISSION-PACKAGE_2026-08-01_v1.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/SUBMISSION-PACKAGE_2026-08-01_v1.md) | project-material | 영어 제출 설명, 90초 데모, 재현 절차 |
+| [SUBMISSION-PACKAGE_2026-08-02_v2.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/SUBMISSION-PACKAGE_2026-08-02_v2.md) | project-material | 현재 local demo, account evidence gate, submission boundary |
+| [SUBMISSION-PACKAGE_2026-08-01_v1.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/SUBMISSION-PACKAGE_2026-08-01_v1.md) | project-material | deprecated hard-gate 초기 제출안 |
 | [../PASSDOWN.md](../PASSDOWN.md) | 인계 | 현재 복귀 지점과 금지사항 |
 | [../README.md](../README.md) | 소개 | 저장소 진입점 |
 
 ## 7 Status
 
-- 마지막 확인 신호: 2026-08-01 KST에 로컬 정책 테스트, 린트, Streamlit prototype을 확인했습니다.
-- 진행상황: L1 완료. 현재 구현은 QA에서 하드 실패로 판정됐으며, L2부터 실제 공고 intake, 공급사 fixture, Snowflake Opportunity Graph, 전략 주도 생성으로 재구성합니다.
-- 현재 주장 가능 범위: 합성 hard-gate demo, 마감된 공개 G2B 공고의 추출 fixture, 고정 proposal template, Snowflake 실행 경로 스케치가 있습니다. Snowflake 실행, CoCo 세션, 실제 입력, 전략 주도 제안서, 영속 Bid Room은 아직 없습니다.
-- 다음 복귀 지점: [Winning Strategy v2](https://docs.svvys.com/projects/personal/products/bidpilot/docs/WINNING-STRATEGY_2026-08-01_v2.md)의 L2를 시작해 공고 원문·두 공급사 fixture·입력 검증을 고정합니다.
+- 마지막 확인 신호: 2026-08-02 KST에 21개 local tests, compile, Streamlit intake·Bid Room smoke test를 확인했습니다.
+- 진행상황: L1, L2, L4, L5 완료. L3와 L6--L8은 authenticated Snowflake account와 CoCo trace가 필요합니다.
+- 현재 주장 가능 범위: local intake, 두 tender·두 supplier fixture, Win Position, strategy-led draft, red-team, SQLite persistent Bid Room, append-safe Snowflake schema와 account-ready Snowpark policy가 있습니다. Snowflake 실행과 CoCo 세션 증거는 없습니다.
+- 외부 게이트: Snowflake AI Data Cloud와 CoCo 가입의 계정 생성이 모두 일반 오류로 실패했습니다. 공식 대회 본문의 India-only 자격도 확인이 필요합니다.
+- 다음 복귀 지점: 정상 Snowflake account에서 schema·seed·Snowpark·CoCo run을 실행하고 실제 `AGENT_RUNS` 증거를 기록합니다.
 
 ## 8 변경 이력
 
@@ -125,3 +127,4 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 - 2026-08-01 v4: BidPilot을 B2G qualification layer로 확장하고 실제 G2B 공고와 Proposal Start Packet 경계를 반영했습니다.
 - 2026-08-01 v5: BidPilot을 Snowflake-native B2G Revenue Agent로 정본화하고 winning strategy와 rubric proof를 반영했습니다.
 - 2026-08-01 v6: 독립 QA 결과를 반영해 BidPilot을 B2G Pursuit Agent의 Bid Room으로 재정의하고, 하드코드 공고·고정 writer·미실행 Snowflake 주장과 실제 구현 목표를 분리했습니다.
+- 2026-08-02 v7: local tender intake, strategy-led generation, persistent Bid Room, account-ready Opportunity Graph를 반영하고 Snowflake 가입·대회 자격 외부 게이트를 기록했습니다.

@@ -1,13 +1,13 @@
 ---
 doc_kind: project-material
-status: canonical
+status: deprecated
 version: 2026-08-01_v1
 canonical_path: /home/elite/projects/personal/products/bidpilot/docs/SUBMISSION-PACKAGE_2026-08-01_v1.md
 ---
 
 # BidPilot 제출 패키지
 
-해커톤 제출 설명, 90초 데모, 재현 명령을 한 곳에 둡니다.
+초기 hard-gate 데모 제출안입니다. 현재 패키지는 [v2](https://docs.svvys.com/projects/personal/products/bidpilot/docs/SUBMISSION-PACKAGE_2026-08-02_v2.md)입니다.
 
 **목차** — 1 Submission narrative · 2 90-second demonstration · 3 Reproduction · 4 Evidence boundary · 5 Change history
 
@@ -96,4 +96,5 @@ The local application uses synthetic RFP and company fixtures. The repository co
 
 ## 5 Change history
 
+- 2026-08-02 v1: Deprecated after Bid Room strategy replaced the hard-gate-only submission story.
 - 2026-08-01 v1: Created the English submission narrative, 90-second demonstration, local reproduction, and evidence boundary.
