@@ -1,0 +1,99 @@
+[
+  {
+    "assignment_id": "A-000013",
+    "blind_id": "ANCHOR:2:low",
+    "scores": {
+      "axis_1": 8,
+      "axis_2": 2,
+      "axis_3": 3,
+      "axis_4": 7
+    },
+    "reason": "The summary use case has modest relevance, but the buyer and operational value are vague. Evidence is limited to a static chat mockup with no platform-dependent mechanism, durable workflow, or end-to-end product proof; the paste-and-summarize demo is simple but offers little wow.",
+    "evidence_gaps": [
+      "No authenticated Snowflake evidence",
+      "No Cortex Code execution or complete run identifier",
+      "No proposal gating, persistence, review, or owned workflow"
+    ]
+  },
+  {
+    "assignment_id": "A-000014",
+    "blind_id": "ANCHOR:2:mid",
+    "scores": {
+      "axis_1": 18,
+      "axis_2": 15,
+      "axis_3": 13,
+      "axis_4": 15
+    },
+    "reason": "The qualification problem and bid-manager buyer are concrete, with working decision logic and warehouse persistence supporting practical value. Technical proof reaches structured policy and saved history, but there is no agent execution, proposal workflow, or full Bid Room; the two-supplier demo is clear without being end-to-end.",
+    "evidence_gaps": [
+      "No Cortex Code execution",
+      "No strategy-led proposal, review loop, or task ownership",
+      "No complete replayable run across downstream artifacts"
+    ]
+  },
+  {
+    "assignment_id": "A-000015",
+    "blind_id": "ANCHOR:2:high",
+    "scores": {
+      "axis_1": 24,
+      "axis_2": 25,
+      "axis_3": 25,
+      "axis_4": 24
+    },
+    "reason": "The card presents a sharply defined high-pressure buyer problem and a credible operating-system value proposition. It supplies authenticated warehouse and agent proof, one complete replayable run, failure reversal, a polished full workflow, and a concise two-by-two demo plan; only production customer validation remains absent.",
+    "evidence_gaps": [
+      "No production customer validation"
+    ]
+  },
+  {
+    "assignment_id": "A-000002",
+    "blind_id": "BLIND-B0D412A83AC4",
+    "scores": {
+      "axis_1": 20,
+      "axis_2": 10,
+      "axis_3": 18,
+      "axis_4": 21
+    },
+    "reason": "The small-team qualification-to-proposal problem is relevant and the replayable Bid Room has credible buyer value. Responsive captures and a decision-to-download interaction support a broad product flow and strong verdict-led demo, but Snowpark, Cortex Code, and one complete Snowflake run appear only as required-technology claims because authenticated app evidence is missing.",
+    "evidence_gaps": [
+      "No authenticated app capture",
+      "No observed Cortex Code execution under one complete run identifier",
+      "No card evidence that REVIEW and NO-GO block proposal generation",
+      "No evidence audit for invented personnel, pricing, or outcome facts"
+    ]
+  },
+  {
+    "assignment_id": "A-000004",
+    "blind_id": "BLIND-3AA15868ED32",
+    "scores": {
+      "axis_1": 21,
+      "axis_2": 10,
+      "axis_3": 18,
+      "axis_4": 22
+    },
+    "reason": "The weighted-evaluation problem is specific to proposal leads and directly links official scoring to effort, proof, gaps, and owners. Interactive responsive evidence supports three states, proposal, review, and replay, while the 40-point-row demo has excellent judge clarity; however the Snowflake, Snowpark, and Cortex path is asserted rather than authenticated in the card.",
+    "evidence_gaps": [
+      "No authenticated app capture",
+      "No observed single-run Snowpark and Cortex continuity",
+      "No explicit proof that REVIEW and NO-GO cannot generate proposals",
+      "No proof that generated claims are limited to verified facts"
+    ]
+  },
+  {
+    "assignment_id": "A-000009",
+    "blind_id": "BLIND-63F207B64D4F",
+    "scores": {
+      "axis_1": 20,
+      "axis_2": 10,
+      "axis_3": 19,
+      "axis_4": 20
+    },
+    "reason": "The accountability, replay, and handoff problem is operationally meaningful, and the responsive six-stage workflow with outputs and tasks suggests strong product breadth. Run identity and stage framing make the flow understandable, but authenticated persistence and actual Snowpark-plus-Cortex continuity are not observed, limiting technical proof and confidence that replay is more than a UI interaction.",
+    "evidence_gaps": [
+      "No authenticated app capture",
+      "No observed Cortex Code trace joined to Snowpark under one run identifier",
+      "No explicit REVIEW and NO-GO generation-block evidence",
+      "No verified-fact safeguards for generated proposal content"
+    ]
+  }
+]

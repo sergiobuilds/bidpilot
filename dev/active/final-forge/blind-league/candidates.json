@@ -1,0 +1,53 @@
+[
+  {
+    "identity": {"name": "decision-first", "artifact": "candidates/decision-first"},
+    "card": {
+      "problem": "Bid qualification, strategy, drafting, and review are split across tools and judgment.",
+      "user": "A small B2G team deciding whether to pursue and how to own the response.",
+      "experience": "A large verdict and four dimensions lead directly into Win Position selection.",
+      "mechanism": "A decision ledger orders verdict, strategy, score map, blueprint, draft, review, and replay.",
+      "required_technology": "Snowpark decides; Cortex Code writes one Snowflake run with every downstream artifact.",
+      "business_case": "It replaces manual go or no-go and proposal kickoff with a replayable Bid Room.",
+      "build_scope": "Responsive Seed Streamlit UI, authenticated Snowflake reads, policy, editor, and download.",
+      "proof_plan": "Compare two suppliers, switch strategy, inspect the proposal, then reload the persisted run.",
+      "observed_evidence": ["Responsive desktop and mobile captures", "Decision-to-download interaction"],
+      "claims": ["Verdict is the visual anchor", "Seven stages remain visible"],
+      "inferences": ["Understandable with little narration"],
+      "missing_evidence": ["Authenticated app capture"]
+    }
+  },
+  {
+    "identity": {"name": "scoremap-first", "artifact": "candidates/scoremap-first"},
+    "card": {
+      "problem": "Eligible bids still hide where points are won, which proof supports them, and what is missing.",
+      "user": "A proposal lead allocating effort by official weight while binding proof and owners.",
+      "experience": "A weighted score map shows readiness, asset, gap, and planned claim before drafting.",
+      "mechanism": "The matrix drives Win Positions, criterion claims, proposal preview, review, and replay.",
+      "required_technology": "Snowflake stores the graph and run; Snowpark decides and Cortex Code authors artifacts.",
+      "business_case": "It directs writing effort before days are spent and retains reusable bid evidence.",
+      "build_scope": "Responsive Seed application with three states, score map, proposal, review, and replay.",
+      "proof_plan": "Show the 40-point row, switch supplier and position, rebuild, then replay the run.",
+      "observed_evidence": ["Responsive desktop and mobile captures", "Interactive map and three states"],
+      "claims": ["Weights dominate the work surface", "Artifacts link to matrix rows"],
+      "inferences": ["Scoring logic is visually obvious"],
+      "missing_evidence": ["Authenticated app capture"]
+    }
+  },
+  {
+    "identity": {"name": "bidroom-first", "artifact": "candidates/bidroom-first"},
+    "card": {
+      "problem": "Proposal generators hide how intake became a decision and text, breaking replay and ownership.",
+      "user": "A bid manager operating the pursuit as stages with every remaining action owned.",
+      "experience": "Run identity and replay sit above six stages from Intake through Assign.",
+      "mechanism": "Stages tie Win Position to score map, blueprint, draft, review, trace, and tasks.",
+      "required_technology": "Snowflake is shared stage memory; Snowpark and Cortex Code write one versioned run.",
+      "business_case": "It makes generation accountable, reduces handoff loss, and builds reusable memory.",
+      "build_scope": "Responsive Seed Bid Room with six stages, persisted continuity, outputs, and tasks.",
+      "proof_plan": "Open a run, trace execution, inspect stages and evidence, then replay after refresh.",
+      "observed_evidence": ["Responsive desktop and mobile captures", "Interactive six-stage workflow"],
+      "claims": ["Run continuity stays visible", "Stages frame every artifact"],
+      "inferences": ["Feels operational, not generic"],
+      "missing_evidence": ["Authenticated app capture"]
+    }
+  }
+]

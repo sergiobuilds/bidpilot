@@ -1,0 +1,23 @@
+{
+  "lane": 1,
+  "orientation_1": {
+    "choice": "right",
+    "decisive_reason": "The right card gives a more decision-specific value chain: official weight, readiness, asset, gap, and planned claim are visibly connected before drafting, with an observed interactive map and three states.",
+    "evidence_gaps": [
+      "No authenticated app capture",
+      "No observed authenticated Snowflake run",
+      "No observed Cortex Code execution under one complete run identifier",
+      "No observed failure reversal"
+    ]
+  },
+  "orientation_2": {
+    "choice": "left",
+    "decisive_reason": "The left card gives a more decision-specific value chain: official weight, readiness, asset, gap, and planned claim are visibly connected before drafting, with an observed interactive map and three states.",
+    "evidence_gaps": [
+      "No authenticated app capture",
+      "No observed authenticated Snowflake run",
+      "No observed Cortex Code execution under one complete run identifier",
+      "No observed failure reversal"
+    ]
+  }
+}

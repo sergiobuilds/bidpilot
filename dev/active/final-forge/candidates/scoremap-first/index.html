@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" data-seed-color-mode="light-only">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BidPilot — Bid Room</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<svg class="vh" aria-hidden="true">
+  <defs>
+    <g id="i-check"><path d="M3 8.5 6.5 12 13 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="i-alert"><path d="M8 2.6 14.6 13.4H1.4L8 2.6Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 6.4v3.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="11.4" r="0.9" fill="currentColor"/></g>
+    <g id="i-block"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 8h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></g>
+    <g id="i-doc"><path d="M4 2.2h5l3 3v8.6H4V2.2Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 2.2v3h3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></g>
+    <g id="i-arrow"><path d="M3 8h9.4M8.8 4.4 12.4 8l-3.6 3.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="i-replay"><path d="M13.2 8a5.2 5.2 0 1 1-1.7-3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M13.4 2v3.2h-3.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></g>
+  </defs>
+</svg>
+
+<header class="appbar">
+  <div class="shell appbar__inner">
+    <span class="wordmark">
+      <span class="wordmark__glyph" aria-hidden="true"></span>
+      BidPilot
+      <span class="wordmark__sub">Bid Room replay</span>
+    </span>
+    <div class="statebar">
+      <span class="statebar__label" id="scenario-label">Pursuit state</span>
+      <div class="seed-segmented-control__root" role="group" aria-labelledby="scenario-label" style="--segment-count:3;--segment-index:0" id="scenario-control">
+        <span class="seed-segmented-control__indicator" aria-hidden="true"></span>
+        <button type="button" class="seed-segmented-control__item" aria-pressed="true" data-checked data-scenario="pursue">PURSUE</button>
+        <button type="button" class="seed-segmented-control__item" aria-pressed="false" data-scenario="review">REVIEW</button>
+        <button type="button" class="seed-segmented-control__item" aria-pressed="false" data-scenario="nogo">NO-GO</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="masthead" aria-labelledby="tender-title">
+  <div class="shell masthead__inner">
+    <div>
+      <p class="masthead__kicker">
+        <span>Public tender</span>
+        <span id="tender-id">G2B-REPLAY-DATA-QUALITY</span>
+      </p>
+      <h1 class="masthead__title" id="tender-title">Public data quality and API continuity service</h1>
+      <p class="masthead__objective" id="buyer-objective">Improve public-data reliability while keeping citizen-facing APIs stable.</p>
+      <ul class="masthead__meta" id="tender-tags"></ul>
+    </div>
+    <div class="verdict">
+      <p class="verdict__label">Pursuit policy decision</p>
+      <p class="verdict__value num" id="verdict-value" data-tone="positive">PURSUE</p>
+      <p class="verdict__policy">Policy version 2026-08-02.v1</p>
+    </div>
+  </div>
+</section>
+
+<div class="shell workspace zone-a">
+
+  <!-- ------------------------------------------------ decision rail -->
+  <aside id="rail-decision" aria-labelledby="rail-decision-title">
+    <div class="card rail-card">
+      <h2 class="rail-card__title" id="rail-decision-title">Pursuit status</h2>
+      <p class="status-line">
+        <span class="status-line__value" id="rail-status" data-tone="positive">PURSUE</span>
+        <span class="seed-badge__root seed-badge__root--size_medium seed-badge__root--variant_weak seed-badge__root--tone_neutral-variant_weak" id="rail-status-badge">
+          <span class="seed-badge__label">Deterministic policy</span>
+        </span>
+      </p>
+      <p class="status-sentence" id="rail-status-sentence"></p>
+
+      <h3 class="rail-card__title" style="margin-top:var(--seed-dimension-x5);margin-bottom:var(--seed-dimension-x2_5)">Decision dimensions</h3>
+      <ul class="dims" id="dims"></ul>
+    </div>
+  </aside>
+
+  <!-- --------------------------------------------------------- main -->
+  <main id="main">
+
+    <!-- 01 score map -->
+    <section class="card rise" aria-labelledby="scoremap-title">
+      <div class="card__head">
+        <span class="step">01</span>
+        <h2 class="card__title" id="scoremap-title">Evaluation score map</h2>
+        <p class="card__note"><span class="num" id="weight-total">100</span> weighted points &middot; <span class="num" id="covered-points">90</span> covered by a supplier asset</p>
+      </div>
+      <div class="readiness-bar" id="readiness-bar" role="img" aria-labelledby="readiness-caption"></div>
+      <p class="vh" id="readiness-caption"></p>
+      <div class="matrix-wrap">
+        <table class="matrix">
+          <caption class="vh">Evaluation criteria with weight, supplier readiness, supporting asset, gap and planned claim. Select a criterion to open its proposal section blueprint.</caption>
+          <colgroup>
+            <col class="c-crit"><col class="c-weight"><col class="c-ready">
+            <col class="c-asset"><col class="c-gap"><col class="c-claim">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">Criterion</th>
+              <th scope="col" class="n">Weight</th>
+              <th scope="col">Readiness</th>
+              <th scope="col">Supplier asset</th>
+              <th scope="col">Gap</th>
+              <th scope="col" class="c-claim-cell">Planned claim</th>
+            </tr>
+          </thead>
+          <tbody id="matrix-body"></tbody>
+        </table>
+      </div>
+
+      <div class="detail" id="detail" aria-live="polite">
+        <div class="detail__head">
+          <h3 class="detail__title" id="detail-title"></h3>
+          <span class="seed-badge__root seed-badge__root--size_medium seed-badge__root--variant_weak seed-badge__root--tone_brand-variant_weak">
+            <span class="seed-badge__label" id="detail-weight"></span>
+          </span>
+        </div>
+        <p class="detail__claim" id="detail-claim"></p>
+        <div class="detail__grid">
+          <div class="kv">
+            <p class="kv__k">Proposal section</p>
+            <p class="kv__v" id="detail-section"></p>
+          </div>
+          <div class="kv">
+            <p class="kv__k">Section owner</p>
+            <p class="kv__v" id="detail-owner"></p>
+          </div>
+          <div class="kv" style="grid-column:1/-1">
+            <p class="kv__k">Required proof</p>
+            <ul class="proof-list" id="detail-proof"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 win positions -->
+    <section class="card rise" aria-labelledby="positions-title">
+      <div class="card__head">
+        <span class="step">02</span>
+        <h2 class="card__title" id="positions-title">Win Position</h2>
+        <p class="card__note">Three positions derived from the score map. The selection binds every blueprint claim.</p>
+      </div>
+      <div class="card__body">
+        <div class="positions" role="radiogroup" aria-labelledby="positions-title" id="positions"></div>
+
+        <div class="action-row">
+          <p class="action-row__text" id="action-note"></p>
+          <button type="button" class="seed-action-button seed-action-button--size_medium seed-action-button--size_medium-layout_withText seed-action-button--variant_brandSolid" id="build-btn">
+            <span class="btn-label">Build strategy-led proposal</span>
+            <span class="spinner" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="2"/><path d="M9 2a7 7 0 0 1 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ------------------------------------------------- context rail -->
+  <aside id="rail-context" aria-labelledby="rail-context-title">
+    <div class="card rail-card">
+      <h2 class="rail-card__title" id="rail-context-title">Tender source snapshot</h2>
+      <div class="facts">
+        <div class="fact"><p class="fact__k">Source</p><p class="fact__v" id="src-source"></p></div>
+        <div class="fact"><p class="fact__k">Opportunity version</p><p class="fact__v" id="src-version"></p></div>
+        <div class="fact"><p class="fact__k">Retrieved</p><p class="fact__v fact__v--quiet" id="src-retrieved"></p></div>
+        <div class="fact"><p class="fact__k">Instruction-like content</p><p class="fact__v" id="src-instruction"></p></div>
+      </div>
+      <hr class="rule">
+      <div class="facts">
+        <div class="fact"><p class="fact__k">Submission deadline</p><p class="fact__v fact__v--quiet" id="src-deadline"></p></div>
+        <div class="fact"><p class="fact__k">Contract value</p><p class="fact__v fact__v--quiet" id="src-value"></p></div>
+        <div class="fact"><p class="fact__k">Planned delivery effort</p><p class="fact__v" id="src-hours"></p></div>
+      </div>
+    </div>
+
+    <div class="card rail-card">
+      <h2 class="rail-card__title">Supplier operating profile</h2>
+      <div class="facts">
+        <div class="fact"><p class="fact__k">Profile</p><p class="fact__v" id="sup-name"></p></div>
+        <div class="fact"><p class="fact__k">Credentials</p><p class="fact__v" id="sup-credentials"></p></div>
+        <div class="fact"><p class="fact__k">Available hours</p><p class="fact__v num" id="sup-hours"></p></div>
+        <div class="fact"><p class="fact__k">Named delivery people</p><p class="fact__v" id="sup-people"></p></div>
+        <div class="fact"><p class="fact__k">Comparable delivery</p><p class="fact__v" id="sup-projects"></p></div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="shell zone-b">
+    <!-- blocked notice for REVIEW / NO-GO -->
+    <section class="card rise" id="blocked-card" hidden aria-labelledby="blocked-title">
+      <div class="card__head">
+        <span class="step">03</span>
+        <h2 class="card__title" id="blocked-title">Gap closure plan</h2>
+        <p class="card__note">Proposal generation stays closed until every gap is resolved.</p>
+      </div>
+      <div class="card__body">
+        <div class="seed-callout__root seed-callout__root--tone_critical" id="blocked-callout" style="margin-bottom:var(--seed-dimension-x4)">
+          <span class="seed-callout__content">
+            <span class="seed-callout__title seed-callout__title--tone_critical" id="blocked-callout-title">Proposal generation blocked</span>
+            <span class="seed-callout__description seed-callout__description--tone_critical" id="blocked-callout-desc"></span>
+          </span>
+        </div>
+        <table class="tasks">
+          <caption class="vh">Gap closure tasks</caption>
+          <thead><tr><th scope="col">Gap</th><th scope="col">Action</th><th scope="col">Owner</th></tr></thead>
+          <tbody id="gap-tasks"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- loading -->
+    <section class="card rise" id="loading-card" hidden aria-labelledby="loading-title" aria-busy="true">
+      <div class="card__head">
+        <span class="step">03</span>
+        <h2 class="card__title" id="loading-title">Building the strategy-led proposal</h2>
+        <p class="card__note" role="status" id="loading-status">Running blueprint, draft and red-team review.</p>
+      </div>
+      <div class="card__body skeleton-stack">
+        <span class="seed-skeleton seed-skeleton--radius_8 seed-skeleton--tone_neutral" style="--seed-box-height:var(--seed-dimension-x12)"></span>
+        <span class="seed-skeleton seed-skeleton--radius_8 seed-skeleton--tone_neutral" style="--seed-box-height:var(--seed-dimension-x12)"></span>
+        <span class="seed-skeleton seed-skeleton--radius_8 seed-skeleton--tone_neutral" style="--seed-box-height:var(--seed-dimension-x12);--seed-box-width:72%"></span>
+        <span class="seed-skeleton seed-skeleton--radius_8 seed-skeleton--tone_neutral" style="--seed-box-height:var(--seed-dimension-x16)"></span>
+      </div>
+    </section>
+
+    <!-- output group -->
+    <div id="output">
+      <section class="card rise" aria-labelledby="blueprint-title">
+        <div class="card__head">
+          <span class="step">03</span>
+          <h2 class="card__title" id="blueprint-title">Proposal blueprint</h2>
+          <p class="card__note">One score-bearing section per criterion, highest weight first.</p>
+        </div>
+        <div class="card__body">
+          <div class="blueprint" id="blueprint"></div>
+        </div>
+      </section>
+
+      <section class="card rise" aria-labelledby="draft-title">
+        <div class="card__head">
+          <span class="step">04</span>
+          <h2 class="card__title" id="draft-title">Generated draft preview</h2>
+          <p class="card__note">Rewritten whenever the Win Position changes. Scroll for the full draft.</p>
+        </div>
+        <div class="card__body">
+          <div class="draft-frame">
+            <article class="draft" id="draft" tabindex="0" role="region" aria-labelledby="draft-title"></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="card rise" aria-labelledby="redteam-title">
+        <div class="card__head">
+          <span class="step">05</span>
+          <h2 class="card__title" id="redteam-title">Red-team review</h2>
+          <p class="card__note" id="redteam-note"></p>
+        </div>
+        <div class="card__body">
+          <div class="checks" id="redteam-checks"></div>
+          <div id="redteam-findings"></div>
+        </div>
+      </section>
+
+      <section class="card rise" aria-labelledby="tasks-title">
+        <div class="card__head">
+          <span class="step">06</span>
+          <h2 class="card__title" id="tasks-title">Owners and tasks</h2>
+          <p class="card__note">Section owners from the blueprint plus the policy next actions.</p>
+        </div>
+        <div class="card__body">
+          <table class="tasks">
+            <caption class="vh">Owners and next actions</caption>
+            <thead><tr><th scope="col">Item</th><th scope="col">Action</th><th scope="col">Owner</th></tr></thead>
+            <tbody id="owner-tasks"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card rise" aria-labelledby="run-title">
+        <div class="card__head">
+          <span class="step">07</span>
+          <h2 class="card__title" id="run-title">Bid Room run</h2>
+          <p class="card__note" id="run-note">Persisted with the tender version, selected position and every generated artefact.</p>
+        </div>
+        <div class="card__body">
+          <div class="run" id="run">
+            <div class="run__head">
+              <span class="seed-badge__root seed-badge__root--size_medium seed-badge__root--variant_solid seed-badge__root--tone_positive-variant_solid" id="run-badge">
+                <span class="seed-badge__label">Saved run</span>
+              </span>
+              <span class="run__id" id="run-id"></span>
+            </div>
+            <div class="run__grid">
+              <div><p class="run__k">Opportunity version</p><p class="run__v" id="run-version"></p></div>
+              <div class="run__cell--wide"><p class="run__k">Selected position</p><p class="run__v" id="run-position"></p></div>
+              <div><p class="run__k">Execution provider</p><p class="run__v" id="run-provider"></p></div>
+              <div><p class="run__k">Execution state</p><p class="run__v" id="run-state"></p></div>
+            </div>
+            <div class="run__foot">
+              <div>
+                <p class="run__k">Replayable steps</p>
+                <div class="run__steps" id="run-steps"></div>
+              </div>
+              <button type="button" class="seed-action-button seed-action-button--size_small seed-action-button--size_small-layout_withText seed-action-button--variant_neutralOutline" id="replay-btn">
+                <svg class="seed-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><use href="#i-replay"/></svg>
+                <span class="btn-label">Replay this run</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+{
+  "aggregate_sha256": "c26dacaf037d0625dfd8991bc264a4e6ddaf36c98f788c542f2f7a0b038fe530",
+  "complete": true,
+  "plan_sha256": "bb9eb112c42a51ba4886cabb7800a6437966851102dbd86e8c3f76fd77020355",
+  "ranking": [
+    {
+      "axis_medians": {
+        "axis_1": 21,
+        "axis_2": 13,
+        "axis_3": 19,
+        "axis_4": 21
+      },
+      "blind_id": "BLIND-B0D412A83AC4",
+      "corrected_median": 75,
+      "identity": {
+        "artifact": "candidates/decision-first",
+        "name": "decision-first"
+      },
+      "needs_adjudication": false,
+      "raw_median": 74,
+      "raw_range": 5,
+      "replicas": [
+        {
+          "assignment_id": "A-000006",
+          "corrected_total": 75,
+          "raw_total": 74,
+          "scores": {
+            "axis_1": 21,
+            "axis_2": 13,
+            "axis_3": 19,
+            "axis_4": 21
+          }
+        },
+        {
+          "assignment_id": "A-000008",
+          "corrected_total": 75,
+          "raw_total": 74,
+          "scores": {
+            "axis_1": 21,
+            "axis_2": 13,
+            "axis_3": 19,
+            "axis_4": 21
+          }
+        },
+        {
+          "assignment_id": "A-000002",
+          "corrected_total": 63,
+          "raw_total": 69,
+          "scores": {
+            "axis_1": 20,
+            "axis_2": 10,
+            "axis_3": 18,
+            "axis_4": 21
+          }
+        }
+      ]
+    },
+    {
+      "axis_medians": {
+        "axis_1": 21,
+        "axis_2": 10,
+        "axis_3": 18,
+        "axis_4": 21
+      },
+      "blind_id": "BLIND-3AA15868ED32",
+      "corrected_median": 65,
+      "identity": {
+        "artifact": "candidates/scoremap-first",
+        "name": "scoremap-first"
+      },
+      "needs_adjudication": false,
+      "raw_median": 71,
+      "raw_range": 8,
+      "replicas": [
+        {
+          "assignment_id": "A-000001",
+          "corrected_total": 76,
+          "raw_total": 75,
+          "scores": {
+            "axis_1": 22,
+            "axis_2": 13,
+            "axis_3": 19,
+            "axis_4": 21
+          }
+        },
+        {
+          "assignment_id": "A-000004",
+          "corrected_total": 65,
+          "raw_total": 71,
+          "scores": {
+            "axis_1": 21,
+            "axis_2": 10,
+            "axis_3": 18,
+            "axis_4": 22
+          }
+        },
+        {
+          "assignment_id": "A-000007",
+          "corrected_total": 62,
+          "raw_total": 67,
+          "scores": {
+            "axis_1": 20,
+            "axis_2": 8,
+            "axis_3": 18,
+            "axis_4": 21
+          }
+        }
+      ]
+    },
+    {
+      "axis_medians": {
+        "axis_1": 19,
+        "axis_2": 8,
+        "axis_3": 19,
+        "axis_4": 18
+      },
+      "blind_id": "BLIND-63F207B64D4F",
+      "corrected_median": 59,
+      "identity": {
+        "artifact": "candidates/bidroom-first",
+        "name": "bidroom-first"
+      },
+      "needs_adjudication": false,
+      "raw_median": 64,
+      "raw_range": 5,
+      "replicas": [
+        {
+          "assignment_id": "A-000009",
+          "corrected_total": 63,
+          "raw_total": 69,
+          "scores": {
+            "axis_1": 20,
+            "axis_2": 10,
+            "axis_3": 19,
+            "axis_4": 20
+          }
+        },
+        {
+          "assignment_id": "A-000003",
+          "corrected_total": 59,
+          "raw_total": 64,
+          "scores": {
+            "axis_1": 19,
+            "axis_2": 8,
+            "axis_3": 19,
+            "axis_4": 18
+          }
+        },
+        {
+          "assignment_id": "A-000005",
+          "corrected_total": 59,
+          "raw_total": 64,
+          "scores": {
+            "axis_1": 19,
+            "axis_2": 8,
+            "axis_3": 19,
+            "axis_4": 18
+          }
+        }
+      ]
+    }
+  ],
+  "schema": "blind-league-aggregate-v1"
+}

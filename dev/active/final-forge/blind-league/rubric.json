@@ -1,0 +1,14 @@
+{
+  "axes": [
+    {"id": "axis_1", "label": "Problem relevance and buyer value", "range": [0, 25], "official_mapping": "Relevance 30 percent"},
+    {"id": "axis_2", "label": "Snowflake and agentic technical proof", "range": [0, 25], "official_mapping": "Technical 40 percent"},
+    {"id": "axis_3", "label": "End-to-end product completeness", "range": [0, 25], "official_mapping": "Completeness 30 percent"},
+    {"id": "axis_4", "label": "Ninety-second demo clarity and wow", "range": [0, 25], "official_mapping": "Cross-cutting judge comprehension"}
+  ],
+  "hard_gates": [
+    "Uses authenticated Snowflake rather than local-only persistence",
+    "Shows actual Cortex Code execution under one complete run identifier",
+    "Blocks proposal generation for REVIEW and NO-GO",
+    "Does not invent personnel, pricing, or outcome facts"
+  ]
+}

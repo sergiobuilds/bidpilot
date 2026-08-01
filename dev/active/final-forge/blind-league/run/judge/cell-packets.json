@@ -1,0 +1,578 @@
+[
+  {
+    "anchors": [
+      {
+        "assignment_id": "A-000010",
+        "blind_id": "ANCHOR:1:low",
+        "card": {
+          "build_scope": "A single-page chat prototype with one prompt, one response, and no persistence or workflow integration.",
+          "business_case": "Users may save reading time, although the buyer, adoption path, and measurable operational value are unclear.",
+          "claims": [
+            "Summarizes tender text"
+          ],
+          "experience": "A chat box accepts pasted text and returns a paragraph summary plus a generic recommendation.",
+          "inferences": [
+            "May save reading time"
+          ],
+          "mechanism": "One prompt sends the source text to a general model and displays the response without structured state.",
+          "missing_evidence": [
+            "Platform necessity",
+            "End-to-end workflow"
+          ],
+          "observed_evidence": [
+            "Static chat mockup"
+          ],
+          "problem": "Teams read long tender documents and want a faster summary before deciding what to do next.",
+          "proof_plan": "Paste a notice, show the generated summary, and state that future versions could add qualification and drafting.",
+          "required_technology": "A database stores chat messages, but the product could work the same way without its named platform.",
+          "user": "Any employee who occasionally opens a procurement notice and wants a short explanation."
+        },
+        "level": "low"
+      },
+      {
+        "assignment_id": "A-000011",
+        "blind_id": "ANCHOR:1:mid",
+        "card": {
+          "build_scope": "A working qualification dashboard, warehouse schema, policy function, fixtures, and saved decision history.",
+          "business_case": "The tool can reduce obvious no-bid effort, but it stops before strategy, proposal writing, or owned remediation.",
+          "claims": [
+            "Prevents obvious bad pursuits"
+          ],
+          "experience": "A dashboard shows eligibility, capacity, margin, a pursue recommendation, and a list of missing inputs.",
+          "inferences": [
+            "Useful as a proposal front door"
+          ],
+          "mechanism": "Structured tender fields and a supplier profile feed deterministic gates and save a decision record.",
+          "missing_evidence": [
+            "Proposal workflow",
+            "Agent execution"
+          ],
+          "observed_evidence": [
+            "Working decision matrix",
+            "Warehouse persistence"
+          ],
+          "problem": "Bid teams waste time on opportunities that fail mandatory requirements or exceed delivery capacity.",
+          "proof_plan": "Run two suppliers through one tender, show different decisions, and query the saved decision table.",
+          "required_technology": "A cloud warehouse stores tenders and decisions, while warehouse code evaluates the qualification policy.",
+          "user": "A bid manager who needs a repeatable qualification checklist before starting a proposal."
+        },
+        "level": "mid"
+      },
+      {
+        "assignment_id": "A-000012",
+        "blind_id": "ANCHOR:1:high",
+        "card": {
+          "build_scope": "A polished responsive application, authenticated warehouse integration, agent execution, proposal editor, review loop, tests, and submission assets.",
+          "business_case": "The product reduces wasted pursuits and proposal coordination while accumulating reusable delivery evidence and institutional bidding memory.",
+          "claims": [
+            "End-to-end Bid Room"
+          ],
+          "experience": "One room shows the decision, weighted score map, selected strategy, evidence-linked sections, review findings, tasks, and authenticated run trace.",
+          "inferences": [
+            "Can become a paid operating system"
+          ],
+          "mechanism": "A versioned opportunity graph drives deterministic policy and an agent writes every downstream artifact under one complete, replayable run.",
+          "missing_evidence": [
+            "Production customer validation"
+          ],
+          "observed_evidence": [
+            "Authenticated complete run",
+            "Responsive product",
+            "Failure reversal"
+          ],
+          "problem": "Small bid teams must convert complex notices and scattered company evidence into a defensible pursuit and proposal under severe time pressure.",
+          "proof_plan": "Show a two-by-two tender and supplier matrix, generate one complete run, expose a review failure and recovery, then reload the exact run and tasks.",
+          "required_technology": "The data cloud supplies shared memory, governed computation, agent execution, query provenance, and durable multi-step state that a chat transcript cannot provide.",
+          "user": "A B2G proposal team that needs qualification, strategy, drafting, review, ownership, and replay in one operating surface."
+        },
+        "level": "high"
+      }
+    ],
+    "candidates": [
+      {
+        "assignment_id": "A-000001",
+        "blind_id": "BLIND-3AA15868ED32",
+        "card": {
+          "build_scope": "Responsive Seed application with three states, score map, proposal, review, and replay.",
+          "business_case": "It directs writing effort before days are spent and retains reusable bid evidence.",
+          "claims": [
+            "Weights dominate the work surface",
+            "Artifacts link to matrix rows"
+          ],
+          "experience": "A weighted score map shows readiness, asset, gap, and planned claim before drafting.",
+          "inferences": [
+            "Scoring logic is visually obvious"
+          ],
+          "mechanism": "The matrix drives Win Positions, criterion claims, proposal preview, review, and replay.",
+          "missing_evidence": [
+            "Authenticated app capture"
+          ],
+          "observed_evidence": [
+            "Responsive desktop and mobile captures",
+            "Interactive map and three states"
+          ],
+          "problem": "Eligible bids still hide where points are won, which proof supports them, and what is missing.",
+          "proof_plan": "Show the 40-point row, switch supplier and position, rebuild, then replay the run.",
+          "required_technology": "Snowflake stores the graph and run; Snowpark decides and Cortex Code authors artifacts.",
+          "user": "A proposal lead allocating effort by official weight while binding proof and owners."
+        }
+      }
+    ],
+    "lane": 1,
+    "replica": 1
+  },
+  {
+    "anchors": [
+      {
+        "assignment_id": "A-000013",
+        "blind_id": "ANCHOR:2:low",
+        "card": {
+          "build_scope": "A single-page chat prototype with one prompt, one response, and no persistence or workflow integration.",
+          "business_case": "Users may save reading time, although the buyer, adoption path, and measurable operational value are unclear.",
+          "claims": [
+            "Summarizes tender text"
+          ],
+          "experience": "A chat box accepts pasted text and returns a paragraph summary plus a generic recommendation.",
+          "inferences": [
+            "May save reading time"
+          ],
+          "mechanism": "One prompt sends the source text to a general model and displays the response without structured state.",
+          "missing_evidence": [
+            "Platform necessity",
+            "End-to-end workflow"
+          ],
+          "observed_evidence": [
+            "Static chat mockup"
+          ],
+          "problem": "Teams read long tender documents and want a faster summary before deciding what to do next.",
+          "proof_plan": "Paste a notice, show the generated summary, and state that future versions could add qualification and drafting.",
+          "required_technology": "A database stores chat messages, but the product could work the same way without its named platform.",
+          "user": "Any employee who occasionally opens a procurement notice and wants a short explanation."
+        },
+        "level": "low"
+      },
+      {
+        "assignment_id": "A-000014",
+        "blind_id": "ANCHOR:2:mid",
+        "card": {
+          "build_scope": "A working qualification dashboard, warehouse schema, policy function, fixtures, and saved decision history.",
+          "business_case": "The tool can reduce obvious no-bid effort, but it stops before strategy, proposal writing, or owned remediation.",
+          "claims": [
+            "Prevents obvious bad pursuits"
+          ],
+          "experience": "A dashboard shows eligibility, capacity, margin, a pursue recommendation, and a list of missing inputs.",
+          "inferences": [
+            "Useful as a proposal front door"
+          ],
+          "mechanism": "Structured tender fields and a supplier profile feed deterministic gates and save a decision record.",
+          "missing_evidence": [
+            "Proposal workflow",
+            "Agent execution"
+          ],
+          "observed_evidence": [
+            "Working decision matrix",
+            "Warehouse persistence"
+          ],
+          "problem": "Bid teams waste time on opportunities that fail mandatory requirements or exceed delivery capacity.",
+          "proof_plan": "Run two suppliers through one tender, show different decisions, and query the saved decision table.",
+          "required_technology": "A cloud warehouse stores tenders and decisions, while warehouse code evaluates the qualification policy.",
+          "user": "A bid manager who needs a repeatable qualification checklist before starting a proposal."
+        },
+        "level": "mid"
+      },
+      {
+        "assignment_id": "A-000015",
+        "blind_id": "ANCHOR:2:high",
+        "card": {
+          "build_scope": "A polished responsive application, authenticated warehouse integration, agent execution, proposal editor, review loop, tests, and submission assets.",
+          "business_case": "The product reduces wasted pursuits and proposal coordination while accumulating reusable delivery evidence and institutional bidding memory.",
+          "claims": [
+            "End-to-end Bid Room"
+          ],
+          "experience": "One room shows the decision, weighted score map, selected strategy, evidence-linked sections, review findings, tasks, and authenticated run trace.",
+          "inferences": [
+            "Can become a paid operating system"
+          ],
+          "mechanism": "A versioned opportunity graph drives deterministic policy and an agent writes every downstream artifact under one complete, replayable run.",
+          "missing_evidence": [
+            "Production customer validation"
+          ],
+          "observed_evidence": [
+            "Authenticated complete run",
+            "Responsive product",
+            "Failure reversal"
+          ],
+          "problem": "Small bid teams must convert complex notices and scattered company evidence into a defensible pursuit and proposal under severe time pressure.",
+          "proof_plan": "Show a two-by-two tender and supplier matrix, generate one complete run, expose a review failure and recovery, then reload the exact run and tasks.",
+          "required_technology": "The data cloud supplies shared memory, governed computation, agent execution, query provenance, and durable multi-step state that a chat transcript cannot provide.",
+          "user": "A B2G proposal team that needs qualification, strategy, drafting, review, ownership, and replay in one operating surface."
+        },
+        "level": "high"
+      }
+    ],
+    "candidates": [
+      {
+        "assignment_id": "A-000002",
+        "blind_id": "BLIND-B0D412A83AC4",
+        "card": {
+          "build_scope": "Responsive Seed Streamlit UI, authenticated Snowflake reads, policy, editor, and download.",
+          "business_case": "It replaces manual go or no-go and proposal kickoff with a replayable Bid Room.",
+          "claims": [
+            "Verdict is the visual anchor",
+            "Seven stages remain visible"
+          ],
+          "experience": "A large verdict and four dimensions lead directly into Win Position selection.",
+          "inferences": [
+            "Understandable with little narration"
+          ],
+          "mechanism": "A decision ledger orders verdict, strategy, score map, blueprint, draft, review, and replay.",
+          "missing_evidence": [
+            "Authenticated app capture"
+          ],
+          "observed_evidence": [
+            "Responsive desktop and mobile captures",
+            "Decision-to-download interaction"
+          ],
+          "problem": "Bid qualification, strategy, drafting, and review are split across tools and judgment.",
+          "proof_plan": "Compare two suppliers, switch strategy, inspect the proposal, then reload the persisted run.",
+          "required_technology": "Snowpark decides; Cortex Code writes one Snowflake run with every downstream artifact.",
+          "user": "A small B2G team deciding whether to pursue and how to own the response."
+        }
+      }
+    ],
+    "lane": 2,
+    "replica": 1
+  },
+  {
+    "anchors": [
+      {
+        "assignment_id": "A-000016",
+        "blind_id": "ANCHOR:3:low",
+        "card": {
+          "build_scope": "A single-page chat prototype with one prompt, one response, and no persistence or workflow integration.",
+          "business_case": "Users may save reading time, although the buyer, adoption path, and measurable operational value are unclear.",
+          "claims": [
+            "Summarizes tender text"
+          ],
+          "experience": "A chat box accepts pasted text and returns a paragraph summary plus a generic recommendation.",
+          "inferences": [
+            "May save reading time"
+          ],
+          "mechanism": "One prompt sends the source text to a general model and displays the response without structured state.",
+          "missing_evidence": [
+            "Platform necessity",
+            "End-to-end workflow"
+          ],
+          "observed_evidence": [
+            "Static chat mockup"
+          ],
+          "problem": "Teams read long tender documents and want a faster summary before deciding what to do next.",
+          "proof_plan": "Paste a notice, show the generated summary, and state that future versions could add qualification and drafting.",
+          "required_technology": "A database stores chat messages, but the product could work the same way without its named platform.",
+          "user": "Any employee who occasionally opens a procurement notice and wants a short explanation."
+        },
+        "level": "low"
+      },
+      {
+        "assignment_id": "A-000017",
+        "blind_id": "ANCHOR:3:mid",
+        "card": {
+          "build_scope": "A working qualification dashboard, warehouse schema, policy function, fixtures, and saved decision history.",
+          "business_case": "The tool can reduce obvious no-bid effort, but it stops before strategy, proposal writing, or owned remediation.",
+          "claims": [
+            "Prevents obvious bad pursuits"
+          ],
+          "experience": "A dashboard shows eligibility, capacity, margin, a pursue recommendation, and a list of missing inputs.",
+          "inferences": [
+            "Useful as a proposal front door"
+          ],
+          "mechanism": "Structured tender fields and a supplier profile feed deterministic gates and save a decision record.",
+          "missing_evidence": [
+            "Proposal workflow",
+            "Agent execution"
+          ],
+          "observed_evidence": [
+            "Working decision matrix",
+            "Warehouse persistence"
+          ],
+          "problem": "Bid teams waste time on opportunities that fail mandatory requirements or exceed delivery capacity.",
+          "proof_plan": "Run two suppliers through one tender, show different decisions, and query the saved decision table.",
+          "required_technology": "A cloud warehouse stores tenders and decisions, while warehouse code evaluates the qualification policy.",
+          "user": "A bid manager who needs a repeatable qualification checklist before starting a proposal."
+        },
+        "level": "mid"
+      },
+      {
+        "assignment_id": "A-000018",
+        "blind_id": "ANCHOR:3:high",
+        "card": {
+          "build_scope": "A polished responsive application, authenticated warehouse integration, agent execution, proposal editor, review loop, tests, and submission assets.",
+          "business_case": "The product reduces wasted pursuits and proposal coordination while accumulating reusable delivery evidence and institutional bidding memory.",
+          "claims": [
+            "End-to-end Bid Room"
+          ],
+          "experience": "One room shows the decision, weighted score map, selected strategy, evidence-linked sections, review findings, tasks, and authenticated run trace.",
+          "inferences": [
+            "Can become a paid operating system"
+          ],
+          "mechanism": "A versioned opportunity graph drives deterministic policy and an agent writes every downstream artifact under one complete, replayable run.",
+          "missing_evidence": [
+            "Production customer validation"
+          ],
+          "observed_evidence": [
+            "Authenticated complete run",
+            "Responsive product",
+            "Failure reversal"
+          ],
+          "problem": "Small bid teams must convert complex notices and scattered company evidence into a defensible pursuit and proposal under severe time pressure.",
+          "proof_plan": "Show a two-by-two tender and supplier matrix, generate one complete run, expose a review failure and recovery, then reload the exact run and tasks.",
+          "required_technology": "The data cloud supplies shared memory, governed computation, agent execution, query provenance, and durable multi-step state that a chat transcript cannot provide.",
+          "user": "A B2G proposal team that needs qualification, strategy, drafting, review, ownership, and replay in one operating surface."
+        },
+        "level": "high"
+      }
+    ],
+    "candidates": [
+      {
+        "assignment_id": "A-000003",
+        "blind_id": "BLIND-63F207B64D4F",
+        "card": {
+          "build_scope": "Responsive Seed Bid Room with six stages, persisted continuity, outputs, and tasks.",
+          "business_case": "It makes generation accountable, reduces handoff loss, and builds reusable memory.",
+          "claims": [
+            "Run continuity stays visible",
+            "Stages frame every artifact"
+          ],
+          "experience": "Run identity and replay sit above six stages from Intake through Assign.",
+          "inferences": [
+            "Feels operational, not generic"
+          ],
+          "mechanism": "Stages tie Win Position to score map, blueprint, draft, review, trace, and tasks.",
+          "missing_evidence": [
+            "Authenticated app capture"
+          ],
+          "observed_evidence": [
+            "Responsive desktop and mobile captures",
+            "Interactive six-stage workflow"
+          ],
+          "problem": "Proposal generators hide how intake became a decision and text, breaking replay and ownership.",
+          "proof_plan": "Open a run, trace execution, inspect stages and evidence, then replay after refresh.",
+          "required_technology": "Snowflake is shared stage memory; Snowpark and Cortex Code write one versioned run.",
+          "user": "A bid manager operating the pursuit as stages with every remaining action owned."
+        }
+      }
+    ],
+    "lane": 3,
+    "replica": 1
+  },
+  {
+    "anchors": [],
+    "candidates": [
+      {
+        "assignment_id": "A-000006",
+        "blind_id": "BLIND-B0D412A83AC4",
+        "card": {
+          "build_scope": "Responsive Seed Streamlit UI, authenticated Snowflake reads, policy, editor, and download.",
+          "business_case": "It replaces manual go or no-go and proposal kickoff with a replayable Bid Room.",
+          "claims": [
+            "Verdict is the visual anchor",
+            "Seven stages remain visible"
+          ],
+          "experience": "A large verdict and four dimensions lead directly into Win Position selection.",
+          "inferences": [
+            "Understandable with little narration"
+          ],
+          "mechanism": "A decision ledger orders verdict, strategy, score map, blueprint, draft, review, and replay.",
+          "missing_evidence": [
+            "Authenticated app capture"
+          ],
+          "observed_evidence": [
+            "Responsive desktop and mobile captures",
+            "Decision-to-download interaction"
+          ],
+          "problem": "Bid qualification, strategy, drafting, and review are split across tools and judgment.",
+          "proof_plan": "Compare two suppliers, switch strategy, inspect the proposal, then reload the persisted run.",
+          "required_technology": "Snowpark decides; Cortex Code writes one Snowflake run with every downstream artifact.",
+          "user": "A small B2G team deciding whether to pursue and how to own the response."
+        }
+      }
+    ],
+    "lane": 1,
+    "replica": 2
+  },
+  {
+    "anchors": [],
+    "candidates": [
+      {
+        "assignment_id": "A-000004",
+        "blind_id": "BLIND-3AA15868ED32",
+        "card": {
+          "build_scope": "Responsive Seed application with three states, score map, proposal, review, and replay.",
+          "business_case": "It directs writing effort before days are spent and retains reusable bid evidence.",
+          "claims": [
+            "Weights dominate the work surface",
+            "Artifacts link to matrix rows"
+          ],
+          "experience": "A weighted score map shows readiness, asset, gap, and planned claim before drafting.",
+          "inferences": [
+            "Scoring logic is visually obvious"
+          ],
+          "mechanism": "The matrix drives Win Positions, criterion claims, proposal preview, review, and replay.",
+          "missing_evidence": [
+            "Authenticated app capture"
+          ],
+          "observed_evidence": [
+            "Responsive desktop and mobile captures",
+            "Interactive map and three states"
+          ],
+          "problem": "Eligible bids still hide where points are won, which proof supports them, and what is missing.",
+          "proof_plan": "Show the 40-point row, switch supplier and position, rebuild, then replay the run.",
+          "required_technology": "Snowflake stores the graph and run; Snowpark decides and Cortex Code authors artifacts.",
+          "user": "A proposal lead allocating effort by official weight while binding proof and owners."
+        }
+      }
+    ],
+    "lane": 2,
+    "replica": 2
+  },
+  {
+    "anchors": [],
+    "candidates": [
+      {
+        "assignment_id": "A-000005",
+        "blind_id": "BLIND-63F207B64D4F",
+        "card": {
+          "build_scope": "Responsive Seed Bid Room with six stages, persisted continuity, outputs, and tasks.",
+          "business_case": "It makes generation accountable, reduces handoff loss, and builds reusable memory.",
+          "claims": [
+            "Run continuity stays visible",
+            "Stages frame every artifact"
+          ],
+          "experience": "Run identity and replay sit above six stages from Intake through Assign.",
+          "inferences": [
+            "Feels operational, not generic"
+          ],
+          "mechanism": "Stages tie Win Position to score map, blueprint, draft, review, trace, and tasks.",
+          "missing_evidence": [
+            "Authenticated app capture"
+          ],
+          "observed_evidence": [
+            "Responsive desktop and mobile captures",
+            "Interactive six-stage workflow"
+          ],
+          "problem": "Proposal generators hide how intake became a decision and text, breaking replay and ownership.",
+          "proof_plan": "Open a run, trace execution, inspect stages and evidence, then replay after refresh.",
+          "required_technology": "Snowflake is shared stage memory; Snowpark and Cortex Code write one versioned run.",
+          "user": "A bid manager operating the pursuit as stages with every remaining action owned."
+        }
+      }
+    ],
+    "lane": 3,
+    "replica": 2
+  },
+  {
+    "anchors": [],
+    "candidates": [
+      {
+        "assignment_id": "A-000008",
+        "blind_id": "BLIND-B0D412A83AC4",
+        "card": {
+          "build_scope": "Responsive Seed Streamlit UI, authenticated Snowflake reads, policy, editor, and download.",
+          "business_case": "It replaces manual go or no-go and proposal kickoff with a replayable Bid Room.",
+          "claims": [
+            "Verdict is the visual anchor",
+            "Seven stages remain visible"
+          ],
+          "experience": "A large verdict and four dimensions lead directly into Win Position selection.",
+          "inferences": [
+            "Understandable with little narration"
+          ],
+          "mechanism": "A decision ledger orders verdict, strategy, score map, blueprint, draft, review, and replay.",
+          "missing_evidence": [
+            "Authenticated app capture"
+          ],
+          "observed_evidence": [
+            "Responsive desktop and mobile captures",
+            "Decision-to-download interaction"
+          ],
+          "problem": "Bid qualification, strategy, drafting, and review are split across tools and judgment.",
+          "proof_plan": "Compare two suppliers, switch strategy, inspect the proposal, then reload the persisted run.",
+          "required_technology": "Snowpark decides; Cortex Code writes one Snowflake run with every downstream artifact.",
+          "user": "A small B2G team deciding whether to pursue and how to own the response."
+        }
+      }
+    ],
+    "lane": 1,
+    "replica": 3
+  },
+  {
+    "anchors": [],
+    "candidates": [
+      {
+        "assignment_id": "A-000009",
+        "blind_id": "BLIND-63F207B64D4F",
+        "card": {
+          "build_scope": "Responsive Seed Bid Room with six stages, persisted continuity, outputs, and tasks.",
+          "business_case": "It makes generation accountable, reduces handoff loss, and builds reusable memory.",
+          "claims": [
+            "Run continuity stays visible",
+            "Stages frame every artifact"
+          ],
+          "experience": "Run identity and replay sit above six stages from Intake through Assign.",
+          "inferences": [
+            "Feels operational, not generic"
+          ],
+          "mechanism": "Stages tie Win Position to score map, blueprint, draft, review, trace, and tasks.",
+          "missing_evidence": [
+            "Authenticated app capture"
+          ],
+          "observed_evidence": [
+            "Responsive desktop and mobile captures",
+            "Interactive six-stage workflow"
+          ],
+          "problem": "Proposal generators hide how intake became a decision and text, breaking replay and ownership.",
+          "proof_plan": "Open a run, trace execution, inspect stages and evidence, then replay after refresh.",
+          "required_technology": "Snowflake is shared stage memory; Snowpark and Cortex Code write one versioned run.",
+          "user": "A bid manager operating the pursuit as stages with every remaining action owned."
+        }
+      }
+    ],
+    "lane": 2,
+    "replica": 3
+  },
+  {
+    "anchors": [],
+    "candidates": [
+      {
+        "assignment_id": "A-000007",
+        "blind_id": "BLIND-3AA15868ED32",
+        "card": {
+          "build_scope": "Responsive Seed application with three states, score map, proposal, review, and replay.",
+          "business_case": "It directs writing effort before days are spent and retains reusable bid evidence.",
+          "claims": [
+            "Weights dominate the work surface",
+            "Artifacts link to matrix rows"
+          ],
+          "experience": "A weighted score map shows readiness, asset, gap, and planned claim before drafting.",
+          "inferences": [
+            "Scoring logic is visually obvious"
+          ],
+          "mechanism": "The matrix drives Win Positions, criterion claims, proposal preview, review, and replay.",
+          "missing_evidence": [
+            "Authenticated app capture"
+          ],
+          "observed_evidence": [
+            "Responsive desktop and mobile captures",
+            "Interactive map and three states"
+          ],
+          "problem": "Eligible bids still hide where points are won, which proof supports them, and what is missing.",
+          "proof_plan": "Show the 40-point row, switch supplier and position, rebuild, then replay the run.",
+          "required_technology": "Snowflake stores the graph and run; Snowpark decides and Cortex Code authors artifacts.",
+          "user": "A proposal lead allocating effort by official weight while binding proof and owners."
+        }
+      }
+    ],
+    "lane": 3,
+    "replica": 3
+  }
+]

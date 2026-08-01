@@ -1,0 +1,25 @@
+{
+  "decision": "Select the information architecture for the final BidPilot authenticated submission experience.",
+  "population_label": "Three Seed-design-system BidPilot product shells sharing the same backend and evidence contract.",
+  "evidence_cutoff": "2026-08-02T01:35:00+09:00",
+  "information_parity": {
+    "min_total_characters": 900,
+    "max_total_characters": 1100,
+    "field_min_characters": 40,
+    "field_max_characters": 260,
+    "narrative_fields": ["problem", "user", "experience", "mechanism", "required_technology", "business_case", "build_scope", "proof_plan"]
+  },
+  "scorer_models": ["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-sol"],
+  "replicas_per_lane": 3,
+  "lanes": 3,
+  "seed": 20260802,
+  "order_policy": "Seeded independent shuffle per lane and replica with identities removed.",
+  "disagreement_rule": "Adjudicate when total range is at least 20 or any axis range is at least 8.",
+  "tie_rule": "Prefer higher technical proof, then demo clarity, then lower judge variance.",
+  "audit_promotion_count": 2,
+  "pairwise_plan": "Compare both finalist orientations in every lane and warn above 65 percent left-position wins.",
+  "source_locked_sensitivity_plan": "Re-score using only directly observed artifact behavior.",
+  "parity_reconstructed_sensitivity_plan": "Re-score the equal-length cards with the same rubric and no identity reveal.",
+  "unscoreable_policy": "Exclude from idea ranking and report separately; never assign zero.",
+  "output_schema": "Four integer axes from 0 to 25, one decisive reason, and evidence gaps."
+}

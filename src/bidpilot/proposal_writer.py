@@ -5,8 +5,20 @@ from __future__ import annotations
 from bidpilot.pursuit import PursuitBrief, WinPosition
 
 
-def write_proposal_draft(tender: dict, company_name: str, positioning: str) -> str:
-    """Produce an editable proposal brief without binding the product to HWPX."""
+def write_proposal_draft(packet: dict, company_name: str, positioning: str) -> str:
+    """Produce a draft only from the qualification engine's packet contract."""
+    if packet.get("kind") != "proposal-start-packet" or packet.get("packet_version") != "1.0":
+        raise ValueError("Proposal drafting requires a versioned proposal-start packet.")
+    tender = packet.get("opportunity", {})
+    strategy = packet.get("proposal_strategy", {})
+    qualification = packet.get("qualification", {})
+    if (
+        tender.get("is_open") is not True
+        or strategy.get("writing_gate") != "OPEN"
+        or qualification.get("missing_evidence")
+        or qualification.get("failed_requirements")
+    ):
+        raise ValueError("Proposal drafting is locked until the tender is open and supplier evidence is approved.")
     supplier = company_name.strip() or "[Supplier name]"
     strengths = positioning.strip() or "[Describe the delivery team, comparable work, and differentiators]"
     return f"""# {tender['title']}
@@ -62,27 +74,106 @@ def write_strategy_proposal(tender: dict, supplier: dict, brief: PursuitBrief) -
 def red_team_proposal(brief: PursuitBrief, draft: str) -> tuple[str, ...]:
     """Review only score-bearing sections using the same evaluation matrix."""
     findings: list[str] = []
+    top_weight = max(section.weight for section in brief.proposal_blueprint)
     for section in brief.proposal_blueprint:
-        if section.criterion not in draft:
+        body = _section_body(draft, section.criterion)
+        if body is None:
             findings.append(f"Add an explicit {section.criterion} section before review.")
-        if not any(asset in draft for asset in section.assets):
+        elif not any(asset in body for asset in section.assets):
             findings.append(f"Connect {section.criterion} to a selected supplier asset.")
+        elif section.weight == top_weight and not _has_high_weight_detail(body):
+            findings.append(f"Strengthen the high-weight {section.criterion} response with validation and buyer outcome detail.")
     position = brief.win_positions[brief.selected_position_index]
     if position.weakness:
         findings.append(position.mitigation or position.weakness)
     return tuple(findings)
 
 
+def build_gap_closure_plan(brief: PursuitBrief) -> tuple[dict[str, str], ...]:
+    """Turn REVIEW and NO-GO gaps into bounded reopening work."""
+    if brief.status == "PURSUE":
+        return ()
+    tasks: list[dict[str, str]] = []
+    for requirement in brief.missing_eligibility:
+        tasks.append({"gap": requirement, "action": f"Verify or obtain {requirement} before reopening.", "owner": "Bid manager"})
+    if brief.capacity_gap_hours:
+        tasks.append({"gap": f"{brief.capacity_gap_hours} delivery hours", "action": "Secure named delivery capacity and rerun the pursuit policy.", "owner": "Delivery lead"})
+    if brief.status == "REVIEW":
+        tasks.append({"gap": "Comparable delivery evidence", "action": "Validate another directly comparable reference and its buyer outcome.", "owner": "Evidence owner"})
+    return tuple(tasks)
+
+
+def red_team_tasks(brief: PursuitBrief, draft: str) -> tuple[dict[str, str], ...]:
+    """Return criterion-owned revision tasks instead of an undifferentiated warning."""
+    tasks: list[dict[str, str]] = []
+    top_weight = max(section.weight for section in brief.proposal_blueprint)
+    for section in brief.proposal_blueprint:
+        gaps: list[str] = []
+        body = _section_body(draft, section.criterion)
+        if body is None:
+            gaps.append("missing explicit response section")
+        elif not any(asset in body for asset in section.assets):
+            gaps.append("missing selected supplier asset")
+        elif section.weight == top_weight and not _has_high_weight_detail(body):
+            gaps.append("high-weight response lacks validation or buyer outcome detail")
+        if gaps:
+            tasks.append({"criterion": section.criterion, "finding": "; ".join(gaps), "action": f"Revise the {section.criterion} response and re-run red-team review.", "owner": section.owner})
+    position = brief.win_positions[brief.selected_position_index]
+    if position.weakness:
+        tasks.append({"criterion": "Win Position", "finding": position.weakness, "action": position.mitigation or "Resolve the strategy weakness before submission.", "owner": "Bid manager"})
+    return tuple(tasks)
+
+
+def _section_body(draft: str, criterion: str) -> str | None:
+    marker = f"## {criterion}"
+    start = draft.find(marker)
+    if start < 0:
+        return None
+    end = draft.find("\n## ", start + len(marker))
+    return draft[start : end if end >= 0 else len(draft)]
+
+
+def _has_high_weight_detail(body: str) -> bool:
+    values = {}
+    for label in ("Validation:", "Buyer outcome:"):
+        start = body.find(label)
+        if start < 0:
+            return False
+        value_start = start + len(label)
+        line_end = body.find("\n", value_start)
+        values[label] = body[value_start : line_end if line_end >= 0 else len(body)].strip()
+    return all(values.values())
+
+
 def _strategy_markdown(tender: dict, supplier: dict, brief: PursuitBrief, position: WinPosition) -> str:
     proof_list = "\n".join(f"- **{card.label}** — {card.detail}" for card in position.proof_cards)
+    top_weight = max(section.weight for section in brief.proposal_blueprint)
     sections = "\n\n".join(
         f"## {section.criterion} ({section.weight} points)\n\n"
+        f"Response priority: {'lead response' if section.weight >= 30 else 'supporting response'} at {section.weight}% of the evaluation.\n\n"
         f"{section.claim}\n\n"
         f"Delivery assets: {', '.join(section.assets)}.\n\n"
+        f"{_weighted_response_detail(section.weight, top_weight, tender['promised_outcome'])}\n\n"
         f"Proposal owner: {section.owner}."
         for section in brief.proposal_blueprint
     )
+    criteria = {section.criterion.lower() for section in brief.proposal_blueprint}
+    top_assets = ", ".join(card.label for card in position.proof_cards) or "the selected supplier profile"
+    required_sections: list[str] = []
+    if "technical approach" not in criteria:
+        required_sections.append(f"## Technical Approach\n\nThe delivery method applies the selected Win Position to {tender['promised_outcome'].lower()} and keeps each technical claim linked to an accountable owner.")
+    if "comparable delivery" not in criteria:
+        required_sections.append(f"## Comparable Delivery\n\nRelevant delivery assets for this pursuit are {top_assets}. Their recorded outcomes define the reusable delivery pattern and the remaining proof gap.")
+    required_text = "\n\n".join(required_sections)
     return f"""# {tender['title']}
+
+## Executive Summary
+
+{supplier['name']} will pursue the buyer objective through the selected Win Position: {position.statement} The response prioritizes the highest-weighted criteria and assigns each claim to an accountable proposal owner.
+
+## Understanding of the Requirement
+
+The buyer needs {brief.buyer_objective.lower()} The proposed response must address the weighted evaluation matrix while remaining deliverable within {tender['delivery_hours']} planned hours.
 
 ## Win Position
 
@@ -98,7 +189,48 @@ def _strategy_markdown(tender: dict, supplier: dict, brief: PursuitBrief, positi
 
 {sections}
 
+{required_text}
+
+## Implementation Plan
+
+1. Confirm the evaluation response plan and evidence owners.
+2. Develop the highest-weighted response first and attach the selected delivery assets.
+3. Validate delivery capacity, operating handoff, and criterion coverage before red-team review.
+
+## Team and Governance
+
+The proposal owners named in the blueprint coordinate the response. Delivery evidence is anchored in {top_assets} and the selected supplier profile has {supplier['available_hours']} available hours.
+
+## Risk and Mitigation
+
+{position.weakness or 'The current pursuit policy found no blocking eligibility or capacity gap.'}
+
+Mitigation: {position.mitigation or 'Keep criterion owners and delivery assets traceable through the saved Bid Room run.'}
+
+## Commercial Response
+
+The commercial response will be completed against the Price criterion and reconciled with the planned {tender['delivery_hours']} delivery hours before submission.
+
 ## Delivery Action
 
 {tender['promised_outcome'].capitalize()} is delivered within the planned effort of {tender['delivery_hours']} hours.
 """
+
+
+def _weighted_response_detail(weight: int, top_weight: int, promised_outcome: str) -> str:
+    """Allocate substantive response depth in proportion to the published score."""
+    if weight == top_weight:
+        emphasis = (
+            "\n\nScoring emphasis: include two acceptance checkpoints and a buyer-facing outcome summary."
+            if weight >= 45
+            else ""
+        )
+        return (
+            "Approach: define the baseline, execute the selected delivery pattern, and assign acceptance ownership.\n\n"
+            "Validation: agree measurable acceptance checks with the buyer and record the result in the Bid Room.\n\n"
+            f"Buyer outcome: {promised_outcome.capitalize()}."
+            f"{emphasis}"
+        )
+    if weight >= 20:
+        return "Approach: name the accountable owner, delivery inputs, and acceptance checkpoint for this response."
+    return "Approach: confirm the required input and reconcile it with the final submission before approval."

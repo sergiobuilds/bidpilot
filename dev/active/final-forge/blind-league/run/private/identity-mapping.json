@@ -1,0 +1,14 @@
+{
+  "BLIND-3AA15868ED32": {
+    "artifact": "candidates/scoremap-first",
+    "name": "scoremap-first"
+  },
+  "BLIND-63F207B64D4F": {
+    "artifact": "candidates/bidroom-first",
+    "name": "bidroom-first"
+  },
+  "BLIND-B0D412A83AC4": {
+    "artifact": "candidates/decision-first",
+    "name": "decision-first"
+  }
+}

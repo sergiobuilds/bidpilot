@@ -57,8 +57,8 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 | 대회 | Snowflake CoCo CLI Hackathon 2026 | [CHRONICLE.md](CHRONICLE.md) |
 | 문제 영역 | Intelligent Workflow Automation Agent | [CHRONICLE.md](CHRONICLE.md) |
 | 저장소 | 비공개 GitHub 저장소 생성 | `sergiobuilds/bidpilot` |
-| 구현 | local intake, strategy-led generation, persistent Bid Room 구현. Snowflake·CoCo 실제 run은 미실행 | 이 문서의 Work Tree |
-| 제출 | in_progress | v2 제출 패키지는 local evidence와 account gate를 분리합니다. |
+| 구현 | authenticated Opportunity Graph, Snowpark 2×2, Cortex complete run, score-map Bid Room 구현 | 이 문서의 Work Tree |
+| 제출 | finalizing | v2 제출 패키지에 실제 run과 90초 영문 스크립트를 동결했습니다. |
 
 ## 3 Confirmed Scope
 
@@ -84,18 +84,18 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 |---|---|---|---|---|---|---|---|---|
 | 1 | L1 | root | done | 프로젝트 정본과 저장소 생성 | 이 지도, 결정 로그, 인계 문서, GitHub 저장소 | 정본 검사 또는 push 실패 | Snowflake 연결 확인 | 구현 범위를 고정합니다. |
 | 2 | L2 | root | done | 공개 공고와 공급사 fixture를 신뢰 가능한 입력으로 고정 | source hash, input validation, 두 tender·두 supplier profile | 마감 공고를 현재 공고로 제시하거나 빈 데이터를 생성문으로 보충함 | Opportunity Graph 적재 | URL/PDF/text intake와 fixture contract를 local test로 확인했습니다. |
-| 3 | L3 | root | in_progress | Snowflake Opportunity Graph 구축 | append-safe schema, 두 profile run, 재조회 | 공고·회사·run 버전 관계를 표현하지 못함 | policy와 retrieval 구현 | schema와 idempotent seed는 구현됐고 authenticated 적재를 대기합니다. |
+| 3 | L3 | root | done | Snowflake Opportunity Graph 구축 | authenticated schema, fixture, 역할별 재조회 | 공고·회사·run 버전 관계를 표현하지 못함 | policy와 retrieval 구현 | schema와 fixture를 적재하고 reader/runner 최소권한 역할로 재조회했습니다. |
 | 4 | L4 | root | done | pursuit policy와 Win Position Engine 구현 | policy vectors, 2×2 전략 변화 | 고정 사례나 고정 전략이 나옴 | proposal blueprint 구현 | Python policy와 strategy contract를 local test로 확인했습니다. |
 | 5 | L5 | root | done | 전략 주도 Proposal Builder 구현 | 평가항목별 section, profile별 출력 변화, NO-GO 차단 | 고정 템플릿 또는 NO-GO 생성 | CoCo orchestration | selected Win Position과 Blueprint를 연결한 local generator를 구현했습니다. |
-| 6 | L6 | root | in_progress | CoCo run과 persistent Bid Room 구현 | 단계별 trace, sections, tasks 재조회 | 브라우저 state에만 남음 | evaluation과 submission | local SQLite Bid Room은 구현됐고 CoCo/Snowflake persistence는 미실행입니다. |
-| 7 | L7 | root | in_progress | 실제 run 검증 | input validation, injection isolation, 2×2, replay | 같은 run을 재현하지 못함 | 제출물 제작 | local test는 intake·matrix·NO-GO·persistence·policy vectors를 다루며 authenticated run은 남았습니다. |
-| 8 | L8 | root | in_progress | 제출물 제작과 제출 | 실제 run 기반 영어 자료, 영상, 제출 확인 | 2026-08-02 안에 제출 불가 | 완료 | 기존 제출 패키지는 초기 hard-gate 데모 기준입니다. |
+| 6 | L6 | root | done | CoCo run과 persistent Bid Room 구현 | complete run의 trace, sections, tasks 재조회 | 브라우저 state에만 남음 | evaluation과 submission | Cortex Code가 동일 run ID로 strategy, plans, 8 sections, 11 tasks와 provenance를 저장했습니다. |
+| 7 | L7 | root | done | 실제 run 검증 | input validation, 2×2 parity, complete replay, 33 tests | 같은 run을 재현하지 못함 | 제출물 제작 | reader 역할의 authenticated AppTest와 proposal adversarial QA를 통과했습니다. |
+| 8 | L8 | root | in_progress | 제출물 제작과 제출 | 실제 run 기반 영어 자료, 영상, 제출 확인 | 제출 링크가 심사자에게 열리지 않음 | 완료 | 영문 제출문과 90초 스크립트는 완료했고 영상과 외부 최종 제출만 남았습니다. |
 
 ## 5 Open / Unconfirmed
 
-1. Snowflake 계정의 CoCo CLI 사용 권한과 지역별 모델 가용성
-2. Hack2Skill 제출 화면에서 요구하는 파일 형식과 업로드 필드
-3. 대회 사이트의 Global 표기와 India-only 본문 표기 중 실제 참가 자격
+1. Hack2Skill 제출 화면에서 요구하는 파일 형식과 업로드 필드
+2. 대회 사이트의 Global 표기와 India-only 본문 표기 중 실제 참가 자격
+3. 비공개 GitHub 저장소에 부여할 공식 심사 계정
 
 ## 6 Canonical Documents
 
@@ -106,18 +106,18 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 | [WINNING-STRATEGY_2026-08-01_v2.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/WINNING-STRATEGY_2026-08-01_v2.md) | project-material | 현재 제품 계약, Snowflake necessity, run trace, demo, implementation gates |
 | [WINNING-STRATEGY_2026-08-01_v1.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/WINNING-STRATEGY_2026-08-01_v1.md) | project-material | deprecated 초기 전략안 |
 | [B2G-QUALIFICATION-INTEGRATION_2026-08-01_v1.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/B2G-QUALIFICATION-INTEGRATION_2026-08-01_v1.md) | project-material | B2G qualification layer와 Proposal Start Packet 경계 |
-| [SUBMISSION-PACKAGE_2026-08-02_v2.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/SUBMISSION-PACKAGE_2026-08-02_v2.md) | project-material | 현재 local demo, account evidence gate, submission boundary |
+| [SUBMISSION-PACKAGE_2026-08-02_v2.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/SUBMISSION-PACKAGE_2026-08-02_v2.md) | project-material | authenticated 영어 제출문, 90초 영상 계약, 데이터·라이선스 경계 |
 | [SUBMISSION-PACKAGE_2026-08-01_v1.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/SUBMISSION-PACKAGE_2026-08-01_v1.md) | project-material | deprecated hard-gate 초기 제출안 |
 | [../PASSDOWN.md](../PASSDOWN.md) | 인계 | 현재 복귀 지점과 금지사항 |
 | [../README.md](../README.md) | 소개 | 저장소 진입점 |
 
 ## 7 Status
 
-- 마지막 확인 신호: 2026-08-02 KST에 21개 local tests, compile, Streamlit intake·Bid Room smoke test를 확인했습니다.
-- 진행상황: L1, L2, L4, L5 완료. L3와 L6--L8은 authenticated Snowflake account와 CoCo trace가 필요합니다.
-- 현재 주장 가능 범위: local intake, 두 tender·두 supplier fixture, Win Position, strategy-led draft, red-team, SQLite persistent Bid Room, append-safe Snowflake schema와 account-ready Snowpark policy가 있습니다. Snowflake 실행과 CoCo 세션 증거는 없습니다.
-- 외부 게이트: Snowflake AI Data Cloud와 CoCo 가입의 계정 생성이 모두 일반 오류로 실패했습니다. Snowflake CLI 연결 profile은 없고 현재 환경에서 `coco` 독립 실행 명령도 확인되지 않았습니다. 공식 대회 본문의 India-only 자격도 확인이 필요합니다.
-- 다음 복귀 지점: 정상 Snowflake account에서 schema·seed·Snowpark·CoCo run을 실행하고 실제 `AGENT_RUNS` 증거를 기록합니다.
+- 마지막 확인 신호: 2026-08-02 KST에 33 tests, authenticated reader AppTest, Snowpark 2×2, complete Cortex run을 확인했습니다.
+- 진행상황: L1--L7 완료. L8은 영상, 심사자 저장소 접근, 외부 제출 확인이 남았습니다.
+- 현재 주장 가능 범위: authenticated Snowflake Opportunity Graph, Snowpark policy parity, Cortex Code complete run, evidence-safe proposal, owned tasks, replayable Streamlit Bid Room이 있습니다.
+- 외부 게이트: 비공개 GitHub 저장소의 공식 심사자 접근과 제출 폼 최종 버튼은 아직 확인하지 않았습니다.
+- 다음 복귀 지점: commit/push 후 별도 권한으로 clone을 검증하고 90초 영상을 녹화합니다.
 
 ## 8 변경 이력
 
@@ -128,3 +128,4 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 - 2026-08-01 v5: BidPilot을 Snowflake-native B2G Revenue Agent로 정본화하고 winning strategy와 rubric proof를 반영했습니다.
 - 2026-08-01 v6: 독립 QA 결과를 반영해 BidPilot을 B2G Pursuit Agent의 Bid Room으로 재정의하고, 하드코드 공고·고정 writer·미실행 Snowflake 주장과 실제 구현 목표를 분리했습니다.
 - 2026-08-02 v7: local tender intake, strategy-led generation, persistent Bid Room, account-ready Opportunity Graph를 반영하고 Snowflake 가입·대회 자격 외부 게이트를 기록했습니다.
+- 2026-08-02 v8: authenticated Snowflake, Snowpark 2×2, evidence-safe Cortex complete run, blind-selected score-map UI, 33 tests와 최종 제출 패키지를 반영했습니다.

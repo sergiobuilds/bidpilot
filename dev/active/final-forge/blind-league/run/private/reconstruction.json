@@ -1,0 +1,32 @@
+[
+  {
+    "assumptions": [
+      "Final shell will receive the same authenticated backend"
+    ],
+    "candidate_index": 0,
+    "card_sha256": "b96fdc1d96f45435d2242567cc84168b4f279ebf074f6ca30e5661d8dbd22436",
+    "research_budget_units": 3,
+    "source_tier": "repository_and_rendered_artifact",
+    "status": "SCOREABLE"
+  },
+  {
+    "assumptions": [
+      "Final shell will receive the same authenticated backend"
+    ],
+    "candidate_index": 1,
+    "card_sha256": "56125f1711e4b14fd763d9599d684fdfeaf2ca0c27e3bece89e759cf5e855081",
+    "research_budget_units": 3,
+    "source_tier": "repository_and_rendered_artifact",
+    "status": "SCOREABLE"
+  },
+  {
+    "assumptions": [
+      "Final shell will receive the same authenticated backend"
+    ],
+    "candidate_index": 2,
+    "card_sha256": "7a460bdcb8994d1b1ee9b80aaad7a570c87b7eb0e8ec8c6464fcff76fff74f1c",
+    "research_budget_units": 3,
+    "source_tier": "repository_and_rendered_artifact",
+    "status": "SCOREABLE"
+  }
+]

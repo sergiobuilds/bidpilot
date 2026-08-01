@@ -1,0 +1,44 @@
+[
+  {
+    "assignment_id": "A-000010",
+    "blind_id": "ANCHOR:1:low",
+    "scores": {"axis_1": 9, "axis_2": 2, "axis_3": 3, "axis_4": 5},
+    "reason": "The tender-summary problem is plausible, but the buyer and measurable value are vague; the card shows only a static chat mockup with no workflow state or platform-dependent technical proof.",
+    "evidence_gaps": ["No authenticated platform evidence", "No agent execution", "No persistence or end-to-end workflow", "No demonstrated replay or failure handling"]
+  },
+  {
+    "assignment_id": "A-000011",
+    "blind_id": "ANCHOR:1:mid",
+    "scores": {"axis_1": 17, "axis_2": 14, "axis_3": 10, "axis_4": 13},
+    "reason": "The repeatable qualification problem and warehouse-backed deterministic decision are concretely evidenced, but the product stops before strategy, proposal, review, task ownership, and agent execution.",
+    "evidence_gaps": ["No authenticated Snowflake proof stated", "No Cortex Code execution", "No proposal or review workflow", "No complete run replay"]
+  },
+  {
+    "assignment_id": "A-000012",
+    "blind_id": "ANCHOR:1:high",
+    "scores": {"axis_1": 23, "axis_2": 25, "axis_3": 24, "axis_4": 23},
+    "reason": "The card supplies authenticated, replayable warehouse and agent evidence across decision, strategy, sections, review, tasks, and a clear matrix-to-recovery demo; only production customer validation remains absent.",
+    "evidence_gaps": ["No production customer validation"]
+  },
+  {
+    "assignment_id": "A-000001",
+    "blind_id": "BLIND-3AA15868ED32",
+    "scores": {"axis_1": 22, "axis_2": 13, "axis_3": 19, "axis_4": 21},
+    "reason": "The score-weighted work surface, supplier and position changes, and responsive interaction evidence make the proposal-lead value and demo legible. The Snowflake, Snowpark, and Cortex mechanism is asserted, but authenticated application execution is explicitly missing.",
+    "evidence_gaps": ["No authenticated app capture", "No observed authenticated Snowflake run", "No observed Cortex Code execution under one run identifier", "No observed failure reversal"]
+  },
+  {
+    "assignment_id": "A-000006",
+    "blind_id": "BLIND-B0D412A83AC4",
+    "scores": {"axis_1": 21, "axis_2": 13, "axis_3": 19, "axis_4": 21},
+    "reason": "The decision-to-download sequence and visible seven-stage room address a coherent small-team workflow and appear easy to narrate. Authenticated Snowflake reads and Cortex Code are claims rather than observed proof because authenticated app capture is missing.",
+    "evidence_gaps": ["No authenticated app capture", "No observed authenticated Snowflake run", "No observed Cortex Code execution under one run identifier", "No observed failure reversal"]
+  },
+  {
+    "assignment_id": "A-000008",
+    "blind_id": "BLIND-B0D412A83AC4",
+    "scores": {"axis_1": 21, "axis_2": 13, "axis_3": 19, "axis_4": 21},
+    "reason": "The decision-to-download sequence and visible seven-stage room address a coherent small-team workflow and appear easy to narrate. Authenticated Snowflake reads and Cortex Code are claims rather than observed proof because authenticated app capture is missing.",
+    "evidence_gaps": ["No authenticated app capture", "No observed authenticated Snowflake run", "No observed Cortex Code execution under one run identifier", "No observed failure reversal"]
+  }
+]

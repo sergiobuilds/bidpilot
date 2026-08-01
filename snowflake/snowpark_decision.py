@@ -1,7 +1,8 @@
 """Snowpark policy path for BidPilot Opportunity Graph runs.
 
-This module is account-ready only. It is intentionally not represented as an
-executed Snowflake or CoCo run until authenticated account evidence exists.
+This module is the policy path used for the authenticated 2x2 Snowpark matrix.
+Execution provenance belongs to the persisted run and Snowflake query history,
+not to import-time state in this module.
 """
 
 from __future__ import annotations

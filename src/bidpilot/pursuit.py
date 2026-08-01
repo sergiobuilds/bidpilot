@@ -94,12 +94,25 @@ def _position(title: str, tender: dict, supplier: dict, projects: list[dict], cr
 
 
 def _blueprint(tender: dict, supplier: dict, position: WinPosition, projects: list[dict]) -> tuple[BlueprintSection, ...]:
-    asset_names = tuple(project["title"] for project in projects[:2]) or tuple(card.label for card in position.proof_cards)
     sections: list[BlueprintSection] = []
     for criterion in sorted(tender["evaluation_criteria"], key=lambda item: item["weight"], reverse=True):
+        name = criterion["name"].lower()
+        if "team" in name:
+            asset_names = tuple(person["name"] for person in supplier["people"]) or tuple(supplier["credentials"])
+            evidence = f"the named {supplier['people'][0]['role']}" if supplier["people"] else "the credentialed delivery team"
+        elif "price" in name or "commercial" in name:
+            asset_names = (f"{supplier['available_hours']} available hours",)
+            evidence = f"a delivery envelope backed by {supplier['available_hours']} available hours"
+        elif "delivery" in name or "experience" in name:
+            asset_names = tuple(project["title"] for project in projects) or tuple(card.label for card in position.proof_cards)
+            evidence = f"{len(projects)} comparable delivery record(s)"
+        else:
+            asset_names = tuple(project["title"] for project in projects[:2]) or tuple(card.label for card in position.proof_cards)
+            outcomes = [project["outcome"] for project in projects[:2]]
+            evidence = outcomes[0] if outcomes else tender["promised_outcome"]
         claim = (
-            f"{position.title}: {supplier['name']} will address {criterion['name'].lower()} "
-            f"through {tender['promised_outcome'].lower()}."
+            f"{position.title}: {supplier['name']} will address {name} through {evidence}. "
+            f"This {criterion['weight']}-point response targets {tender['promised_outcome'].lower()}."
         )
         owner = "Solution lead" if criterion["weight"] >= 30 else "Bid manager"
         sections.append(BlueprintSection(criterion["name"], criterion["weight"], claim, asset_names, owner))
