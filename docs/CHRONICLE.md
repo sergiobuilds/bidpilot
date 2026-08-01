@@ -15,3 +15,6 @@ canonical_path: /home/elite/projects/personal/products/bidpilot/docs/CHRONICLE.m
 - 2026-08-01 [scope]: Snowflake, CoCo CLI, Python을 필수 핵심 경로로 사용하고 Snowpark와 Streamlit을 제품 흐름에 포함하기로 했습니다.
 - 2026-08-01 [boundary]: 실제 고객 자료, 감사 자료, 비공개 업무자료를 제외하고 합성 데이터 또는 공개 사용 허용 자료만 사용하기로 했습니다.
 - 2026-08-01 [boundary]: 데이터 검증, 출처 추적, 범용 대시보드를 제품 주제로 삼지 않기로 했습니다.
+- 2026-08-01 [validation]: 내부 IDEA blind league의 4개 후보 중 BidPilot이 가장 높은 측정 신호를 얻었고, 제조 정비 후보와의 제시 순서 양방향 결선에서도 일관되게 우세했습니다. 이는 공개 경쟁자 전체 순위가 아닌 동일 정보량의 내부 후보군 판정입니다.
+- 2026-08-01 [implementation]: 높은 매출 RFP가 자격·용량·마진 hard gate로 NO-BID가 되고 다음 RFP의 내부 제안 업무가 생성되는 단일 시연 장면을 구현 범위로 고정했습니다.
+- 2026-08-01 [evidence]: 로컬 Python 엔진, Streamlit 사용자 흐름, Snowflake DDL·seed·Snowpark 실행 경로를 만들었습니다. Snowflake 연결 프로필이 없어 실제 SQL, Snowpark, CoCo 세션 증거는 아직 주장하지 않습니다.

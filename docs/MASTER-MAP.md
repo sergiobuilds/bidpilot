@@ -57,7 +57,7 @@ BidPilot은 RFP 문서와 회사의 역량, 인력, 단가, 일정을 함께 분
 | 대회 | Snowflake CoCo CLI Hackathon 2026 | [CHRONICLE.md](CHRONICLE.md) |
 | 문제 영역 | Intelligent Workflow Automation Agent | [CHRONICLE.md](CHRONICLE.md) |
 | 저장소 | 비공개 GitHub 저장소 생성 | `sergiobuilds/bidpilot` |
-| 구현 | 미착수 | 이 문서의 Work Tree |
+| 구현 | 로컬 프로토타입과 Snowflake 실행 경로 준비 완료. 계정 연결 대기 | 이 문서의 Work Tree |
 | 제출 | 미착수 | 내부 마감 2026-08-02 |
 
 ## 3 Confirmed Scope
@@ -83,11 +83,11 @@ BidPilot은 RFP 문서와 회사의 역량, 인력, 단가, 일정을 함께 분
 | 번호 | leaf ID | parent | 상태 | 한 가지 책임 | 완료 증거 | 실패 조건 | 다음 전이 | 기여 |
 |---|---|---|---|---|---|---|---|---|
 | 1 | L1 | root | done | 프로젝트 정본과 저장소 생성 | 이 지도, 결정 로그, 인계 문서, GitHub 저장소 | 정본 검사 또는 push 실패 | Snowflake 연결 확인 | 구현 범위를 고정합니다. |
-| 2 | L2 | root | todo | Snowflake 계정과 CoCo CLI 실행 경로 확인 | 연결 확인, SQL 실행, 세션 기록 | 계정 또는 역할 접근 불가 | 데이터 모델 구축 | 필수 기술요건을 검증합니다. |
-| 3 | L3 | root | todo | RFP와 회사 운영 데이터 모델 구축 | DDL, 합성 데이터, 적재 테스트 | 핵심 입력을 표현하지 못함 | 판단 엔진 구현 | 판단에 필요한 데이터를 제공합니다. |
-| 4 | L4 | root | todo | 참여 판단 엔진 구현 | Python 테스트, Snowpark 실행, 고정 사례 결과 | 결정이 재현되지 않음 | 사용자 흐름 구현 | 핵심 판단 가치를 만듭니다. |
-| 5 | L5 | root | todo | Streamlit 사용자 흐름 구현 | 입력부터 판단까지 라이브 시연 | 설명 없이 흐름 완주 불가 | 작업 생성 연동 | 제품 가치를 화면에 연결합니다. |
-| 6 | L6 | root | todo | 승인 후 제안 업무 생성 | 실제 작업 생성과 Snowflake 상태 기록 | 외부 행동 또는 상태 변경 없음 | 평가와 실패복구 | 판단을 실행으로 전환합니다. |
+| 2 | L2 | root | in_progress | Snowflake 계정과 CoCo CLI 실행 경로 확인 | 연결 확인, SQL 실행, 세션 기록 | 계정 또는 역할 접근 불가 | 데이터 모델 구축 | CoCo CLI v1.1.52와 Snowflake CLI v3.23.0은 설치됐으나 연결 프로필이 없습니다. |
+| 3 | L3 | root | in_progress | RFP와 회사 운영 데이터 모델 구축 | DDL, 합성 데이터, 적재 테스트 | 핵심 입력을 표현하지 못함 | 판단 엔진 구현 | 스키마와 합성 fixture는 준비됐고 계정 적재를 대기합니다. |
+| 4 | L4 | root | in_progress | 참여 판단 엔진 구현 | Python 테스트, Snowpark 실행, 고정 사례 결과 | 결정이 재현되지 않음 | 사용자 흐름 구현 | 로컬 Python 판단은 두 고정 사례로 검증됐고 Snowpark 실행이 남았습니다. |
+| 5 | L5 | root | in_progress | Streamlit 사용자 흐름 구현 | 입력부터 판단까지 라이브 시연 | 설명 없이 흐름 완주 불가 | 작업 생성 연동 | 로컬 브라우저에서 NO-BID 반전과 BID 흐름을 검증했습니다. |
+| 6 | L6 | root | in_progress | 승인 후 제안 업무 생성 | 실제 작업 생성과 Snowflake 상태 기록 | 외부 행동 또는 상태 변경 없음 | 평가와 실패복구 | 로컬 in-session 작업 계획은 구현됐고 영속 Snowflake 상태 기록을 대기합니다. |
 | 7 | L7 | root | todo | 평가와 실패복구 검증 | 전체 테스트, 시간 비교, 데모 반복 성공 | 반복 시연 실패 | 제출물 제작 | 심사 증거를 확정합니다. |
 | 8 | L8 | root | todo | 제출물 제작과 제출 | 영어 자료, 코드, 영상, 제출 확인 | 2026-08-02 안에 제출 불가 | 완료 | 대회 참가를 마감합니다. |
 
@@ -95,8 +95,7 @@ BidPilot은 RFP 문서와 회사의 역량, 인력, 단가, 일정을 함께 분
 
 1. Snowflake 계정의 CoCo CLI 사용 권한과 지역별 모델 가용성
 2. Hack2Skill 제출 화면에서 요구하는 파일 형식과 업로드 필드
-3. 승인 후 작업 생성 대상을 GitHub Issues로 할지 내부 작업 원장으로 할지 여부
-4. 시연용 RFP의 공개 출처 또는 합성 문서 구성
+3. 대회 사이트의 Global 표기와 India-only 본문 표기 중 실제 참가 자격
 
 ## 6 Canonical Documents
 
@@ -109,11 +108,12 @@ BidPilot은 RFP 문서와 회사의 역량, 인력, 단가, 일정을 함께 분
 
 ## 7 Status
 
-- 마지막 확인 신호: 2026-08-01 17:47 KST에 비공개 GitHub 저장소를 생성했습니다.
-- 진행상황: L1 완료, 제품 구현 미착수
-- 현재 주장 가능 범위: 제품 방향, 대회 문제 영역, 내부 마감, 정본 구조가 확정됐습니다.
-- 다음 복귀 지점: L2에서 Snowflake 계정과 CoCo CLI의 실제 연결을 확인합니다.
+- 마지막 확인 신호: 2026-08-01 KST에 로컬 단위 테스트 2건과 실제 브라우저의 NO-BID → BID → 작업 생성 흐름을 확인했습니다.
+- 진행상황: L1 완료. L2--L6은 계정 연결 전 로컬 구현까지 진행됐습니다.
+- 현재 주장 가능 범위: 로컬 Streamlit, 합성 fixture, 결정 엔진, SQL과 Snowpark 실행 경로가 준비됐습니다. Snowflake 실행과 CoCo 세션 증거는 아직 없습니다.
+- 다음 복귀 지점: Snowflake 연결 프로필을 만들고 `snow sql`로 스키마·fixture를 적재한 뒤 CoCo CLI 세션과 Snowpark 결과를 기록합니다.
 
 ## 8 변경 이력
 
 - 2026-08-01 v1: BidPilot을 해커톤 출품 프로젝트로 승격하고 Charter, Work Tree, 상태를 기록했습니다.
+- 2026-08-01 v2: 로컬 프로토타입, 합성 데이터와 Snowflake 실행 경로의 실제 상태를 반영했습니다.
