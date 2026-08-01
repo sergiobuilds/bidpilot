@@ -34,3 +34,4 @@ canonical_path: /home/elite/projects/personal/products/bidpilot/docs/CHRONICLE.m
 - 2026-08-02 [security]: 앱 읽기와 실행 권한을 `BIDPILOT_READER`, `BIDPILOT_RUNNER`로 분리하고 secondary role을 비활성화했습니다. authenticated mode는 local fixture로 fallback하지 않습니다.
 - 2026-08-02 [validation]: 제안서 엔진의 packet gate, 배점별 내용 변화, canonical 8영역, criterion-specific asset, 상대 최고배점 red-team 반례를 독립 재감사했고 5개 항목 모두 통과했습니다. 전체 테스트는 33개입니다.
 - 2026-08-02 [design]: Seed design system으로 decision-first, scoremap-first, bidroom-first 세 후보를 만들고 동일 정보량의 ARTIFACT blind league를 실행했습니다. 절대점수는 decision-first가 75점으로 높았지만, 세 lane의 양방향 finalist pairwise는 모두 scoremap-first를 선택해 최종 화면을 score map 중심 하이브리드로 확정했습니다.
+- 2026-08-02 [submission]: 공식 Hack2Skill 페이지에서 한국이 Japan & Korea 권역으로 참가 가능하고 행사는 Global·Online이며, 등록 마감은 8월 2일, prototype 제출 마감은 8월 6일임을 재확인했습니다. 공개 rubric은 Relevance 30, Technical 40, Completeness 30입니다.

@@ -93,9 +93,9 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 
 ## 5 Open / Unconfirmed
 
-1. Hack2Skill 제출 화면에서 요구하는 파일 형식과 업로드 필드
-2. 대회 사이트의 Global 표기와 India-only 본문 표기 중 실제 참가 자격
-3. 비공개 GitHub 저장소에 부여할 공식 심사 계정
+1. Hack2Skill 로그인 후 제출 화면에서 요구하는 파일 형식과 업로드 필드
+2. 비공개 GitHub 저장소에 부여할 공식 심사 계정
+3. 공개 영상 URL과 signed-out 접근 검증
 
 ## 6 Canonical Documents
 
@@ -129,3 +129,4 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 - 2026-08-01 v6: 독립 QA 결과를 반영해 BidPilot을 B2G Pursuit Agent의 Bid Room으로 재정의하고, 하드코드 공고·고정 writer·미실행 Snowflake 주장과 실제 구현 목표를 분리했습니다.
 - 2026-08-02 v7: local tender intake, strategy-led generation, persistent Bid Room, account-ready Opportunity Graph를 반영하고 Snowflake 가입·대회 자격 외부 게이트를 기록했습니다.
 - 2026-08-02 v8: authenticated Snowflake, Snowpark 2×2, evidence-safe Cortex complete run, blind-selected score-map UI, 33 tests와 최종 제출 패키지를 반영했습니다.
+- 2026-08-02 v9: 공식 페이지에서 한국 참가 가능, 8월 2일 등록 마감, 8월 6일 제출 마감과 30/40/30 rubric을 재확인하고 deck·Q&A·200단어 제출문을 추가했습니다.
