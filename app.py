@@ -321,8 +321,11 @@ def render_bid_room() -> None:
         st.info("Proposal generation is blocked until this opportunity is pursueable.")
     result_state = st.session_state.get("bid_room")
     result = None
+    store = BidRoomStore(Path(".bidpilot") / "bidpilot.sqlite")
     if result_state and result_state.get("input_key") == input_key:
-        result = BidRoomStore(Path(".bidpilot") / "bidpilot.sqlite").load(result_state["run_id"])
+        result = store.load(result_state["run_id"])
+    elif brief.can_generate_proposal:
+        result = store.latest(tender["id"], supplier["id"], opportunity_version, position.statement)
     if result:
         st.success(f"Bid Room run saved: {result['run_id']}")
         st.text_area("Strategy-led proposal draft", result["proposal_markdown"], height=520)
