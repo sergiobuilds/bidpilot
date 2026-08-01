@@ -3,13 +3,15 @@
 from __future__ import annotations
 
 import html
+from pathlib import Path
 
 import streamlit as st
 
+from bidpilot.bid_room import BidRoomStore
 from bidpilot.engine import create_proposal_tasks, evaluate_bid
-from bidpilot.fixtures import COMPANY, RFPS
-from bidpilot.proposal_writer import write_proposal_draft
-from bidpilot.public_tender import PUBLIC_TENDER, assess_public_tender
+from bidpilot.fixtures import COMPANY, RFPS, SUPPLIER_PROFILES, TENDERS
+from bidpilot.proposal_writer import red_team_proposal, write_strategy_proposal
+from bidpilot.pursuit import build_pursuit_brief, select_win_position
 
 st.set_page_config(page_title="BidPilot · Bid Decision Workbench", page_icon="◈", layout="wide")
 
@@ -244,71 +246,90 @@ def section(number: str, title: str, right: str = "") -> str:
     )
 
 
-def render_public_tender_case() -> None:
-    """Render the buyer-facing fit decision and the proposal-writing surface."""
-    st.sidebar.markdown('<div class="bp-kicker">Company profile</div>', unsafe_allow_html=True)
-    company_name = st.sidebar.text_input("Company name", placeholder="Your company")
-    positioning = st.sidebar.text_area("Why should the buyer choose you?", placeholder="Delivery strengths, comparable work, team, or differentiators", height=120)
-    st.sidebar.markdown('<div class="bp-kicker">Tender qualification</div>', unsafe_allow_html=True)
-    choices = ("Not sure", "Yes", "No")
-    evidence: dict[str, bool] = {}
-    for requirement in PUBLIC_TENDER["requirements"]:
-        choice = st.sidebar.selectbox(requirement["label"], choices, key=f"tender-{requirement['key']}")
-        evidence[requirement["key"]] = {"Yes": True, "No": False}.get(choice)  # type: ignore[assignment]
+def render_bid_room() -> None:
+    """Render the end-to-end tender, strategy, proposal, and persistent run surface."""
+    st.sidebar.markdown('<div class="bp-kicker">Tender replay</div>', unsafe_allow_html=True)
+    tender = st.sidebar.selectbox("Tender", TENDERS, format_func=lambda item: item["title"])
+    supplier = st.sidebar.selectbox("Supplier profile", SUPPLIER_PROFILES, format_func=lambda item: item["name"])
+    brief = build_pursuit_brief(tender, supplier)
+    position_labels = [f"{position.title} — {position.statement}" for position in brief.win_positions]
+    selected_index = st.sidebar.radio("Win Position", range(len(position_labels)), format_func=lambda index: position_labels[index])
+    brief = select_win_position(brief, tender, supplier, selected_index)
+    position = brief.win_positions[selected_index]
+    opportunity_version = f"fixture:{tender['id']}:v1"
+    input_key = f"{tender['id']}:{supplier['id']}:{selected_index}:{opportunity_version}"
 
-    assessment = assess_public_tender(PUBLIC_TENDER, evidence)
-    state_class = "is-nobid" if assessment.recommendation.startswith("NO-BID") else "is-bid" if assessment.recommendation.startswith("ELIGIBLE") else "is-nobid"
-    source_url = html.escape(PUBLIC_TENDER["source_url"], quote=True)
-
+    state_class = "is-bid" if brief.status == "PURSUE" else "is-nobid"
     st.markdown(
-        '<div class="bp-rail"><span class="bp-rail-item"><span class="bp-rail-key">Public-source case</span>'
-        f'<span class="bp-rail-val">{PUBLIC_TENDER["case_id"]}</span></span>'
-        f'<span class="bp-rail-item"><span class="bp-rail-key">Source fingerprint</span><span class="bp-rail-val">{PUBLIC_TENDER["source_sha256"][:12]}…</span></span>'
-        '<span class="bp-rail-mode">Historical notice · proposal drafting locked</span></div>',
+        f'<div class="bp-rail"><span class="bp-rail-item"><span class="bp-rail-key">Tender</span><span class="bp-rail-val">{tender["id"]}</span></span>'
+        f'<span class="bp-rail-item"><span class="bp-rail-key">Supplier</span><span class="bp-rail-val">{supplier["name"]}</span></span>'
+        f'<span class="bp-rail-item"><span class="bp-rail-key">Profile capacity</span><span class="bp-rail-val">{supplier["available_hours"]} h</span></span>'
+        '<span class="bp-rail-mode">Local persistent Bid Room · Snowflake account pending</span></div>',
         unsafe_allow_html=True,
     )
     st.markdown(
-        f'''<div class="bp-mast"><div class="bp-mast-left"><div class="bp-kicker">B2G qualification → proposal drafting</div>
-        <div class="bp-title">Can we win<br>this tender?</div><div class="bp-lede">BidPilot reads a real public notice, checks whether your company can participate, and turns a viable pursuit into an editable proposal draft. Qualification happens in the background; the output is a clear pursue decision and a proposal your team can refine.</div></div>
-        <div class="bp-mast-right"><b>{PUBLIC_TENDER["issuer"]}</b><br>{PUBLIC_TENDER["notice_number"]}<br><br>Bid close: {PUBLIC_TENDER["bid_close"]}<br>Current status: historical and closed.</div></div>''',
+        f'''<div class="bp-mast"><div class="bp-mast-left"><div class="bp-kicker">B2G Pursuit Agent</div>
+        <div class="bp-title">Win the score,<br>then write the bid.</div><div class="bp-lede">BidPilot connects a tender evaluation matrix to the supplier profile, selects a Win Position, builds score-bearing proposal sections, and stores the result as a Bid Room run.</div></div>
+        <div class="bp-mast-right"><b>{html.escape(tender["title"])}</b><br><br>{html.escape(tender["buyer_objective"])}</div></div>''',
         unsafe_allow_html=True,
     )
-
     left, right = st.columns([1.05, 1], gap="large")
     with left:
         st.markdown(
-            f'''<div class="bp-decision {state_class}"><div class="bp-dec-top"><span>Pursuit decision</span><span>{PUBLIC_TENDER["case_id"]}</span></div>
-            <div class="bp-dec-word">{assessment.recommendation}</div><div class="bp-dec-line">Complete the company profile in the sidebar. BidPilot will immediately show whether to pursue, stop, or resolve a qualification gap.</div></div>''',
+            f'<div class="bp-decision {state_class}"><div class="bp-dec-top"><span>Pursuit decision</span><span>{supplier["id"]}</span></div>'
+            f'<div class="bp-dec-word">{brief.status}</div><div class="bp-dec-line">{html.escape(" ".join(brief.next_actions))}</div></div>',
             unsafe_allow_html=True,
         )
-        st.markdown(section("01", "Public notice facts", "source-bound extraction"), unsafe_allow_html=True)
-        st.markdown(
-            f'<div class="bp-reason">{PUBLIC_TENDER["scope"]}</div><div class="bp-reason">KRW {PUBLIC_TENDER["contract_value_krw"]:,} · {PUBLIC_TENDER["duration_days"]} delivery days</div><div class="bp-reason">{PUBLIC_TENDER["evaluation"]}</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(f'<p class="bp-note">Source: <a href="{source_url}" target="_blank">official G2B attachment</a> · 9 pages · SHA-256 {PUBLIC_TENDER["source_sha256"]}</p>', unsafe_allow_html=True)
-
+        st.markdown(section("01", "Selected Win Position", "strategy before drafting"), unsafe_allow_html=True)
+        st.markdown(f'<div class="bp-reason">{html.escape(position.statement)}</div>', unsafe_allow_html=True)
+        for card in position.proof_cards:
+            st.markdown(f'<div class="bp-reason"><b>{html.escape(card.label)}</b> · {html.escape(card.detail)}</div>', unsafe_allow_html=True)
+        if position.weakness:
+            st.warning(f"Weakness: {position.weakness} Mitigation: {position.mitigation}")
     with right:
-        st.markdown(section("02", "Can your company enter?", f"{assessment.passed} yes · {assessment.failed} no · {assessment.unknown} to confirm"), unsafe_allow_html=True)
-        rows = "".join(
-            f'<div class="bp-gate-row"><span class="bp-gate-name">{html.escape(check["label"])}</span><span class="bp-gate-test">{check["source"]}</span><span class="bp-gate-flag {"pass" if check["status"] == "PASS" else "fail" if check["status"] == "FAIL" else "info"}>{"YES" if check["status"] == "PASS" else "NO" if check["status"] == "FAIL" else "CHECK"}</span></div>'
-            for check in assessment.checks
+        st.markdown(section("02", "Score Map", "where the proposal must win"), unsafe_allow_html=True)
+        st.dataframe(brief.score_map, hide_index=True, width="stretch")
+        st.markdown(section("03", "Proposal Blueprint", "criterion → claim → owner"), unsafe_allow_html=True)
+        st.dataframe(
+            [{"Criterion": item.criterion, "Weight": item.weight, "Claim": item.claim, "Owner": item.owner} for item in brief.proposal_blueprint],
+            hide_index=True,
+            width="stretch",
         )
-        st.markdown(f'<div class="bp-gate">{rows}</div>', unsafe_allow_html=True)
 
-    st.markdown(section("03", "Write the proposal", "editable English draft"), unsafe_allow_html=True)
-    st.markdown(
-        '<div class="bp-handoff"><div class="bp-handoff-k">Proposal brief</div><div class="bp-handoff-v">From tender to first draft</div><div class="bp-handoff-p">Generate an English executive summary, technical approach, delivery plan, evaluation strategy, and submission checklist. Your team can then edit and export it in the buyer’s required format.</div></div>',
-        unsafe_allow_html=True,
-    )
-    if st.button("Generate proposal draft", type="primary"):
-        st.session_state["public_tender_draft"] = write_proposal_draft(PUBLIC_TENDER, company_name, positioning)
-    draft = st.session_state.get("public_tender_draft")
-    if draft:
-        st.markdown("#### Proposal draft")
-        st.text_area("Editable proposal draft", value=draft, height=520, key="proposal-draft-editor")
-        st.download_button("Download proposal draft (Markdown)", data=draft, file_name="g2b-proposal-draft.md", mime="text/markdown")
-    st.markdown('<p class="bp-foot"><b>Public-notice case.</b> This is a real historical G2B notice used to demonstrate the workflow. The product is designed for an open notice selected by the user, then outputs a pursuit decision and a proposal draft rather than an HWPX-only document process.</p>', unsafe_allow_html=True)
+    st.markdown(section("04", "Build and Red-team", "one persisted run"), unsafe_allow_html=True)
+    if st.button("Build strategy-led proposal", type="primary", disabled=not brief.can_generate_proposal):
+        draft = write_strategy_proposal(tender, supplier, brief)
+        findings = red_team_proposal(brief, draft)
+        store = BidRoomStore(Path(".bidpilot") / "bidpilot.sqlite")
+        tasks = tuple(
+            {"task": f"Develop {section.criterion} response", "owner": section.owner, "status": "OPEN"}
+            for section in brief.proposal_blueprint
+        )
+        run_id = store.save(
+            brief,
+            opportunity_version=opportunity_version,
+            proposal_markdown=draft,
+            red_team_findings=findings,
+            tasks=tasks,
+        )
+        st.session_state["bid_room"] = {"input_key": input_key, "run_id": run_id}
+    if brief.status != "PURSUE":
+        st.info("Proposal generation is blocked until this opportunity is pursueable.")
+    result_state = st.session_state.get("bid_room")
+    result = None
+    if result_state and result_state.get("input_key") == input_key:
+        result = BidRoomStore(Path(".bidpilot") / "bidpilot.sqlite").load(result_state["run_id"])
+    if result:
+        st.success(f"Bid Room run saved: {result['run_id']}")
+        st.text_area("Strategy-led proposal draft", result["proposal_markdown"], height=520)
+        if result["red_team_findings"]:
+            st.warning("Red-team findings: " + " ".join(result["red_team_findings"]))
+        else:
+            st.caption("Red-team: each score-bearing section includes a selected supplier asset.")
+        st.caption("Pursuit tasks: " + " · ".join(task["task"] for task in result["tasks"]))
+        st.caption("Agent trace: local-development-adapter only. Snowflake and CoCo execution has not occurred.")
+        st.download_button("Download proposal draft", result["proposal_markdown"], file_name="bidpilot-strategy-proposal.md", mime="text/markdown")
+    st.markdown('<p class="bp-foot"><b>Demo boundary.</b> Tender and supplier profiles in this view are synthetic replay fixtures. URL/PDF intake is implemented as a separate source-snapshot contract. Snowflake and CoCo execution remain unverified until account access exists.</p>', unsafe_allow_html=True)
 
 
 # ---------------------------------------------------------------------------
@@ -317,11 +338,11 @@ def render_public_tender_case() -> None:
 
 workflow = st.sidebar.radio(
     "Workflow",
-    options=("Synthetic decision simulation", "Actual G2B notice → Proposal Start Packet"),
+    options=("Bid Room replay", "Synthetic decision simulation"),
     label_visibility="collapsed",
 )
-if workflow == "Actual G2B notice → Proposal Start Packet":
-    render_public_tender_case()
+if workflow == "Bid Room replay":
+    render_bid_room()
     st.stop()
 
 st.sidebar.markdown('<div class="bp-kicker">Opportunity queue</div>', unsafe_allow_html=True)

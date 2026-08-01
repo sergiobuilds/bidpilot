@@ -49,13 +49,13 @@ The notice weights technical evaluation at 90% and price at 10%. The proposal sh
 """
 
 
-def write_strategy_proposal(tender: dict, supplier: dict, brief: PursuitBrief, position_index: int = 0) -> str:
+def write_strategy_proposal(tender: dict, supplier: dict, brief: PursuitBrief) -> str:
     """Write criterion-led sections from a persisted Pursuit Brief contract."""
     if not brief.can_generate_proposal:
         raise ValueError(f"Proposal generation is blocked for {brief.status} opportunities.")
     if brief.opportunity_id != tender["id"] or brief.supplier_profile_id != supplier["id"]:
         raise ValueError("Tender and supplier must match the Pursuit Brief version.")
-    position = brief.win_positions[position_index]
+    position = brief.win_positions[brief.selected_position_index]
     return _strategy_markdown(tender, supplier, brief, position)
 
 
@@ -67,8 +67,9 @@ def red_team_proposal(brief: PursuitBrief, draft: str) -> tuple[str, ...]:
             findings.append(f"Add an explicit {section.criterion} section before review.")
         if not any(asset in draft for asset in section.assets):
             findings.append(f"Connect {section.criterion} to a selected supplier asset.")
-    if brief.win_positions[0].weakness:
-        findings.append(brief.win_positions[0].mitigation or brief.win_positions[0].weakness)
+    position = brief.win_positions[brief.selected_position_index]
+    if position.weakness:
+        findings.append(position.mitigation or position.weakness)
     return tuple(findings)
 
 

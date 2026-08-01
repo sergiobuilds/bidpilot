@@ -3,7 +3,7 @@ from pathlib import Path
 from bidpilot.bid_room import BidRoomStore
 from bidpilot.fixtures import SUPPLIER_PROFILES, TENDERS
 from bidpilot.proposal_writer import red_team_proposal, write_strategy_proposal
-from bidpilot.pursuit import build_pursuit_brief
+from bidpilot.pursuit import build_pursuit_brief, select_win_position
 
 
 def test_qualified_supplier_receives_pursue_and_strategy_bound_blueprint() -> None:
@@ -49,6 +49,18 @@ def test_strategy_led_proposal_uses_the_selected_tender_and_supplier_assets() ->
     assert red_team_proposal(brief, draft) == ()
 
 
+def test_selecting_a_position_changes_the_proposal_blueprint_claims() -> None:
+    tender = TENDERS[0]
+    supplier = SUPPLIER_PROFILES[0]
+    brief = build_pursuit_brief(tender, supplier)
+    continuity = select_win_position(brief, tender, supplier, 1)
+
+    assert continuity.proposal_blueprint[0].claim != brief.proposal_blueprint[0].claim
+    assert continuity.win_positions[1].title in continuity.proposal_blueprint[0].claim
+    assert continuity.selected_position_index == 1
+    assert continuity.win_positions[1].statement in write_strategy_proposal(tender, supplier, continuity)
+
+
 def test_no_go_brief_cannot_create_a_strategy_proposal() -> None:
     tender = TENDERS[0]
     supplier = SUPPLIER_PROFILES[1]
@@ -72,9 +84,9 @@ def test_bid_room_persists_the_same_versioned_run_after_refresh(tmp_path: Path) 
     run_id = store.save(
         brief,
         opportunity_version="sha256:demo-replay-v1",
-        position=brief.win_positions[0],
         proposal_markdown=proposal,
         red_team_findings=red_team_proposal(brief, proposal),
+        tasks=({"owner": "Solution lead", "task": "Confirm proposal outline"},),
     )
     loaded = store.load(run_id)
 
@@ -83,3 +95,9 @@ def test_bid_room_persists_the_same_versioned_run_after_refresh(tmp_path: Path) 
     assert loaded["opportunity_version"] == "sha256:demo-replay-v1"
     assert loaded["proposal_markdown"] == proposal
     assert loaded["red_team_findings"] == ()
+    assert loaded["brief"]["win_positions"][0]["proof_cards"]
+    assert loaded["tasks"][0]["owner"] == "Solution lead"
+    assert loaded["agent_run"]["state"] == "not-executed-in-snowflake-or-coco"
+    latest = store.latest(tender["id"], supplier["id"], "sha256:demo-replay-v1", brief.win_positions[0].statement)
+    assert latest is not None
+    assert latest["run_id"] == run_id
