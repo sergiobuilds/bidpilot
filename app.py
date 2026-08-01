@@ -3,13 +3,12 @@
 from __future__ import annotations
 
 import html
-import json
 
 import streamlit as st
 
 from bidpilot.engine import create_proposal_tasks, evaluate_bid
 from bidpilot.fixtures import COMPANY, RFPS
-from bidpilot.proposal_packet import build_proposal_start_packet
+from bidpilot.proposal_writer import write_proposal_draft
 from bidpilot.public_tender import PUBLIC_TENDER, assess_public_tender
 
 st.set_page_config(page_title="BidPilot · Bid Decision Workbench", page_icon="◈", layout="wide")
@@ -246,17 +245,18 @@ def section(number: str, title: str, right: str = "") -> str:
 
 
 def render_public_tender_case() -> None:
-    """Render one public-source tender without inventing supplier facts."""
-    st.sidebar.markdown('<div class="bp-kicker">Supplier evidence declaration</div>', unsafe_allow_html=True)
-    st.sidebar.caption("Only mark a requirement verified when a current company record supports it.")
-    choices = ("Not verified", "Verified", "Does not meet")
+    """Render the buyer-facing fit decision and the proposal-writing surface."""
+    st.sidebar.markdown('<div class="bp-kicker">Company profile</div>', unsafe_allow_html=True)
+    company_name = st.sidebar.text_input("Company name", placeholder="Your company")
+    positioning = st.sidebar.text_area("Why should the buyer choose you?", placeholder="Delivery strengths, comparable work, team, or differentiators", height=120)
+    st.sidebar.markdown('<div class="bp-kicker">Tender qualification</div>', unsafe_allow_html=True)
+    choices = ("Not sure", "Yes", "No")
     evidence: dict[str, bool] = {}
     for requirement in PUBLIC_TENDER["requirements"]:
         choice = st.sidebar.selectbox(requirement["label"], choices, key=f"tender-{requirement['key']}")
-        evidence[requirement["key"]] = {"Verified": True, "Does not meet": False}.get(choice)  # type: ignore[assignment]
+        evidence[requirement["key"]] = {"Yes": True, "No": False}.get(choice)  # type: ignore[assignment]
 
     assessment = assess_public_tender(PUBLIC_TENDER, evidence)
-    packet = build_proposal_start_packet(PUBLIC_TENDER, assessment)
     state_class = "is-nobid" if assessment.recommendation.startswith("NO-BID") else "is-bid" if assessment.recommendation.startswith("ELIGIBLE") else "is-nobid"
     source_url = html.escape(PUBLIC_TENDER["source_url"], quote=True)
 
@@ -268,8 +268,8 @@ def render_public_tender_case() -> None:
         unsafe_allow_html=True,
     )
     st.markdown(
-        f'''<div class="bp-mast"><div class="bp-mast-left"><div class="bp-kicker">B2G qualification → proposal start packet</div>
-        <div class="bp-title">Public notice,<br>evidence first.</div><div class="bp-lede">This is a real, public G2B notice. BidPilot extracts its non-negotiable entry requirements, asks only for supplier evidence, and produces the source-bound packet that a proposal engine needs before it writes.</div></div>
+        f'''<div class="bp-mast"><div class="bp-mast-left"><div class="bp-kicker">B2G qualification → proposal drafting</div>
+        <div class="bp-title">Can we win<br>this tender?</div><div class="bp-lede">BidPilot reads a real public notice, checks whether your company can participate, and turns a viable pursuit into an editable proposal draft. Qualification happens in the background; the output is a clear pursue decision and a proposal your team can refine.</div></div>
         <div class="bp-mast-right"><b>{PUBLIC_TENDER["issuer"]}</b><br>{PUBLIC_TENDER["notice_number"]}<br><br>Bid close: {PUBLIC_TENDER["bid_close"]}<br>Current status: historical and closed.</div></div>''',
         unsafe_allow_html=True,
     )
@@ -277,8 +277,8 @@ def render_public_tender_case() -> None:
     left, right = st.columns([1.05, 1], gap="large")
     with left:
         st.markdown(
-            f'''<div class="bp-decision {state_class}"><div class="bp-dec-top"><span>Qualification result</span><span>{PUBLIC_TENDER["case_id"]}</span></div>
-            <div class="bp-dec-word">{assessment.recommendation}</div><div class="bp-dec-line">Supplier facts are never inferred. This result changes only when supported evidence is declared.</div></div>''',
+            f'''<div class="bp-decision {state_class}"><div class="bp-dec-top"><span>Pursuit decision</span><span>{PUBLIC_TENDER["case_id"]}</span></div>
+            <div class="bp-dec-word">{assessment.recommendation}</div><div class="bp-dec-line">Complete the company profile in the sidebar. BidPilot will immediately show whether to pursue, stop, or resolve a qualification gap.</div></div>''',
             unsafe_allow_html=True,
         )
         st.markdown(section("01", "Public notice facts", "source-bound extraction"), unsafe_allow_html=True)
@@ -289,25 +289,26 @@ def render_public_tender_case() -> None:
         st.markdown(f'<p class="bp-note">Source: <a href="{source_url}" target="_blank">official G2B attachment</a> · 9 pages · SHA-256 {PUBLIC_TENDER["source_sha256"]}</p>', unsafe_allow_html=True)
 
     with right:
-        st.markdown(section("02", "Eligibility evidence", f"{assessment.passed} pass · {assessment.failed} fail · {assessment.unknown} pending"), unsafe_allow_html=True)
+        st.markdown(section("02", "Can your company enter?", f"{assessment.passed} yes · {assessment.failed} no · {assessment.unknown} to confirm"), unsafe_allow_html=True)
         rows = "".join(
-            f'<div class="bp-gate-row"><span class="bp-gate-name">{html.escape(check["label"])}</span><span class="bp-gate-test">{check["source"]}</span><span class="bp-gate-flag {"pass" if check["status"] == "PASS" else "fail" if check["status"] == "FAIL" else "info"}">{check["status"]}</span></div>'
+            f'<div class="bp-gate-row"><span class="bp-gate-name">{html.escape(check["label"])}</span><span class="bp-gate-test">{check["source"]}</span><span class="bp-gate-flag {"pass" if check["status"] == "PASS" else "fail" if check["status"] == "FAIL" else "info"}>{"YES" if check["status"] == "PASS" else "NO" if check["status"] == "FAIL" else "CHECK"}</span></div>'
             for check in assessment.checks
         )
         st.markdown(f'<div class="bp-gate">{rows}</div>', unsafe_allow_html=True)
 
-    st.markdown(section("03", "Proposal Engine handoff", packet["proposal_strategy"]["writing_gate"]), unsafe_allow_html=True)
+    st.markdown(section("03", "Write the proposal", "editable English draft"), unsafe_allow_html=True)
     st.markdown(
-        f'<div class="bp-handoff"><div class="bp-handoff-k">Proposal Start Packet v{packet["packet_version"]}</div><div class="bp-handoff-v">{packet["proposal_strategy"]["writing_gate"]}</div><div class="bp-handoff-p">{packet["proposal_strategy"]["writing_gate_reason"]}</div></div>',
+        '<div class="bp-handoff"><div class="bp-handoff-k">Proposal brief</div><div class="bp-handoff-v">From tender to first draft</div><div class="bp-handoff-p">Generate an English executive summary, technical approach, delivery plan, evaluation strategy, and submission checklist. Your team can then edit and export it in the buyer’s required format.</div></div>',
         unsafe_allow_html=True,
     )
-    st.download_button(
-        "Download Proposal Start Packet (JSON)",
-        data=json.dumps(packet, ensure_ascii=False, indent=2),
-        file_name=f"{PUBLIC_TENDER['case_id'].lower()}-proposal-start-packet.json",
-        mime="application/json",
-    )
-    st.markdown('<p class="bp-foot"><b>Evidence boundary.</b> This is a real historical public notice, not a live bidding recommendation. The application never asserts supplier qualifications, commercial feasibility, or proposal readiness without declared evidence. The JSON packet is the integration boundary for Grant Proposal Engine.</p>', unsafe_allow_html=True)
+    if st.button("Generate proposal draft", type="primary"):
+        st.session_state["public_tender_draft"] = write_proposal_draft(PUBLIC_TENDER, company_name, positioning)
+    draft = st.session_state.get("public_tender_draft")
+    if draft:
+        st.markdown("#### Proposal draft")
+        st.text_area("Editable proposal draft", value=draft, height=520, key="proposal-draft-editor")
+        st.download_button("Download proposal draft (Markdown)", data=draft, file_name="g2b-proposal-draft.md", mime="text/markdown")
+    st.markdown('<p class="bp-foot"><b>Public-notice case.</b> This is a real historical G2B notice used to demonstrate the workflow. The product is designed for an open notice selected by the user, then outputs a pursuit decision and a proposal draft rather than an HWPX-only document process.</p>', unsafe_allow_html=True)
 
 
 # ---------------------------------------------------------------------------
