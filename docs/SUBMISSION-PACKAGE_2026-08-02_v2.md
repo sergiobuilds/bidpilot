@@ -68,6 +68,8 @@ BidPilot is not another tender summarizer. It shows a team whether to bid, where
 | 70–82 s | Open execution provenance and show session ID plus query IDs. | “Snowpark and Cortex Code wrote one complete run. The provider, policy version, session, query IDs, sections, and tasks are reloadable from Snowflake.” |
 | 82–90 s | Return to the 40-point row and proposal download. | “BidPilot turns the question ‘Should we bid?’ into ‘Here is how we win, what we can write now, and what the team must close next.’” |
 
+The repository contains a 90.000-second, 1440×900 H.264 review draft at `dev/active/final-forge/bidpilot-demo-90s-draft.mp4`. It uses six authenticated app captures in this exact sequence. Add the voice-over above and upload the reviewed version as an unlisted or public judge-accessible video before submission.
+
 ## Pitch deck copy
 
 ### Slide 1 — The proposal starts too late
@@ -168,7 +170,7 @@ No final bid is submitted by the product. A human owns source review, company ev
 ## Final submission checklist
 
 - Replace the repository placeholder with the judge-accessible GitHub URL and verified commit SHA.
-- Record the 90-second video from authenticated mode and verify audio, text size, and URL permissions from a signed-out browser.
+- Review the repository's exact 90-second draft, add the approved voice-over, upload it, and verify audio, text size, and URL permissions from a signed-out browser.
 - Paste the title, one-line description, problem, solution, Snowflake explanation, and business value without adding unsupported claims.
 - Confirm the repository, video, and any live demo remain accessible for the judging window.
 - Sergio performs the external final-submit click after reviewing the rendered form.
