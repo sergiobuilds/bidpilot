@@ -1,5 +1,7 @@
 from bidpilot.engine import create_proposal_tasks, decision_trace, evaluate_bid
 from bidpilot.fixtures import COMPANY, RFPS
+from bidpilot.proposal_packet import build_proposal_start_packet
+from bidpilot.public_tender import PUBLIC_TENDER, assess_public_tender
 
 
 def test_high_value_opportunity_is_rejected_for_policy_failures() -> None:
@@ -40,3 +42,30 @@ def test_snowpark_execution_module_imports() -> None:
     module = runpy.run_path("snowflake/snowpark_decision.py")
 
     assert callable(module["evaluate_and_persist"])
+
+
+def test_public_tender_never_claims_eligibility_without_supplier_evidence() -> None:
+    assessment = assess_public_tender(PUBLIC_TENDER, {})
+
+    assert assessment.recommendation == "HOLD — EVIDENCE REQUIRED"
+    assert assessment.unknown == 6
+
+
+def test_public_tender_rejects_a_confirmed_mandatory_requirement_failure() -> None:
+    assessment = assess_public_tender(
+        PUBLIC_TENDER,
+        {"daejeon_headquarters": False, "software_business_1468": True},
+    )
+
+    assert assessment.recommendation == "NO-BID — INELIGIBLE"
+    assert assessment.failed == 1
+
+
+def test_public_tender_packet_locks_proposal_drafting_until_evidence_and_open_status_exist() -> None:
+    assessment = assess_public_tender(PUBLIC_TENDER, {})
+    packet = build_proposal_start_packet(PUBLIC_TENDER, assessment)
+
+    assert packet["kind"] == "proposal-start-packet"
+    assert packet["source"]["sha256"] == PUBLIC_TENDER["source_sha256"]
+    assert packet["proposal_strategy"]["writing_gate"] == "LOCKED"
+    assert len(packet["qualification"]["missing_evidence"]) == 6

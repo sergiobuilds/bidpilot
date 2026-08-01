@@ -2,10 +2,15 @@
 
 from __future__ import annotations
 
+import html
+import json
+
 import streamlit as st
 
 from bidpilot.engine import create_proposal_tasks, evaluate_bid
 from bidpilot.fixtures import COMPANY, RFPS
+from bidpilot.proposal_packet import build_proposal_start_packet
+from bidpilot.public_tender import PUBLIC_TENDER, assess_public_tender
 
 st.set_page_config(page_title="BidPilot · Bid Decision Workbench", page_icon="◈", layout="wide")
 
@@ -240,9 +245,83 @@ def section(number: str, title: str, right: str = "") -> str:
     )
 
 
+def render_public_tender_case() -> None:
+    """Render one public-source tender without inventing supplier facts."""
+    st.sidebar.markdown('<div class="bp-kicker">Supplier evidence declaration</div>', unsafe_allow_html=True)
+    st.sidebar.caption("Only mark a requirement verified when a current company record supports it.")
+    choices = ("Not verified", "Verified", "Does not meet")
+    evidence: dict[str, bool] = {}
+    for requirement in PUBLIC_TENDER["requirements"]:
+        choice = st.sidebar.selectbox(requirement["label"], choices, key=f"tender-{requirement['key']}")
+        evidence[requirement["key"]] = {"Verified": True, "Does not meet": False}.get(choice)  # type: ignore[assignment]
+
+    assessment = assess_public_tender(PUBLIC_TENDER, evidence)
+    packet = build_proposal_start_packet(PUBLIC_TENDER, assessment)
+    state_class = "is-nobid" if assessment.recommendation.startswith("NO-BID") else "is-bid" if assessment.recommendation.startswith("ELIGIBLE") else "is-nobid"
+    source_url = html.escape(PUBLIC_TENDER["source_url"], quote=True)
+
+    st.markdown(
+        '<div class="bp-rail"><span class="bp-rail-item"><span class="bp-rail-key">Public-source case</span>'
+        f'<span class="bp-rail-val">{PUBLIC_TENDER["case_id"]}</span></span>'
+        f'<span class="bp-rail-item"><span class="bp-rail-key">Source fingerprint</span><span class="bp-rail-val">{PUBLIC_TENDER["source_sha256"][:12]}…</span></span>'
+        '<span class="bp-rail-mode">Historical notice · proposal drafting locked</span></div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        f'''<div class="bp-mast"><div class="bp-mast-left"><div class="bp-kicker">B2G qualification → proposal start packet</div>
+        <div class="bp-title">Public notice,<br>evidence first.</div><div class="bp-lede">This is a real, public G2B notice. BidPilot extracts its non-negotiable entry requirements, asks only for supplier evidence, and produces the source-bound packet that a proposal engine needs before it writes.</div></div>
+        <div class="bp-mast-right"><b>{PUBLIC_TENDER["issuer"]}</b><br>{PUBLIC_TENDER["notice_number"]}<br><br>Bid close: {PUBLIC_TENDER["bid_close"]}<br>Current status: historical and closed.</div></div>''',
+        unsafe_allow_html=True,
+    )
+
+    left, right = st.columns([1.05, 1], gap="large")
+    with left:
+        st.markdown(
+            f'''<div class="bp-decision {state_class}"><div class="bp-dec-top"><span>Qualification result</span><span>{PUBLIC_TENDER["case_id"]}</span></div>
+            <div class="bp-dec-word">{assessment.recommendation}</div><div class="bp-dec-line">Supplier facts are never inferred. This result changes only when supported evidence is declared.</div></div>''',
+            unsafe_allow_html=True,
+        )
+        st.markdown(section("01", "Public notice facts", "source-bound extraction"), unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="bp-reason">{PUBLIC_TENDER["scope"]}</div><div class="bp-reason">KRW {PUBLIC_TENDER["contract_value_krw"]:,} · {PUBLIC_TENDER["duration_days"]} delivery days</div><div class="bp-reason">{PUBLIC_TENDER["evaluation"]}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(f'<p class="bp-note">Source: <a href="{source_url}" target="_blank">official G2B attachment</a> · 9 pages · SHA-256 {PUBLIC_TENDER["source_sha256"]}</p>', unsafe_allow_html=True)
+
+    with right:
+        st.markdown(section("02", "Eligibility evidence", f"{assessment.passed} pass · {assessment.failed} fail · {assessment.unknown} pending"), unsafe_allow_html=True)
+        rows = "".join(
+            f'<div class="bp-gate-row"><span class="bp-gate-name">{html.escape(check["label"])}</span><span class="bp-gate-test">{check["source"]}</span><span class="bp-gate-flag {"pass" if check["status"] == "PASS" else "fail" if check["status"] == "FAIL" else "info"}">{check["status"]}</span></div>'
+            for check in assessment.checks
+        )
+        st.markdown(f'<div class="bp-gate">{rows}</div>', unsafe_allow_html=True)
+
+    st.markdown(section("03", "Proposal Engine handoff", packet["proposal_strategy"]["writing_gate"]), unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="bp-handoff"><div class="bp-handoff-k">Proposal Start Packet v{packet["packet_version"]}</div><div class="bp-handoff-v">{packet["proposal_strategy"]["writing_gate"]}</div><div class="bp-handoff-p">{packet["proposal_strategy"]["writing_gate_reason"]}</div></div>',
+        unsafe_allow_html=True,
+    )
+    st.download_button(
+        "Download Proposal Start Packet (JSON)",
+        data=json.dumps(packet, ensure_ascii=False, indent=2),
+        file_name=f"{PUBLIC_TENDER['case_id'].lower()}-proposal-start-packet.json",
+        mime="application/json",
+    )
+    st.markdown('<p class="bp-foot"><b>Evidence boundary.</b> This is a real historical public notice, not a live bidding recommendation. The application never asserts supplier qualifications, commercial feasibility, or proposal readiness without declared evidence. The JSON packet is the integration boundary for Grant Proposal Engine.</p>', unsafe_allow_html=True)
+
+
 # ---------------------------------------------------------------------------
 # Selection
 # ---------------------------------------------------------------------------
+
+workflow = st.sidebar.radio(
+    "Workflow",
+    options=("Synthetic decision simulation", "Actual G2B notice → Proposal Start Packet"),
+    label_visibility="collapsed",
+)
+if workflow == "Actual G2B notice → Proposal Start Packet":
+    render_public_tender_case()
+    st.stop()
 
 st.sidebar.markdown('<div class="bp-kicker">Opportunity queue</div>', unsafe_allow_html=True)
 labels = {rfp["id"]: f"{rfp['id']} · {rfp['title']}" for rfp in RFPS}
