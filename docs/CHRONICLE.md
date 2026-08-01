@@ -24,3 +24,5 @@ canonical_path: /home/elite/projects/personal/products/bidpilot/docs/CHRONICLE.m
 - 2026-08-01 [evidence]: 공개 G2B 공고 R26BK01490484의 원문 URL, 9쪽 원문 SHA-256, 자격·평가·과업 추출을 실제 사례로 추가했습니다. 이 공고는 마감된 과거 사례이므로 현재 투찰 가능성을 주장하지 않습니다.
 - 2026-08-01 [direction]: BidPilot의 headline을 qualification이나 문서 형식 보존이 아니라 Snowflake-native B2G Revenue Agent로 확정했습니다. 외부 공고와 내부 운영 데이터를 결합해 pursuit decision, win strategy, editable proposal draft, proposal work plan을 만듭니다.
 - 2026-08-01 [strategy]: 심사 시연의 magic moment는 실제 공고가 기술평가 승리 전략과 제안서 초안으로 변하는 장면으로 고정했습니다. 공고 조건과 회사 데이터 대조는 신뢰성 계층으로 유지하되 발표의 전면에는 두지 않습니다.
+- 2026-08-01 [direction]: 독립 제품·구매자·심사·구조 QA를 반영해 BidPilot을 B2G Pursuit Agent의 Bid Room으로 재정의했습니다. 제품의 단위는 공고 요약이나 bid/no-bid 답이 아니라, 평가 논리와 회사 운영 메모리에서 선택한 Win Position을 전략 주도 제안서·red-team·소유 작업으로 연결한 하나의 persisted run입니다.
+- 2026-08-01 [scope]: 기존 합성 hard-gate 데모, 단일 마감 공고 fixture, 고정 Markdown writer, 실행되지 않은 Snowflake 스케치는 초기 prototype으로 격하했습니다. 최종 제출 주장은 실제 Snowflake query·write, Snowpark parity, CoCo trace, 두 공고와 두 공급사 프로필의 변화 검증이 있는 경우에만 허용합니다.

@@ -1,18 +1,27 @@
 # BidPilot
 
-BidPilot is an RFP bid/no-bid decision prototype for the Snowflake CoCo CLI Hackathon 2026. The local demo connects a proposed engagement to delivery capability, capacity, economics, and deadlines, then creates an in-session proposal work plan.
+BidPilot is a B2G Pursuit Agent for the Snowflake CoCo CLI Hackathon 2026. It is designed to turn a tender into a Bid Room: evaluation logic, supplier operating memory, a selected win position, a strategy-led proposal draft, and owned pursuit work.
 
-**Contents** — 1 Demo flow · 2 Run locally · 3 Snowflake proof path · 4 Canonical project records · 5 Change history
+**Contents** — 1 Product direction · 2 Current prototype boundary · 3 Run locally · 4 Snowflake proof path · 5 Canonical project records · 6 Change history
 
-## 1 Demo flow
+## 1 Product direction
 
-1. Select `RFP-ORBIT` to see a high-value opportunity rejected because mandatory qualification, capacity, and margin gates fail.
-2. Select `RFP-NORTHSTAR` to see the next viable bid.
-3. Create its proposal work plan and inspect the owned internal tasks.
+The target flow is public tender intake → supplier retrieval → pursuit brief → win position → proposal blueprint and draft → red-team → persisted Bid Room.
 
-All records are synthetic. The fixture includes no customer, audit, or confidential bid data.
+The canonical implementation contract is [Winning Strategy v2](docs/WINNING-STRATEGY_2026-08-01_v2.md).
 
-## 2 Run locally
+## 2 Current prototype boundary
+
+The repository currently contains an early local prototype:
+
+1. Two synthetic RFP hard-gate scenarios.
+2. One historical public G2B tender fixture.
+3. A fixed Markdown proposal template.
+4. Prepared Snowflake SQL and Snowpark sketches without an authenticated run.
+
+It does not yet prove public tender intake, Snowflake retrieval or persistence, CoCo orchestration, strategy-driven proposal generation, or a persistent Bid Room.
+
+## 3 Run locally
 
 ```bash
 uv sync --group dev
@@ -20,7 +29,7 @@ uv run pytest -q
 uv run streamlit run app.py
 ```
 
-## 3 Snowflake proof path
+## 4 Snowflake proof path
 
 | Layer | Evidence prepared in this repository | Current runtime state |
 |---|---|---|
@@ -29,13 +38,15 @@ uv run streamlit run app.py
 | CoCo CLI | CoCo CLI v1.1.52 and Snowflake CLI v3.23.0 installed locally | No Snowflake connection profile yet |
 | User flow | Streamlit decision and in-session work-plan prototype | Local browser flow verified; no persistent store is active |
 
-## 4 Canonical project records
+## 5 Canonical project records
 
 - Project map: [docs/MASTER-MAP.md](docs/MASTER-MAP.md)
 - Decision record: [docs/CHRONICLE.md](docs/CHRONICLE.md)
+- Implementation contract: [docs/WINNING-STRATEGY_2026-08-01_v2.md](docs/WINNING-STRATEGY_2026-08-01_v2.md)
 - Current handoff: [PASSDOWN.md](PASSDOWN.md)
 
-## 5 Change history
+## 6 Change history
 
+- 2026-08-01 v3: Replaced the prototype-first repository description with the canonical Bid Room direction and separated unproven prototype behavior from the target implementation.
 - 2026-08-01 v2: Added the synthetic decision prototype, Snowflake schema and Snowpark execution path, local verification commands, and current proof boundary.
 - 2026-08-01 v1: Created the repository and canonical document entry points.
