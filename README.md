@@ -46,7 +46,9 @@ Load the schema and fixture, then run the Snowpark matrix with the commands in [
 | Snowpark matrix | Four authenticated tender/supplier combinations match the Python policy |
 | Complete Cortex run | Decision, strategy, plans, eight sections, eleven tasks, and trace share one `run_id` |
 | Streamlit authenticated mode | Complete run reloads through `BIDPILOT_READER` with editable/downloadable Markdown |
-| Responsive design candidates | Seed reference renders at 1440, 768, and 390 CSS pixels report no horizontal overflow |
+| Responsive authenticated app | Actual Snowflake-backed renders at 1440, 768, and 390 CSS pixels report no horizontal overflow |
+
+Visual evidence is stored under `dev/active/final-forge/final-app-shot/`.
 
 The replay records are synthetic contest fixtures. The included public G2B notice is a closed historical example used only to test intake and qualification; it is not presented as an open opportunity. `PEOPLE`, prior-proposal, and pricing evidence absent from the Snowflake run remain explicit tasks and are not invented in the proposal.
 

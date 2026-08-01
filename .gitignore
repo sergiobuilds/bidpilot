@@ -10,6 +10,6 @@ __pycache__/
 .bidpilot/
 .gstack/
 dev/active/final-forge/.chrome-bidpilot/
-dev/active/final-forge/final-app-shot/
+dev/active/final-forge/final-app-shot/auth-*.png
 dev/active/final-forge/candidates/*/.dsshot/
 dev/active/final-forge/candidates/*/.verify-shot*/

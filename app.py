@@ -210,6 +210,19 @@ AUTHENTICATED_STYLE = """
         margin: var(--sx-x3) 0 0; overflow-wrap: anywhere; }
       .sx-mast__sub { margin-top: var(--sx-x2); max-width: 62ch; font-size: 14px; line-height: 22px;
         color: var(--sx-white-a700); }
+      .sx-magic { display: flex; flex-wrap: wrap; align-items: stretch; gap: var(--sx-x2);
+        margin-top: var(--sx-x4); }
+      .sx-magic__item { min-width: 150px; padding: var(--sx-x2) var(--sx-x3); border-radius: var(--sx-r2);
+        background: var(--sx-white-a300); box-shadow: inset 0 0 0 1px #ffffff24; }
+      .sx-magic__k { display: block; font-size: 10px; line-height: 14px; letter-spacing: .1em;
+        text-transform: uppercase; font-weight: 700; color: var(--sx-carrot-400); }
+      .sx-magic__v { display: block; margin-top: 2px; font-size: 13px; line-height: 18px;
+        font-weight: 700; color: #fff; }
+      .sx-magic__cta { display: inline-flex; align-items: center; justify-content: center; min-height: 42px;
+        padding: 0 var(--sx-x4); border-radius: var(--sx-r2); background: var(--sx-carrot-600);
+        color: #fff !important; text-decoration: none !important; font-size: 13px; font-weight: 700; }
+      .sx-magic__cta:hover, .sx-magic__cta:focus { background: var(--sx-carrot-700); }
+      .sx-magic__cta:focus-visible { outline: 3px solid var(--sx-focus); outline-offset: 2px; }
       .sx-verdict { display: grid; gap: 6px; justify-items: end; text-align: right; }
       .sx-verdict__k { font-size: 11px; line-height: 15px; letter-spacing: .12em; text-transform: uppercase;
         font-weight: 700; color: var(--sx-white-a700); }
@@ -222,6 +235,15 @@ AUTHENTICATED_STYLE = """
       @media (max-width: 860px) {
         .sx-mast { grid-template-columns: minmax(0,1fr); }
         .sx-verdict { justify-items: start; text-align: left; }
+      }
+      @media (max-width: 720px) {
+        .sx-strip__i:nth-child(2), .sx-strip__i:nth-child(3), .sx-strip__i:nth-child(4) { display: none; }
+        .sx-strip__live { margin-left: 0; }
+        .sx-mast { padding: var(--sx-x5); gap: var(--sx-x4); }
+        .sx-mast__title { font-size: 23px; line-height: 30px; }
+        .sx-magic { display: grid; grid-template-columns: 1fr 1fr; }
+        .sx-magic__item { min-width: 0; }
+        .sx-magic__cta { grid-column: 1 / -1; }
       }
 
       /* cards ------------------------------------------------------------ */
@@ -744,6 +766,8 @@ def render_snowflake_bid_room() -> None:
     decision = result["decision"] or {}
     strategies = result["strategies"] or []
     selected = next((item for item in strategies if item.get("selected")), strategies[0] if strategies else {})
+    blueprint = result["blueprint"] or []
+    lead_plan = max(blueprint, key=lambda item: as_number(item.get("weight")) or 0, default={})
     status = str(decision.get("status") or first_key(trace, ("pursuit_status", "status")) or "RECORDED")
     tone = STATUS_TONES.get(status.upper(), "neutral")
 
@@ -772,11 +796,20 @@ def render_snowflake_bid_room() -> None:
     # carries it; otherwise the opportunity identifier is the headline.
     headline = opportunity.get("title") or first_key(trace, TRACE_TITLE_KEYS) or run.get("opportunity_id") or selected_id
     objective = opportunity.get("buyer_objective") or first_key(trace, TRACE_OBJECTIVE_KEYS)
+    lead_label = lead_plan.get("criterion_name") or NOT_RECORDED
+    lead_weight = as_number(lead_plan.get("weight"))
+    lead_value = f"{trim(lead_weight)} points · {lead_label}" if lead_weight is not None else lead_label
+    position_value = selected.get("title") or NOT_RECORDED
     st.markdown(
         f'<section class="sx-mast"><div><p class="sx-kicker"><span>Authenticated Bid Room</span>'
         f'<span>Opportunity {esc(run.get("opportunity_id") or NOT_RECORDED)}</span></p>'
         f'<h1 class="sx-mast__title">{esc(headline)}</h1>'
-        f'<p class="sx-mast__sub">{esc(objective) if objective else "Buyer objective is not carried in this run record."}</p></div>'
+        f'<p class="sx-mast__sub">{esc(objective) if objective else "Buyer objective is not carried in this run record."}</p>'
+        f'<div class="sx-magic"><span class="sx-magic__item"><span class="sx-magic__k">Lead score target</span>'
+        f'<span class="sx-magic__v">{esc(lead_value)}</span></span>'
+        f'<span class="sx-magic__item"><span class="sx-magic__k">Selected Win Position</span>'
+        f'<span class="sx-magic__v">{esc(position_value)}</span></span>'
+        f'<a class="sx-magic__cta" href="#proposal-draft">Open proposal from selected strategy</a></div></div>'
         f'<div class="sx-verdict"><p class="sx-verdict__k">Pursuit decision</p>'
         f'<p class="sx-verdict__v" data-tone="{tone}">{esc(status)}</p>'
         f'<p class="sx-verdict__n sx-mono">Opportunity version {esc(run.get("opportunity_version") or NOT_RECORDED)}</p></div></section>',
@@ -810,7 +843,6 @@ def render_snowflake_bid_room() -> None:
 
     # 02 · the score map. Criterion weight, the supplier asset the run attached
     # to it, and the claim the proposal will make for those points.
-    blueprint = result["blueprint"] or []
     rows: list[dict] = []
     total_weight = 0.0
     evidenced_weight = 0.0
@@ -955,6 +987,7 @@ def render_snowflake_bid_room() -> None:
         unsafe_allow_html=True,
     )
     if result["sections"]:
+        st.markdown('<span id="proposal-draft"></span>', unsafe_allow_html=True)
         draft = "\n\n".join(str(item.get("section_markdown") or "") for item in result["sections"])
         edited = st.text_area(
             "Proposal draft",
