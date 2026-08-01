@@ -4,6 +4,7 @@ from streamlit.testing.v1 import AppTest
 
 
 def test_bid_room_reopens_latest_matching_persisted_run(monkeypatch, tmp_path: Path) -> None:
+    monkeypatch.delenv("BIDPILOT_SNOWFLAKE_CONNECTION", raising=False)
     monkeypatch.chdir(tmp_path)
     app_path = Path(__file__).parents[1] / "app.py"
 

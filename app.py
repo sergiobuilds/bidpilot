@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import html
+import json
+import os
 from pathlib import Path
 
 import streamlit as st
@@ -11,13 +13,16 @@ from bidpilot.bid_room import BidRoomStore
 from bidpilot.engine import create_proposal_tasks, evaluate_bid
 from bidpilot.fixtures import COMPANY, RFPS, SUPPLIER_PROFILES, TENDERS
 from bidpilot.intake import TenderIntakeError, build_pursuit_tender, intake_tender_bytes, intake_tender_url
-from bidpilot.proposal_writer import red_team_proposal, write_strategy_proposal
+from bidpilot.proposal_writer import red_team_proposal, red_team_tasks, write_strategy_proposal
 from bidpilot.pursuit import build_pursuit_brief, select_win_position
+from bidpilot.snowflake_store import SnowflakeBidRoomError, SnowflakeBidRoomStore, configured_connection_name
 
 st.set_page_config(page_title="BidPilot · Bid Decision Workbench", page_icon="◈", layout="wide")
 
-st.markdown(
-    """
+# The replay, intake and simulation surfaces keep their existing stylesheet.
+# The authenticated surface has its own sheet further down; exactly one of the
+# two is emitted per run so neither view inherits the other's rules.
+LOCAL_STYLE = """
     <style>
       @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap');
       :root {
@@ -141,9 +146,209 @@ st.markdown(
         .bp-gate-row, .bp-work-row { grid-template-columns: 1fr auto; }
       }
     </style>
-    """,
-    unsafe_allow_html=True,
-)
+    """
+
+
+# ---------------------------------------------------------------------------
+# Authenticated Bid Room stylesheet.
+#
+# Values are the resolved light-mode Seed tokens pinned by .design-system
+# (carrot brand, gray neutrals, green/yellow/red status). Seed's own family is
+# the platform stack, so this sheet loads no font, image or script from the
+# network. Every table collapses into labelled cards below 720px, which is what
+# keeps 390px free of horizontal overflow.
+# ---------------------------------------------------------------------------
+
+AUTHENTICATED_STYLE = """
+    <style>
+      :root {
+        --sx-gray-00:#fff; --sx-gray-100:#f7f8f9; --sx-gray-200:#f3f4f5; --sx-gray-300:#eeeff1;
+        --sx-gray-400:#dcdee3; --sx-gray-700:#868b94; --sx-gray-800:#555d6d; --sx-gray-900:#2a3038;
+        --sx-gray-1000:#1a1c20;
+        --sx-carrot-100:#fff2ec; --sx-carrot-300:#ffd5c0; --sx-carrot-400:#ffb999;
+        --sx-carrot-600:#f60; --sx-carrot-700:#e14d00; --sx-carrot-800:#b93901;
+        --sx-green-100:#edfaf6; --sx-green-400:#7ddcb3; --sx-green-700:#079171; --sx-green-900:#075445;
+        --sx-yellow-100:#fff7de; --sx-yellow-300:#fbdc65; --sx-yellow-900:#4f3e1f;
+        --sx-red-100:#fdf0f0; --sx-red-400:#feb7b3; --sx-red-700:#fa342c; --sx-red-900:#921708;
+        --sx-focus:#5e98fe;
+        --sx-line:#00000010; --sx-line-strong:#dcdee3;
+        --sx-white-a300:#ffffff2e; --sx-white-a700:#ffffffb3;
+        --sx-x1:4px; --sx-x2:8px; --sx-x3:12px; --sx-x4:16px; --sx-x5:20px; --sx-x6:24px; --sx-x8:32px;
+        --sx-r2:8px; --sx-r3:12px; --sx-r4:16px; --sx-full:9999px;
+        --sx-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      }
+      .stApp { background: var(--sx-gray-200); color: var(--sx-gray-1000); }
+      .block-container { padding-top: 1.2rem; padding-bottom: 3rem; max-width: 1320px; }
+      .stApp, .stApp p, .stApp li, .stApp label, .stApp div {
+        font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, "Noto Sans", sans-serif; }
+      .sx-num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+      .sx-mono { font-family: var(--sx-mono); overflow-wrap: anywhere; }
+
+      /* run strip -------------------------------------------------------- */
+      .sx-strip { display: flex; flex-wrap: wrap; gap: var(--sx-x3) var(--sx-x6);
+        align-items: baseline; padding: var(--sx-x3) var(--sx-x4); margin-bottom: var(--sx-x4);
+        background: var(--sx-gray-00); border-radius: var(--sx-r3);
+        box-shadow: inset 0 0 0 1px var(--sx-line); }
+      .sx-strip__i { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+      .sx-strip__k { font-size: 11px; line-height: 15px; letter-spacing: .1em; text-transform: uppercase;
+        font-weight: 700; color: var(--sx-gray-800); }
+      .sx-strip__v { font-size: 13px; line-height: 18px; color: var(--sx-gray-1000); overflow-wrap: anywhere; }
+      .sx-strip__live { margin-left: auto; display: inline-flex; align-items: center; gap: var(--sx-x2);
+        padding: 4px 10px; border-radius: var(--sx-full); background: var(--sx-green-100);
+        color: var(--sx-green-900); font-size: 12px; line-height: 16px; font-weight: 700; white-space: nowrap; }
+      .sx-strip__dot { width: 7px; height: 7px; border-radius: var(--sx-full); background: var(--sx-green-700); }
+
+      /* masthead --------------------------------------------------------- */
+      .sx-mast { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: var(--sx-x6);
+        align-items: start; padding: var(--sx-x6); border-radius: var(--sx-r4);
+        background: var(--sx-gray-900); color: #fff; border-bottom: 4px solid var(--sx-carrot-600); }
+      .sx-kicker { display: flex; flex-wrap: wrap; gap: var(--sx-x2) var(--sx-x3); font-size: 11px;
+        line-height: 15px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700;
+        color: var(--sx-carrot-400); }
+      .sx-mast__title { font-size: 26px; line-height: 35px; font-weight: 700; letter-spacing: -.025em;
+        margin: var(--sx-x3) 0 0; overflow-wrap: anywhere; }
+      .sx-mast__sub { margin-top: var(--sx-x2); max-width: 62ch; font-size: 14px; line-height: 22px;
+        color: var(--sx-white-a700); }
+      .sx-verdict { display: grid; gap: 6px; justify-items: end; text-align: right; }
+      .sx-verdict__k { font-size: 11px; line-height: 15px; letter-spacing: .12em; text-transform: uppercase;
+        font-weight: 700; color: var(--sx-white-a700); }
+      .sx-verdict__v { font-size: 24px; line-height: 32px; font-weight: 700; letter-spacing: -.02em; }
+      .sx-verdict__v[data-tone="positive"] { color: var(--sx-green-400); }
+      .sx-verdict__v[data-tone="warning"] { color: var(--sx-carrot-400); }
+      .sx-verdict__v[data-tone="critical"] { color: var(--sx-red-400); }
+      .sx-verdict__v[data-tone="neutral"] { color: #fff; }
+      .sx-verdict__n { font-size: 12px; line-height: 16px; color: var(--sx-white-a700); overflow-wrap: anywhere; }
+      @media (max-width: 860px) {
+        .sx-mast { grid-template-columns: minmax(0,1fr); }
+        .sx-verdict { justify-items: start; text-align: left; }
+      }
+
+      /* cards ------------------------------------------------------------ */
+      .sx-card { background: var(--sx-gray-00); border-radius: var(--sx-r4); margin-top: var(--sx-x6);
+        box-shadow: inset 0 0 0 1px var(--sx-line); overflow: hidden; }
+      .sx-card__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sx-x3);
+        padding: var(--sx-x5) var(--sx-x5) var(--sx-x4); }
+      .sx-step { font-size: 11px; line-height: 15px; font-weight: 700; letter-spacing: .14em;
+        color: var(--sx-carrot-800); }
+      .sx-card__title { font-size: 18px; line-height: 24px; font-weight: 700; letter-spacing: -.015em;
+        margin: 0 auto 0 0; }
+      .sx-card__note { font-size: 13px; line-height: 18px; color: var(--sx-gray-800); }
+      .sx-card__body { padding: 0 var(--sx-x5) var(--sx-x5); }
+
+      /* decision facts --------------------------------------------------- */
+      .sx-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--sx-x3); }
+      .sx-fact { padding: var(--sx-x3) var(--sx-x4); border-radius: var(--sx-r2); background: var(--sx-gray-100); }
+      .sx-fact__k { font-size: 11px; line-height: 15px; letter-spacing: .08em; text-transform: uppercase;
+        font-weight: 700; color: var(--sx-gray-800); }
+      .sx-fact__v { margin-top: 4px; font-size: 14px; line-height: 19px; color: var(--sx-gray-1000);
+        overflow-wrap: anywhere; }
+      .sx-fact__v[data-tone="critical"] { color: var(--sx-red-900); font-weight: 700; }
+      .sx-fact__v[data-tone="positive"] { color: var(--sx-green-900); font-weight: 700; }
+      /* Missing-evidence labels stay at gray-800 (6.62:1). gray-700 is 3.42:1
+         on white and fails AA, so italics carry the distinction instead. */
+      .sx-fact__v[data-missing="true"] { color: var(--sx-gray-800); font-style: italic; }
+
+      /* coverage bar ----------------------------------------------------- */
+      .sx-cover { display: flex; gap: 2px; height: var(--sx-x2); margin: 0 var(--sx-x5) var(--sx-x3);
+        border-radius: var(--sx-full); overflow: hidden; background: var(--sx-gray-300); }
+      .sx-cover__seg[data-tone="evidenced"] { background: var(--sx-green-700); }
+      .sx-cover__seg[data-tone="open"] { background: var(--sx-gray-400); }
+      .sx-legend { display: flex; flex-wrap: wrap; gap: var(--sx-x2) var(--sx-x5);
+        margin: 0 var(--sx-x5) var(--sx-x4); font-size: 12px; line-height: 16px; color: var(--sx-gray-800); }
+      .sx-legend span { display: inline-flex; align-items: center; gap: 6px; }
+      .sx-legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+      .sx-legend i[data-tone="evidenced"] { background: var(--sx-green-700); }
+      .sx-legend i[data-tone="open"] { background: var(--sx-gray-400); }
+
+      /* tables ----------------------------------------------------------- */
+      .sx-tablewrap { padding: 0 var(--sx-x3) var(--sx-x2); }
+      table.sx-table { width: 100%; border-collapse: collapse; table-layout: fixed;
+        font-size: 13px; line-height: 18px; }
+      .sx-table th { text-align: left; padding: var(--sx-x2) var(--sx-x3); font-size: 11px; line-height: 15px;
+        letter-spacing: .08em; text-transform: uppercase; font-weight: 700; color: var(--sx-gray-800);
+        border-bottom: 1px solid var(--sx-line-strong); }
+      .sx-table td { padding: var(--sx-x3); border-bottom: 1px solid var(--sx-line);
+        color: var(--sx-gray-800); vertical-align: top; overflow-wrap: anywhere; }
+      .sx-table tbody tr:last-child td { border-bottom: 0; }
+      .sx-table tbody tr[data-tone="open"] { background: var(--sx-carrot-100); }
+      .sx-crit { font-size: 14px; line-height: 19px; font-weight: 700; color: var(--sx-gray-1000); }
+      .sx-owner { display: block; margin-top: 2px; font-size: 12px; line-height: 16px; color: var(--sx-gray-800); }
+      .sx-weight { display: flex; align-items: center; gap: var(--sx-x2); }
+      .sx-weight__track { flex: 1; min-width: 32px; height: 6px; border-radius: var(--sx-full);
+        background: var(--sx-gray-300); overflow: hidden; }
+      .sx-weight__fill { display: block; height: 100%; background: var(--sx-carrot-600); border-radius: var(--sx-full); }
+      .sx-weight__n { font-size: 18px; line-height: 24px; font-weight: 700; letter-spacing: -.02em;
+        color: var(--sx-gray-1000); }
+      .sx-mark { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; line-height: 16px;
+        font-weight: 700; padding: 3px 9px; border-radius: var(--sx-full); white-space: nowrap; }
+      .sx-mark[data-tone="evidenced"] { background: var(--sx-green-100); color: var(--sx-green-900); }
+      .sx-mark[data-tone="open"] { background: var(--sx-carrot-100); color: var(--sx-carrot-800); }
+      .sx-mark[data-tone="neutral"] { background: var(--sx-gray-200); color: var(--sx-gray-800); }
+      .sx-asset { display: block; }
+      .sx-asset + .sx-asset { margin-top: 4px; }
+      .sx-missing { color: var(--sx-gray-800); font-style: italic; }
+
+      @media (max-width: 720px) {
+        .sx-tablewrap { padding: 0 var(--sx-x4) var(--sx-x2); }
+        .sx-table, .sx-table caption, .sx-table tbody, .sx-table tr, .sx-table td { display: block; width: 100%; }
+        .sx-table colgroup, .sx-table col { display: none; }
+        .sx-table thead { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+        .sx-table tbody tr { border: 1px solid var(--sx-line-strong); border-radius: var(--sx-r3);
+          padding: var(--sx-x4); margin-bottom: var(--sx-x3); }
+        .sx-table td { border-bottom: 0; padding: 0; }
+        .sx-table td + td { margin-top: var(--sx-x3); }
+        .sx-table td[data-label]::before { content: attr(data-label); display: block; margin-bottom: 4px;
+          font-size: 11px; line-height: 15px; letter-spacing: .08em; text-transform: uppercase;
+          font-weight: 700; color: var(--sx-gray-800); }
+      }
+
+      /* win position ----------------------------------------------------- */
+      .sx-pos { padding: var(--sx-x5); border-radius: var(--sx-r3); background: var(--sx-carrot-100);
+        box-shadow: inset 0 0 0 2px var(--sx-carrot-300); }
+      .sx-pos__title { font-size: 16px; line-height: 22px; font-weight: 700; color: var(--sx-gray-1000); }
+      .sx-pos__statement { margin-top: var(--sx-x2); font-size: 14px; line-height: 22px; color: var(--sx-gray-800); }
+      .sx-proofs { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: var(--sx-x3); margin-top: var(--sx-x4); }
+      .sx-proof { padding: var(--sx-x3); border-radius: var(--sx-r2); background: var(--sx-gray-00); }
+      .sx-proof__kind { font-size: 11px; line-height: 15px; letter-spacing: .06em; text-transform: uppercase;
+        font-weight: 700; color: var(--sx-carrot-800); }
+      .sx-proof__label { margin-top: 2px; font-size: 13px; line-height: 18px; font-weight: 700; }
+      .sx-proof__detail { margin-top: 2px; font-size: 12px; line-height: 18px; color: var(--sx-gray-800); }
+      .sx-risk { margin-top: var(--sx-x4); padding-top: var(--sx-x3); border-top: 1px solid var(--sx-line);
+        font-size: 13px; line-height: 19px; color: var(--sx-gray-800); }
+      .sx-risk b { color: var(--sx-gray-1000); }
+      .sx-alts { display: grid; gap: var(--sx-x2); margin-top: var(--sx-x4); }
+      .sx-alt { padding: var(--sx-x3) var(--sx-x4); border-radius: var(--sx-r2); background: var(--sx-gray-100);
+        font-size: 13px; line-height: 19px; color: var(--sx-gray-800); }
+      .sx-alt b { color: var(--sx-gray-1000); }
+
+      /* stage trace ------------------------------------------------------ */
+      .sx-steps { display: grid; gap: var(--sx-x2); }
+      .sx-stepline { display: grid; grid-template-columns: 26px minmax(0,1fr); gap: var(--sx-x3);
+        align-items: start; padding: var(--sx-x3); border-radius: var(--sx-r2); background: var(--sx-gray-100); }
+      .sx-stepline__n { font-size: 12px; line-height: 18px; font-weight: 700; color: var(--sx-carrot-800); }
+      .sx-stepline__t { font-size: 13px; line-height: 18px; font-weight: 700; color: var(--sx-gray-1000); }
+      .sx-stepline__d { margin-top: 2px; font-size: 12px; line-height: 18px; color: var(--sx-gray-800);
+        font-family: var(--sx-mono); overflow-wrap: anywhere; }
+      .sx-empty { padding: var(--sx-x4); border-radius: var(--sx-r2); background: var(--sx-gray-100);
+        font-size: 13px; line-height: 19px; color: var(--sx-gray-800); }
+      .sx-foot { margin-top: var(--sx-x6); font-size: 12px; line-height: 18px; color: var(--sx-gray-800); }
+
+      /* streamlit chrome ------------------------------------------------- */
+      .stApp h1, .stApp h2, .stApp h3 { letter-spacing: -.02em; }
+      .stButton button, .stDownloadButton button { border-radius: var(--sx-r2); border: 0;
+        background: var(--sx-carrot-600); color: #fff; font-weight: 700; font-size: 14px; min-height: 40px; }
+      .stButton button:hover, .stDownloadButton button:hover { background: var(--sx-carrot-700); color: #fff; }
+      .stButton button:focus-visible, .stDownloadButton button:focus-visible {
+        outline: 3px solid var(--sx-focus); outline-offset: 2px; }
+      .stTextArea textarea { font-family: var(--sx-mono); font-size: 13px; line-height: 20px;
+        border-radius: var(--sx-r2); }
+      section[data-testid="stSidebar"] { background: var(--sx-gray-00); border-right: 1px solid var(--sx-line-strong); }
+      div[data-baseweb="select"] > div { border-radius: var(--sx-r2); }
+    </style>
+    """
 
 
 # ---------------------------------------------------------------------------
@@ -268,7 +473,7 @@ def render_bid_room() -> None:
         f'<div class="bp-rail"><span class="bp-rail-item"><span class="bp-rail-key">Tender</span><span class="bp-rail-val">{tender["id"]}</span></span>'
         f'<span class="bp-rail-item"><span class="bp-rail-key">Supplier</span><span class="bp-rail-val">{supplier["name"]}</span></span>'
         f'<span class="bp-rail-item"><span class="bp-rail-key">Profile capacity</span><span class="bp-rail-val">{supplier["available_hours"]} h</span></span>'
-        '<span class="bp-rail-mode">Local persistent Bid Room · Snowflake account pending</span></div>',
+        '<span class="bp-rail-mode">Local replay adapter · authenticated mode is separate</span></div>',
         unsafe_allow_html=True,
     )
     st.markdown(
@@ -308,7 +513,7 @@ def render_bid_room() -> None:
         tasks = tuple(
             {"task": f"Develop {section.criterion} response", "owner": section.owner, "status": "OPEN"}
             for section in brief.proposal_blueprint
-        )
+        ) + tuple({"task": item["action"], "owner": item["owner"], "status": "OPEN"} for item in red_team_tasks(brief, draft))
         run_id = store.save(
             brief,
             opportunity_version=opportunity_version,
@@ -328,15 +533,15 @@ def render_bid_room() -> None:
         result = store.latest(tender["id"], supplier["id"], opportunity_version, position.statement)
     if result:
         st.success(f"Bid Room run saved: {result['run_id']}")
-        st.text_area("Strategy-led proposal draft", result["proposal_markdown"], height=520)
+        edited_draft = st.text_area("Strategy-led proposal draft", result["proposal_markdown"], height=520)
         if result["red_team_findings"]:
             st.warning("Red-team findings: " + " ".join(result["red_team_findings"]))
         else:
             st.caption("Red-team: each score-bearing section includes a selected supplier asset.")
         st.caption("Pursuit tasks: " + " · ".join(task["task"] for task in result["tasks"]))
         st.caption("Agent trace: local-development-adapter only. Snowflake and CoCo execution has not occurred.")
-        st.download_button("Download proposal draft", result["proposal_markdown"], file_name="bidpilot-strategy-proposal.md", mime="text/markdown")
-    st.markdown('<p class="bp-foot"><b>Demo boundary.</b> Tender and supplier profiles in this view are synthetic replay fixtures. URL/PDF intake is implemented as a separate source-snapshot contract. Snowflake and CoCo execution remain unverified until account access exists.</p>', unsafe_allow_html=True)
+        st.download_button("Download proposal draft", edited_draft, file_name="bidpilot-strategy-proposal.md", mime="text/markdown")
+    st.markdown('<p class="bp-foot"><b>Demo boundary.</b> This workflow intentionally uses synthetic replay fixtures and local SQLite. Choose Authenticated Snowflake Bid Room to inspect the verified complete run.</p>', unsafe_allow_html=True)
 
 
 def render_tender_intake() -> None:
@@ -393,14 +598,464 @@ def render_tender_intake() -> None:
 
 
 # ---------------------------------------------------------------------------
+# Authenticated Bid Room helpers.
+#
+# Snowflake hands back VARIANT and ARRAY columns as JSON text and NUMBER as
+# Decimal, so every value is normalised before it reaches the markup. Nothing
+# here supplies a substitute value: an absent field is labelled as absent.
+# ---------------------------------------------------------------------------
+
+NOT_RECORDED = "Not recorded in this run"
+
+TRACE_TITLE_KEYS = ("opportunity_title", "tender_title", "title")
+TRACE_OBJECTIVE_KEYS = ("buyer_objective", "objective", "summary")
+TRACE_SESSION_KEYS = ("session_id", "snowflake_session_id", "session")
+TRACE_QUERY_KEYS = ("query_id", "query_ids", "last_query_id", "queries")
+TRACE_STEP_KEYS = ("steps", "stages", "events", "trace")
+STEP_NAME_KEYS = ("step", "name", "stage", "action", "operation")
+STEP_DETAIL_KEYS = ("sql", "object", "output", "result", "input", "status", "error")
+ASSET_NAME_KEYS = ("label", "title", "name", "asset", "project_title")
+
+STATUS_TONES = {"PURSUE": "positive", "REVIEW": "warning", "NO-GO": "critical", "NO_GO": "critical"}
+
+
+def esc(value: object) -> str:
+    """HTML-escape any Snowflake scalar without turning None into the word None."""
+    return html.escape("" if value is None else str(value))
+
+
+def as_records(value: object) -> list:
+    """Return a VARIANT/ARRAY column as a list, keeping unparseable text visible."""
+    if value is None:
+        return []
+    if isinstance(value, (list, tuple)):
+        return list(value)
+    if isinstance(value, dict):
+        return [value]
+    if isinstance(value, str):
+        text = value.strip()
+        if not text:
+            return []
+        try:
+            parsed = json.loads(text)
+        except ValueError:
+            return [text]
+        if isinstance(parsed, list):
+            return parsed
+        return [parsed] if parsed not in (None, "") else []
+    return [value]
+
+
+def record_label(item: object) -> str:
+    """Name one asset or proof record without inventing a label for it."""
+    if isinstance(item, dict):
+        for key in ASSET_NAME_KEYS:
+            if item.get(key):
+                return str(item[key])
+        return json.dumps(item, ensure_ascii=False, sort_keys=True)
+    return str(item)
+
+
+def as_number(value: object) -> float | None:
+    """Coerce NUMBER/Decimal to float so weights can be summed and compared."""
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def trim(value: float) -> str:
+    return f"{value:g}"
+
+
+def first_key(mapping: object, keys: tuple[str, ...]) -> object:
+    if not isinstance(mapping, dict):
+        return None
+    for key in keys:
+        candidate = mapping.get(key)
+        if candidate not in (None, "", [], {}):
+            return candidate
+    return None
+
+
+def flatten(value: object) -> str:
+    if isinstance(value, (list, tuple)):
+        return ", ".join(str(item) for item in value)
+    if isinstance(value, dict):
+        return json.dumps(value, ensure_ascii=False, sort_keys=True)
+    return str(value)
+
+
+def trace_steps(trace: object) -> list[dict]:
+    """Return the run's stage list if the trace recorded one."""
+    if not isinstance(trace, dict):
+        return []
+    for key in TRACE_STEP_KEYS:
+        value = trace.get(key)
+        if isinstance(value, list) and value:
+            return [item if isinstance(item, dict) else {"step": str(item)} for item in value]
+    return []
+
+
+def sx_card(step: str, title: str, note: str, body: str, bare: str = "") -> str:
+    return (
+        f'<section class="sx-card"><div class="sx-card__head"><span class="sx-step">{esc(step)}</span>'
+        f'<h2 class="sx-card__title">{esc(title)}</h2>'
+        f'<p class="sx-card__note">{esc(note)}</p></div>{bare}'
+        f'<div class="sx-card__body">{body}</div></section>'
+    )
+
+
+def sx_fact(key: str, value: str | None, tone: str = "") -> str:
+    missing = "true" if not value else "false"
+    shown = value or NOT_RECORDED
+    return (
+        f'<div class="sx-fact"><p class="sx-fact__k">{esc(key)}</p>'
+        f'<p class="sx-fact__v" data-tone="{tone}" data-missing="{missing}">{esc(shown)}</p></div>'
+    )
+
+
+def render_snowflake_bid_room() -> None:
+    """Render one persisted Snowflake run: verdict, score map, sections, work, provenance."""
+    connection_name = configured_connection_name()
+    if not connection_name:
+        st.error("Authenticated mode is not configured. Set BIDPILOT_SNOWFLAKE_CONNECTION to a named Snowflake CLI connection.")
+        return
+
+    try:
+        store = SnowflakeBidRoomStore(connection_name)
+        all_runs = store.list_runs()
+        runs = [run for run in all_runs if run["state"] == "COMPLETED" and run["is_complete"]]
+        if not runs:
+            st.warning("No completed run currently contains a decision, strategy, proposal sections, and owned tasks under one run ID.")
+            if all_runs:
+                st.dataframe(all_runs, hide_index=True, width="stretch")
+            return
+        selected_id = st.sidebar.selectbox("Persisted run", [run["run_id"] for run in runs])
+        result = store.load_run(selected_id)
+    except (SnowflakeBidRoomError, KeyError) as error:
+        st.error(str(error))
+        return
+
+    run = result["run"]
+    trace = run.get("trace") if isinstance(run.get("trace"), dict) else {}
+    decision = result["decision"] or {}
+    strategies = result["strategies"] or []
+    selected = next((item for item in strategies if item.get("selected")), strategies[0] if strategies else {})
+    status = str(decision.get("status") or first_key(trace, ("pursuit_status", "status")) or "RECORDED")
+    tone = STATUS_TONES.get(status.upper(), "neutral")
+
+    # 00 · run strip. Provider, state and policy version come from AGENT_RUNS,
+    # never from the locally imported policy constant.
+    strip_items = [
+        ("Run ID", selected_id),
+        ("Provider", run.get("provider")),
+        ("Execution state", run.get("state")),
+        ("Policy version", run.get("policy_version")),
+        ("Supplier profile", run.get("supplier_profile_id")),
+    ]
+    st.markdown(
+        '<div class="sx-strip">'
+        + "".join(
+            f'<span class="sx-strip__i"><span class="sx-strip__k">{esc(key)}</span>'
+            f'<span class="sx-strip__v sx-mono">{esc(value) if value not in (None, "") else NOT_RECORDED}</span></span>'
+            for key, value in strip_items
+        )
+        + f'<span class="sx-strip__live"><span class="sx-strip__dot"></span>'
+        f"Snowflake connection {esc(connection_name)}</span></div>",
+        unsafe_allow_html=True,
+    )
+
+    # 00 · masthead. The tender headline is only shown when the run itself
+    # carries it; otherwise the opportunity identifier is the headline.
+    headline = first_key(trace, TRACE_TITLE_KEYS) or run.get("opportunity_id") or selected_id
+    objective = first_key(trace, TRACE_OBJECTIVE_KEYS)
+    st.markdown(
+        f'<section class="sx-mast"><div><p class="sx-kicker"><span>Authenticated Bid Room</span>'
+        f'<span>Opportunity {esc(run.get("opportunity_id") or NOT_RECORDED)}</span></p>'
+        f'<h1 class="sx-mast__title">{esc(headline)}</h1>'
+        f'<p class="sx-mast__sub">{esc(objective) if objective else "Buyer objective is not carried in this run record."}</p></div>'
+        f'<div class="sx-verdict"><p class="sx-verdict__k">Pursuit decision</p>'
+        f'<p class="sx-verdict__v" data-tone="{tone}">{esc(status)}</p>'
+        f'<p class="sx-verdict__n sx-mono">Opportunity version {esc(run.get("opportunity_version") or NOT_RECORDED)}</p></div></section>',
+        unsafe_allow_html=True,
+    )
+
+    # 01 · what the verdict rests on.
+    missing = [record_label(item) for item in as_records(decision.get("missing_eligibility"))]
+    gap_hours = as_number(decision.get("capacity_gap_hours"))
+    st.markdown(
+        sx_card(
+            "01",
+            "Why the run reached this decision",
+            "PURSUIT_DECISIONS, one row per run",
+            '<div class="sx-facts">'
+            + sx_fact("Decision", status, tone)
+            + sx_fact(
+                "Missing eligibility",
+                ", ".join(missing) if missing else ("None recorded" if decision else None),
+                "critical" if missing else "positive" if decision else "",
+            )
+            + sx_fact(
+                "Capacity gap",
+                None if gap_hours is None else (f"{trim(gap_hours)} h short" if gap_hours > 0 else "No shortfall recorded"),
+                "critical" if gap_hours else "positive" if gap_hours == 0 else "",
+            )
+            + "</div>",
+        ),
+        unsafe_allow_html=True,
+    )
+
+    # 02 · the score map. Criterion weight, the supplier asset the run attached
+    # to it, and the claim the proposal will make for those points.
+    blueprint = result["blueprint"] or []
+    rows: list[dict] = []
+    total_weight = 0.0
+    evidenced_weight = 0.0
+    for item in blueprint:
+        weight = as_number(item.get("weight")) or 0.0
+        assets = [record_label(asset) for asset in as_records(item.get("assets"))]
+        total_weight += weight
+        if assets:
+            evidenced_weight += weight
+        rows.append({"item": item, "weight": weight, "assets": assets})
+    # Bars are scaled against the full weighted total, so a 40-point criterion
+    # reads as 40% of the score and not as a full bar.
+
+    if rows:
+        open_weight = total_weight - evidenced_weight
+        cover_bar = (
+            '<div class="sx-cover" role="img" aria-label="'
+            f'{esc(trim(evidenced_weight))} of {esc(trim(total_weight))} weighted points have a supplier asset recorded">'
+            f'<span class="sx-cover__seg" data-tone="evidenced" style="flex:{evidenced_weight or 0}"></span>'
+            f'<span class="sx-cover__seg" data-tone="open" style="flex:{open_weight or 0}"></span></div>'
+            '<div class="sx-legend"><span><i data-tone="evidenced"></i>'
+            f"Evidence recorded · {esc(trim(evidenced_weight))} pts</span>"
+            '<span><i data-tone="open"></i>'
+            f"No asset recorded · {esc(trim(open_weight))} pts</span></div>"
+        )
+        body_rows = ""
+        for row in rows:
+            item, weight, assets = row["item"], row["weight"], row["assets"]
+            evidenced = bool(assets)
+            fill = (weight / total_weight * 100) if total_weight else 0
+            asset_html = (
+                "".join(f'<span class="sx-asset">{esc(asset)}</span>' for asset in assets)
+                if evidenced
+                else f'<span class="sx-missing">{NOT_RECORDED}</span>'
+            )
+            body_rows += (
+                f'<tr data-tone="{"evidenced" if evidenced else "open"}">'
+                f'<td data-label="Criterion"><span class="sx-crit">{esc(item.get("criterion_name") or NOT_RECORDED)}</span>'
+                f'<span class="sx-owner">Owner · {esc(item.get("owner") or NOT_RECORDED)}</span></td>'
+                f'<td data-label="Weight"><span class="sx-weight"><span class="sx-weight__track">'
+                f'<span class="sx-weight__fill" style="width:{fill:.0f}%"></span></span>'
+                f'<span class="sx-weight__n sx-num">{esc(trim(weight))}</span></span></td>'
+                f'<td data-label="Evidence"><span class="sx-mark" data-tone="{"evidenced" if evidenced else "open"}">'
+                f'{"Asset recorded" if evidenced else "No asset"}</span></td>'
+                f'<td data-label="Supplier asset">{asset_html}</td>'
+                f'<td data-label="Planned claim">{esc(item.get("claim") or NOT_RECORDED)}</td></tr>'
+            )
+        table = (
+            '<div class="sx-tablewrap"><table class="sx-table">'
+            "<caption class=\"sx-missing\" style=\"text-align:left;padding:0 12px 8px;font-style:normal\">"
+            "Evidence is derived in this view from RUBRIC_RESPONSE_PLANS.assets: a criterion counts as "
+            "evidenced when the run recorded at least one supplier asset against it.</caption>"
+            '<colgroup><col style="width:24%"><col style="width:15%"><col style="width:13%">'
+            '<col style="width:22%"><col style="width:26%"></colgroup>'
+            "<thead><tr><th scope=\"col\">Criterion</th><th scope=\"col\">Weight</th>"
+            "<th scope=\"col\">Evidence</th><th scope=\"col\">Supplier asset</th>"
+            "<th scope=\"col\">Planned claim</th></tr></thead>"
+            f"<tbody>{body_rows}</tbody></table></div>"
+        )
+        st.markdown(
+            sx_card(
+                "02",
+                "Official weighted evaluation score map",
+                f"{trim(evidenced_weight)} of {trim(total_weight)} weighted points carry a recorded supplier asset",
+                "",
+                cover_bar + table,
+            ),
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            sx_card(
+                "02",
+                "Official weighted evaluation score map",
+                "RUBRIC_RESPONSE_PLANS",
+                '<div class="sx-empty">No weighted response plan rows are stored under this run ID.</div>',
+            ),
+            unsafe_allow_html=True,
+        )
+
+    # 03 · the strategy those claims are bound to.
+    if selected:
+        proofs = as_records(selected.get("proof_cards"))
+        proof_html = "".join(
+            '<div class="sx-proof">'
+            f'<p class="sx-proof__kind">{esc(card.get("kind")) if isinstance(card, dict) and card.get("kind") else "Proof"}</p>'
+            f'<p class="sx-proof__label">{esc(record_label(card))}</p>'
+            + (
+                f'<p class="sx-proof__detail">{esc(card["detail"])}</p>'
+                if isinstance(card, dict) and card.get("detail")
+                else ""
+            )
+            + "</div>"
+            for card in proofs
+        )
+        weakness = selected.get("weakness")
+        mitigation = selected.get("mitigation")
+        risk = (
+            f'<p class="sx-risk"><b>Recorded weakness.</b> {esc(weakness)}'
+            + (f" <b>Mitigation.</b> {esc(mitigation)}" if mitigation else "")
+            + "</p>"
+            if weakness
+            else ""
+        )
+        alternates = "".join(
+            f'<div class="sx-alt"><b>{esc(item.get("title") or NOT_RECORDED)}</b> — '
+            f'{esc(item.get("statement") or NOT_RECORDED)}</div>'
+            for item in strategies
+            if item is not selected
+        )
+        st.markdown(
+            sx_card(
+                "03",
+                "Selected Win Position",
+                "WIN_STRATEGIES, selected row of this run",
+                '<div class="sx-pos">'
+                f'<p class="sx-pos__title">{esc(selected.get("title") or NOT_RECORDED)}</p>'
+                f'<p class="sx-pos__statement">{esc(selected.get("statement") or NOT_RECORDED)}</p>'
+                + (f'<div class="sx-proofs">{proof_html}</div>' if proof_html else "")
+                + risk
+                + "</div>"
+                + (
+                    '<p class="sx-card__note" style="margin-top:16px">Positions the run considered and did not select</p>'
+                    f'<div class="sx-alts">{alternates}</div>'
+                    if alternates
+                    else ""
+                ),
+            ),
+            unsafe_allow_html=True,
+        )
+
+    # 04 · evidence-safe proposal sections, editable and downloadable.
+    st.markdown(
+        sx_card(
+            "04",
+            "Proposal sections",
+            "PROPOSAL_SECTIONS, one section per score-bearing criterion",
+            '<div class="sx-empty">Edit below. The download always reflects the edited text.</div>'
+            if result["sections"]
+            else '<div class="sx-empty">This run is incomplete: no proposal section is persisted under this run ID.</div>',
+        ),
+        unsafe_allow_html=True,
+    )
+    if result["sections"]:
+        draft = "\n\n".join(str(item.get("section_markdown") or "") for item in result["sections"])
+        edited = st.text_area(
+            "Proposal draft",
+            draft,
+            height=440,
+            key=f"authenticated-draft::{selected_id}",
+            help="Sections are loaded from this run. Edits stay in this session and are not written back to Snowflake.",
+        )
+        st.download_button(
+            "Download proposal draft",
+            edited,
+            file_name=f"{selected_id}.md",
+            mime="text/markdown",
+        )
+
+    # 05 · the owned work that closes the remaining gaps.
+    tasks = result["tasks"] or []
+    if tasks:
+        task_rows = "".join(
+            f'<tr><td data-label="Task"><span class="sx-crit">{esc(task.get("task_name") or NOT_RECORDED)}</span></td>'
+            f'<td data-label="Owner">{esc(task.get("owner") or NOT_RECORDED)}</td>'
+            f'<td data-label="Status"><span class="sx-mark" data-tone="neutral">'
+            f'{esc(task.get("status") or NOT_RECORDED)}</span></td></tr>'
+            for task in tasks
+        )
+        task_html = (
+            '<div class="sx-tablewrap" style="padding-inline:0"><table class="sx-table">'
+            '<caption class="sx-missing" style="text-align:left;padding:0 12px 8px;font-style:normal">'
+            "Every task below is stored under the same run ID as the decision and the sections.</caption>"
+            '<colgroup><col style="width:52%"><col style="width:28%"><col style="width:20%"></colgroup>'
+            '<thead><tr><th scope="col">Task</th><th scope="col">Owner</th><th scope="col">Status</th></tr></thead>'
+            f"<tbody>{task_rows}</tbody></table></div>"
+        )
+    else:
+        task_html = '<div class="sx-empty">No pursuit task is persisted under this run ID.</div>'
+    st.markdown(
+        sx_card("05", "Owned pursuit work", f"PURSUIT_TASKS · {len(tasks)} rows", task_html),
+        unsafe_allow_html=True,
+    )
+
+    # 06 · provenance. Compact by default, full trace behind the expander.
+    provenance = trace.get("execution_provenance") if isinstance(trace.get("execution_provenance"), dict) else {}
+    session_id = first_key(provenance, ("cortex_session_id", "session_id")) or first_key(trace, TRACE_SESSION_KEYS)
+    query_ids = (
+        first_key(provenance, ("cortex_write_query_ids", "query_ids"))
+        or first_key(trace, TRACE_QUERY_KEYS)
+    )
+    st.markdown(
+        sx_card(
+            "06",
+            "Execution provenance",
+            "AGENT_RUNS.trace",
+            '<div class="sx-facts">'
+            + sx_fact("Provider", run.get("provider"))
+            + sx_fact("Execution state", run.get("state"))
+            + sx_fact("Cortex session", flatten(session_id) if session_id else None)
+            + sx_fact("Query provenance", flatten(query_ids) if query_ids else None)
+            + sx_fact("Run created", str(run.get("created_at")) if run.get("created_at") else None)
+            + "</div>",
+        ),
+        unsafe_allow_html=True,
+    )
+    steps = trace_steps(trace)
+    if steps:
+        step_html = ""
+        for index, step in enumerate(steps, start=1):
+            name = first_key(step, STEP_NAME_KEYS)
+            detail = first_key(step, STEP_DETAIL_KEYS)
+            step_html += (
+                f'<div class="sx-stepline"><span class="sx-stepline__n sx-num">{index:02d}</span>'
+                f'<span><span class="sx-stepline__t">{esc(flatten(name)) if name else "Unnamed stage"}</span>'
+                + (f'<span class="sx-stepline__d">{esc(flatten(detail))}</span>' if detail else "")
+                + "</span></div>"
+            )
+        st.markdown(f'<div class="sx-steps" style="margin-top:16px">{step_html}</div>', unsafe_allow_html=True)
+    with st.expander("Full run trace as stored in AGENT_RUNS"):
+        st.json(run.get("trace") if run.get("trace") not in (None, "") else {})
+    st.markdown(
+        '<p class="sx-foot">Every value on this screen is a field of this run ID in Snowflake. '
+        "Fields the run did not record are labelled rather than filled in.</p>",
+        unsafe_allow_html=True,
+    )
+
+
+# ---------------------------------------------------------------------------
 # Selection
 # ---------------------------------------------------------------------------
 
+workflow_options = ["Bid Room replay", "Tender intake", "Synthetic decision simulation"]
+if configured_connection_name():
+    workflow_options.insert(0, "Authenticated Snowflake Bid Room")
 workflow = st.sidebar.radio(
     "Workflow",
-    options=("Bid Room replay", "Tender intake", "Synthetic decision simulation"),
+    options=workflow_options,
     label_visibility="collapsed",
 )
+st.markdown(
+    AUTHENTICATED_STYLE if workflow == "Authenticated Snowflake Bid Room" else LOCAL_STYLE,
+    unsafe_allow_html=True,
+)
+if workflow == "Authenticated Snowflake Bid Room":
+    render_snowflake_bid_room()
+    st.stop()
 if workflow == "Bid Room replay":
     render_bid_room()
     st.stop()
@@ -698,10 +1353,9 @@ else:
             st.markdown(f'<div class="bp-work">{row}</div>', unsafe_allow_html=True)
 
 st.markdown(
-    '<p class="bp-foot"><b>Local demo mode.</b> Every number on this screen is computed in-process from a '
+    '<p class="bp-foot"><b>Local simulation mode.</b> Every number on this screen is computed in-process from a '
     "synthetic contest fixture. No customer data, no live Snowflake session, and no persistent task store is "
-    "connected here. <b>Prepared proof path:</b> after an authenticated Snowflake account is connected, the "
-    "repository can store the RFP and operating records, run the same policy in Snowpark, and capture a CoCo "
-    "CLI execution trace. This view exposes that decision policy and its in-session work-plan behavior.</p>",
+    "connected in this view. The separate Authenticated Snowflake Bid Room reloads the verified Snowpark and "
+    "Cortex Code run. This simulation remains only as a transparent policy comparison surface.</p>",
     unsafe_allow_html=True,
 )

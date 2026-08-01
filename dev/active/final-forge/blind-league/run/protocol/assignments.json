@@ -1,0 +1,155 @@
+[
+  {
+    "assignment_id": "A-000001",
+    "blind_id": "BLIND-3AA15868ED32",
+    "kind": "candidate",
+    "lane": 1,
+    "orientation": "forward",
+    "replica": 1
+  },
+  {
+    "assignment_id": "A-000002",
+    "blind_id": "BLIND-B0D412A83AC4",
+    "kind": "candidate",
+    "lane": 2,
+    "orientation": "forward",
+    "replica": 1
+  },
+  {
+    "assignment_id": "A-000003",
+    "blind_id": "BLIND-63F207B64D4F",
+    "kind": "candidate",
+    "lane": 3,
+    "orientation": "forward",
+    "replica": 1
+  },
+  {
+    "assignment_id": "A-000004",
+    "blind_id": "BLIND-3AA15868ED32",
+    "kind": "candidate",
+    "lane": 2,
+    "orientation": "reverse",
+    "replica": 2
+  },
+  {
+    "assignment_id": "A-000005",
+    "blind_id": "BLIND-63F207B64D4F",
+    "kind": "candidate",
+    "lane": 3,
+    "orientation": "reverse",
+    "replica": 2
+  },
+  {
+    "assignment_id": "A-000006",
+    "blind_id": "BLIND-B0D412A83AC4",
+    "kind": "candidate",
+    "lane": 1,
+    "orientation": "reverse",
+    "replica": 2
+  },
+  {
+    "assignment_id": "A-000007",
+    "blind_id": "BLIND-3AA15868ED32",
+    "kind": "candidate",
+    "lane": 3,
+    "orientation": "forward",
+    "replica": 3
+  },
+  {
+    "assignment_id": "A-000008",
+    "blind_id": "BLIND-B0D412A83AC4",
+    "kind": "candidate",
+    "lane": 1,
+    "orientation": "forward",
+    "replica": 3
+  },
+  {
+    "assignment_id": "A-000009",
+    "blind_id": "BLIND-63F207B64D4F",
+    "kind": "candidate",
+    "lane": 2,
+    "orientation": "forward",
+    "replica": 3
+  },
+  {
+    "assignment_id": "A-000010",
+    "blind_id": "ANCHOR:1:low",
+    "expected_total": 20,
+    "kind": "anchor",
+    "lane": 1,
+    "orientation": "fixed",
+    "replica": 1
+  },
+  {
+    "assignment_id": "A-000011",
+    "blind_id": "ANCHOR:1:mid",
+    "expected_total": 55,
+    "kind": "anchor",
+    "lane": 1,
+    "orientation": "fixed",
+    "replica": 1
+  },
+  {
+    "assignment_id": "A-000012",
+    "blind_id": "ANCHOR:1:high",
+    "expected_total": 88,
+    "kind": "anchor",
+    "lane": 1,
+    "orientation": "fixed",
+    "replica": 1
+  },
+  {
+    "assignment_id": "A-000013",
+    "blind_id": "ANCHOR:2:low",
+    "expected_total": 20,
+    "kind": "anchor",
+    "lane": 2,
+    "orientation": "fixed",
+    "replica": 1
+  },
+  {
+    "assignment_id": "A-000014",
+    "blind_id": "ANCHOR:2:mid",
+    "expected_total": 55,
+    "kind": "anchor",
+    "lane": 2,
+    "orientation": "fixed",
+    "replica": 1
+  },
+  {
+    "assignment_id": "A-000015",
+    "blind_id": "ANCHOR:2:high",
+    "expected_total": 88,
+    "kind": "anchor",
+    "lane": 2,
+    "orientation": "fixed",
+    "replica": 1
+  },
+  {
+    "assignment_id": "A-000016",
+    "blind_id": "ANCHOR:3:low",
+    "expected_total": 20,
+    "kind": "anchor",
+    "lane": 3,
+    "orientation": "fixed",
+    "replica": 1
+  },
+  {
+    "assignment_id": "A-000017",
+    "blind_id": "ANCHOR:3:mid",
+    "expected_total": 55,
+    "kind": "anchor",
+    "lane": 3,
+    "orientation": "fixed",
+    "replica": 1
+  },
+  {
+    "assignment_id": "A-000018",
+    "blind_id": "ANCHOR:3:high",
+    "expected_total": 88,
+    "kind": "anchor",
+    "lane": 3,
+    "orientation": "fixed",
+    "replica": 1
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "lane": 2,
+  "pair_id": "finalists-v1",
+  "orientation_1": {
+    "winner": "right",
+    "winner_blind_id": "BLIND-3AA15868ED32",
+    "reason": "The right card makes the buyer's scoring problem and the product's answer more concrete by binding official weight, readiness, evidence asset, gap, and planned claim in one interactive matrix, producing a clearer allocation decision and a sharper 40-point-row demo than the broader stage ledger.",
+    "evidence_gaps": [
+      "Neither card includes an authenticated app capture",
+      "Actual Cortex Code execution under one complete run identifier is not observed",
+      "REVIEW and NO-GO proposal blocking is not proven",
+      "Fact-safety for personnel, pricing, and outcome claims is not proven"
+    ]
+  },
+  "orientation_2": {
+    "winner": "left",
+    "winner_blind_id": "BLIND-3AA15868ED32",
+    "reason": "The left card provides the more judge-legible end-to-end thesis: its weighted map visibly connects where points are won to current readiness, supporting proof, unresolved gaps, and the claim to draft, while three interactive states offer a more specific reversal demonstration.",
+    "evidence_gaps": [
+      "Neither card includes an authenticated app capture",
+      "Snowpark-to-Cortex continuity under one persisted run is asserted rather than observed",
+      "The proposal-generation gates for REVIEW and NO-GO are not demonstrated",
+      "No observed safeguard prevents unsupported personnel, pricing, or outcome facts"
+    ]
+  }
+}

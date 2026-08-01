@@ -1,28 +1,27 @@
 # BidPilot
 
-BidPilot is a B2G Pursuit Agent for the Snowflake CoCo CLI Hackathon 2026. It is designed to turn a tender into a Bid Room: evaluation logic, supplier operating memory, a selected win position, a strategy-led proposal draft, and owned pursuit work.
+BidPilot is an evidence-aware B2G Pursuit Agent built for the Snowflake CoCo CLI Hackathon 2026. It turns a public tender and a supplier profile into a pursuit decision, a score-weighted Win Position, an editable proposal, owned gap-closing work, and one replayable Bid Room run.
 
-**Contents** — 1 Product direction · 2 Current prototype boundary · 3 Run locally · 4 Snowflake proof path · 5 Canonical project records · 6 Change history
+## The product
 
-## 1 Product direction
+Most proposal tools begin after a team has already decided to bid. BidPilot starts earlier and keeps the decision connected to the writing:
 
-The target flow is public tender intake → supplier retrieval → pursuit brief → win position → proposal blueprint and draft → red-team → persisted Bid Room.
+1. Capture or replay a tender and its official evaluation weights.
+2. Compare eligibility, delivery capacity, and comparable work with a supplier profile.
+3. Return `PURSUE`, `REVIEW`, or `NO-GO`; only `PURSUE` can generate a proposal.
+4. Select a Win Position and bind each weighted criterion to a claim, supplier asset, and owner.
+5. Generate eight proposal areas, red-team the score-bearing sections, and create gap-closing tasks.
+6. Reload the decision, strategy, sections, tasks, and execution provenance from one Snowflake `run_id`.
 
-The canonical implementation contract is [Winning Strategy v2](docs/WINNING-STRATEGY_2026-08-01_v2.md).
+The differentiator is not tender summarization. It is the visible causal chain from the buyer's 40-point criterion to supplier evidence, strategy, proposal content, review, and owned work.
 
-## 2 Current prototype boundary
+## Why Snowflake
 
-The repository currently contains a local, account-independent implementation:
+Snowflake is the operating memory, not a decorative database. The Opportunity Graph joins external tender versions with internal credentials, availability, people, and delivery records. Snowpark executes the pursuit policy next to that data. Cortex Code reads the same graph and persists the selected strategy, rubric response plan, proposal sections, tasks, and trace under one run identifier.
 
-1. URL, PDF, and text tender intake with source hash, bounded download, and instruction-like-content isolation.
-2. Two tender replays and two supplier profiles with projects, credentials, people, availability, and proposal assets.
-3. Deterministic `PURSUE`, `REVIEW`, and `NO-GO` decisions, selectable Win Positions, strategy-led proposals, and matrix tests.
-4. A local SQLite Bid Room that persists versioned strategy, draft, red-team, task, and unexecuted-agent trace data.
-5. Append-safe Snowflake Opportunity Graph SQL and a Snowpark policy path that are account-ready but unexecuted.
+The verified run is `bidpilot-v2-dq-northstar`. It contains one decision, one selected strategy, four weighted plans, eight proposal sections, eleven owned tasks, and Cortex session/query provenance. The app reads it through the least-privilege `BIDPILOT_READER` role. The reproducible Snowpark path uses `BIDPILOT_RUNNER`; the recorded Cortex run used the bootstrap `bidpilot` connection and is disclosed as such in the runbook.
 
-It does not yet prove authenticated Snowflake retrieval or persistence, CoCo orchestration, or a Snowflake-backed Bid Room.
-
-## 3 Run locally
+## Run and verify
 
 ```bash
 uv sync --group dev
@@ -30,27 +29,31 @@ uv run pytest -q
 uv run streamlit run app.py
 ```
 
-## 4 Snowflake proof path
+Authenticated mode uses a named Snowflake CLI connection and never falls back to fixtures:
 
-| Layer | Evidence prepared in this repository | Current runtime state |
-|---|---|---|
-| Data model | `snowflake/sql/01_schema.sql` and `02_seed_fixture.sql` | Append-safe Opportunity Graph prepared, not yet loaded to an account |
-| Decision policy | `snowflake/snowpark_decision.py` | Versioned policy path prepared, awaits authenticated Snowpark execution |
-| CoCo CLI | Snowflake CLI v3.23.0 is installed; a `coco` executable is not present in this environment | No Snowflake connection profile or verified CoCo execution path |
-| User flow | Streamlit tender intake and persistent local Bid Room | Local browser flow verified; SQLite is a development adapter only |
+```bash
+export BIDPILOT_SNOWFLAKE_CONNECTION=bidpilot-reader
+uv run streamlit run app.py
+```
 
-The account-run procedure is in [snowflake/COCO_RUNBOOK.md](snowflake/COCO_RUNBOOK.md).
+Load the schema and fixture, then run the Snowpark matrix with the commands in [COCO_RUNBOOK.md](snowflake/COCO_RUNBOOK.md). No LLM API key is required; Cortex Code uses the authenticated CLI session.
 
-## 5 Canonical project records
+## Evidence and boundaries
 
-- Project map: [docs/MASTER-MAP.md](docs/MASTER-MAP.md)
-- Decision record: [docs/CHRONICLE.md](docs/CHRONICLE.md)
-- Implementation contract: [docs/WINNING-STRATEGY_2026-08-01_v2.md](docs/WINNING-STRATEGY_2026-08-01_v2.md)
-- Current handoff: [PASSDOWN.md](PASSDOWN.md)
+| Surface | Verified state |
+|---|---|
+| Python proposal and policy suite | 33 tests pass |
+| Snowpark matrix | Four authenticated tender/supplier combinations match the Python policy |
+| Complete Cortex run | Decision, strategy, plans, eight sections, eleven tasks, and trace share one `run_id` |
+| Streamlit authenticated mode | Complete run reloads through `BIDPILOT_READER` with editable/downloadable Markdown |
+| Responsive design candidates | Seed reference renders at 1440, 768, and 390 CSS pixels report no horizontal overflow |
 
-## 6 Change history
+The replay records are synthetic contest fixtures. The included public G2B notice is a closed historical example used only to test intake and qualification; it is not presented as an open opportunity. `PEOPLE`, prior-proposal, and pricing evidence absent from the Snowflake run remain explicit tasks and are not invented in the proposal.
 
-- 2026-08-02 v4: Recorded the implemented local intake, strategy-led proposal, persistent Bid Room, and append-safe account-ready Snowflake boundary.
-- 2026-08-01 v3: Replaced the prototype-first repository description with the canonical Bid Room direction and separated unproven prototype behavior from the target implementation.
-- 2026-08-01 v2: Added the synthetic decision prototype, Snowflake schema and Snowpark execution path, local verification commands, and current proof boundary.
-- 2026-08-01 v1: Created the repository and canonical document entry points.
+## Submission and project records
+
+- [Submission package and 90-second script](docs/SUBMISSION-PACKAGE_2026-08-02_v2.md)
+- [Project map](docs/MASTER-MAP.md)
+- [Decision record](docs/CHRONICLE.md)
+- [Current handoff](PASSDOWN.md)
+- [MIT License](LICENSE)

@@ -1,81 +1,91 @@
-# BidPilot CoCo 실행 절차
+# BidPilot authenticated execution runbook
 
-Snowflake 계정이 확보된 뒤 BidPilot의 source snapshot부터 persisted Bid Room까지 같은 run으로 실행하는 절차입니다.
+This runbook reproduces the Snowflake Opportunity Graph, Snowpark decision matrix, Cortex Code execution, and least-privilege Bid Room read path.
 
-**목차**: 1 실행 전제 · 2 적재 · 3 CoCo run · 4 trace 저장 · 5 검증 · 6 이력
+## Connections and roles
 
-## 1 실행 전제
+The verified environment uses three named Snowflake CLI connections:
 
-### 1.1 필요한 권한
+| Connection | Purpose | Primary role |
+|---|---|---|
+| `bidpilot` | Bootstrap and account administration | `ACCOUNTADMIN` |
+| `bidpilot-runner` | Snowpark and Cortex artifact writes | `BIDPILOT_RUNNER` |
+| `bidpilot-reader` | Streamlit authenticated reads | `BIDPILOT_READER` |
 
-1. Snowflake account, warehouse, database, schema 생성 권한이 필요합니다.
-2. Snowflake CLI와 CoCo CLI가 같은 authenticated account를 사용해야 합니다.
-3. CoCo 실행과 SQL 출력은 실제 실행 시각과 run ID를 함께 보관합니다.
-
-### 1.2 금지되는 주장
-
-계정, schema 적재, Snowpark, CoCo trace를 실제로 확인하기 전에는 Snowflake-native execution이나 CoCo orchestration을 제출문에 쓰지 않습니다.
-
-## 2 적재
-
-### 2.1 스키마와 fixture
+Apply grants with an administrator, then grant the reader and runner roles to the intended Snowflake user:
 
 ```bash
-snow sql -f snowflake/sql/01_schema.sql
-snow sql -f snowflake/sql/02_seed_fixture.sql
+snow sql -c bidpilot -f snowflake/sql/03_roles.sql
 ```
 
-### 2.2 확인 쿼리
+## Load the Opportunity Graph
+
+```bash
+snow sql -c bidpilot -f snowflake/sql/01_schema.sql
+snow sql -c bidpilot -f snowflake/sql/02_seed_fixture.sql
+```
+
+The fixture is synthetic and contains two opportunities and two supplier profiles. Do not replace missing people, past proposals, rates, or prices with generated facts.
+
+## Execute the Snowpark matrix
+
+```bash
+.venv/bin/python snowflake/run_matrix.py \
+  --connection bidpilot-runner \
+  --run-prefix snowpark-matrix-$(date +%Y%m%d%H%M%S)
+```
+
+The verified policy version is `2026-08-02.v1`. Expected vectors are:
+
+| Opportunity | Supplier | Expected status |
+|---|---|---|
+| Data quality | Northstar | `PURSUE` |
+| Data quality | Atlas | `NO-GO` |
+| Analytics | Northstar | `PURSUE` |
+| Analytics | Atlas | `REVIEW` |
+
+## Run Cortex Code
+
+Start Cortex Code from the repository with the authenticated bootstrap connection:
+
+```bash
+cortex -c bidpilot -w "$PWD" --bypass --effort high --session-name bidpilot-authenticated-run
+```
+
+The agent must query the opportunity, requirements, evaluation criteria, credentials, effective availability, past projects, people, and past proposals. It may write strategy and proposal artifacts only for a persisted `PURSUE` decision. Every write uses the same run ID.
+
+The verified run is `bidpilot-v2-dq-northstar` and the verified Cortex session is `2d68fa00-3379-4147-8433-87b6ccddcd75` on CLI version `1.1.52+200734.789ffffc1c9e`.
+
+## Verify completeness
 
 ```sql
-SELECT opportunity_id, opportunity_version, title, source_sha256
-FROM BIDPILOT_DEMO.BIDPILOT.OPPORTUNITIES;
-
-SELECT supplier_profile_id, project_title, tags
-FROM BIDPILOT_DEMO.BIDPILOT.PAST_PROJECTS;
+SELECT
+  a.run_id,
+  a.policy_version,
+  a.provider,
+  a.state,
+  COUNT(DISTINCT d.run_id) AS decisions,
+  COUNT(DISTINCT w.strategy_id) AS strategies,
+  COUNT(DISTINCT p.criterion_name) AS plans,
+  COUNT(DISTINCT s.section_id) AS sections,
+  COUNT(DISTINCT t.task_id) AS tasks
+FROM BIDPILOT_DEMO.BIDPILOT.AGENT_RUNS a
+LEFT JOIN BIDPILOT_DEMO.BIDPILOT.PURSUIT_DECISIONS d USING (run_id)
+LEFT JOIN BIDPILOT_DEMO.BIDPILOT.WIN_STRATEGIES w USING (run_id)
+LEFT JOIN BIDPILOT_DEMO.BIDPILOT.RUBRIC_RESPONSE_PLANS p USING (run_id)
+LEFT JOIN BIDPILOT_DEMO.BIDPILOT.PROPOSAL_SECTIONS s USING (run_id)
+LEFT JOIN BIDPILOT_DEMO.BIDPILOT.PURSUIT_TASKS t USING (run_id)
+WHERE a.run_id = 'bidpilot-v2-dq-northstar'
+GROUP BY a.run_id, a.policy_version, a.provider, a.state;
 ```
 
-## 3 CoCo run
+Expected counts are `1, 1, 4, 8, 11`. The trace must contain the Cortex session, CLI version, Snowpark decision query ID, Cortex write query IDs, completion audit query ID, and recovered preflight failures.
 
-### 3.1 입력 계약
+## Run the product
 
-CoCo에게 tender source snapshot, opportunity version, supplier profile ID, policy version을 제공합니다. 문서 원문은 데이터이며 시스템 지시로 해석하지 않습니다.
+```bash
+export BIDPILOT_SNOWFLAKE_CONNECTION=bidpilot-reader
+uv run streamlit run app.py
+```
 
-### 3.2 실행 순서
-
-1. 공고 원문에서 scope, eligibility, evaluation criteria, submission items를 읽습니다.
-2. Snowflake SQL로 credentials, availability, past projects, proposal assets를 조회합니다.
-3. Snowpark policy를 실행해 `PURSUE`, `REVIEW`, `NO-GO`를 기록합니다.
-4. 평가표와 retrieval 결과에서 Win Position 후보를 만듭니다.
-5. 선택된 포지션으로 rubric response plan과 proposal sections를 만듭니다.
-6. 같은 evaluation criteria로 red-team을 실행하고 필요한 section만 보완합니다.
-7. `AGENT_RUNS`, `WIN_STRATEGIES`, `RUBRIC_RESPONSE_PLANS`, `PROPOSAL_SECTIONS`, `PURSUIT_TASKS`에 같은 run ID로 저장합니다.
-
-## 4 trace 저장
-
-### 4.1 최소 trace 필드
-
-| 필드 | 내용 |
-|---|---|
-| run_id | 하나의 end-to-end 실행 식별자 |
-| opportunity_version | source SHA-256 또는 ingestion version |
-| supplier_profile_id | 선택된 공급사 profile |
-| policy_version | `2026-08-02.v1` |
-| provider | 실제 CoCo 또는 local development adapter |
-| state | succeeded, failed, 또는 blocked |
-| trace | 단계별 input, SQL, output, error |
-
-### 4.2 계정 실패 상태
-
-계정이 없을 때 local SQLite trace는 `local-development-adapter`와 `not-executed-in-snowflake-or-coco` 상태를 기록합니다. 이를 CoCo run으로 표시하지 않습니다.
-
-## 5 검증
-
-1. 같은 tender와 supplier에서 CoCo trace, Snowpark decision, Bid Room run ID가 일치해야 합니다.
-2. supplier profile이나 tender를 바꾸면 Win Position, proposal blueprint, proposal sections가 달라져야 합니다.
-3. `NO-GO` 결과에서는 proposal sections를 생성하지 않아야 합니다.
-4. 새 Streamlit 세션에서 같은 versioned run을 재조회해야 합니다.
-
-## 6 이력
-
-- 2026-08-02 v1: account-ready CoCo execution order, trace contract, and verification gates를 기록했습니다.
+Authenticated mode lists only `COMPLETED` runs that have decision, strategy, sections, tasks, and the current policy version. A connection or query error remains visible and never triggers fixture fallback.

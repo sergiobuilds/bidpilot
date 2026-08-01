@@ -72,10 +72,40 @@ def test_public_tender_packet_locks_proposal_drafting_until_evidence_and_open_st
     assert len(packet["qualification"]["missing_evidence"]) == 6
 
 
-def test_proposal_writer_turns_the_public_tender_into_an_editable_english_proposal() -> None:
-    draft = write_proposal_draft(PUBLIC_TENDER, "Northstar Systems", "A public-data delivery team.")
+def test_proposal_writer_blocks_a_closed_public_tender() -> None:
+    try:
+        write_proposal_draft(PUBLIC_TENDER, "Northstar Systems", "A public-data delivery team.")
+    except ValueError as error:
+        assert "versioned proposal-start packet" in str(error)
+    else:
+        raise AssertionError("A closed tender must not produce a full proposal draft")
 
-    assert "# Information-system DB quality diagnosis and consulting service" in draft
-    assert "Northstar Systems proposes" in draft
-    assert "Technical approach" in draft
-    assert "Delivery plan" in draft
+
+def test_proposal_writer_rejects_a_raw_tender_even_with_a_forged_gate() -> None:
+    forged = {**PUBLIC_TENDER, "is_open": True, "writing_gate": "OPEN"}
+    try:
+        write_proposal_draft(forged, "Northstar Systems", "A public-data delivery team.")
+    except ValueError as error:
+        assert "versioned proposal-start packet" in str(error)
+    else:
+        raise AssertionError("A raw tender must never bypass the qualified packet contract")
+
+
+def test_proposal_writer_consumes_an_approved_packet_and_rejects_a_locked_packet() -> None:
+    locked = build_proposal_start_packet(PUBLIC_TENDER, assess_public_tender(PUBLIC_TENDER, {}))
+    approved = {
+        **locked,
+        "opportunity": {**locked["opportunity"], "is_open": True},
+        "qualification": {**locked["qualification"], "missing_evidence": [], "failed_requirements": []},
+        "proposal_strategy": {**locked["proposal_strategy"], "writing_gate": "OPEN"},
+    }
+
+    assert "## Executive summary" in write_proposal_draft(
+        approved, "Northstar Systems", "A public-data delivery team."
+    )
+    try:
+        write_proposal_draft(locked, "Northstar Systems", "A public-data delivery team.")
+    except ValueError as error:
+        assert "supplier evidence is approved" in str(error)
+    else:
+        raise AssertionError("A locked packet must not produce a proposal draft")

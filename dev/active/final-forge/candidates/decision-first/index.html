@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en" data-seed-color-mode="light-only" data-seed-platform="web">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BidPilot — Pursuit Workbench</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="ledger.css">
+</head>
+<body>
+
+<a class="bp-skip" href="#work">Skip to the pursuit decision</a>
+
+<!-- ── Source identity rail ─────────────────────────────────────────── -->
+<header class="bp-rail" role="banner">
+  <div class="bp-shell bp-rail__inner">
+    <div class="bp-rail__brand">
+      <span class="bp-rail__mark" aria-hidden="true"></span>
+      <span class="bp-rail__name">BidPilot</span>
+      <span class="bp-rail__kind">Pursuit workbench</span>
+    </div>
+
+    <dl class="bp-rail__facts">
+      <div class="bp-fact">
+        <dt>Source</dt>
+        <dd id="factSource">g2b.go.kr · Notice 2026-936</dd>
+      </div>
+      <div class="bp-fact">
+        <dt>Opportunity</dt>
+        <dd id="factOpp">G2B-R26BK01490484</dd>
+      </div>
+      <div class="bp-fact bp-fact--hash">
+        <dt>Snapshot sha256</dt>
+        <dd><span id="factHash" class="bp-hash" title=""></span></dd>
+      </div>
+      <div class="bp-fact">
+        <dt>Captured</dt>
+        <dd id="factCaptured">2026-08-01 · 9 pages</dd>
+      </div>
+    </dl>
+
+    <p class="bp-rail__mode">Local persistent Bid&nbsp;Room · Snowflake account pending</p>
+  </div>
+</header>
+
+<!-- ── Masthead ─────────────────────────────────────────────────────── -->
+<section class="bp-mast" aria-labelledby="tenderTitle">
+  <div class="bp-shell bp-mast__inner">
+    <div class="bp-mast__lead">
+      <p class="bp-eyebrow" id="mastEyebrow">Captured tender · reviewed intake</p>
+      <h1 class="bp-mast__title" id="tenderTitle">Information-system DB quality diagnosis and consulting service</h1>
+      <p class="bp-mast__objective"><span class="bp-mast__objective-key">Buyer objective</span> <span id="tenderObjective">Improve public-data reliability while keeping citizen-facing APIs stable.</span></p>
+    </div>
+
+    <div class="bp-mast__meta">
+      <p class="bp-mast__status" id="mastStatusLine">
+        <span class="bp-eyebrow">Pursuit outcome</span>
+        <span class="seed-badge__root seed-badge__root--size_large seed-badge__root--variant_solid seed-badge__root--tone_positive-variant_solid" id="mastStatusBadge"><span class="seed-badge__label">PURSUE</span></span>
+      </p>
+      <dl class="bp-mast__facts">
+        <div class="bp-fact">
+          <dt>Supplier profile</dt>
+          <dd id="factSupplier">Northstar Systems</dd>
+        </div>
+        <div class="bp-fact">
+          <dt>Bid close</dt>
+          <dd id="factDeadline">2026-08-19 10:00 KST</dd>
+        </div>
+        <div class="bp-fact">
+          <dt>Contract value</dt>
+          <dd id="factValue">KRW 70,000,000</dd>
+        </div>
+        <div class="bp-fact">
+          <dt>Next action</dt>
+          <dd id="factNext">Choose a Win Position</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ── Operating controls ───────────────────────────────────────────── -->
+<section class="bp-controls" aria-label="Pursuit inputs">
+  <div class="bp-shell bp-controls__inner">
+    <div class="bp-control">
+      <label class="bp-control__label" for="tenderSelect">Opportunity</label>
+      <select class="bp-select" id="tenderSelect"></select>
+    </div>
+    <div class="bp-control">
+      <label class="bp-control__label" for="supplierSelect">Supplier profile</label>
+      <select class="bp-select" id="supplierSelect"></select>
+    </div>
+    <div class="bp-control bp-control--view">
+      <span class="bp-control__label" id="viewLabel">Surface state</span>
+      <div class="seed-segmented-control__root" id="viewSwitch" role="radiogroup" aria-labelledby="viewLabel" style="--segment-count:3">
+        <span class="seed-segmented-control__indicator" style="--segment-index:0" id="viewIndicator" aria-hidden="true"></span>
+        <button type="button" class="seed-segmented-control__item" role="radio" aria-checked="true" data-checked data-view="live">Loaded</button>
+        <button type="button" class="seed-segmented-control__item" role="radio" aria-checked="false" data-view="loading">Loading</button>
+        <button type="button" class="seed-segmented-control__item" role="radio" aria-checked="false" data-view="empty">Empty</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main id="work" class="bp-shell bp-main" tabindex="-1">
+
+  <!-- Empty state -->
+  <section class="bp-empty" id="emptyState" hidden aria-labelledby="emptyTitle">
+    <div class="bp-panel bp-empty__panel">
+      <p class="bp-eyebrow">No opportunity in the Bid Room</p>
+      <h2 class="bp-empty__title" id="emptyTitle">Capture a tender to start a pursuit</h2>
+      <p class="bp-empty__body">Nothing is loaded. Capture a public notice by URL or PDF, review the extracted eligibility and evaluation structure, then open a reviewed Bid Room. No decision, strategy, or draft exists until a source snapshot is reviewed.</p>
+      <div class="bp-empty__actions">
+        <button type="button" class="seed-action-button seed-action-button--variant_brandSolid seed-action-button--size_medium seed-action-button--size_medium-layout_withText">Capture tender source</button>
+        <button type="button" class="seed-action-button seed-action-button--variant_neutralOutline seed-action-button--size_medium seed-action-button--size_medium-layout_withText">Open saved Bid Room run</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loading state -->
+  <section class="bp-loading" id="loadingState" hidden aria-live="polite" aria-busy="true">
+    <p class="bp-sr">Evaluating the tender against the selected supplier profile.</p>
+    <div class="bp-grid bp-grid--decision">
+      <div class="bp-panel bp-panel--plate bp-skelbox">
+        <span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:9rem;--seed-box-height:12px"></span>
+        <span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:min(100%,16rem);--seed-box-height:56px"></span>
+        <span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:100%;--seed-box-height:14px"></span>
+        <span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:80%;--seed-box-height:14px"></span>
+        <span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:100%;--seed-box-height:40px"></span>
+      </div>
+      <div class="bp-dims bp-dims--skeleton">
+        <div class="bp-panel bp-skelbox"><span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:6rem;--seed-box-height:11px"></span><span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:70%;--seed-box-height:20px"></span><span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:100%;--seed-box-height:12px"></span></div>
+        <div class="bp-panel bp-skelbox"><span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:6rem;--seed-box-height:11px"></span><span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:70%;--seed-box-height:20px"></span><span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:100%;--seed-box-height:12px"></span></div>
+        <div class="bp-panel bp-skelbox"><span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:6rem;--seed-box-height:11px"></span><span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:70%;--seed-box-height:20px"></span><span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:100%;--seed-box-height:12px"></span></div>
+        <div class="bp-panel bp-skelbox"><span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:6rem;--seed-box-height:11px"></span><span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:70%;--seed-box-height:20px"></span><span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:100%;--seed-box-height:12px"></span></div>
+      </div>
+    </div>
+    <div class="bp-grid bp-grid--strategy">
+      <div class="bp-panel bp-skelbox">
+        <span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:8rem;--seed-box-height:11px"></span>
+        <span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_16" style="--seed-box-width:100%;--seed-box-height:84px"></span>
+        <span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_16" style="--seed-box-width:100%;--seed-box-height:84px"></span>
+        <span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_16" style="--seed-box-width:100%;--seed-box-height:84px"></span>
+      </div>
+      <div class="bp-panel bp-skelbox">
+        <span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:8rem;--seed-box-height:11px"></span>
+        <span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:100%;--seed-box-height:44px"></span>
+        <span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:100%;--seed-box-height:44px"></span>
+        <span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:100%;--seed-box-height:44px"></span>
+        <span class="seed-skeleton seed-skeleton--tone_neutral seed-skeleton--radius_8" style="--seed-box-width:100%;--seed-box-height:44px"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live state -->
+  <div id="liveState">
+
+    <!-- 01 · Decision -->
+    <section class="bp-section bp-grid bp-grid--decision" aria-labelledby="decisionHeading" data-reveal="1">
+      <article class="bp-panel bp-panel--plate" id="decisionPlate">
+        <header class="bp-plate__head">
+          <p class="bp-index"><span class="bp-index__n">01</span> Pursuit decision</p>
+          <p class="bp-plate__policy">policy 2026-08-02.v1</p>
+        </header>
+        <h2 class="bp-plate__verdict" id="decisionHeading"><span id="verdictWord">PURSUE</span></h2>
+        <p class="bp-plate__because" id="verdictBecause"></p>
+        <ol class="bp-plate__actions" id="verdictActions"></ol>
+        <div class="bp-plate__cta">
+          <button type="button" class="seed-action-button seed-action-button--variant_brandSolid seed-action-button--size_large seed-action-button--size_large-layout_withText bp-cta" id="buildBtn" aria-describedby="buildGate">
+            Build proposal from selected strategy
+          </button>
+          <p class="bp-plate__gate" id="buildGate"></p>
+        </div>
+      </article>
+
+      <div class="bp-dims" id="dimensions" aria-label="Evaluation dimensions"></div>
+    </section>
+
+    <!-- 02 / 03 · Strategy + score map -->
+    <div class="bp-section bp-grid bp-grid--strategy" data-reveal="2">
+      <section class="bp-panel" aria-labelledby="positionsHeading">
+        <header class="bp-panel__head">
+          <p class="bp-index"><span class="bp-index__n">02</span> Win Position</p>
+          <h2 class="bp-panel__title" id="positionsHeading">Choose the position before drafting</h2>
+        </header>
+        <div class="bp-positions" id="positions" role="radiogroup" aria-labelledby="positionsHeading"></div>
+        <div class="bp-reveal" id="positionDetail" aria-live="polite"></div>
+      </section>
+
+      <section class="bp-panel" aria-labelledby="scoreHeading">
+        <header class="bp-panel__head">
+          <p class="bp-index"><span class="bp-index__n">03</span> Evaluation score map</p>
+          <h2 class="bp-panel__title" id="scoreHeading">Where the proposal must win</h2>
+          <p class="bp-panel__note bp-bound" id="scoreBound"></p>
+        </header>
+        <div class="bp-tablewrap">
+          <table class="bp-table bp-table--score">
+            <caption class="bp-sr">Evaluation criteria with official weight, current readiness, and the proposal claim that answers each criterion.</caption>
+            <thead>
+              <tr><th scope="col">Criterion</th><th scope="col" class="bp-num">Weight</th><th scope="col">Readiness</th><th scope="col">Proposal claim</th></tr>
+            </thead>
+            <tbody id="scoreBody"></tbody>
+          </table>
+        </div>
+        <p class="bp-footnote">Readiness is derived on screen from the selected position and the supplier profile. <b>Ready</b> — targeted by the selected Win Position and backed by a matched delivery asset. <b>Partial</b> — a matched asset exists but the position does not target the criterion. <b>Input required</b> — no profile asset addresses this criterion, so a commercial or operator input is still needed.</p>
+      </section>
+    </div>
+
+    <!-- 04 · Blueprint -->
+    <section class="bp-section bp-panel" aria-labelledby="blueprintHeading" data-reveal="3">
+      <header class="bp-panel__head bp-panel__head--row">
+        <div>
+          <p class="bp-index"><span class="bp-index__n">04</span> Proposal blueprint</p>
+          <h2 class="bp-panel__title" id="blueprintHeading">Criterion to section, claim, asset, and owner</h2>
+        </div>
+        <p class="bp-panel__note" id="blueprintNote"></p>
+      </header>
+      <div class="bp-tablewrap">
+        <table class="bp-table bp-table--blueprint">
+          <caption class="bp-sr">Each evaluation criterion mapped to a proposal section, claim, supplier asset, owner, and status.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Criterion</th>
+              <th scope="col">Proposal section</th>
+              <th scope="col">Claim</th>
+              <th scope="col">Supplier asset</th>
+              <th scope="col">Owner</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody id="blueprintBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 05 / 06 · Draft + red-team -->
+    <div class="bp-section bp-grid bp-grid--output" data-reveal="4">
+      <section class="bp-panel" aria-labelledby="draftHeading">
+        <header class="bp-panel__head bp-panel__head--row">
+          <div>
+            <p class="bp-index"><span class="bp-index__n">05</span> Generated draft</p>
+            <h2 class="bp-panel__title" id="draftHeading">Strategy-led proposal preview</h2>
+          </div>
+          <button type="button" class="seed-action-button seed-action-button--variant_neutralOutline seed-action-button--size_small seed-action-button--size_small-layout_withText" id="downloadBtn">Download draft</button>
+        </header>
+        <div class="bp-draft" id="draftPreview" tabindex="0" role="region" aria-label="Generated proposal draft, scrollable"></div>
+        <p class="bp-footnote" id="draftNote"></p>
+      </section>
+
+      <section class="bp-panel" aria-labelledby="redteamHeading">
+        <header class="bp-panel__head">
+          <p class="bp-index"><span class="bp-index__n">06</span> Red team</p>
+          <h2 class="bp-panel__title" id="redteamHeading">Score-bearing section review</h2>
+        </header>
+        <div id="redteam"></div>
+      </section>
+    </div>
+
+    <!-- 07 · Bid Room run -->
+    <section class="bp-section bp-panel bp-panel--run" aria-labelledby="runHeading" data-reveal="5">
+      <header class="bp-panel__head bp-panel__head--row">
+        <div>
+          <p class="bp-index"><span class="bp-index__n">07</span> Bid Room</p>
+          <h2 class="bp-panel__title" id="runHeading">Saved run</h2>
+        </div>
+        <div class="bp-run__controls">
+          <button type="button" class="seed-action-button seed-action-button--variant_neutralOutline seed-action-button--size_small seed-action-button--size_small-layout_withText" id="replayBtn">Replay run</button>
+        </div>
+      </header>
+      <div id="runBody"></div>
+    </section>
+
+  </div><!-- /liveState -->
+
+  <p class="bp-boundary">
+    <b>Demo boundary.</b> Tender and supplier records on this screen are reviewed replay fixtures. Persistence is a local development adapter; Snowflake and agent-runtime execution are not proven until account access exists.
+  </p>
+</main>
+
+<script src="ledger.js"></script>
+</body>
+</html>

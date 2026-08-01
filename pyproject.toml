@@ -1,7 +1,7 @@
 [project]
 name = "bidpilot"
 version = "0.1.0"
-description = "RFP bid/no-bid decision and proposal-workflow prototype for the Snowflake CoCo CLI Hackathon"
+description = "Evidence-aware B2G pursuit decision, strategy, and proposal Bid Room for Snowflake CoCo"
 requires-python = ">=3.11"
 dependencies = [
   "pandas>=2.2,<3",

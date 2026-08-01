@@ -5,67 +5,86 @@ version: 2026-08-02_v2
 canonical_path: ~/projects/personal/products/bidpilot/docs/SUBMISSION-PACKAGE_2026-08-02_v2.md
 ---
 
-# BidPilot 제출 패키지
+# BidPilot submission package
 
-BidPilot의 현재 구현과 Snowflake·CoCo 실증 게이트를 구분하는 제출 기준입니다.
+This is the paste-ready English submission source and the recording contract for the final BidPilot entry.
 
-**목차**: 1 제출 명제 · 2 현재 시연 · 3 계정 실증 후 시연 · 4 재현 · 5 주장 경계 · 6 이력
+## Submission copy
 
-## 1 제출 명제
+### Title
 
-### 1.1 제목
+BidPilot — Turn tender scoring into a proposal-winning Bid Room
 
-**BidPilot — From tender evaluation to a strategy-led Bid Room.**
+### One-line description
 
-### 1.2 한 문장
+BidPilot combines a public tender's evaluation matrix with supplier operating memory to decide whether to pursue, choose a proof-backed Win Position, draft the proposal, red-team it, and persist the work as one replayable Snowflake run.
 
-BidPilot captures a tender, connects its evaluation matrix to supplier operating memory, selects a Win Position, builds score-bearing proposal sections, red-teams them, and persists the work as a Bid Room.
+### Problem
 
-## 2 현재 시연
+Small B2G teams lose weeks in two places: they pursue opportunities they cannot credibly win, and they begin writing without connecting the buyer's scoring model to their own delivery evidence. Qualification, strategy, drafting, review, and task ownership live in separate files and meetings. Generic AI can summarize the notice or produce fluent prose, but it does not maintain an accountable chain from official evaluation weights to supplier evidence and an executable bid plan.
 
-### 2.1 구현된 장면
+### Solution
 
-| 순서 | 화면 | 확인할 결과 |
-|---|---|---|
-| 1 | Tender intake | URL/PDF/text source hash, 추출 구조, 지시문형 텍스트 격리 |
-| 2 | Bid Room | tender와 supplier profile에 따라 달라지는 `PURSUE`, `REVIEW`, `NO-GO` |
-| 3 | Win Position | 평가표, 과거 수행, 자격, 가용성을 연결한 선택 가능한 전략 |
-| 4 | Proposal Blueprint | 평가항목별 claim, asset, owner |
-| 5 | Build and Red-team | 선택 전략을 쓴 draft, section review, SQLite persisted run과 task |
+BidPilot creates a Bid Room around one tender and supplier profile. It computes a transparent `PURSUE`, `REVIEW`, or `NO-GO` decision; proposal generation remains locked unless the decision is `PURSUE`. The official score map then drives selectable Win Positions. Every criterion becomes a response plan with its weight, claim, supplier asset, owner, and evidence gap. Cortex Code writes eight proposal areas, red-teams the score-bearing sections, creates owned gap-closing work, and saves the complete result under one `run_id`.
 
-### 2.2 재현 명령
+### Why Snowflake and CoCo
+
+This workflow requires more than a chat transcript. Snowflake holds the versioned Opportunity Graph that joins external tender requirements and evaluation criteria with internal credentials, availability, people, past delivery, and prior proposal assets. Snowpark evaluates the same policy next to the governed data. Cortex Code queries that graph and persists strategy, sections, tasks, and execution provenance under the same run. Streamlit then reloads the run through a least-privilege reader role. That shared, replayable state is the product's organizational memory.
+
+### What is working
+
+- An authenticated Snowpark 2×2 matrix across two tenders and two supplier profiles.
+- A complete evidence-safe run, `bidpilot-v2-dq-northstar`, with one decision, one selected strategy, four response plans, eight sections, eleven tasks, and Cortex session/query provenance.
+- A proposal gate that rejects raw, locked, `REVIEW`, and `NO-GO` inputs.
+- Score-weighted proposal depth and criterion-specific supplier assets.
+- A red-team that detects missing assets and empty validation or buyer-outcome content in the top-weighted response.
+- An authenticated Streamlit Bid Room with editable/downloadable Markdown and no fixture fallback.
+- Thirty-three passing tests and responsive Seed reference renders at 1440, 768, and 390 CSS pixels.
+
+### Business value
+
+The first buyer is a small B2G proposal team. BidPilot reduces wasted pursuit effort before drafting, makes the buyer's score allocation visible to every author, and preserves reusable delivery proof and lessons across bids. The commercial path is a team subscription with governed supplier memory, plus usage-based agent runs for intake, strategy, drafting, and review.
+
+## Ninety-second demo script
+
+| Time | Screen and action | Voice-over |
+|---:|---|---|
+| 0–8 s | Open the authenticated Bid Room and point to the `PURSUE` verdict and run strip. | “Proposal tools start after the bid decision. BidPilot keeps the decision, strategy, proposal, and work in one Snowflake Bid Room.” |
+| 8–20 s | Focus the 40-point Technical approach row: weight, supplier asset, and claim. | “The buyer's official score map is the control plane. This 40-point criterion is connected to recorded delivery evidence, not a generic prompt.” |
+| 20–30 s | Show the decision dimensions and the two-supplier matrix result. | “Snowpark checks eligibility, capacity, and comparable delivery. The same tender is `PURSUE` for one supplier and `NO-GO` for another, which locks proposal generation.” |
+| 30–43 s | Show the selected Win Position and four response-plan rows. | “Cortex Code turns the strongest evidence into a Win Position, then binds every weighted response to a claim, an asset, and an owner.” |
+| 43–58 s | Scroll the editable eight-section proposal. | “The output is not a form fill. It is an editable strategy-led proposal covering the requirement, technical approach, comparable delivery, team, plan, risk, and commercial response.” |
+| 58–70 s | Show review status and open tasks for people, pricing, and missing metrics. | “Missing personnel and pricing data are not invented. They become owned work, and the top-weighted section must carry validation and a buyer outcome.” |
+| 70–82 s | Open execution provenance and show session ID plus query IDs. | “Snowpark and Cortex Code wrote one complete run. The provider, policy version, session, query IDs, sections, and tasks are reloadable from Snowflake.” |
+| 82–90 s | Return to the 40-point row and proposal download. | “BidPilot turns the question ‘Should we bid?’ into ‘Here is how we win, what we can write now, and what the team must close next.’” |
+
+## Reproduction
 
 ```bash
 uv sync --group dev
 uv run pytest -q
+export BIDPILOT_SNOWFLAKE_CONNECTION=bidpilot-reader
 uv run streamlit run app.py
 ```
 
-## 3 계정 실증 후 시연
+The authenticated account must contain the objects defined in `snowflake/sql/01_schema.sql` and the fixture in `02_seed_fixture.sql`. The exact Snowpark and Cortex Code commands are recorded in `snowflake/COCO_RUNBOOK.md`.
 
-### 3.1 Snowflake 실행
+## Data, safety, and license disclosure
 
-1. `snowflake/sql/01_schema.sql`과 `02_seed_fixture.sql`을 authenticated account에 실행합니다.
-2. 공고 source snapshot, supplier profile, strategy, sections, tasks, `AGENT_RUNS`를 조회합니다.
-3. Snowpark policy를 실행해 Python policy와 같은 결과를 저장합니다.
-
-### 3.2 CoCo 실행
-
-CoCo trace는 intake, Snowflake retrieval, Win Position, proposal section, red-team, task creation의 단계별 입력·SQL·출력을 같은 `run_id`로 남겨야 합니다.
-
-## 4 주장 경계
-
-| 주장 | 현재 상태 |
+| Asset | Status and permitted claim |
 |---|---|
-| Tender intake, strategy-led proposal, red-team, persistent local Bid Room | 구현 및 local test 확인 |
-| Snowflake Opportunity Graph SQL과 Snowpark policy | account-ready 코드만 존재 |
-| Snowflake SQL·Snowpark 실행, CoCo trace, Snowflake persistence | 미실행 |
-| Snowflake-native end-to-end submission | 실제 account run 전에는 주장 불가 |
+| Two tender replays and two supplier profiles | Synthetic contest fixtures created for this repository. No customer or confidential company data. |
+| G2B case `R26BK01490484` | Closed historical public notice used for intake and qualification testing. Source URL, retrieval date, page count, and SHA-256 are recorded in code. It is not presented as currently open. |
+| Snowflake run artifacts | Generated from the synthetic fixture through authenticated Snowpark and Cortex Code execution. |
+| Generated proposal | Demo output only; named people, rates, prices, and quantitative outcomes absent from source tables are not asserted. |
+| Source code | MIT License, except third-party dependencies under their own licenses. |
 
-## 5 대회 외부 게이트
+No final bid is submitted by the product. A human owns source review, company evidence, pricing, and the final submission.
 
-Snowflake 가입은 AI Data Cloud와 CoCo 전용 경로에서 모두 계정 생성 일반 오류로 실패했습니다. 공식 대회 페이지는 CoCo CLI 기반 구현을 요구하며 Geographic Eligibility 본문에는 India만 적혀 있습니다. 계정 실증과 참가 자격은 공식 지원의 명시 답변이 있어야 해결됩니다.
+## Final submission checklist
 
-## 6 이력
-
-- 2026-08-02 v2: Bid Room local implementation, account-ready Snowflake path, CoCo evidence gate, 가입·자격 외부 리스크를 반영했습니다.
+- Replace the repository placeholder with the judge-accessible GitHub URL and verified commit SHA.
+- Record the 90-second video from authenticated mode and verify audio, text size, and URL permissions from a signed-out browser.
+- Paste the title, one-line description, problem, solution, Snowflake explanation, and business value without adding unsupported claims.
+- Confirm the repository, video, and any live demo remain accessible for the judging window.
+- Sergio performs the external final-submit click after reviewing the rendered form.
