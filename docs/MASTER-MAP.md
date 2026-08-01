@@ -58,7 +58,7 @@ BidPilot은 RFP 문서와 회사의 역량, 인력, 단가, 일정을 함께 분
 | 문제 영역 | Intelligent Workflow Automation Agent | [CHRONICLE.md](CHRONICLE.md) |
 | 저장소 | 비공개 GitHub 저장소 생성 | `sergiobuilds/bidpilot` |
 | 구현 | 로컬 프로토타입과 Snowflake 실행 경로 준비 완료. 계정 연결 대기 | 이 문서의 Work Tree |
-| 제출 | 미착수 | 내부 마감 2026-08-02 |
+| 제출 | in_progress | 영어 제출 설명, 90초 데모 대본, 재현 절차 준비 완료. 영상과 실제 Snowflake 실행 증거가 남았습니다. |
 
 ## 3 Confirmed Scope
 
@@ -88,8 +88,8 @@ BidPilot은 RFP 문서와 회사의 역량, 인력, 단가, 일정을 함께 분
 | 4 | L4 | root | in_progress | 참여 판단 엔진 구현 | Python 테스트, Snowpark 실행, 고정 사례 결과 | 결정이 재현되지 않음 | 사용자 흐름 구현 | 로컬 Python 판단은 두 고정 사례로 검증됐고 Snowpark 실행이 남았습니다. |
 | 5 | L5 | root | in_progress | Streamlit 사용자 흐름 구현 | 입력부터 판단까지 라이브 시연 | 설명 없이 흐름 완주 불가 | 작업 생성 연동 | 로컬 브라우저에서 NO-BID 반전과 BID 흐름을 검증했습니다. |
 | 6 | L6 | root | in_progress | 승인 후 제안 업무 생성 | 실제 작업 생성과 Snowflake 상태 기록 | 외부 행동 또는 상태 변경 없음 | 평가와 실패복구 | 로컬 in-session 작업 계획은 구현됐고 영속 Snowflake 상태 기록을 대기합니다. |
-| 7 | L7 | root | todo | 평가와 실패복구 검증 | 전체 테스트, 시간 비교, 데모 반복 성공 | 반복 시연 실패 | 제출물 제작 | 심사 증거를 확정합니다. |
-| 8 | L8 | root | todo | 제출물 제작과 제출 | 영어 자료, 코드, 영상, 제출 확인 | 2026-08-02 안에 제출 불가 | 완료 | 대회 참가를 마감합니다. |
+| 7 | L7 | root | in_progress | 평가와 실패복구 검증 | 전체 테스트, 시간 비교, 데모 반복 성공 | 반복 시연 실패 | 제출물 제작 | 로컬 정책 테스트 4건과 Streamlit health 확인을 마쳤습니다. |
+| 8 | L8 | root | in_progress | 제출물 제작과 제출 | 영어 자료, 코드, 영상, 제출 확인 | 2026-08-02 안에 제출 불가 | 완료 | 제출 설명과 90초 대본은 준비됐고 영상과 제출 화면 확인이 남았습니다. |
 
 ## 5 Open / Unconfirmed
 
@@ -103,17 +103,19 @@ BidPilot은 RFP 문서와 회사의 역량, 인력, 단가, 일정을 함께 분
 |---|---|---|
 | [MASTER-MAP.md](MASTER-MAP.md) | project-map | 목적, 범위, Work Tree, 상태의 유일한 정본 |
 | [CHRONICLE.md](CHRONICLE.md) | project-decision | append-only 결정 기록 |
+| [SUBMISSION-PACKAGE_2026-08-01_v1.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/SUBMISSION-PACKAGE_2026-08-01_v1.md) | project-material | 영어 제출 설명, 90초 데모, 재현 절차 |
 | [../PASSDOWN.md](../PASSDOWN.md) | 인계 | 현재 복귀 지점과 금지사항 |
 | [../README.md](../README.md) | 소개 | 저장소 진입점 |
 
 ## 7 Status
 
-- 마지막 확인 신호: 2026-08-01 KST에 로컬 단위 테스트 2건과 실제 브라우저의 NO-BID → BID → 작업 생성 흐름을 확인했습니다.
-- 진행상황: L1 완료. L2--L6은 계정 연결 전 로컬 구현까지 진행됐습니다.
-- 현재 주장 가능 범위: 로컬 Streamlit, 합성 fixture, 결정 엔진, SQL과 Snowpark 실행 경로가 준비됐습니다. Snowflake 실행과 CoCo 세션 증거는 아직 없습니다.
+- 마지막 확인 신호: 2026-08-01 KST에 로컬 정책 테스트 4건, 린트, Streamlit health endpoint를 확인했습니다.
+- 진행상황: L1 완료. L2--L6은 계정 연결 전 로컬 구현까지 진행됐고 L7--L8은 제출 패키지 제작 단계입니다.
+- 현재 주장 가능 범위: 로컬 Streamlit, 합성 fixture, inspectable policy trace, in-session work-plan behavior, SQL과 Snowpark 실행 경로가 준비됐습니다. Snowflake 실행과 CoCo 세션 증거는 아직 없습니다.
 - 다음 복귀 지점: Snowflake 연결 프로필을 만들고 `snow sql`로 스키마·fixture를 적재한 뒤 CoCo CLI 세션과 Snowpark 결과를 기록합니다.
 
 ## 8 변경 이력
 
 - 2026-08-01 v1: BidPilot을 해커톤 출품 프로젝트로 승격하고 Charter, Work Tree, 상태를 기록했습니다.
 - 2026-08-01 v2: 로컬 프로토타입, 합성 데이터와 Snowflake 실행 경로의 실제 상태를 반영했습니다.
+- 2026-08-01 v3: 판단 근거를 화면에 노출하는 workbench와 제출 패키지의 실제 상태를 반영했습니다.

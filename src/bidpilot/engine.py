@@ -79,13 +79,66 @@ def evaluate_bid(rfp: dict, company: dict) -> BidDecision:
     )
 
 
+def decision_trace(rfp: dict, company: dict, decision: BidDecision) -> list[dict]:
+    """Return the policy checks shown in the product without hiding any failure."""
+    missing = _missing_required(rfp["required_capabilities"], company["capabilities"])
+    required_hours = rfp["required_hours"]
+    available_hours = company["available_hours"]
+    margin_rate = decision.expected_margin / rfp["contract_value"]
+
+    return [
+        {
+            "gate": "Mandatory capability",
+            "policy": "Every mandatory capability must be present",
+            "observed": "All present" if not missing else f"Missing: {', '.join(missing)}",
+            "passed": not missing,
+        },
+        {
+            "gate": "Delivery capacity",
+            "policy": "Available hours must cover delivery effort",
+            "observed": f"{available_hours:,}h available / {required_hours:,}h required",
+            "passed": decision.capacity_gap_hours == 0,
+        },
+        {
+            "gate": "Margin floor",
+            "policy": f"Margin must be at least {company['minimum_margin_rate']:.0%}",
+            "observed": f"{margin_rate:.1%} expected margin",
+            "passed": margin_rate >= company["minimum_margin_rate"],
+        },
+    ]
+
+
 def create_proposal_tasks(rfp: dict, decision: BidDecision) -> list[dict]:
     """Create deterministic internal tasks only after a positive decision."""
     if not decision.can_proceed:
         return []
     return [
-        {"task": "Confirm solution outline", "owner": "Solutions lead", "due_in_days": 1},
-        {"task": "Prepare pricing assumptions", "owner": "Commercial lead", "due_in_days": 2},
-        {"task": "Draft compliance matrix", "owner": "Bid manager", "due_in_days": 2},
-        {"task": "Run proposal review", "owner": "Executive sponsor", "due_in_days": max(1, rfp["deadline_days"] - 1)},
+        {
+            "task": "Confirm solution outline",
+            "owner": "Solutions lead",
+            "due_in_days": 1,
+            "workstream": "Solution",
+            "outcome": "A scoped architecture and delivery assumptions",
+        },
+        {
+            "task": "Prepare pricing assumptions",
+            "owner": "Commercial lead",
+            "due_in_days": 2,
+            "workstream": "Commercial",
+            "outcome": "A reviewable cost and margin position",
+        },
+        {
+            "task": "Draft compliance matrix",
+            "owner": "Bid manager",
+            "due_in_days": 2,
+            "workstream": "Compliance",
+            "outcome": "A requirement-to-evidence response matrix",
+        },
+        {
+            "task": "Run proposal review",
+            "owner": "Executive sponsor",
+            "due_in_days": max(1, rfp["deadline_days"] - 1),
+            "workstream": "Approval",
+            "outcome": "A bid-ready decision before the deadline",
+        },
     ]
