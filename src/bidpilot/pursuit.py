@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 
+from bidpilot.policy import pursue_status
+
 
 @dataclass(frozen=True)
 class ProofCard:
@@ -115,11 +117,11 @@ def build_pursuit_brief(tender: dict, supplier: dict) -> PursuitBrief:
         _position("Operational continuity", tender, supplier, projects, list(score_map)[1:] + list(score_map)[:1]),
     )
 
-    if missing or capacity_gap:
+    status = pursue_status(len(missing), capacity_gap, len(projects))
+    if status == "NO-GO":
         status = "NO-GO"
         next_actions = ("Do not generate a proposal.", "Resolve eligibility or delivery capacity before reopening this opportunity.")
-    elif len(projects) < 2:
-        status = "REVIEW"
+    elif status == "REVIEW":
         next_actions = ("Validate the comparable-project gap.", "Add a delivery reference before authoring a proposal.")
     else:
         status = "PURSUE"

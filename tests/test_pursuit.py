@@ -1,9 +1,11 @@
 from pathlib import Path
+import runpy
 
 from bidpilot.bid_room import BidRoomStore
 from bidpilot.fixtures import SUPPLIER_PROFILES, TENDERS
 from bidpilot.proposal_writer import red_team_proposal, write_strategy_proposal
 from bidpilot.pursuit import build_pursuit_brief, select_win_position
+from bidpilot.policy import POLICY_VERSION, pursue_status
 
 
 def test_qualified_supplier_receives_pursue_and_strategy_bound_blueprint() -> None:
@@ -101,3 +103,14 @@ def test_bid_room_persists_the_same_versioned_run_after_refresh(tmp_path: Path) 
     latest = store.latest(tender["id"], supplier["id"], "sha256:demo-replay-v1", brief.win_positions[0].statement)
     assert latest is not None
     assert latest["run_id"] == run_id
+
+
+def test_python_and_snowpark_policy_contract_share_version_and_decision_vectors() -> None:
+    module = runpy.run_path("snowflake/snowpark_decision.py")
+
+    assert module["POLICY_VERSION"] == POLICY_VERSION
+    assert [
+        pursue_status(missing, capacity, projects)
+        for missing, capacity, projects in ((1, 0, 3), (0, 4, 3), (0, 0, 1), (0, 0, 2))
+    ] == ["NO-GO", "NO-GO", "REVIEW", "PURSUE"]
+    assert callable(module["pursue_status_expression"])

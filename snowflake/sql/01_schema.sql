@@ -1,49 +1,178 @@
+-- BidPilot Opportunity Graph.  All business records are append-safe and tied
+-- to tenant, supplier profile, opportunity version, and agent run.
 CREATE DATABASE IF NOT EXISTS BIDPILOT_DEMO;
 CREATE SCHEMA IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT;
 
-CREATE OR REPLACE TABLE BIDPILOT_DEMO.BIDPILOT.RFPS (
-    rfp_id STRING,
-    title STRING,
-    contract_value NUMBER(12, 2),
-    required_hours NUMBER(10, 0),
-    estimated_delivery_cost NUMBER(12, 2),
-    deadline_days NUMBER(10, 0),
-    delivery_risk STRING,
-    incumbent_competitor BOOLEAN
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.OPPORTUNITIES (
+    tenant_id STRING NOT NULL,
+    opportunity_id STRING NOT NULL,
+    opportunity_version STRING NOT NULL,
+    title STRING NOT NULL,
+    source_url STRING,
+    source_sha256 STRING NOT NULL,
+    retrieved_at TIMESTAMP_TZ NOT NULL,
+    content_type STRING NOT NULL,
+    source_status STRING NOT NULL,
+    scope STRING,
+    buyer_objective STRING,
+    delivery_hours NUMBER(10, 0) NOT NULL,
+    tags ARRAY NOT NULL,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
 );
 
-CREATE OR REPLACE TABLE BIDPILOT_DEMO.BIDPILOT.RFP_REQUIREMENTS (
-    rfp_id STRING,
-    capability STRING,
-    is_mandatory BOOLEAN
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.OPPORTUNITY_DOCUMENTS (
+    tenant_id STRING NOT NULL,
+    opportunity_id STRING NOT NULL,
+    opportunity_version STRING NOT NULL,
+    document_id STRING NOT NULL,
+    source_sha256 STRING NOT NULL,
+    content_type STRING NOT NULL,
+    extracted_text STRING NOT NULL,
+    instruction_like_content BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
 );
 
-CREATE OR REPLACE TABLE BIDPILOT_DEMO.BIDPILOT.COMPANY_CAPABILITIES (
-    capability STRING
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.REQUIREMENTS (
+    tenant_id STRING NOT NULL,
+    opportunity_id STRING NOT NULL,
+    opportunity_version STRING NOT NULL,
+    requirement_id STRING NOT NULL,
+    requirement_text STRING NOT NULL,
+    requirement_kind STRING NOT NULL,
+    source_locator STRING,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
 );
 
-CREATE OR REPLACE TABLE BIDPILOT_DEMO.BIDPILOT.COMPANY_CAPACITY (
-    available_hours NUMBER(10, 0),
-    loaded_hourly_cost NUMBER(12, 2),
-    minimum_margin_rate NUMBER(5, 4),
-    minimum_lead_days NUMBER(10, 0)
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.EVALUATION_CRITERIA (
+    tenant_id STRING NOT NULL,
+    opportunity_id STRING NOT NULL,
+    opportunity_version STRING NOT NULL,
+    criterion_id STRING NOT NULL,
+    criterion_name STRING NOT NULL,
+    weight NUMBER(6, 2) NOT NULL,
+    source_locator STRING,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
 );
 
-CREATE OR REPLACE TABLE BIDPILOT_DEMO.BIDPILOT.BID_DECISIONS (
-    rfp_id STRING,
-    recommendation STRING,
-    expected_margin NUMBER(12, 2),
-    capacity_gap_hours NUMBER(10, 0),
-    hard_gate_failures VARIANT,
-    risks VARIANT,
-    evaluated_at TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP()
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.SUBMISSION_ITEMS (
+    tenant_id STRING NOT NULL,
+    opportunity_id STRING NOT NULL,
+    opportunity_version STRING NOT NULL,
+    item_id STRING NOT NULL,
+    item_text STRING NOT NULL,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
 );
 
-CREATE OR REPLACE TABLE BIDPILOT_DEMO.BIDPILOT.PROPOSAL_TASKS (
-    rfp_id STRING,
-    task_name STRING,
-    owner STRING,
-    due_in_days NUMBER(10, 0),
-    status STRING DEFAULT 'OPEN',
-    created_at TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP()
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.SUPPLIER_PROFILES (
+    tenant_id STRING NOT NULL,
+    supplier_profile_id STRING NOT NULL,
+    supplier_name STRING NOT NULL,
+    profile_version STRING NOT NULL,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
+);
+
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.CREDENTIALS (
+    tenant_id STRING NOT NULL,
+    supplier_profile_id STRING NOT NULL,
+    credential_name STRING NOT NULL,
+    status STRING NOT NULL,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
+);
+
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.PEOPLE (
+    tenant_id STRING NOT NULL,
+    supplier_profile_id STRING NOT NULL,
+    person_id STRING NOT NULL,
+    person_name STRING NOT NULL,
+    role_name STRING NOT NULL,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
+);
+
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.AVAILABILITY (
+    tenant_id STRING NOT NULL,
+    supplier_profile_id STRING NOT NULL,
+    available_hours NUMBER(10, 0) NOT NULL,
+    effective_from DATE NOT NULL,
+    effective_to DATE NOT NULL,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
+);
+
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.PAST_PROJECTS (
+    tenant_id STRING NOT NULL,
+    supplier_profile_id STRING NOT NULL,
+    project_id STRING NOT NULL,
+    project_title STRING NOT NULL,
+    tags ARRAY NOT NULL,
+    outcome STRING NOT NULL,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
+);
+
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.PAST_PROPOSALS (
+    tenant_id STRING NOT NULL,
+    supplier_profile_id STRING NOT NULL,
+    proposal_asset_id STRING NOT NULL,
+    title STRING NOT NULL,
+    tags ARRAY NOT NULL,
+    excerpt STRING NOT NULL,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
+);
+
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.AGENT_RUNS (
+    run_id STRING NOT NULL,
+    tenant_id STRING NOT NULL,
+    opportunity_id STRING NOT NULL,
+    opportunity_version STRING NOT NULL,
+    supplier_profile_id STRING NOT NULL,
+    policy_version STRING NOT NULL,
+    provider STRING NOT NULL,
+    state STRING NOT NULL,
+    trace VARIANT NOT NULL,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
+);
+
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.PURSUIT_DECISIONS (
+    run_id STRING NOT NULL,
+    status STRING NOT NULL,
+    missing_eligibility ARRAY NOT NULL,
+    capacity_gap_hours NUMBER(10, 0) NOT NULL,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
+);
+
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.WIN_STRATEGIES (
+    run_id STRING NOT NULL,
+    strategy_id STRING NOT NULL,
+    selected BOOLEAN NOT NULL,
+    title STRING NOT NULL,
+    statement STRING NOT NULL,
+    proof_cards VARIANT NOT NULL,
+    weakness STRING,
+    mitigation STRING,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
+);
+
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.RUBRIC_RESPONSE_PLANS (
+    run_id STRING NOT NULL,
+    criterion_name STRING NOT NULL,
+    weight NUMBER(6, 2) NOT NULL,
+    claim STRING NOT NULL,
+    assets ARRAY NOT NULL,
+    owner STRING NOT NULL,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
+);
+
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.PROPOSAL_SECTIONS (
+    run_id STRING NOT NULL,
+    section_id STRING NOT NULL,
+    criterion_name STRING NOT NULL,
+    section_markdown STRING NOT NULL,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
+);
+
+CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.PURSUIT_TASKS (
+    run_id STRING NOT NULL,
+    task_id STRING NOT NULL,
+    task_name STRING NOT NULL,
+    owner STRING NOT NULL,
+    status STRING NOT NULL,
+    created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
 );

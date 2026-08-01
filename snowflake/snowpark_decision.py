@@ -1,70 +1,103 @@
-"""Snowpark execution path for the same fixed BidPilot policy.
+"""Snowpark policy path for BidPilot Opportunity Graph runs.
 
-Run this only from an authenticated Snowflake Python worksheet or a configured
-Snowpark environment. It persists the result needed by the Streamlit surface.
+This module is account-ready only. It is intentionally not represented as an
+executed Snowflake or CoCo run until authenticated account evidence exists.
 """
 
+from __future__ import annotations
+
 from snowflake.snowpark import Session
+from snowflake.snowpark.column import Column
 from snowflake.snowpark.functions import (
     array_agg,
     array_construct,
+    array_intersection,
     array_size,
     coalesce,
     col,
+    count,
     iff,
     lit,
 )
 
+POLICY_VERSION = "2026-08-02.v1"
 
-def evaluate_and_persist(session: Session, rfp_id: str) -> None:
-    rfp = session.table("BIDPILOT_DEMO.BIDPILOT.RFPS").filter(col("RFP_ID") == rfp_id)
-    capacity = session.table("BIDPILOT_DEMO.BIDPILOT.COMPANY_CAPACITY")
-    requirements = session.table("BIDPILOT_DEMO.BIDPILOT.RFP_REQUIREMENTS").filter(
-        (col("RFP_ID") == rfp_id) & col("IS_MANDATORY")
+
+def pursue_status_expression(missing_eligibility_count: Column, capacity_gap_hours: Column, comparable_project_count: Column) -> Column:
+    """Mirror ``bidpilot.policy.pursue_status`` in Snowpark expressions."""
+    return iff(
+        (missing_eligibility_count > lit(0)) | (capacity_gap_hours > lit(0)),
+        lit("NO-GO"),
+        iff(comparable_project_count < lit(2), lit("REVIEW"), lit("PURSUE")),
     )
-    capabilities = session.table("BIDPILOT_DEMO.BIDPILOT.COMPANY_CAPABILITIES")
 
+
+def evaluate_and_persist(
+    session: Session,
+    run_id: str,
+    tenant_id: str,
+    opportunity_id: str,
+    opportunity_version: str,
+    supplier_profile_id: str,
+) -> None:
+    """Persist the deterministic eligibility, capacity, and analogue policy output."""
+    opportunities = session.table("BIDPILOT_DEMO.BIDPILOT.OPPORTUNITIES").filter(
+        (col("TENANT_ID") == tenant_id)
+        & (col("OPPORTUNITY_ID") == opportunity_id)
+        & (col("OPPORTUNITY_VERSION") == opportunity_version)
+    )
+    requirements = session.table("BIDPILOT_DEMO.BIDPILOT.REQUIREMENTS").filter(
+        (col("TENANT_ID") == tenant_id)
+        & (col("OPPORTUNITY_ID") == opportunity_id)
+        & (col("OPPORTUNITY_VERSION") == opportunity_version)
+        & (col("REQUIREMENT_KIND") == lit("eligibility"))
+    )
+    credentials = session.table("BIDPILOT_DEMO.BIDPILOT.CREDENTIALS").filter(
+        (col("TENANT_ID") == tenant_id)
+        & (col("SUPPLIER_PROFILE_ID") == supplier_profile_id)
+        & (col("STATUS") == lit("active"))
+    )
     missing = requirements.join(
-        capabilities,
-        requirements["CAPABILITY"] == capabilities["CAPABILITY"],
+        credentials,
+        requirements["REQUIREMENT_TEXT"] == credentials["CREDENTIAL_NAME"],
         "leftanti",
-    ).agg(array_agg(col("CAPABILITY")).alias("MISSING_CAPABILITIES"))
-
-    decision = (
-        rfp.cross_join(capacity)
-        .cross_join(missing)
-        .select(
-            col("RFP_ID"),
-            (col("CONTRACT_VALUE") - col("ESTIMATED_DELIVERY_COST")).alias("EXPECTED_MARGIN"),
-            iff(col("REQUIRED_HOURS") > col("AVAILABLE_HOURS"), col("REQUIRED_HOURS") - col("AVAILABLE_HOURS"), lit(0)).alias("CAPACITY_GAP_HOURS"),
-            col("MISSING_CAPABILITIES"),
-            col("MINIMUM_MARGIN_RATE"),
-            col("CONTRACT_VALUE"),
-            col("DEADLINE_DAYS"),
-            col("MINIMUM_LEAD_DAYS"),
+    )
+    missing_metrics = missing.agg(
+        count(lit(1)).alias("MISSING_ELIGIBILITY_COUNT"),
+        array_agg(col("REQUIREMENT_TEXT")).alias("MISSING_ELIGIBILITY"),
+    )
+    availability = session.table("BIDPILOT_DEMO.BIDPILOT.AVAILABILITY").filter(
+        (col("TENANT_ID") == tenant_id) & (col("SUPPLIER_PROFILE_ID") == supplier_profile_id)
+    ).select(col("AVAILABLE_HOURS")).limit(1)
+    projects = session.table("BIDPILOT_DEMO.BIDPILOT.PAST_PROJECTS").filter(
+        (col("TENANT_ID") == tenant_id) & (col("SUPPLIER_PROFILE_ID") == supplier_profile_id)
+    )
+    comparable_count = projects.cross_join(opportunities).filter(
+        array_size(array_intersection(projects["TAGS"], opportunities["TAGS"])) > lit(0)
+    ).agg(count(lit(1)).alias("COMPARABLE_PROJECT_COUNT"))
+    policy = (
+        opportunities.cross_join(availability)
+        .cross_join(missing_metrics)
+        .cross_join(comparable_count)
+        .with_column(
+            "CAPACITY_GAP_HOURS",
+            iff(col("DELIVERY_HOURS") > col("AVAILABLE_HOURS"), col("DELIVERY_HOURS") - col("AVAILABLE_HOURS"), lit(0)),
         )
         .with_column(
-            "RECOMMENDATION",
-            iff(
-                (coalesce(array_size(col("MISSING_CAPABILITIES")), lit(0)) > 0)
-                | (col("CAPACITY_GAP_HOURS") > 0)
-                | ((col("EXPECTED_MARGIN") / col("CONTRACT_VALUE")) < col("MINIMUM_MARGIN_RATE")),
-                lit("NO-BID"),
-                lit("BID"),
+            "STATUS",
+            pursue_status_expression(
+                col("MISSING_ELIGIBILITY_COUNT"), col("CAPACITY_GAP_HOURS"), col("COMPARABLE_PROJECT_COUNT")
             ),
         )
         .select(
-            "RFP_ID",
-            "RECOMMENDATION",
-            "EXPECTED_MARGIN",
-            "CAPACITY_GAP_HOURS",
-            col("MISSING_CAPABILITIES").alias("HARD_GATE_FAILURES"),
-            array_construct().alias("RISKS"),
+            lit(run_id).alias("RUN_ID"),
+            col("STATUS"),
+            coalesce(col("MISSING_ELIGIBILITY"), array_construct()).alias("MISSING_ELIGIBILITY"),
+            col("CAPACITY_GAP_HOURS"),
         )
     )
-
-    decision.write.save_as_table(
-        "BIDPILOT_DEMO.BIDPILOT.BID_DECISIONS",
+    policy.write.save_as_table(
+        "BIDPILOT_DEMO.BIDPILOT.PURSUIT_DECISIONS",
         mode="append",
         column_order="name",
     )
