@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from bidpilot.pursuit import PursuitBrief, WinPosition
+
 
 def write_proposal_draft(tender: dict, company_name: str, positioning: str) -> str:
     """Produce an editable proposal brief without binding the product to HWPX."""
@@ -44,4 +46,58 @@ The notice weights technical evaluation at 90% and price at 10%. The proposal sh
 - Confirm every participation condition before bid submission.
 - Tailor team and delivery capability statements to the final company profile.
 - Convert this brief into the buyer’s required proposal format and submit it with the required administrative documents.
+"""
+
+
+def write_strategy_proposal(tender: dict, supplier: dict, brief: PursuitBrief, position_index: int = 0) -> str:
+    """Write criterion-led sections from a persisted Pursuit Brief contract."""
+    if not brief.can_generate_proposal:
+        raise ValueError(f"Proposal generation is blocked for {brief.status} opportunities.")
+    if brief.opportunity_id != tender["id"] or brief.supplier_profile_id != supplier["id"]:
+        raise ValueError("Tender and supplier must match the Pursuit Brief version.")
+    position = brief.win_positions[position_index]
+    return _strategy_markdown(tender, supplier, brief, position)
+
+
+def red_team_proposal(brief: PursuitBrief, draft: str) -> tuple[str, ...]:
+    """Review only score-bearing sections using the same evaluation matrix."""
+    findings: list[str] = []
+    for section in brief.proposal_blueprint:
+        if section.criterion not in draft:
+            findings.append(f"Add an explicit {section.criterion} section before review.")
+        if not any(asset in draft for asset in section.assets):
+            findings.append(f"Connect {section.criterion} to a selected supplier asset.")
+    if brief.win_positions[0].weakness:
+        findings.append(brief.win_positions[0].mitigation or brief.win_positions[0].weakness)
+    return tuple(findings)
+
+
+def _strategy_markdown(tender: dict, supplier: dict, brief: PursuitBrief, position: WinPosition) -> str:
+    proof_list = "\n".join(f"- **{card.label}** — {card.detail}" for card in position.proof_cards)
+    sections = "\n\n".join(
+        f"## {section.criterion} ({section.weight} points)\n\n"
+        f"{section.claim}\n\n"
+        f"Delivery assets: {', '.join(section.assets)}.\n\n"
+        f"Proposal owner: {section.owner}."
+        for section in brief.proposal_blueprint
+    )
+    return f"""# {tender['title']}
+
+## Win Position
+
+{position.statement}
+
+## Buyer Objective
+
+{brief.buyer_objective}
+
+## Selected Delivery Assets
+
+{proof_list}
+
+{sections}
+
+## Delivery Action
+
+{tender['promised_outcome'].capitalize()} is delivered within the planned effort of {tender['delivery_hours']} hours.
 """
