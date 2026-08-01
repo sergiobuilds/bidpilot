@@ -9,7 +9,7 @@ BidPilot 구현을 재개할 때 읽는 현재 작업 진입점입니다.
 - 비공개 GitHub 저장소 `sergiobuilds/bidpilot`을 생성했습니다.
 - 제품 방향은 B2G Pursuit Agent의 Bid Room으로 확정했습니다. 공고의 평가 논리와 회사 운영 메모리에서 Win Position을 고르고, 그 전략으로 제안서와 작업을 만듭니다.
 - 프로젝트 지도와 결정 기록을 작성했습니다.
-- CoCo CLI v1.1.52와 Snowflake CLI v3.23.0을 설치했습니다.
+- Snowflake CLI v3.23.0은 설치됐습니다. 현재 환경에서 `coco` 독립 실행 명령은 확인되지 않았습니다.
 - Snowflake 가입은 AI Data Cloud와 CoCo 전용 경로에서 모두 마지막 생성 요청이 일반 오류로 실패했습니다. SQL 적재, Snowpark 실행, CoCo 세션 증거는 미완료입니다.
 - URL/PDF/text intake, source hash, 지시문형 텍스트 격리, 2×2 supplier/tender fixture, Win Position, strategy-led draft, red-team, SQLite Bid Room persistence를 구현했습니다.
 - Snowflake Opportunity Graph SQL과 Snowpark 정책은 account-ready이며 실행 증거는 없습니다.

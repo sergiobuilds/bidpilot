@@ -116,7 +116,7 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 - 마지막 확인 신호: 2026-08-02 KST에 21개 local tests, compile, Streamlit intake·Bid Room smoke test를 확인했습니다.
 - 진행상황: L1, L2, L4, L5 완료. L3와 L6--L8은 authenticated Snowflake account와 CoCo trace가 필요합니다.
 - 현재 주장 가능 범위: local intake, 두 tender·두 supplier fixture, Win Position, strategy-led draft, red-team, SQLite persistent Bid Room, append-safe Snowflake schema와 account-ready Snowpark policy가 있습니다. Snowflake 실행과 CoCo 세션 증거는 없습니다.
-- 외부 게이트: Snowflake AI Data Cloud와 CoCo 가입의 계정 생성이 모두 일반 오류로 실패했습니다. 공식 대회 본문의 India-only 자격도 확인이 필요합니다.
+- 외부 게이트: Snowflake AI Data Cloud와 CoCo 가입의 계정 생성이 모두 일반 오류로 실패했습니다. Snowflake CLI 연결 profile은 없고 현재 환경에서 `coco` 독립 실행 명령도 확인되지 않았습니다. 공식 대회 본문의 India-only 자격도 확인이 필요합니다.
 - 다음 복귀 지점: 정상 Snowflake account에서 schema·seed·Snowpark·CoCo run을 실행하고 실제 `AGENT_RUNS` 증거를 기록합니다.
 
 ## 8 변경 이력
