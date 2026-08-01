@@ -20,3 +20,5 @@ canonical_path: /home/elite/projects/personal/products/bidpilot/docs/CHRONICLE.m
 - 2026-08-01 [evidence]: 로컬 Python 엔진, Streamlit 사용자 흐름, Snowflake DDL·seed·Snowpark 실행 경로를 만들었습니다. Snowflake 연결 프로필이 없어 실제 SQL, Snowpark, CoCo 세션 증거는 아직 주장하지 않습니다.
 - 2026-08-01 [implementation]: 심사자 화면을 hard gate별 정책·관측값·통과 여부가 보이는 decision-to-action workbench로 확장했습니다. 긍정 판단은 owner·기한·workstream·expected outcome을 가진 내부 proposal work plan으로 전환합니다.
 - 2026-08-01 [submission]: 영어 제출 설명, 90초 시연 순서, 로컬 재현 명령, 증거 경계를 제출 패키지에 고정했습니다. 실제 Snowflake 및 CoCo 세션 증거는 여전히 미완료입니다.
+- 2026-08-01 [product]: BidPilot을 독립 BID/NO-BID 서비스가 아니라 B2G 공고 qualification layer로 확정했습니다. 열린 공고와 닫힌 회사 증거가 확인될 때만 Proposal Start Packet을 통해 Grant Proposal Engine의 제안서 작성 단계로 넘깁니다.
+- 2026-08-01 [evidence]: 공개 G2B 공고 R26BK01490484의 원문 URL, 9쪽 원문 SHA-256, 자격·평가·과업 추출을 실제 사례로 추가했습니다. 이 공고는 마감된 과거 사례이므로 현재 투찰 가능성을 주장하지 않습니다.

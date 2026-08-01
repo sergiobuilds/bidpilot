@@ -8,7 +8,7 @@ authority_model: v2
 
 # BidPilot 프로젝트 지도
 
-기업의 RFP 참여 판단과 제안 업무 착수를 Snowflake 안에서 처리하는 해커톤 프로젝트의 정본입니다.
+기업의 RFP와 B2G 공고를 검증하고, 제안서 작성 시작 패킷까지 만드는 해커톤 프로젝트의 정본입니다.
 
 **목차**: 1 Project Charter · 2 Current Map · 3 Confirmed Scope · 4 Work Tree · 5 Open / Unconfirmed · 6 Canonical Documents · 7 Status · 8 변경 이력
 
@@ -16,7 +16,7 @@ authority_model: v2
 
 ### 1.1 목적
 
-BidPilot은 RFP 문서와 회사의 역량, 인력, 단가, 일정을 함께 분석해 입찰 참여 여부를 판단하고, 승인된 건의 제안 업무를 실제 작업 단위로 생성합니다.
+BidPilot은 RFP와 B2G 공고를 회사의 자격, 역량, 인력, 단가, 일정과 함께 분석합니다. 참여 가능성이 확인된 건은 제안 업무 또는 Grant Proposal Engine용 Proposal Start Packet으로 전환합니다.
 
 ### 1.2 최종 산출물
 
@@ -103,6 +103,7 @@ BidPilot은 RFP 문서와 회사의 역량, 인력, 단가, 일정을 함께 분
 |---|---|---|
 | [MASTER-MAP.md](MASTER-MAP.md) | project-map | 목적, 범위, Work Tree, 상태의 유일한 정본 |
 | [CHRONICLE.md](CHRONICLE.md) | project-decision | append-only 결정 기록 |
+| [B2G-QUALIFICATION-INTEGRATION_2026-08-01_v1.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/B2G-QUALIFICATION-INTEGRATION_2026-08-01_v1.md) | project-material | B2G qualification layer와 Proposal Start Packet 경계 |
 | [SUBMISSION-PACKAGE_2026-08-01_v1.md](https://docs.svvys.com/projects/personal/products/bidpilot/docs/SUBMISSION-PACKAGE_2026-08-01_v1.md) | project-material | 영어 제출 설명, 90초 데모, 재현 절차 |
 | [../PASSDOWN.md](../PASSDOWN.md) | 인계 | 현재 복귀 지점과 금지사항 |
 | [../README.md](../README.md) | 소개 | 저장소 진입점 |
@@ -110,8 +111,8 @@ BidPilot은 RFP 문서와 회사의 역량, 인력, 단가, 일정을 함께 분
 ## 7 Status
 
 - 마지막 확인 신호: 2026-08-01 KST에 로컬 정책 테스트 4건, 린트, Streamlit health endpoint를 확인했습니다.
-- 진행상황: L1 완료. L2--L6은 계정 연결 전 로컬 구현까지 진행됐고 L7--L8은 제출 패키지 제작 단계입니다.
-- 현재 주장 가능 범위: 로컬 Streamlit, 합성 fixture, inspectable policy trace, in-session work-plan behavior, SQL과 Snowpark 실행 경로가 준비됐습니다. Snowflake 실행과 CoCo 세션 증거는 아직 없습니다.
+- 진행상황: L1 완료. L2--L6은 계정 연결 전 로컬 구현까지 진행됐고, 실제 공개 G2B 공고에서 evidence-first qualification과 Proposal Start Packet을 생성할 수 있습니다. L7--L8은 제출 패키지 제작 단계입니다.
+- 현재 주장 가능 범위: 로컬 Streamlit, 합성 fixture, 실제 공개 G2B 원문 기반 qualification, inspectable policy trace, Proposal Start Packet, in-session work-plan behavior, SQL과 Snowpark 실행 경로가 준비됐습니다. Snowflake 실행과 CoCo 세션 증거는 아직 없습니다.
 - 다음 복귀 지점: Snowflake 연결 프로필을 만들고 `snow sql`로 스키마·fixture를 적재한 뒤 CoCo CLI 세션과 Snowpark 결과를 기록합니다.
 
 ## 8 변경 이력
@@ -119,3 +120,4 @@ BidPilot은 RFP 문서와 회사의 역량, 인력, 단가, 일정을 함께 분
 - 2026-08-01 v1: BidPilot을 해커톤 출품 프로젝트로 승격하고 Charter, Work Tree, 상태를 기록했습니다.
 - 2026-08-01 v2: 로컬 프로토타입, 합성 데이터와 Snowflake 실행 경로의 실제 상태를 반영했습니다.
 - 2026-08-01 v3: 판단 근거를 화면에 노출하는 workbench와 제출 패키지의 실제 상태를 반영했습니다.
+- 2026-08-01 v4: BidPilot을 B2G qualification layer로 확장하고 실제 G2B 공고와 Proposal Start Packet 경계를 반영했습니다.
