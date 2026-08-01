@@ -36,7 +36,7 @@ uv run streamlit run app.py
 |---|---|---|
 | Data model | `snowflake/sql/01_schema.sql` and `02_seed_fixture.sql` | Append-safe Opportunity Graph prepared, not yet loaded to an account |
 | Decision policy | `snowflake/snowpark_decision.py` | Versioned policy path prepared, awaits authenticated Snowpark execution |
-| CoCo CLI | CoCo CLI v1.1.52 and Snowflake CLI v3.23.0 installed locally | No Snowflake connection profile yet |
+| CoCo CLI | Snowflake CLI v3.23.0 is installed; a `coco` executable is not present in this environment | No Snowflake connection profile or verified CoCo execution path |
 | User flow | Streamlit tender intake and persistent local Bid Room | Local browser flow verified; SQLite is a development adapter only |
 
 The account-run procedure is in [snowflake/COCO_RUNBOOK.md](snowflake/COCO_RUNBOOK.md).
