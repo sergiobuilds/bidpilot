@@ -2,7 +2,7 @@
 
 BidPilot is an RFP bid/no-bid decision prototype for the Snowflake CoCo CLI Hackathon 2026. The local demo connects a proposed engagement to delivery capability, capacity, economics, and deadlines, then creates an in-session proposal work plan.
 
-**Contents** — 1 Demo flow · 2 Run locally · 3 Snowflake proof path · 4 Canonical project records · Change history
+**Contents** — 1 Demo flow · 2 Run locally · 3 Snowflake proof path · 4 Canonical project records · 5 Change history
 
 ## 1 Demo flow
 
@@ -35,7 +35,7 @@ uv run streamlit run app.py
 - Decision record: [docs/CHRONICLE.md](docs/CHRONICLE.md)
 - Current handoff: [PASSDOWN.md](PASSDOWN.md)
 
-## Change history
+## 5 Change history
 
 - 2026-08-01 v2: Added the synthetic decision prototype, Snowflake schema and Snowpark execution path, local verification commands, and current proof boundary.
 - 2026-08-01 v1: Created the repository and canonical document entry points.
