@@ -1,0 +1,22 @@
+[project]
+name = "bidpilot"
+version = "0.1.0"
+description = "RFP bid/no-bid decision and proposal-workflow prototype for the Snowflake CoCo CLI Hackathon"
+requires-python = ">=3.11"
+dependencies = [
+  "pandas>=2.2,<3",
+  "pyarrow>=14.0.1,<24",
+  "snowflake-snowpark-python>=1.53,<2",
+  "streamlit>=1.47,<2",
+]
+
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = ["pytest>=8.3,<9"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
