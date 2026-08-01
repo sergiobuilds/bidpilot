@@ -2,6 +2,8 @@
 
 BidPilot is an RFP bid/no-bid decision prototype for the Snowflake CoCo CLI Hackathon 2026. The local demo connects a proposed engagement to delivery capability, capacity, economics, and deadlines, then creates an in-session proposal work plan.
 
+**Contents** — 1 Demo flow · 2 Run locally · 3 Snowflake proof path · 4 Canonical project records · Change history
+
 ## 1 Demo flow
 
 1. Select `RFP-ORBIT` to see a high-value opportunity rejected because mandatory qualification, capacity, and margin gates fail.
