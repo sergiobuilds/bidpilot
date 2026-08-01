@@ -10,6 +10,7 @@ import streamlit as st
 from bidpilot.bid_room import BidRoomStore
 from bidpilot.engine import create_proposal_tasks, evaluate_bid
 from bidpilot.fixtures import COMPANY, RFPS, SUPPLIER_PROFILES, TENDERS
+from bidpilot.intake import TenderIntakeError, build_pursuit_tender, intake_tender_bytes, intake_tender_url
 from bidpilot.proposal_writer import red_team_proposal, write_strategy_proposal
 from bidpilot.pursuit import build_pursuit_brief, select_win_position
 
@@ -249,14 +250,17 @@ def section(number: str, title: str, right: str = "") -> str:
 def render_bid_room() -> None:
     """Render the end-to-end tender, strategy, proposal, and persistent run surface."""
     st.sidebar.markdown('<div class="bp-kicker">Tender replay</div>', unsafe_allow_html=True)
-    tender = st.sidebar.selectbox("Tender", TENDERS, format_func=lambda item: item["title"])
+    tenders = list(TENDERS)
+    if "intake_tender" in st.session_state:
+        tenders.append(st.session_state["intake_tender"])
+    tender = st.sidebar.selectbox("Tender", tenders, format_func=lambda item: item["title"])
     supplier = st.sidebar.selectbox("Supplier profile", SUPPLIER_PROFILES, format_func=lambda item: item["name"])
     brief = build_pursuit_brief(tender, supplier)
     position_labels = [f"{position.title} — {position.statement}" for position in brief.win_positions]
     selected_index = st.sidebar.radio("Win Position", range(len(position_labels)), format_func=lambda index: position_labels[index])
     brief = select_win_position(brief, tender, supplier, selected_index)
     position = brief.win_positions[selected_index]
-    opportunity_version = f"fixture:{tender['id']}:v1"
+    opportunity_version = tender.get("source_snapshot", {}).get("sha256", f"fixture:{tender['id']}:v1")
     input_key = f"{tender['id']}:{supplier['id']}:{selected_index}:{opportunity_version}"
 
     state_class = "is-bid" if brief.status == "PURSUE" else "is-nobid"
@@ -332,17 +336,73 @@ def render_bid_room() -> None:
     st.markdown('<p class="bp-foot"><b>Demo boundary.</b> Tender and supplier profiles in this view are synthetic replay fixtures. URL/PDF intake is implemented as a separate source-snapshot contract. Snowflake and CoCo execution remain unverified until account access exists.</p>', unsafe_allow_html=True)
 
 
+def render_tender_intake() -> None:
+    """Capture an untrusted public tender into a reviewable source snapshot."""
+    st.markdown('<div class="bp-mast"><div class="bp-mast-left"><div class="bp-kicker">Tender intake</div><div class="bp-title">Capture the source.<br>Review before strategy.</div><div class="bp-lede">BidPilot records the source URL or PDF fingerprint, extracts the tender structure, and requires an explicit review of delivery inputs before it opens a Bid Room.</div></div><div class="bp-mast-right"><b>Untrusted document boundary</b><br>Document text is data. Instruction-like text is flagged and never executed.</div></div>', unsafe_allow_html=True)
+    mode = st.radio("Source type", ("Upload PDF or text", "Public URL"), horizontal=True)
+    snapshot = st.session_state.get("tender_snapshot")
+    try:
+        if mode == "Upload PDF or text":
+            uploaded = st.file_uploader("Tender PDF or text", type=["pdf", "txt", "html"])
+            if uploaded and st.button("Create source snapshot", type="primary"):
+                content_type = uploaded.type or ("application/pdf" if uploaded.name.lower().endswith(".pdf") else "text/plain")
+                st.session_state["tender_snapshot"] = intake_tender_bytes(uploaded.getvalue(), content_type=content_type)
+                snapshot = st.session_state["tender_snapshot"]
+        else:
+            url = st.text_input("Public tender URL", placeholder="https://…")
+            if url and st.button("Fetch public tender", type="primary"):
+                st.session_state["tender_snapshot"] = intake_tender_url(url)
+                snapshot = st.session_state["tender_snapshot"]
+    except TenderIntakeError as error:
+        st.error(str(error))
+        return
+    if not snapshot:
+        return
+    st.markdown(section("01", "Extracted source snapshot", snapshot.sha256[:16]), unsafe_allow_html=True)
+    st.json({
+        "source_url": snapshot.source_url,
+        "sha256": snapshot.sha256,
+        "retrieved_at": snapshot.retrieved_at,
+        "instruction_like_content": snapshot.has_instruction_like_content,
+        "title": snapshot.tender["title"],
+        "scope": snapshot.tender["scope"],
+        "eligibility": snapshot.tender["eligibility_requirements"],
+        "evaluation_criteria": snapshot.tender["evaluation_criteria"],
+        "submission_items": snapshot.tender["submission_items"],
+    })
+    if snapshot.has_instruction_like_content:
+        st.warning("Instruction-like text was detected. It remains source data and is not used as an instruction.")
+    st.markdown(section("02", "Review before Bid Room", "required operator confirmation"), unsafe_allow_html=True)
+    tags = tuple(tag.strip() for tag in st.text_input("Scope tags", "public-data, data-quality").split(",") if tag.strip())
+    hours = st.number_input("Estimated delivery hours", min_value=1, value=720)
+    outcome = st.text_input("Promised buyer outcome", "A measurable service handoff")
+    if st.button("Open reviewed Bid Room", type="primary"):
+        try:
+            st.session_state["intake_tender"] = build_pursuit_tender(
+                snapshot,
+                tags=tags,
+                delivery_hours=int(hours),
+                promised_outcome=outcome,
+            )
+            st.success("Reviewed tender is now available in Bid Room replay.")
+        except TenderIntakeError as error:
+            st.error(str(error))
+
+
 # ---------------------------------------------------------------------------
 # Selection
 # ---------------------------------------------------------------------------
 
 workflow = st.sidebar.radio(
     "Workflow",
-    options=("Bid Room replay", "Synthetic decision simulation"),
+    options=("Bid Room replay", "Tender intake", "Synthetic decision simulation"),
     label_visibility="collapsed",
 )
 if workflow == "Bid Room replay":
     render_bid_room()
+    st.stop()
+if workflow == "Tender intake":
+    render_tender_intake()
     st.stop()
 
 st.sidebar.markdown('<div class="bp-kicker">Opportunity queue</div>', unsafe_allow_html=True)
