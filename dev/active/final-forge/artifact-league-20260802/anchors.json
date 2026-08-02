@@ -1,0 +1,47 @@
+[
+  {
+    "level": "low",
+    "expected_total": 24,
+    "card": {
+      "problem": "A broad business task is slow and users want a shorter summary.",
+      "user": "Any employee who occasionally reads a long document.",
+      "workflow": "A chat box accepts text and returns a generic answer without structured state or follow-through.",
+      "snowflake_role": "A warehouse stores messages, but the named platform is not essential to the experience.",
+      "execution_proof": "A static mockup and claimed prompt result are shown without an authenticated run.",
+      "product_proof": "One screen communicates the concept but has no complete workflow, failure state, deployment proof or submission package.",
+      "business_case": "Reading time may fall, while the buyer, adoption path and measurable value remain unclear.",
+      "observed_evidence": ["static mockup"],
+      "missing_evidence": ["platform necessity", "working run", "complete product"]
+    }
+  },
+  {
+    "level": "mid",
+    "expected_total": 58,
+    "card": {
+      "problem": "An operations team manually applies repeatable rules to structured and unstructured records.",
+      "user": "A named operational manager responsible for reviewing exceptions.",
+      "workflow": "The prototype ingests fixtures, computes an exception, shows a recommendation and saves one result for review.",
+      "snowflake_role": "Snowflake stores the records and runs a policy near the data, but agent execution and durable multi-step provenance are limited.",
+      "execution_proof": "Source, setup SQL and tests exist. A local end-to-end demo works, while authenticated query evidence and public deployment are absent.",
+      "product_proof": "The main path and one failure state are usable, but review, ownership and a judge-ready package remain partial.",
+      "business_case": "The first buyer and avoided manual effort are credible, though customer proof and expansion economics are untested.",
+      "observed_evidence": ["working local prototype", "schema and tests"],
+      "missing_evidence": ["authenticated agent run", "public demo", "customer validation"]
+    }
+  },
+  {
+    "level": "high",
+    "expected_total": 90,
+    "card": {
+      "problem": "A costly operational workflow requires governed data, agent reasoning, explicit policy boundaries and accountable action.",
+      "user": "A narrow professional team with a recurring high-value decision and clear ownership.",
+      "workflow": "One public product shows trusted intake, policy decision, multiple agent capabilities, human review, owned action, replay and failure recovery.",
+      "snowflake_role": "Snowflake is indispensable shared memory and execution infrastructure across source records, Snowpark policy, Cortex Code artifacts, least-privilege reads and query provenance.",
+      "execution_proof": "A fresh authenticated run, exact lifecycle and cardinality audit, reproducible tests, cost controls and query identifiers are independently reloadable.",
+      "product_proof": "A responsive public deployment, English 3-to-5-minute demo, complete PDF deck and signed-out access proof make the entry judge-ready.",
+      "business_case": "The product saves measurable cost or revenue, has a specific buyer and a plausible repeatable commercial model.",
+      "observed_evidence": ["authenticated complete run", "public product", "responsive QA", "submission assets"],
+      "missing_evidence": ["production customer outcome"]
+    }
+  }
+]

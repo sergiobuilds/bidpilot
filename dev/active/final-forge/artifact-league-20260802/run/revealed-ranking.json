@@ -1,0 +1,405 @@
+{
+  "status": "REVEALED_AFTER_SEAL",
+  "parity_ranking": [
+    {
+      "rank": 1,
+      "blind_id": "BLIND-4D4B3DACD573",
+      "measurements": 3,
+      "parity": {
+        "median_calibrated_total": 90,
+        "median_raw_total": 95,
+        "range_calibrated": [
+          90,
+          94
+        ],
+        "stdev_calibrated": 1.886,
+        "median_axes": {
+          "relevance": 27,
+          "technical": 39,
+          "completeness": 29
+        }
+      },
+      "source_locked": {
+        "median_calibrated_total": 94,
+        "median_raw_total": 90,
+        "range_calibrated": [
+          94,
+          100
+        ],
+        "stdev_calibrated": 2.828,
+        "median_axes": {
+          "relevance": 25,
+          "technical": 37,
+          "completeness": 28
+        }
+      },
+      "median_confidence": 0.93,
+      "evidence_gaps": [
+        "independent business-impact measurement",
+        "open live tender submission outcome",
+        "paid customer validation"
+      ],
+      "identity": {
+        "name": "BidPilot",
+        "revision": "d6eb3df0b66e70baea114ebfdd33ed66a9b379f5",
+        "source": "local repository plus public Cloud Run deployment"
+      }
+    },
+    {
+      "rank": 2,
+      "blind_id": "BLIND-87B23B5AE081",
+      "measurements": 3,
+      "parity": {
+        "median_calibrated_total": 80,
+        "median_raw_total": 85,
+        "range_calibrated": [
+          80,
+          83
+        ],
+        "stdev_calibrated": 1.414,
+        "median_axes": {
+          "relevance": 26,
+          "technical": 35,
+          "completeness": 24
+        }
+      },
+      "source_locked": {
+        "median_calibrated_total": 78,
+        "median_raw_total": 74,
+        "range_calibrated": [
+          78,
+          86
+        ],
+        "stdev_calibrated": 3.771,
+        "median_axes": {
+          "relevance": 22,
+          "technical": 31,
+          "completeness": 21
+        }
+      },
+      "median_confidence": 0.88,
+      "evidence_gaps": [
+        "authenticated end-to-end run evidence",
+        "independent production outcome",
+        "public verification of ERP posting and recovery",
+        "signed-out Snowflake dashboard access",
+        "signed-out access to Snowflake dashboard"
+      ],
+      "identity": {
+        "name": "VF Logistics",
+        "revision": "442dc486b548eaab5d719d1ae5715d63c6038354",
+        "source": "public GitHub repository and linked public MVP"
+      }
+    },
+    {
+      "rank": 3,
+      "blind_id": "BLIND-306F061E94B8",
+      "measurements": 3,
+      "parity": {
+        "median_calibrated_total": 76,
+        "median_raw_total": 76,
+        "range_calibrated": [
+          70,
+          76
+        ],
+        "stdev_calibrated": 2.828,
+        "median_axes": {
+          "relevance": 26,
+          "technical": 27,
+          "completeness": 23
+        }
+      },
+      "source_locked": {
+        "median_calibrated_total": 71,
+        "median_raw_total": 65,
+        "range_calibrated": [
+          69,
+          71
+        ],
+        "stdev_calibrated": 0.943,
+        "median_axes": {
+          "relevance": 24,
+          "technical": 21,
+          "completeness": 20
+        }
+      },
+      "median_confidence": 0.91,
+      "evidence_gaps": [
+        "authenticated Snowflake execution trace",
+        "production outcome",
+        "proof that public app uses Snowflake"
+      ],
+      "identity": {
+        "name": "Cortex SupplyGuard",
+        "revision": "81cee81afecac8d6ad53b1afc341af1e3d256d57",
+        "source": "public GitHub repository and linked Vercel app"
+      }
+    },
+    {
+      "rank": 4,
+      "blind_id": "BLIND-D4DABBE06D86",
+      "measurements": 3,
+      "parity": {
+        "median_calibrated_total": 70,
+        "median_raw_total": 70,
+        "range_calibrated": [
+          70,
+          70
+        ],
+        "stdev_calibrated": 0.0,
+        "median_axes": {
+          "relevance": 21,
+          "technical": 30,
+          "completeness": 19
+        }
+      },
+      "source_locked": {
+        "median_calibrated_total": 65,
+        "median_raw_total": 59,
+        "range_calibrated": [
+          65,
+          65
+        ],
+        "stdev_calibrated": 0.0,
+        "median_axes": {
+          "relevance": 19,
+          "technical": 25,
+          "completeness": 15
+        }
+      },
+      "median_confidence": 0.89,
+      "evidence_gaps": [
+        "captured authenticated run",
+        "customer validation",
+        "public deployment",
+        "resolved license"
+      ],
+      "identity": {
+        "name": "Trading Agent App OS",
+        "revision": "c2dd8617f62bb6cdfa68e5f66cfea2f0fa807b8e",
+        "source": "public GitHub repository"
+      }
+    },
+    {
+      "rank": 5,
+      "blind_id": "BLIND-BC6FBE07614E",
+      "measurements": 3,
+      "parity": {
+        "median_calibrated_total": 66,
+        "median_raw_total": 71,
+        "range_calibrated": [
+          66,
+          70
+        ],
+        "stdev_calibrated": 1.886,
+        "median_axes": {
+          "relevance": 23,
+          "technical": 27,
+          "completeness": 21
+        }
+      },
+      "source_locked": {
+        "median_calibrated_total": 66,
+        "median_raw_total": 62,
+        "range_calibrated": [
+          66,
+          70
+        ],
+        "stdev_calibrated": 1.886,
+        "median_axes": {
+          "relevance": 21,
+          "technical": 23,
+          "completeness": 18
+        }
+      },
+      "median_confidence": 0.87,
+      "evidence_gaps": [
+        "authenticated Cortex run and query provenance",
+        "authenticated Cortex run provenance",
+        "independent proof of role-based behavior",
+        "measured adoption",
+        "measured adoption or buyer validation",
+        "public live URL",
+        "signed-out end-to-end workflow"
+      ],
+      "identity": {
+        "name": "SALAY",
+        "revision": "738eb006f679ae8ea15393286f993c389211c23f",
+        "source": "public GitHub repository"
+      }
+    },
+    {
+      "rank": 6,
+      "blind_id": "BLIND-D31D623FEE21",
+      "measurements": 3,
+      "parity": {
+        "median_calibrated_total": 64,
+        "median_raw_total": 68,
+        "range_calibrated": [
+          64,
+          68
+        ],
+        "stdev_calibrated": 1.886,
+        "median_axes": {
+          "relevance": 26,
+          "technical": 26,
+          "completeness": 16
+        }
+      },
+      "source_locked": {
+        "median_calibrated_total": 64,
+        "median_raw_total": 56,
+        "range_calibrated": [
+          64,
+          64
+        ],
+        "stdev_calibrated": 0.0,
+        "median_axes": {
+          "relevance": 22,
+          "technical": 22,
+          "completeness": 12
+        }
+      },
+      "median_confidence": 0.95,
+      "evidence_gaps": [
+        "authenticated Snowflake run",
+        "demo video",
+        "independent test result",
+        "public interface"
+      ],
+      "identity": {
+        "name": "Contract Risk and Obligation Auditor",
+        "revision": "decd2e7a1363897c61d86bd808446b643e794cf3",
+        "source": "public GitHub repository"
+      }
+    }
+  ],
+  "source_locked_ranking": [
+    {
+      "rank": 1,
+      "blind_id": "BLIND-4D4B3DACD573",
+      "median_calibrated_total": 94,
+      "median_raw_total": 90,
+      "range_calibrated": [
+        94,
+        100
+      ],
+      "stdev_calibrated": 2.828,
+      "median_axes": {
+        "relevance": 25,
+        "technical": 37,
+        "completeness": 28
+      },
+      "identity": {
+        "name": "BidPilot",
+        "revision": "d6eb3df0b66e70baea114ebfdd33ed66a9b379f5",
+        "source": "local repository plus public Cloud Run deployment"
+      }
+    },
+    {
+      "rank": 2,
+      "blind_id": "BLIND-87B23B5AE081",
+      "median_calibrated_total": 78,
+      "median_raw_total": 74,
+      "range_calibrated": [
+        78,
+        86
+      ],
+      "stdev_calibrated": 3.771,
+      "median_axes": {
+        "relevance": 22,
+        "technical": 31,
+        "completeness": 21
+      },
+      "identity": {
+        "name": "VF Logistics",
+        "revision": "442dc486b548eaab5d719d1ae5715d63c6038354",
+        "source": "public GitHub repository and linked public MVP"
+      }
+    },
+    {
+      "rank": 3,
+      "blind_id": "BLIND-306F061E94B8",
+      "median_calibrated_total": 71,
+      "median_raw_total": 65,
+      "range_calibrated": [
+        69,
+        71
+      ],
+      "stdev_calibrated": 0.943,
+      "median_axes": {
+        "relevance": 24,
+        "technical": 21,
+        "completeness": 20
+      },
+      "identity": {
+        "name": "Cortex SupplyGuard",
+        "revision": "81cee81afecac8d6ad53b1afc341af1e3d256d57",
+        "source": "public GitHub repository and linked Vercel app"
+      }
+    },
+    {
+      "rank": 4,
+      "blind_id": "BLIND-BC6FBE07614E",
+      "median_calibrated_total": 66,
+      "median_raw_total": 62,
+      "range_calibrated": [
+        66,
+        70
+      ],
+      "stdev_calibrated": 1.886,
+      "median_axes": {
+        "relevance": 21,
+        "technical": 23,
+        "completeness": 18
+      },
+      "identity": {
+        "name": "SALAY",
+        "revision": "738eb006f679ae8ea15393286f993c389211c23f",
+        "source": "public GitHub repository"
+      }
+    },
+    {
+      "rank": 5,
+      "blind_id": "BLIND-D4DABBE06D86",
+      "median_calibrated_total": 65,
+      "median_raw_total": 59,
+      "range_calibrated": [
+        65,
+        65
+      ],
+      "stdev_calibrated": 0.0,
+      "median_axes": {
+        "relevance": 19,
+        "technical": 25,
+        "completeness": 15
+      },
+      "identity": {
+        "name": "Trading Agent App OS",
+        "revision": "c2dd8617f62bb6cdfa68e5f66cfea2f0fa807b8e",
+        "source": "public GitHub repository"
+      }
+    },
+    {
+      "rank": 6,
+      "blind_id": "BLIND-D31D623FEE21",
+      "median_calibrated_total": 64,
+      "median_raw_total": 56,
+      "range_calibrated": [
+        64,
+        64
+      ],
+      "stdev_calibrated": 0.0,
+      "median_axes": {
+        "relevance": 22,
+        "technical": 22,
+        "completeness": 12
+      },
+      "identity": {
+        "name": "Contract Risk and Obligation Auditor",
+        "revision": "decd2e7a1363897c61d86bd808446b643e794cf3",
+        "source": "public GitHub repository"
+      }
+    }
+  ]
+}

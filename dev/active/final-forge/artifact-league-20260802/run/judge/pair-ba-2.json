@@ -1,0 +1,31 @@
+{
+  "judge": "pair-ba-2",
+  "orientation": "LEFT=BLIND-87B23B5AE081; RIGHT=BLIND-4D4B3DACD573",
+  "left": "BLIND-87B23B5AE081",
+  "right": "BLIND-4D4B3DACD573",
+  "left_scores": {
+    "relevance": 29,
+    "technical": 36,
+    "completeness": 25,
+    "total": 90
+  },
+  "right_scores": {
+    "relevance": 28,
+    "technical": 38,
+    "completeness": 27,
+    "total": 93
+  },
+  "winner": "RIGHT",
+  "decisive_reason": "RIGHT provides stronger executed-system evidence: a completed authenticated run with query provenance, a Snowpark matrix, 47 passing tests, and verified responsive captures, while LEFT primarily provides reproducible implementation materials and cannot show judge-accessible dashboard execution.",
+  "evidence_gaps": {
+    "left": [
+      "signed-out access to Snowflake dashboard",
+      "independent production outcome"
+    ],
+    "right": [
+      "paid customer validation",
+      "open live tender submission outcome"
+    ]
+  },
+  "confidence": 0.82
+}

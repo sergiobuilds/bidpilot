@@ -1,0 +1,35 @@
+{
+  "judge": "pair-ba-1",
+  "orientation": {
+    "left": "BLIND-87B23B5AE081",
+    "right": "BLIND-4D4B3DACD573"
+  },
+  "left": "BLIND-87B23B5AE081",
+  "right": "BLIND-4D4B3DACD573",
+  "left_scores": {
+    "relevance": 29,
+    "technical": 35,
+    "completeness": 26,
+    "total": 90
+  },
+  "right_scores": {
+    "relevance": 28,
+    "technical": 39,
+    "completeness": 29,
+    "total": 96
+  },
+  "winner": "RIGHT",
+  "decisive_reason": "RIGHT provides stronger verified end-to-end execution evidence through an authenticated completed run, query provenance, role separation, a persisted Snowpark decision matrix, 47 passing tests, and a publicly replayable responsive product, while LEFT's technically ambitious pipeline is supported more by repository and reproducibility artifacts than equivalent observed runtime proof.",
+  "evidence_gaps": {
+    "left": [
+      "No signed-out access to the Snowflake dashboard is evidenced.",
+      "No authenticated end-to-end runtime trace or test result is stated in the packet.",
+      "No independent production outcome is evidenced."
+    ],
+    "right": [
+      "No paid customer validation is evidenced.",
+      "No outcome from an open live tender submission is evidenced."
+    ]
+  },
+  "confidence": 0.93
+}

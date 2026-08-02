@@ -1,0 +1,193 @@
+[
+  {
+    "assignment_id": "A-000019",
+    "blind_id": "ANCHOR:1:low",
+    "scores": {
+      "relevance": 6,
+      "technical": 4,
+      "completeness": 4
+    },
+    "source_locked_scores": {
+      "relevance": 5,
+      "technical": 2,
+      "completeness": 2
+    },
+    "reason": "The card shows a generic summarization concept with an indistinct buyer, weak measurable value, a nonessential warehouse role, and only a static mockup rather than a working workflow.",
+    "evidence_gaps": [
+      "platform necessity",
+      "working run",
+      "complete product"
+    ],
+    "confidence": 0.98
+  },
+  {
+    "assignment_id": "A-000020",
+    "blind_id": "ANCHOR:1:mid",
+    "scores": {
+      "relevance": 19,
+      "technical": 21,
+      "completeness": 18
+    },
+    "source_locked_scores": {
+      "relevance": 18,
+      "technical": 18,
+      "completeness": 16
+    },
+    "reason": "A named operations buyer, repeatable exception workflow, local prototype, schema, and tests establish credible mid-tier value and execution, but agent provenance, public access, ownership, and judge-ready packaging remain partial.",
+    "evidence_gaps": [
+      "authenticated agent run",
+      "public demo",
+      "customer validation"
+    ],
+    "confidence": 0.97
+  },
+  {
+    "assignment_id": "A-000021",
+    "blind_id": "ANCHOR:1:high",
+    "scores": {
+      "relevance": 29,
+      "technical": 39,
+      "completeness": 29
+    },
+    "source_locked_scores": {
+      "relevance": 28,
+      "technical": 39,
+      "completeness": 29
+    },
+    "reason": "The entry presents a high-value owned workflow, indispensable governed Snowflake and Cortex infrastructure, independently reloadable authenticated provenance, policy controls, public responsive product, recovery path, and complete submission assets.",
+    "evidence_gaps": [
+      "production customer outcome"
+    ],
+    "confidence": 0.98
+  },
+  {
+    "assignment_id": "A-000001",
+    "blind_id": "BLIND-306F061E94B8",
+    "scores": {
+      "relevance": 26,
+      "technical": 27,
+      "completeness": 23
+    },
+    "source_locked_scores": {
+      "relevance": 24,
+      "technical": 21,
+      "completeness": 20
+    },
+    "reason": "Inventory disruption is a concrete, costly problem with an identifiable operations buyer, and the anomaly-to-authorized-action workflow is understandable and policy bounded. Source, tests, skills, web and CLI surfaces support meaningful execution, but the emulator path and absence of authenticated Snowflake persistence prevent full technical credit.",
+    "evidence_gaps": [
+      "authenticated Snowflake execution trace",
+      "proof that public app uses Snowflake",
+      "production outcome"
+    ],
+    "confidence": 0.91
+  },
+  {
+    "assignment_id": "A-000004",
+    "blind_id": "BLIND-D4DABBE06D86",
+    "scores": {
+      "relevance": 21,
+      "technical": 30,
+      "completeness": 19
+    },
+    "source_locked_scores": {
+      "relevance": 19,
+      "technical": 25,
+      "completeness": 15
+    },
+    "reason": "The multi-source equity research workflow is coherent and the inspectable Snowflake architecture is technically broad, spanning Agent routing, Analyst, Search, dynamic tables, grants, and smoke scripts. Crowded-market differentiation, credential friction, fallbacks, unresolved licensing, and no captured passing run or public deployment weaken value and judge readiness.",
+    "evidence_gaps": [
+      "public deployment",
+      "captured authenticated run",
+      "resolved license",
+      "customer validation"
+    ],
+    "confidence": 0.89
+  },
+  {
+    "assignment_id": "A-000009",
+    "blind_id": "BLIND-306F061E94B8",
+    "scores": {
+      "relevance": 26,
+      "technical": 27,
+      "completeness": 23
+    },
+    "source_locked_scores": {
+      "relevance": 24,
+      "technical": 21,
+      "completeness": 20
+    },
+    "reason": "Inventory disruption is a concrete, costly problem with an identifiable operations buyer, and the anomaly-to-authorized-action workflow is understandable and policy bounded. Source, tests, skills, web and CLI surfaces support meaningful execution, but the emulator path and absence of authenticated Snowflake persistence prevent full technical credit.",
+    "evidence_gaps": [
+      "authenticated Snowflake execution trace",
+      "proof that public app uses Snowflake",
+      "production outcome"
+    ],
+    "confidence": 0.91
+  },
+  {
+    "assignment_id": "A-000012",
+    "blind_id": "BLIND-D4DABBE06D86",
+    "scores": {
+      "relevance": 21,
+      "technical": 30,
+      "completeness": 19
+    },
+    "source_locked_scores": {
+      "relevance": 19,
+      "technical": 25,
+      "completeness": 15
+    },
+    "reason": "The multi-source equity research workflow is coherent and the inspectable Snowflake architecture is technically broad, spanning Agent routing, Analyst, Search, dynamic tables, grants, and smoke scripts. Crowded-market differentiation, credential friction, fallbacks, unresolved licensing, and no captured passing run or public deployment weaken value and judge readiness.",
+    "evidence_gaps": [
+      "public deployment",
+      "captured authenticated run",
+      "resolved license",
+      "customer validation"
+    ],
+    "confidence": 0.89
+  },
+  {
+    "assignment_id": "A-000014",
+    "blind_id": "BLIND-D31D623FEE21",
+    "scores": {
+      "relevance": 27,
+      "technical": 25,
+      "completeness": 16
+    },
+    "source_locked_scores": {
+      "relevance": 25,
+      "technical": 21,
+      "completeness": 12
+    },
+    "reason": "Contract-to-spend monitoring addresses measurable leakage for specific finance, procurement, and legal buyers, with realistic fixtures, deterministic anomaly classes, Cortex extraction, SQL rules, and an action queue. However, expected results and setup instructions do not substitute for an authenticated run, independent tests, a public interface, or a recorded end-to-end demonstration.",
+    "evidence_gaps": [
+      "authenticated Snowflake run",
+      "public interface",
+      "demo video",
+      "independent test result"
+    ],
+    "confidence": 0.91
+  },
+  {
+    "assignment_id": "A-000017",
+    "blind_id": "BLIND-D4DABBE06D86",
+    "scores": {
+      "relevance": 21,
+      "technical": 30,
+      "completeness": 19
+    },
+    "source_locked_scores": {
+      "relevance": 19,
+      "technical": 25,
+      "completeness": 15
+    },
+    "reason": "The multi-source equity research workflow is coherent and the inspectable Snowflake architecture is technically broad, spanning Agent routing, Analyst, Search, dynamic tables, grants, and smoke scripts. Crowded-market differentiation, credential friction, fallbacks, unresolved licensing, and no captured passing run or public deployment weaken value and judge readiness.",
+    "evidence_gaps": [
+      "public deployment",
+      "captured authenticated run",
+      "resolved license",
+      "customer validation"
+    ],
+    "confidence": 0.89
+  }
+]

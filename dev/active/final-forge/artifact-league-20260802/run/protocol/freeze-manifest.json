@@ -1,0 +1,28 @@
+{
+  "anchors_sha256": "8ec4e44668b174bac93f27d5d76d8e30c7377ec993c8ed356bd909c7db18807f",
+  "assignment_count": 27,
+  "candidate_count": 6,
+  "candidates_sha256": "9a34102e2ad7b5ccc2f6774576a5fdd369ac964ee7d45dcbdae15ac96064d8d8",
+  "implementation_sha256": "e8f3b5cf66c6406bf69eb0424c9cc77425a10762862167fdff1a05f4948779b0",
+  "information_parity": {
+    "candidate_lengths": [
+      1655,
+      1695,
+      1656,
+      1707,
+      1628,
+      1644
+    ],
+    "max": 1707,
+    "min": 1628,
+    "research_budget_units": 5
+  },
+  "lanes": 3,
+  "plan_sha256": "be5d5236ed25be8bf89ab7f67ff012a031b48507183efe1acc07230222cd4872",
+  "preregistration_sha256": "ba14eab43e80d339900df1e8869d01e074c2cfccb75eff61323c956a82354b36",
+  "reconstruction_sha256": "03f65640f023ea8936e959d7f07847a0971960db37174af4131904b2f3250d8e",
+  "replicas": 3,
+  "rubric_sha256": "bc2999d154113e41b2186f11b01f4609345082e7f09272e7918bb551c161e84b",
+  "schema": "blind-league-plan-v2",
+  "seed": "20260802"
+}

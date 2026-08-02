@@ -12,14 +12,14 @@ BidPilot 최종 제출 직전 상태의 복귀 지점입니다.
 - 제안서 엔진의 raw/locked/REVIEW/NO-GO 차단, 배점별 내용 변화, 필수 8영역, 항목별 자산, 고배점 red-team 반례를 독립 재감사했고 모두 통과했습니다.
 - 세 Seed 후보를 동일 정보량으로 블라인드 평가했습니다. 절대점수는 decision-first가 높았지만, 세 레인의 양방향 결선은 모두 scoremap-first를 선택했습니다. 최종 앱은 score map 중심 하이브리드입니다.
 - 전체 테스트는 47개 통과합니다. authenticated AppTest에서 complete run, 9,202자 편집 초안, provenance 화면을 확인했습니다.
+- 현재 산출물 6개를 세 독립 레인으로 재평가한 artifact blind league에서 BidPilot은 parity 90점, source-locked 94점으로 모두 1위였습니다. 2위 VF Logistics와의 좌우 반전 결선도 4대 0으로 이겼습니다.
+- 공개 영상은 `https://storage.googleapis.com/bidpilot-demo-164282963747/BidPilot-Final-Demo.mp4`이며 signed-out HTTP range 요청이 206으로 통과합니다.
 
 ## 다음 작업
 
-1. 현재 산출물을 동결해 artifact blind league와 적대 QA를 실행합니다.
-2. `dev/active/final-forge/BidPilot-Final-Demo.mp4`를 공개 재생 링크에 올리고 포털 초안을 채웁니다.
-3. Sergio 승인 후 저장소를 public으로 전환하고 signed-out clone을 검증합니다.
-4. 최종 제출 버튼은 Sergio 승인 후에만 누릅니다.
-5. 외부 제출 폼의 최종 버튼은 Sergio가 렌더링 결과를 확인한 뒤 누릅니다.
+1. CDP 9222에 실제 Chrome이 열리면 포털 초안을 채웁니다. 현재 원격 9222는 Chrome이 아니라 `svchost`가 점유해 응답이 없습니다.
+2. Sergio 승인 후 저장소를 public으로 전환하고 signed-out clone을 검증합니다.
+3. 최종 제출 버튼은 Sergio 승인 후에만 누릅니다.
 
 ## 금지 경계
 

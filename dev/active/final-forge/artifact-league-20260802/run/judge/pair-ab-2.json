@@ -1,0 +1,31 @@
+{
+  "judge": "pair-ab-2",
+  "orientation": "LEFT=BLIND-4D4B3DACD573; RIGHT=BLIND-87B23B5AE081",
+  "left": "BLIND-4D4B3DACD573",
+  "right": "BLIND-87B23B5AE081",
+  "left_scores": {
+    "relevance": 30,
+    "technical": 38,
+    "completeness": 28,
+    "total": 96
+  },
+  "right_scores": {
+    "relevance": 29,
+    "technical": 36,
+    "completeness": 27,
+    "total": 92
+  },
+  "winner": "LEFT",
+  "decisive_reason": "LEFT supplies stronger end-to-end execution proof for a single authenticated run, including query provenance, persisted outputs, passing tests, responsive captures, and replayable workflow evidence; RIGHT describes a technically broad pipeline but leaves its Snowflake dashboard unavailable to a judge without credentials.",
+  "evidence_gaps": {
+    "LEFT": [
+      "No paid-customer validation is supplied.",
+      "No open live tender-submission outcome is supplied."
+    ],
+    "RIGHT": [
+      "The Snowflake dashboard is not accessible signed out, so its runtime cannot be independently inspected from the supplied proof.",
+      "No independent production outcome is supplied."
+    ]
+  },
+  "confidence": 0.84
+}
