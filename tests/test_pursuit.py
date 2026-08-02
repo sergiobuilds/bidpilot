@@ -6,6 +6,7 @@ import pytest
 from bidpilot.bid_room import BidRoomStore
 from bidpilot.fixtures import SUPPLIER_PROFILES, TENDERS
 from bidpilot.proposal_writer import (
+    compose_persisted_proposal,
     build_gap_closure_plan,
     red_team_persisted_draft,
     red_team_proposal,
@@ -180,6 +181,40 @@ def test_red_team_rejects_placeholders_and_rechecks_authenticated_edits() -> Non
     ]
     findings = red_team_persisted_draft(plans, broken)
     assert any(item["criterion"] == top.criterion for item in findings)
+    assert red_team_persisted_draft(plans, draft) == ()
+
+
+def test_persisted_fragments_are_grouped_under_score_bearing_criteria() -> None:
+    plans = [
+        {
+            "criterion_name": "Technical approach",
+            "weight": 40,
+            "claim": "Use a tested remediation cycle.",
+            "assets": '["project-open-data", "credential:maintenance"]',
+        },
+        {
+            "criterion_name": "Price",
+            "weight": 10,
+            "claim": "Work inside the approved hour envelope.",
+            "assets": '["availability:900h"]',
+        },
+    ]
+    sections = [
+        {
+            "criterion_name": "Technical approach",
+            "section_markdown": "## Remediation method\n\nAutomated profiling and regression validation reduced recurring defects. Evidence from project-open-data and credential:maintenance prevented buyer-facing disruption.",
+        },
+        {
+            "criterion_name": "Price",
+            "section_markdown": "## Price model\n\nThe availability:900h record supports the delivery envelope.",
+        },
+    ]
+
+    draft = compose_persisted_proposal(plans, sections)
+
+    assert "## Technical approach" in draft
+    assert "### Remediation method" in draft
+    assert "## Price" in draft
     assert red_team_persisted_draft(plans, draft) == ()
 
 
