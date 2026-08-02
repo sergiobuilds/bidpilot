@@ -1,0 +1,55 @@
+1
+00:00:00,000 --> 00:00:04,500
+Bid teams often lose before writing begins.
+
+2
+00:00:04,500 --> 00:00:08,000
+They chase weak fits, then ignore the buyer's score.
+
+3
+00:00:08,000 --> 00:00:13,500
+BidPilot starts with eligibility, capacity, and comparable delivery.
+
+4
+00:00:13,500 --> 00:00:20,000
+This run is PURSUE. Other inputs produce REVIEW and NO-GO.
+
+5
+00:00:20,000 --> 00:00:27,000
+The official evaluation matrix becomes the control plane.
+
+6
+00:00:27,000 --> 00:00:35,000
+The 40-point criterion leads, with supplier assets and an owner.
+
+7
+00:00:35,000 --> 00:00:42,500
+The agent compares three materially different Win Positions.
+
+8
+00:00:42,500 --> 00:00:50,000
+The selected position follows the buyer's highest-weighted need.
+
+9
+00:00:50,000 --> 00:00:57,500
+Eight fragments form four score-bearing proposal responses.
+
+10
+00:00:57,500 --> 00:01:05,000
+The editable draft passes review and downloads from the Bid Room.
+
+11
+00:01:05,000 --> 00:01:12,500
+Red-team gaps become twelve owned and governed tasks.
+
+12
+00:01:12,500 --> 00:01:20,500
+Snowpark decides. Cortex Code writes. Snowflake preserves the run.
+
+13
+00:01:20,500 --> 00:01:26,000
+This is a replayable operating workflow, not a prompt wrapper.
+
+14
+00:01:26,000 --> 00:01:30,000
+Should we bid, and how do we win the score.

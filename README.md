@@ -51,7 +51,7 @@ The matrix runner persists `RUNNING`, `FAILED`, and `COMPLETED` states, requires
 | Public deployment | `https://bidpilot-demo-tbauoylpra-uc.a.run.app` renders the authenticated run |
 | Responsive authenticated app | Actual Snowflake-backed renders at 1440, 768, and 390 CSS pixels report no horizontal overflow |
 
-Verified public captures are stored under `dev/active/final-forge/public-app-verified/`, `public-app-768/`, and `public-app-390/`. The 278.136-second narrated demo is `dev/active/final-forge/BidPilot-Final-Demo.mp4`; its application scenes can be regenerated with `capture-demo.mjs`.
+Verified public captures are stored under `dev/active/final-forge/public-app-verified/`, `public-app-768/`, and `public-app-390/`. The portal-ready 278.136-second narrated demo is `dev/active/final-forge/BidPilot-Final-Demo.mp4`. A separate 90-second English pitch with burned subtitles is `dev/active/final-forge/BidPilot-90s-Pitch.mp4`; application scenes can be regenerated with `capture-demo.mjs`.
 
 The replay records are synthetic contest fixtures. The included public G2B notice is a closed historical example used only to test intake and qualification; it is not presented as an open opportunity. `PEOPLE`, prior-proposal, and pricing evidence absent from the Snowflake run remain explicit tasks and are not invented in the proposal.
 

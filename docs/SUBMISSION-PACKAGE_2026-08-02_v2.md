@@ -82,6 +82,8 @@ BidPilot is not another tender summarizer. It shows a team whether to bid, where
 
 The repository contains a 278.136-second, 1440×900 H.264/AAC final demo at `dev/active/final-forge/BidPilot-Final-Demo.mp4`. It uses the public intake, authenticated run, Snowflake architecture, and closing deck frames with English narration. The public copy returns HTTP 206 for signed-out range requests at `https://storage.googleapis.com/bidpilot-demo-164282963747/BidPilot-Final-Demo.mp4`.
 
+The companion pitch at `dev/active/final-forge/BidPilot-90s-Pitch.mp4` is exactly 90 seconds and follows the compressed verdict → score map → Win Position → proposal → red-team → Snowflake proof sequence. It has English narration and burned subtitles. The Hack2Skill portal requires a 3–5-minute screen recording, so the 4:38 public video remains the submission artifact.
+
 ## Pitch deck copy
 
 ### Slide 1 — The proposal starts too late
