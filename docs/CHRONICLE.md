@@ -43,3 +43,5 @@ canonical_path: /home/elite/projects/personal/products/bidpilot/docs/CHRONICLE.m
 - 2026-08-02 [submission]: Sergio가 final submission까지 명시 승인했습니다. Hack2Skill 계정의 OTP 인증 후 저장소를 public으로 전환하고 signed-out 접근을 확인했습니다. GitHub/Deployed Link와 Prototype/MVP의 attempt 1을 각각 최종 평가 확인창에서 제출했으며, 하드 리로드 뒤 challenge, URL, 878자 brief, 영상 URL과 PDF명이 서버에서 복원됐습니다.
 - 2026-08-02 [design]: 제출 후 UI를 Design Forge의 `wanted-design-system` pack으로 다시 만들었습니다. 공개 제품의 주 흐름을 Opportunities, Bid Decision, Win Plan, Proposal Room 네 화면으로 제한하고 provenance는 Proposal Room의 Run proof로 내렸습니다. 실제 reader run과 59 tests, 1440/768/390 네 화면의 overflow 0을 확인했으며, 기존 Cloud Run은 VivoBook sign-off 전까지 유지합니다.
 - 2026-08-02 [security]: 공개 저장소의 현재 문서에서 제출 계정 이메일을 제거했습니다. 제출 완료 증거에는 계정 주소가 필요하지 않습니다.
+- 2026-08-02 [deployment]: WDS 네 화면을 Cloud Run revision `bidpilot-demo-00004-9fd`로 배포하고 트래픽 100%와 기존 공개 URL의 HTTP 200을 확인했습니다. signed-out 1440, 768, 390 검증에서 네 화면 모두 horizontal overflow가 없었습니다.
+- 2026-08-02 [submission]: GitHub/Deployed Link와 Prototype/MVP를 각각 attempt 2로 최종 제출했습니다. Prototype brief를 네 화면과 59 tests를 반영한 1022자로 갱신했고 기존 4분 38초 영상과 8쪽 PDF를 유지했습니다. 강제 재로드 후 challenge, 두 URL, brief, 영상 URL과 PDF명이 서버에서 복원됐습니다.

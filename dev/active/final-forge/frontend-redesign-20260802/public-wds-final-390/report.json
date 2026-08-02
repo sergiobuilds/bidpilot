@@ -1,0 +1,90 @@
+{
+  "width": 390,
+  "height": 844,
+  "reports": {
+    "opportunities": {
+      "viewport": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "heading": "Choose an opportunity",
+      "buttons": [
+        "keyboard_double_arrow_left",
+        "01 · Opportunities",
+        "02 · Bid Decision",
+        "03 · Win Plan",
+        "04 · Proposal Room",
+        "keyboard_double_arrow_right",
+        "Open bid decision",
+        "Open this analysis"
+      ],
+      "primaryActionY": 773.15625,
+      "sectionNavigator": null,
+      "proposalEditorY": null
+    },
+    "decision": {
+      "viewport": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "heading": "Public data quality and API continuity service",
+      "buttons": [
+        "keyboard_double_arrow_left",
+        "01 · Opportunities",
+        "02 · Bid Decision",
+        "03 · Win Plan",
+        "04 · Proposal Room",
+        "keyboard_double_arrow_right",
+        "Build the win plan",
+        "Back to opportunities",
+        "Build the win plan"
+      ],
+      "primaryActionY": null,
+      "sectionNavigator": null,
+      "proposalEditorY": null
+    },
+    "winPlan": {
+      "viewport": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "heading": "Where this bid wins the official score",
+      "buttons": [
+        "keyboard_double_arrow_left",
+        "01 · Opportunities",
+        "02 · Bid Decision",
+        "03 · Win Plan",
+        "04 · Proposal Room",
+        "keyboard_double_arrow_right",
+        "Draft proposal with this strategy",
+        "Back to bid decision",
+        "Draft proposal with this strategy"
+      ],
+      "primaryActionY": null,
+      "sectionNavigator": null,
+      "proposalEditorY": null
+    },
+    "proposal": {
+      "viewport": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "heading": "Turn the win plan into a proposal",
+      "buttons": [
+        "keyboard_double_arrow_left",
+        "01 · Opportunities",
+        "02 · Bid Decision",
+        "03 · Win Plan",
+        "04 · Proposal Room",
+        "keyboard_double_arrow_right",
+        "Download proposal draft",
+        "Download proposal draft",
+        "Back to win plan"
+      ],
+      "primaryActionY": null,
+      "sectionNavigator": {
+        "display": "grid",
+        "columns": "162.859px 162.859px",
+        "top": 642.359375,
+        "height": 140.75
+      },
+      "proposalEditorY": 889.703125
+    }
+  }
+}

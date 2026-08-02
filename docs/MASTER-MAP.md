@@ -1,7 +1,7 @@
 ---
 doc_kind: project-map
 status: canonical
-version: 2026-08-01_v1
+version: 2026-08-02_v18
 canonical_path: /home/elite/projects/personal/products/bidpilot/docs/MASTER-MAP.md
 authority_model: v2
 ---
@@ -58,7 +58,7 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 | 문제 영역 | Intelligent Workflow Automation Agent | [CHRONICLE.md](CHRONICLE.md) |
 | 저장소 | 공개 GitHub 저장소 제출 | `sergiobuilds/bidpilot` |
 | 구현 | authenticated Opportunity Graph, Snowpark 2×2, Cortex complete run, score-map Bid Room 구현 | 이 문서의 Work Tree |
-| 제출 | submitted | runner-only 실제 run, 4분 38초 영문 영상, 8쪽 PDF 덱, 공개 앱과 두 portal attempt 1을 제출했습니다. |
+| 제출 | submitted | runner-only 실제 run, 4분 38초 영문 영상, 8쪽 PDF 덱, WDS 공개 앱과 두 portal attempt 2를 제출했습니다. |
 
 ## 3 Confirmed Scope
 
@@ -90,13 +90,12 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 | 6 | L6 | root | done | CoCo run과 persistent Bid Room 구현 | complete run의 trace, sections, tasks 재조회 | 브라우저 state에만 남음 | evaluation과 submission | Cortex Code가 동일 run ID로 3 strategies, 4 plans, 8 sections, 12 tasks와 provenance를 저장했습니다. |
 | 7 | L7 | root | done | 실제 run 검증 | input validation, 2×2 parity, complete replay, 48 tests | 같은 run을 재현하지 못함 | 제출물 제작 | reader 역할의 authenticated AppTest와 공개 앱 proposal red-team·download를 통과했습니다. |
 | 8 | L8 | root | done | 제출물 제작과 제출 | 실제 run 기반 영어 자료, 영상, 제출 확인 | 제출 링크가 심사자에게 열리지 않음 | 완료 | 4분 38초 포털 영상, 90초 companion pitch, 8쪽 PDF 덱, 공개 앱·영상, public repository와 두 Hack2Skill attempt 1 제출을 확인했습니다. |
-| 9 | L9 | root | in_progress | 제출 후 WDS 제품 화면 개선 | 네 화면 실제 reader run, 59 tests, 3개 viewport overflow 0 | 기존 긴 보고서 구조 또는 심사 중 live regression | VivoBook sign-off와 선택적 재배포 | Design Forge와 WDS로 Opportunities, Bid Decision, Win Plan, Proposal Room을 분리했고 로컬 실측을 마쳤습니다. |
+| 9 | L9 | root | done | 제출 후 WDS 제품 화면 개선 | 네 화면 실제 reader run, 59 tests, 3개 viewport overflow 0, Cloud Run revision과 attempt 2 | 기존 긴 보고서 구조 또는 심사 중 live regression | 완료 | Design Forge와 WDS로 네 화면을 분리해 공개 배포하고 두 portal module의 attempt 2를 제출했습니다. |
 
 ## 5 Open / Unconfirmed
 
 1. 심사 기간 동안 public repository, 앱, 영상의 접근성을 유지합니다.
-2. VivoBook에서 새 WDS 후보를 확인한 뒤 Cloud Run 재배포 여부를 결정합니다.
-3. 포털 수정이 필요하면 현재 attempt 1을 기준으로 변경 범위를 확인합니다.
+2. 포털을 다시 수정할 때는 attempt 1과 attempt 2를 보존하고 변경 범위를 확인합니다.
 
 ## 6 Canonical Documents
 
@@ -114,11 +113,11 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 
 ## 7 Status
 
-- 마지막 확인 신호: 2026-08-02 KST에 59 tests와 새 WDS 네 화면의 reader run, 1440/768/390 overflow 0을 확인했습니다.
-- 진행상황: L1--L8 완료. L9은 로컬 검증을 마치고 VivoBook sign-off를 기다립니다. Cloud Run과 Hack2Skill attempt 1은 기존 제출 상태입니다.
+- 마지막 확인 신호: 2026-08-02 KST에 59 tests, 공개 WDS 네 화면의 1440/768/390 overflow 0, Cloud Run revision `bidpilot-demo-00004-9fd`, 두 Hack2Skill attempt 2의 서버 재로드를 확인했습니다.
+- 진행상황: L1--L9 완료. WDS 공개 배포와 Hack2Skill 수정 제출까지 끝났습니다.
 - 현재 주장 가능 범위: authenticated Snowflake Opportunity Graph, Snowpark policy parity, Cortex Code complete run, strategy 비교, proposal, adversarial review, owned tasks, replayable public Bid Room이 있습니다.
-- 외부 게이트: 새 WDS 후보의 Cloud Run 재배포는 VivoBook 시각 확인 뒤 진행합니다.
-- 다음 복귀 지점: CDP 9447의 BidPilot 탭에서 네 화면을 확인합니다.
+- 외부 게이트: 심사 기간 동안 공개 저장소, 앱, 영상의 접근성을 유지합니다.
+- 다음 복귀 지점: 공개 링크의 접근성과 Cloud Run revision 트래픽을 점검합니다.
 
 ## 8 변경 이력
 
@@ -139,3 +138,4 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 - 2026-08-02 v15: 최종 QA 보고서, coverage census, portal checklist, v2 protocol index와 90초 영문 자막 companion pitch를 정본 작업층에 추가했습니다.
 - 2026-08-02 v16: GitHub public 전환, signed-out 접근, Hack2Skill 두 attempt 1 최종 제출과 서버 재로드 증거를 반영했습니다.
 - 2026-08-02 v17: Design Forge와 WDS 기반 네 화면 후보, 59 tests, 1440/768/390 실제 reader 검증과 배포 전 VivoBook gate를 반영했습니다.
+- 2026-08-02 v18: WDS 네 화면의 Cloud Run 배포, 두 Hack2Skill attempt 2 제출과 서버 재로드 증거를 반영했습니다.
