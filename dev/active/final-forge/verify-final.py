@@ -11,7 +11,6 @@ from pathlib import Path
 
 from bidpilot.snowflake_store import SnowflakeBidRoomStore
 
-
 ROOT = Path(__file__).resolve().parents[3]
 FORGE = ROOT / "dev" / "active" / "final-forge"
 LEAGUE = FORGE / "artifact-league-20260802"

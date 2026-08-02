@@ -7,7 +7,6 @@ from pathlib import Path
 
 import pytest
 
-
 SNOWFLAKE_DIR = Path(__file__).parents[1] / "snowflake"
 if str(SNOWFLAKE_DIR) not in sys.path:
     sys.path.insert(0, str(SNOWFLAKE_DIR))
@@ -24,7 +23,7 @@ decision_spec.loader.exec_module(snowpark_decision)
 
 
 class MatrixCursor:
-    def __init__(self, connection: "MatrixConnection") -> None:
+    def __init__(self, connection: MatrixConnection) -> None:
         self.connection = connection
         self.rows: list[tuple] = []
 
@@ -38,16 +37,16 @@ class MatrixCursor:
         elif "SELECT COUNT(*)" in sql and "PURSUIT_DECISIONS" in sql:
             self.rows = [(self.connection.decisions.get(params[0], 0),)]
         elif "INSERT INTO BIDPILOT_DEMO.BIDPILOT.AGENT_RUNS" in sql:
-            run_id, tenant_id, opportunity_id, opportunity_version, supplier_id, policy, provider, _, _ = params
+            run_id, tenant_id, opportunity_id, opportunity_version, supplier_id, supplier_version, policy, provider, _, _ = params
             self.connection.runs.setdefault(
                 run_id,
-                (tenant_id, opportunity_id, opportunity_version, supplier_id, policy, provider, "RUNNING"),
+                (tenant_id, opportunity_id, opportunity_version, supplier_id, supplier_version, policy, provider, "RUNNING"),
             )
             self.rows = []
         elif "UPDATE BIDPILOT_DEMO.BIDPILOT.AGENT_RUNS" in sql:
             state, policy, trace_json, run_id = params
             current = self.connection.runs[run_id]
-            self.connection.runs[run_id] = (*current[:4], policy, current[5], state)
+            self.connection.runs[run_id] = (*current[:5], policy, current[6], state)
             self.connection.traces[run_id] = json.loads(trace_json)
             self.rows = []
         elif "ALTER SESSION SET" in sql:
@@ -91,7 +90,7 @@ def test_matrix_cell_persists_running_then_completed_with_exactly_one_decision(m
 
     assert outcome == "inserted"
     assert connection.decisions["matrix-dq-northstar"] == 1
-    assert connection.runs["matrix-dq-northstar"][6] == "COMPLETED"
+    assert connection.runs["matrix-dq-northstar"][7] == "COMPLETED"
     assert connection.traces["matrix-dq-northstar"]["decision_count"] == 1
 
 
@@ -100,7 +99,7 @@ def test_matrix_cell_reuses_a_valid_completed_run_without_duplicate_write(monkey
     run_id = "matrix-dq-northstar"
     connection.runs[run_id] = (
         "demo-tenant", "G2B-REPLAY-DATA-QUALITY", "fixture-v1", "supplier-northstar",
-        "2026-08-02.v1", "SNOWPARK", "COMPLETED",
+        "fixture-v1", "2026-08-02.v1", "SNOWPARK", "COMPLETED",
     )
     connection.decisions[run_id] = 1
 
@@ -128,7 +127,7 @@ def test_matrix_cell_marks_failed_when_policy_execution_raises(monkeypatch) -> N
             object(), connection, "matrix-failed", "G2B-REPLAY-DATA-QUALITY", "supplier-atlas"
         )
 
-    assert connection.runs["matrix-failed"][6] == "FAILED"
+    assert connection.runs["matrix-failed"][7] == "FAILED"
     assert connection.traces["matrix-failed"]["error_type"] == "RuntimeError"
 
 
@@ -145,7 +144,7 @@ def test_matrix_cell_marks_failed_when_more_than_one_decision_exists(monkeypatch
             object(), connection, "matrix-duplicate", "G2B-REPLAY-ANALYTICS", "supplier-northstar"
         )
 
-    assert connection.runs["matrix-duplicate"][6] == "FAILED"
+    assert connection.runs["matrix-duplicate"][7] == "FAILED"
 
 
 def test_matrix_requires_runner_role_and_bounded_session_parameters() -> None:
@@ -187,6 +186,7 @@ def test_snowpark_decision_reuses_one_existing_row_and_rejects_duplicates() -> N
         opportunity_id="opp-1",
         opportunity_version="v1",
         supplier_profile_id="supplier-1",
+        supplier_profile_version="v1",
     )
     assert reused == "reused"
 
@@ -198,6 +198,7 @@ def test_snowpark_decision_reuses_one_existing_row_and_rejects_duplicates() -> N
             opportunity_id="opp-1",
             opportunity_version="v1",
             supplier_profile_id="supplier-1",
+            supplier_profile_version="v1",
         )
 
 
@@ -213,3 +214,15 @@ def test_role_sql_separates_source_artifact_lifecycle_and_cost_privileges() -> N
     assert "CREATE RESOURCE MONITOR IF NOT EXISTS BIDPILOT_COST_MONITOR" in sql
     assert "STATEMENT_TIMEOUT_IN_SECONDS = 300" in sql
     assert "STATEMENT_QUEUED_TIMEOUT_IN_SECONDS = 60" in sql
+
+
+def test_schema_binds_every_supplier_record_and_run_to_a_profile_version() -> None:
+    schema = (SNOWFLAKE_DIR / "sql" / "01_schema.sql").read_text()
+    seed = (SNOWFLAKE_DIR / "sql" / "02_seed_fixture.sql").read_text()
+
+    for table in ("CREDENTIALS", "PEOPLE", "AVAILABILITY", "PAST_PROJECTS", "PAST_PROPOSALS"):
+        block = schema.split(f".{table} (", 1)[1].split(");", 1)[0]
+        assert "profile_version STRING" in block
+    runs = schema.split(".AGENT_RUNS (", 1)[1].split(");", 1)[0]
+    assert "supplier_profile_version STRING" in runs
+    assert seed.count("profile_version") >= 5

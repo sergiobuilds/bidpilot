@@ -4,11 +4,15 @@ from unittest.mock import patch
 
 import pytest
 
-from bidpilot.snowflake_store import SnowflakeBidRoomError, SnowflakeBidRoomStore, configured_connection_name
+from bidpilot.snowflake_store import (
+    SnowflakeBidRoomError,
+    SnowflakeBidRoomStore,
+    configured_connection_name,
+)
 
 
 class FakeCursor:
-    def __init__(self, connection: "FakeConnection") -> None:
+    def __init__(self, connection: FakeConnection) -> None:
         self.connection = connection
         self.description = []
         self.rows: list[tuple] = []
@@ -50,12 +54,12 @@ class FakeConnection:
         self.closed = True
 
 
-def complete_run_responses(is_complete: bool = True) -> list[tuple]:
+def complete_run_responses(is_complete: bool = True, trace: str = '{"status":"PURSUE"}') -> list[tuple]:
     return [
         (
             "SELECT * FROM BIDPILOT_DEMO.BIDPILOT.AGENT_RUNS WHERE run_id",
             ("RUN_ID", "PROVIDER", "TRACE"),
-            [("run-1", "CORTEX_CODE_CLI", '{"status":"PURSUE"}')],
+            [("run-1", "CORTEX_CODE_CLI", trace)],
         ),
         ("SELECT o.*", ("OPPORTUNITY_ID",), []),
         ("SELECT p.*", ("SUPPLIER_PROFILE_ID",), []),
@@ -69,14 +73,20 @@ def complete_run_responses(is_complete: bool = True) -> list[tuple]:
             (
                 "AGENT_COUNT",
                 "DECISION_COUNT",
+                "PURSUE_DECISION_COUNT",
                 "STRATEGY_COUNT",
                 "SELECTED_STRATEGY_COUNT",
+                "INVALID_STRATEGY_COUNT",
                 "PLAN_COUNT",
+                "INVALID_PLAN_COUNT",
+                "PLAN_WEIGHT_TOTAL",
                 "SECTION_COUNT",
+                "INVALID_SECTION_COUNT",
                 "TASK_COUNT",
+                "INVALID_TASK_COUNT",
                 "IS_COMPLETE",
             ),
-            [(1, 1, 1, 1, 4, 8, 11, is_complete)],
+            [(1, 1, 1, 3, 1, 0, 4, 0, 100, 8, 0, 11, 0, is_complete)],
         ),
     ]
 
@@ -123,10 +133,19 @@ def test_authenticated_store_rejects_direct_load_of_partial_run(connect) -> None
 
 
 @patch("bidpilot.snowflake_store.snowflake.connector.connect")
+def test_authenticated_store_normalizes_malformed_trace_as_domain_error(connect) -> None:
+    connection = FakeConnection(responses=complete_run_responses(trace="{not-json"))
+    connect.return_value = connection
+
+    with pytest.raises(SnowflakeBidRoomError, match="malformed execution trace"):
+        SnowflakeBidRoomStore("contest").load_run("run-1")
+
+
+@patch("bidpilot.snowflake_store.snowflake.connector.connect")
 def test_run_listing_completeness_checks_provider_plans_selected_strategy_and_provenance(connect) -> None:
     row = (
         "run-1", "opp-1", "v1", "supplier-1", "2026-08-02.v1", "CORTEX_CODE_CLI",
-        "COMPLETED", "2026-08-02", 1, 1, 2, 1, 4, 8, 11, True,
+        "COMPLETED", "2026-08-02", 1, 1, 1, 3, 1, 0, 4, 0, 100, 8, 0, 11, 0, True,
     )
     response = [
         (
@@ -134,8 +153,10 @@ def test_run_listing_completeness_checks_provider_plans_selected_strategy_and_pr
             (
                 "RUN_ID", "OPPORTUNITY_ID", "OPPORTUNITY_VERSION", "SUPPLIER_PROFILE_ID",
                 "POLICY_VERSION", "PROVIDER", "STATE", "CREATED_AT", "AGENT_COUNT",
-                "DECISION_COUNT", "STRATEGY_COUNT", "SELECTED_STRATEGY_COUNT", "PLAN_COUNT",
-                "SECTION_COUNT", "TASK_COUNT", "IS_COMPLETE",
+                "DECISION_COUNT", "PURSUE_DECISION_COUNT", "STRATEGY_COUNT",
+                "SELECTED_STRATEGY_COUNT", "INVALID_STRATEGY_COUNT", "PLAN_COUNT",
+                "INVALID_PLAN_COUNT", "PLAN_WEIGHT_TOTAL", "SECTION_COUNT",
+                "INVALID_SECTION_COUNT", "TASK_COUNT", "INVALID_TASK_COUNT", "IS_COMPLETE",
             ),
             [row],
         )
@@ -148,6 +169,13 @@ def test_run_listing_completeness_checks_provider_plans_selected_strategy_and_pr
     assert runs[0]["is_complete"] is True
     sql = next(call[0] for call in connection.executed if "SELECT a.run_id" in call[0])
     assert "selected_strategy_count" in sql
+    assert "pursue_decision_count" in sql
+    assert "invalid_strategy_count" in sql
+    assert "invalid_plan_count" in sql
+    assert "plan_weight_total" in sql
+    assert "invalid_section_count" in sql
+    assert "invalid_task_count" in sql
+    assert "supplier_profile_version" in sql
     assert "plan_count" in sql
     assert "CORTEX_CODE_CLI" not in sql  # provider stays bound, not interpolated
     assert "cortex_session_id" in sql

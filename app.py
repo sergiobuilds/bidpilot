@@ -5,7 +5,6 @@ from __future__ import annotations
 import datetime as dt
 import html
 import json
-import os
 from pathlib import Path
 
 import streamlit as st
@@ -1398,8 +1397,10 @@ def render_opportunities_screen(
         if all_runs:
             rows = [
                 [
-                    f'<span class="br-crit">{esc(run.get("opportunity_id") or NOT_RECORDED)}</span>'
-                    f'<span class="br-sub">Started {esc(run.get("created_at") or NOT_RECORDED)}</span>',
+                    (
+                        f'<span class="br-crit">{esc(run.get("opportunity_id") or NOT_RECORDED)}</span>'
+                        f'<span class="br-sub">Started {esc(run.get("created_at") or NOT_RECORDED)}</span>'
+                    ),
                     esc(run.get("state") or NOT_RECORDED),
                     f'{esc(run.get("decision_count"))} decision · {esc(run.get("selected_strategy_count"))} chosen position',
                     f'{esc(run.get("plan_count"))} plan · {esc(run.get("section_count"))} section · {esc(run.get("task_count"))} task',
@@ -1676,11 +1677,15 @@ def render_win_plan_screen(view: dict) -> None:
             )
             rows.append(
                 [
-                    f'<span class="br-crit">{esc(item["name"] or NOT_RECORDED)}</span>'
-                    f'<span class="br-sub">Owner · {esc(item["owner"] or NOT_RECORDED)}</span>',
-                    '<span class="br-weight"><span class="br-weight__track">'
-                    f'<span class="br-weight__fill" style="width:{fill:.0f}%"></span></span>'
-                    f'<span class="br-weight__n">{esc(trim(item["weight"]))}</span></span>',
+                    (
+                        f'<span class="br-crit">{esc(item["name"] or NOT_RECORDED)}</span>'
+                        f'<span class="br-sub">Owner · {esc(item["owner"] or NOT_RECORDED)}</span>'
+                    ),
+                    (
+                        '<span class="br-weight"><span class="br-weight__track">'
+                        f'<span class="br-weight__fill" style="width:{fill:.0f}%"></span></span>'
+                        f'<span class="br-weight__n">{esc(trim(item["weight"]))}</span></span>'
+                    ),
                     br_badge("Asset recorded" if evidenced else "No asset", "accent" if evidenced else ""),
                     assets_html,
                 ]

@@ -47,6 +47,7 @@ def evaluate_and_persist(
     opportunity_id: str,
     opportunity_version: str,
     supplier_profile_id: str,
+    supplier_profile_version: str,
 ) -> str:
     """Persist exactly one decision, or reuse the one already stored for this run."""
     existing_count = persisted_decision_count(session, run_id)
@@ -69,6 +70,7 @@ def evaluate_and_persist(
     credentials = session.table("BIDPILOT_DEMO.BIDPILOT.CREDENTIALS").filter(
         (col("TENANT_ID") == tenant_id)
         & (col("SUPPLIER_PROFILE_ID") == supplier_profile_id)
+        & (col("PROFILE_VERSION") == supplier_profile_version)
         & (col("STATUS") == lit("active"))
     )
     missing = requirements.join(
@@ -83,11 +85,14 @@ def evaluate_and_persist(
     availability = session.table("BIDPILOT_DEMO.BIDPILOT.AVAILABILITY").filter(
         (col("TENANT_ID") == tenant_id)
         & (col("SUPPLIER_PROFILE_ID") == supplier_profile_id)
+        & (col("PROFILE_VERSION") == supplier_profile_version)
         & (col("EFFECTIVE_FROM") <= current_date())
         & (col("EFFECTIVE_TO") >= current_date())
     ).sort(col("EFFECTIVE_FROM").desc()).select(col("AVAILABLE_HOURS")).limit(1)
     projects = session.table("BIDPILOT_DEMO.BIDPILOT.PAST_PROJECTS").filter(
-        (col("TENANT_ID") == tenant_id) & (col("SUPPLIER_PROFILE_ID") == supplier_profile_id)
+        (col("TENANT_ID") == tenant_id)
+        & (col("SUPPLIER_PROFILE_ID") == supplier_profile_id)
+        & (col("PROFILE_VERSION") == supplier_profile_version)
     )
     comparable_count = projects.cross_join(opportunities).filter(
         array_size(array_intersection(projects["TAGS"], opportunities["TAGS"])) > lit(0)
