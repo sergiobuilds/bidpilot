@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from pathlib import Path
 
 
@@ -17,12 +18,15 @@ def load(path: Path):
 
 
 def main() -> None:
-    sealed = load(RUN / "sealed-aggregate.json")
+    sealed_path = RUN / "sealed-aggregate.json"
+    sealed_bytes = sealed_path.read_bytes()
+    sealed = json.loads(sealed_bytes)
     if sealed.get("status") != "SEALED_BEFORE_REVEAL":
         raise ValueError("aggregate was not sealed before reveal")
     identities = load(RUN / "private" / "identity-mapping.json")
     revealed = {
         "status": "REVEALED_AFTER_SEAL",
+        "sealed_aggregate_sha256": hashlib.sha256(sealed_bytes).hexdigest(),
         "parity_ranking": [],
         "source_locked_ranking": [],
     }

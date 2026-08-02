@@ -1,5 +1,6 @@
 {
   "status": "REVEALED_AFTER_SEAL",
+  "sealed_aggregate_sha256": "222dbc19c04d89004f85617f4b9795adbec072c239e850e6c4b915df096047c5",
   "parity_ranking": [
     {
       "rank": 1,
@@ -41,7 +42,7 @@
       ],
       "identity": {
         "name": "BidPilot",
-        "revision": "d6eb3df0b66e70baea114ebfdd33ed66a9b379f5",
+        "revision": "84dc9c38f2311c78c8cf25032df215b23fa00ed2",
         "source": "local repository plus public Cloud Run deployment"
       }
     },
@@ -299,7 +300,7 @@
       },
       "identity": {
         "name": "BidPilot",
-        "revision": "d6eb3df0b66e70baea114ebfdd33ed66a9b379f5",
+        "revision": "84dc9c38f2311c78c8cf25032df215b23fa00ed2",
         "source": "local repository plus public Cloud Run deployment"
       }
     },

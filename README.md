@@ -44,7 +44,7 @@ The matrix runner persists `RUNNING`, `FAILED`, and `COMPLETED` states, requires
 
 | Surface | Verified state |
 |---|---|
-| Python proposal and policy suite | 47 tests pass |
+| Python proposal and policy suite | 48 tests pass |
 | Snowpark matrix | Four runner-only tender/supplier combinations match the Python policy and complete their persisted lifecycle |
 | Complete Cortex run | One decision, three strategies, four plans, eight sections, twelve tasks, and trace share one `run_id` |
 | Streamlit authenticated mode | Complete run reloads through `BIDPILOT_READER` with editable/downloadable Markdown |
@@ -65,4 +65,4 @@ The replay records are synthetic contest fixtures. The included public G2B notic
 
 ## Change history
 
-- 2026-08-02: Applied runner lifecycle, least-privilege roles, bounded compute, a new Cortex Code run, responsive public deployment, and 47-test verification.
+- 2026-08-02: Applied runner lifecycle, least-privilege roles, bounded compute, a new Cortex Code run, responsive public deployment, criterion-grouped persisted drafting, and 48-test verification.

@@ -1,12 +1,7 @@
 {
-  "BLIND-306F061E94B8": {
-    "name": "Cortex SupplyGuard",
-    "revision": "81cee81afecac8d6ad53b1afc341af1e3d256d57",
-    "source": "public GitHub repository and linked Vercel app"
-  },
   "BLIND-4D4B3DACD573": {
     "name": "BidPilot",
-    "revision": "d6eb3df0b66e70baea114ebfdd33ed66a9b379f5",
+    "revision": "84dc9c38f2311c78c8cf25032df215b23fa00ed2",
     "source": "local repository plus public Cloud Run deployment"
   },
   "BLIND-87B23B5AE081": {
@@ -18,6 +13,11 @@
     "name": "SALAY",
     "revision": "738eb006f679ae8ea15393286f993c389211c23f",
     "source": "public GitHub repository"
+  },
+  "BLIND-306F061E94B8": {
+    "name": "Cortex SupplyGuard",
+    "revision": "81cee81afecac8d6ad53b1afc341af1e3d256d57",
+    "source": "public GitHub repository and linked Vercel app"
   },
   "BLIND-D31D623FEE21": {
     "name": "Contract Risk and Obligation Auditor",

@@ -32,6 +32,10 @@ def main() -> None:
     anchors = load(ROOT / "anchors.json")
     identities = load(ROOT / "run" / "private" / "identity-mapping.json")
     blind_by_name = {value["name"]: key for key, value in identities.items()}
+    identities = {
+        blind_by_name[candidate["identity"]["name"]]: candidate["identity"]
+        for candidate in candidates
+    }
 
     lane_packets = []
     assignments = []

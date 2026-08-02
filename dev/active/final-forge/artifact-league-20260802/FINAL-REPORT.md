@@ -65,3 +65,5 @@ BidPilot wins 4–0. The left item wins two of four non-ties, so observed positi
 - Top-two judgments: `run-v2/judge/pair-ab-1.json`, `pair-ab-2.json`, `pair-ba-1.json`, `pair-ba-2.json`
 
 The earlier `run/` directory is retained as superseded audit history. Its assignment plan was not one-candidate-per-lane balanced and must not be used for the final result.
+
+`run-v2/revealed-ranking.json` stores the SHA-256 of the exact sealed aggregate bytes. Recomputing that digest must match before the identity reveal is accepted.
