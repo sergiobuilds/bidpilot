@@ -4,6 +4,6 @@
   "lanes": 3,
   "candidate_measurements": 3,
   "one_candidate_per_lane": true,
-  "candidates_sha256": "6e187e9a7e0664696e217ee685e7ec28046649e0117692adbfcb4f575ab886f4",
+  "candidates_sha256": "55cfc1b9c7f11ecb0be20d3d1e52f021025790967ab0dc2f4b3bdf1931e46b1b",
   "lane_packets_sha256": "b3c81b4491676543bf00ad58e49bbb2bf603994c7d7f95cd42a72bcd041e8fff"
 }

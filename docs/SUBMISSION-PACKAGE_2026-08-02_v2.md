@@ -21,7 +21,7 @@ BidPilot combines a public tender's evaluation matrix with supplier operating me
 
 ### Portal brief, under 1,024 characters
 
-BidPilot is a Snowflake-native Bid Room for small B2G teams. It joins a public tender's requirements and evaluation weights with governed supplier credentials, capacity, people, and delivery history. Snowpark returns PURSUE, REVIEW, or NO-GO before drafting is allowed. For a viable bid, Cortex Code compares three Win Positions, creates score-weighted response plans, drafts eight editable proposal areas, red-teams the highest-value claims, and assigns missing evidence as owned work. Every decision, strategy, section, task, Cortex session, and query reference persists under one replayable run ID. A least-privilege Streamlit app reloads that run without fixture fallback. The verified prototype includes an authenticated 2x2 decision matrix, a complete runner-only Cortex run, 47 passing tests, responsive public deployment, a 4:38 English demo, and an eight-page PDF deck.
+BidPilot is a Snowflake-native Bid Room for small B2G teams. It joins a public tender's requirements and evaluation weights with governed supplier credentials, capacity, people, and delivery history. Snowpark returns PURSUE, REVIEW, or NO-GO before drafting is allowed. For a viable bid, Cortex Code compares three Win Positions, creates score-weighted response plans, drafts eight editable proposal areas, red-teams the highest-value claims, and assigns missing evidence as owned work. Every decision, strategy, section, task, Cortex session, and query reference persists under one replayable run ID. A least-privilege Streamlit app reloads that run without fixture fallback. The verified prototype includes an authenticated 2x2 decision matrix, a complete runner-only Cortex run, 48 passing tests, responsive public deployment, a 4:38 English demo, and an eight-page PDF deck.
 
 ### Portal links and file
 
@@ -53,7 +53,7 @@ This workflow requires more than a chat transcript. Snowflake holds the versione
 - Score-weighted proposal depth and criterion-specific supplier assets.
 - A red-team that detects missing assets and empty validation or buyer-outcome content in the top-weighted response.
 - An authenticated Streamlit Bid Room with editable/downloadable Markdown and no fixture fallback.
-- Forty-seven passing tests and public authenticated app renders at 1440, 768, and 390 CSS pixels.
+- Forty-eight passing tests and public authenticated app renders at 1440, 768, and 390 CSS pixels.
 
 ### Business value
 
@@ -124,7 +124,7 @@ The repository contains a 278.136-second, 1440×900 H.264/AAC final demo at `dev
 
 **Headline:** Authenticated end to end.
 
-**Copy:** Two tenders by two suppliers produce PURSUE, NO-GO, PURSUE, and REVIEW. The final Cortex run contains one decision, three strategies with one selected, four plans, eight sections, twelve tasks, and reproducible Snowflake and Cortex provenance. Forty-seven tests pass.
+**Copy:** Two tenders by two suppliers produce PURSUE, NO-GO, PURSUE, and REVIEW. The final Cortex run contains one decision, three strategies with one selected, four plans, eight sections, twelve tasks, and reproducible Snowflake and Cortex provenance. Forty-eight tests pass.
 
 ### Slide 8 — From one bid to operating memory
 
@@ -165,7 +165,7 @@ The authenticated account must contain the objects defined in `snowflake/sql/01_
 | Pursuit policy | Compute eligibility, capacity gap, comparable delivery, and status | Matching Python and authenticated Snowpark vectors |
 | Agent execution | Query the graph and create strategy, response plans, sections, and tasks | Cortex Code CLI complete run with session and query IDs |
 | Bid Room | Reload one complete run, expose the score map, edit proposal text, and download | Streamlit through `BIDPILOT_READER`, without fixture fallback |
-| Verification | Exercise gates, content variation, persistence, and responsive UI | 47 tests, authenticated AppTest, 1440/768/390 captures |
+| Verification | Exercise gates, content variation, persistence, and responsive UI | 48 tests, authenticated AppTest, 1440/768/390 captures |
 
 ## Data, safety, and license disclosure
 

@@ -88,7 +88,7 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 | 4 | L4 | root | done | pursuit policy와 Win Position Engine 구현 | policy vectors, 2×2 전략 변화 | 고정 사례나 고정 전략이 나옴 | proposal blueprint 구현 | Python policy와 strategy contract를 local test로 확인했습니다. |
 | 5 | L5 | root | done | 전략 주도 Proposal Builder 구현 | 평가항목별 section, profile별 출력 변화, NO-GO 차단 | 고정 템플릿 또는 NO-GO 생성 | CoCo orchestration | selected Win Position과 Blueprint를 연결한 local generator를 구현했습니다. |
 | 6 | L6 | root | done | CoCo run과 persistent Bid Room 구현 | complete run의 trace, sections, tasks 재조회 | 브라우저 state에만 남음 | evaluation과 submission | Cortex Code가 동일 run ID로 3 strategies, 4 plans, 8 sections, 12 tasks와 provenance를 저장했습니다. |
-| 7 | L7 | root | done | 실제 run 검증 | input validation, 2×2 parity, complete replay, 47 tests | 같은 run을 재현하지 못함 | 제출물 제작 | reader 역할의 authenticated AppTest와 proposal adversarial QA를 통과했습니다. |
+| 7 | L7 | root | done | 실제 run 검증 | input validation, 2×2 parity, complete replay, 48 tests | 같은 run을 재현하지 못함 | 제출물 제작 | reader 역할의 authenticated AppTest와 공개 앱 proposal red-team·download를 통과했습니다. |
 | 8 | L8 | root | in_progress | 제출물 제작과 제출 | 실제 run 기반 영어 자료, 영상, 제출 확인 | 제출 링크가 심사자에게 열리지 않음 | 완료 | 4분 38초 영문 영상, 8쪽 PDF 덱, 공개 앱·영상과 균형 재실행한 내부 artifact blind league 1위를 확인했고 포털 최종 확인이 남았습니다. |
 
 ## 5 Open / Unconfirmed
@@ -112,7 +112,7 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 
 ## 7 Status
 
-- 마지막 확인 신호: 2026-08-02 KST에 47 tests, runner-only Snowpark 2×2, Cortex Code complete run, reader reload, Cloud Run 1440/768/390 렌더를 확인했습니다.
+- 마지막 확인 신호: 2026-08-02 KST에 48 tests, runner-only Snowpark 2×2, Cortex Code complete run, review-ready reader reload, Cloud Run 1440/768/390 렌더를 확인했습니다.
 - 진행상황: L1--L7 완료. L8은 저장소 공개 전환, 포털 초안 입력과 승인 제출이 남았습니다. 공개 영상은 signed-out range 검증을 통과했고 균형 재실행한 내부 artifact blind league는 6개 중 1위였습니다.
 - 현재 주장 가능 범위: authenticated Snowflake Opportunity Graph, Snowpark policy parity, Cortex Code complete run, strategy 비교, proposal, adversarial review, owned tasks, replayable public Bid Room이 있습니다.
 - 외부 게이트: 저장소 public 전환과 제출 폼 최종 버튼은 Sergio 승인 전입니다.
@@ -133,3 +133,4 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 - 2026-08-02 v11: 실계정 grant·비용 경계, runner-only Snowpark와 Cortex 완주, 공개 앱, 4분 38초 영상, 8쪽 PDF 덱을 반영했습니다.
 - 2026-08-02 v12: 현재 artifact 6개 blind league 1위, 결선 4대 0, 공개 영상 링크와 signed-out 검증을 반영했습니다.
 - 2026-08-02 v13: 후보별 독립 3회가 되도록 blind league를 균형 재실행하고 PDF 작업 수와 CLI 버전 표기를 실데이터에 맞췄습니다.
+- 2026-08-02 v14: persisted section fragment를 평가항목별 초안으로 조합해 공개 앱의 false missing-section 판정을 제거하고 download 활성화를 검증했습니다.

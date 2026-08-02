@@ -1,6 +1,6 @@
 [
   {
-    "identity": {"name": "BidPilot", "revision": "d7a6292", "source": "local repository plus public Cloud Run deployment"},
+    "identity": {"name": "BidPilot", "revision": "84dc9c38f2311c78c8cf25032df215b23fa00ed2", "source": "local repository plus public Cloud Run deployment"},
     "card": {
       "problem": "Small government-bid teams waste pursuit effort before drafting and then write without tying official evaluation weights to supplier operating evidence.",
       "user": "A small B2G proposal team responsible for qualification, win strategy, drafting, review, and owned closure work.",
