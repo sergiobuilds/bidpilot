@@ -19,7 +19,7 @@ The differentiator is not tender summarization. It is the visible causal chain f
 
 Snowflake is the operating memory, not a decorative database. The Opportunity Graph joins external tender versions with internal credentials, availability, people, and delivery records. Snowpark executes the pursuit policy next to that data. Cortex Code reads the same graph and persists the selected strategy, rubric response plan, proposal sections, tasks, and trace under one run identifier.
 
-The verified run is `bidpilot-v2-dq-northstar`. It contains one decision, one selected strategy, four weighted plans, eight proposal sections, eleven owned tasks, and Cortex session/query provenance. The app reads it through the least-privilege `BIDPILOT_READER` role. The reproducible Snowpark path uses `BIDPILOT_RUNNER`; the recorded Cortex run used the bootstrap `bidpilot` connection and is disclosed as such in the runbook.
+The current verified run is `cortex-final-20260802-a`. It contains one decision, three materially different strategies with one selected, four weighted plans, eight proposal sections, twelve owned and adversarial tasks, and Cortex session/query provenance. Cortex Code created it through `BIDPILOT_RUNNER`; the public app reloads it through `BIDPILOT_READER`.
 
 ## Run and verify
 
@@ -38,25 +38,31 @@ uv run streamlit run app.py
 
 Load the schema and fixture, then run the Snowpark matrix with the commands in [COCO_RUNBOOK.md](snowflake/COCO_RUNBOOK.md). No LLM API key is required; Cortex Code uses the authenticated CLI session.
 
+The matrix runner persists `RUNNING`, `FAILED`, and `COMPLETED` states, requires exactly one decision per run, and supports idempotent retry. The role setup narrows table grants and configures a five-credit monthly resource monitor, 300-second statement timeout, 60-second queue timeout, and 60-second warehouse auto-suspend.
+
 ## Evidence and boundaries
 
 | Surface | Verified state |
 |---|---|
-| Python proposal and policy suite | 33 tests pass |
-| Snowpark matrix | Four authenticated tender/supplier combinations match the Python policy |
-| Complete Cortex run | Decision, strategy, plans, eight sections, eleven tasks, and trace share one `run_id` |
+| Python proposal and policy suite | 47 tests pass |
+| Snowpark matrix | Four runner-only tender/supplier combinations match the Python policy and complete their persisted lifecycle |
+| Complete Cortex run | One decision, three strategies, four plans, eight sections, twelve tasks, and trace share one `run_id` |
 | Streamlit authenticated mode | Complete run reloads through `BIDPILOT_READER` with editable/downloadable Markdown |
+| Public deployment | `https://bidpilot-demo-tbauoylpra-uc.a.run.app` renders the authenticated run |
 | Responsive authenticated app | Actual Snowflake-backed renders at 1440, 768, and 390 CSS pixels report no horizontal overflow |
 
-Visual evidence is stored under `dev/active/final-forge/final-app-shot/`.
-An exact 90-second review draft is stored at `dev/active/final-forge/bidpilot-demo-90s-draft.mp4`; its six authenticated scenes can be regenerated with `capture-demo.mjs`.
+Verified public captures are stored under `dev/active/final-forge/public-app-verified/`, `public-app-768/`, and `public-app-390/`. The 278.136-second narrated demo is `dev/active/final-forge/BidPilot-Final-Demo.mp4`; its application scenes can be regenerated with `capture-demo.mjs`.
 
 The replay records are synthetic contest fixtures. The included public G2B notice is a closed historical example used only to test intake and qualification; it is not presented as an open opportunity. `PEOPLE`, prior-proposal, and pricing evidence absent from the Snowflake run remain explicit tasks and are not invented in the proposal.
 
 ## Submission and project records
 
-- [Submission package and 90-second script](docs/SUBMISSION-PACKAGE_2026-08-02_v2.md)
+- [Submission package and final demo contract](docs/SUBMISSION-PACKAGE_2026-08-02_v2.md)
 - [Project map](docs/MASTER-MAP.md)
 - [Decision record](docs/CHRONICLE.md)
 - [Current handoff](PASSDOWN.md)
 - [MIT License](LICENSE)
+
+## Change history
+
+- 2026-08-02: Applied runner lifecycle, least-privilege roles, bounded compute, a new Cortex Code run, responsive public deployment, and 47-test verification.

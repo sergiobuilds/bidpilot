@@ -7,6 +7,10 @@ from dataclasses import dataclass, replace
 from bidpilot.policy import pursue_status
 
 
+class PursuitInputError(ValueError):
+    """Raised when a tender or supplier cannot enter the pursuit policy."""
+
+
 @dataclass(frozen=True)
 class ProofCard:
     label: str
@@ -78,7 +82,10 @@ def _proof_cards(supplier: dict, projects: list[dict]) -> tuple[ProofCard, ...]:
 
 
 def _position(title: str, tender: dict, supplier: dict, projects: list[dict], criteria: list[dict]) -> WinPosition:
-    proof_cards = _proof_cards(supplier, projects)
+    ranked_projects = list(projects)
+    if title == "Operational continuity":
+        ranked_projects.sort(key=lambda item: "api-operations" in item.get("tags", ()), reverse=True)
+    proof_cards = _proof_cards(supplier, ranked_projects)
     target = tuple(criterion["name"] for criterion in criteria[:2])
     proof_names = ", ".join(card.label for card in proof_cards[:2]) or "the selected delivery team"
     statement = (
@@ -95,6 +102,12 @@ def _position(title: str, tender: dict, supplier: dict, projects: list[dict], cr
 
 def _blueprint(tender: dict, supplier: dict, position: WinPosition, projects: list[dict]) -> tuple[BlueprintSection, ...]:
     sections: list[BlueprintSection] = []
+    continuity = position.title == "Operational continuity"
+    strategy_method = (
+        "a phased transition, service checkpoints, and an explicit rollback owner"
+        if continuity
+        else "recorded delivery outcomes, criterion-level acceptance checks, and traceable evidence owners"
+    )
     for criterion in sorted(tender["evaluation_criteria"], key=lambda item: item["weight"], reverse=True):
         name = criterion["name"].lower()
         if "team" in name:
@@ -111,16 +124,40 @@ def _blueprint(tender: dict, supplier: dict, position: WinPosition, projects: li
             outcomes = [project["outcome"] for project in projects[:2]]
             evidence = outcomes[0] if outcomes else tender["promised_outcome"]
         claim = (
-            f"{position.title}: {supplier['name']} will address {name} through {evidence}. "
+            f"{position.title}: {supplier['name']} will address {name} through {strategy_method}, backed by {evidence}. "
             f"This {criterion['weight']}-point response targets {tender['promised_outcome'].lower()}."
         )
-        owner = "Solution lead" if criterion["weight"] >= 30 else "Bid manager"
+        owner = ("Operations lead" if continuity else "Solution lead") if criterion["weight"] >= 30 else "Bid manager"
         sections.append(BlueprintSection(criterion["name"], criterion["weight"], claim, asset_names, owner))
     return tuple(sections)
 
 
 def build_pursuit_brief(tender: dict, supplier: dict) -> PursuitBrief:
     """Return a reproducible bid decision and strategy from structured input."""
+    required_tender = ("id", "buyer_objective", "promised_outcome", "tags", "eligibility_requirements", "delivery_hours", "evaluation_criteria")
+    required_supplier = ("id", "name", "credentials", "available_hours", "past_projects", "people")
+    missing_tender = [key for key in required_tender if key not in tender]
+    missing_supplier = [key for key in required_supplier if key not in supplier]
+    if missing_tender or missing_supplier:
+        raise PursuitInputError(
+            "Pursuit input is incomplete: "
+            + ", ".join(f"tender.{key}" for key in missing_tender)
+            + ("; " if missing_tender and missing_supplier else "")
+            + ", ".join(f"supplier.{key}" for key in missing_supplier)
+        )
+    criteria = tender["evaluation_criteria"]
+    if not criteria:
+        raise PursuitInputError("Pursuit input needs a reviewed evaluation score map.")
+    names = [str(item.get("name") or "").strip() for item in criteria]
+    weights = [float(item.get("weight") or 0) for item in criteria]
+    if any(not name for name in names) or any(weight <= 0 for weight in weights):
+        raise PursuitInputError("Every score-map row needs a name and positive weight.")
+    if len({name.casefold() for name in names}) != len(names):
+        raise PursuitInputError("Score-map criterion names must be unique.")
+    if abs(sum(weights) - 100.0) > 0.01:
+        raise PursuitInputError(f"Score-map weights must total 100; current total is {sum(weights):g}.")
+    if int(tender["delivery_hours"]) <= 0 or int(supplier["available_hours"]) < 0:
+        raise PursuitInputError("Delivery and availability hours must be valid non-negative values.")
     missing = tuple(sorted(set(tender["eligibility_requirements"]) - set(supplier["credentials"])))
     capacity_gap = max(0, tender["delivery_hours"] - supplier["available_hours"])
     projects = _matches(tender, supplier)

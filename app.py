@@ -12,8 +12,19 @@ import streamlit as st
 from bidpilot.bid_room import BidRoomStore
 from bidpilot.engine import create_proposal_tasks, evaluate_bid
 from bidpilot.fixtures import COMPANY, RFPS, SUPPLIER_PROFILES, TENDERS
-from bidpilot.intake import TenderIntakeError, build_pursuit_tender, intake_tender_bytes, intake_tender_url
-from bidpilot.proposal_writer import red_team_proposal, red_team_tasks, write_strategy_proposal
+from bidpilot.intake import (
+    TenderIntakeError,
+    build_pursuit_tender,
+    intake_tender_bytes,
+    intake_tender_url,
+    review_tender_snapshot,
+)
+from bidpilot.proposal_writer import (
+    red_team_persisted_draft,
+    red_team_proposal,
+    red_team_tasks,
+    write_strategy_proposal,
+)
 from bidpilot.pursuit import build_pursuit_brief, select_win_position
 from bidpilot.snowflake_store import SnowflakeBidRoomError, SnowflakeBidRoomStore, configured_connection_name
 
@@ -552,7 +563,7 @@ def render_bid_room() -> None:
     if result_state and result_state.get("input_key") == input_key:
         result = store.load(result_state["run_id"])
     elif brief.can_generate_proposal:
-        result = store.latest(tender["id"], supplier["id"], opportunity_version, position.statement)
+        result = store.latest(tender["id"], supplier["id"], opportunity_version, position.statement, brief)
     if result:
         st.success(f"Bid Room run saved: {result['run_id']}")
         edited_draft = st.text_area("Strategy-led proposal draft", result["proposal_markdown"], height=520)
@@ -603,13 +614,42 @@ def render_tender_intake() -> None:
     if snapshot.has_instruction_like_content:
         st.warning("Instruction-like text was detected. It remains source data and is not used as an instruction.")
     st.markdown(section("02", "Review before Bid Room", "required operator confirmation"), unsafe_allow_html=True)
+    reviewed_scope = st.text_area("Tender scope", snapshot.tender["scope"], height=90)
+    reviewed_objective = st.text_area("Buyer objective", snapshot.tender["buyer_objective"], height=90)
+    eligibility_text = st.text_area(
+        "Eligibility requirements · one per line",
+        "\n".join(snapshot.tender["eligibility_requirements"]),
+        height=100,
+    )
+    criteria_text = st.text_area(
+        "Official evaluation score map · Criterion | weight",
+        "\n".join(f'{item["name"]} | {item["weight"]}' for item in snapshot.tender["evaluation_criteria"]),
+        height=130,
+        help="The reviewed top-level weights must be unique, positive, and total 100.",
+    )
     tags = tuple(tag.strip() for tag in st.text_input("Scope tags", "public-data, data-quality").split(",") if tag.strip())
     hours = st.number_input("Estimated delivery hours", min_value=1, value=720)
     outcome = st.text_input("Promised buyer outcome", "A measurable service handoff")
     if st.button("Open reviewed Bid Room", type="primary"):
         try:
-            st.session_state["intake_tender"] = build_pursuit_tender(
+            reviewed_criteria = []
+            for line in criteria_text.splitlines():
+                if not line.strip():
+                    continue
+                if "|" not in line:
+                    raise TenderIntakeError("Write each score-map row as 'Criterion | weight'.")
+                name, weight = line.rsplit("|", 1)
+                reviewed_criteria.append({"name": name.strip(), "weight": weight.strip()})
+            reviewed_snapshot = review_tender_snapshot(
                 snapshot,
+                scope=reviewed_scope,
+                buyer_objective=reviewed_objective,
+                eligibility_requirements=tuple(eligibility_text.splitlines()),
+                evaluation_criteria=tuple(reviewed_criteria),
+            )
+            st.session_state["tender_snapshot"] = reviewed_snapshot
+            st.session_state["intake_tender"] = build_pursuit_tender(
+                reviewed_snapshot,
                 tags=tags,
                 delivery_hours=int(hours),
                 promised_outcome=outcome,
@@ -636,7 +676,7 @@ TRACE_QUERY_KEYS = ("query_id", "query_ids", "last_query_id", "queries")
 TRACE_STEP_KEYS = ("steps", "stages", "events", "trace")
 STEP_NAME_KEYS = ("step", "name", "stage", "action", "operation")
 STEP_DETAIL_KEYS = ("sql", "object", "output", "result", "input", "status", "error")
-ASSET_NAME_KEYS = ("label", "title", "name", "asset", "project_title")
+ASSET_NAME_KEYS = ("label", "title", "name", "asset", "project_title", "project_id")
 
 STATUS_TONES = {"PURSUE": "positive", "REVIEW": "warning", "NO-GO": "critical", "NO_GO": "critical"}
 
@@ -676,6 +716,20 @@ def record_label(item: object) -> str:
                 return str(item[key])
         return json.dumps(item, ensure_ascii=False, sort_keys=True)
     return str(item)
+
+
+def record_detail(item: object) -> str:
+    """Turn a structured proof card into judge-readable supporting detail."""
+    if not isinstance(item, dict):
+        return ""
+    details = []
+    outcome = item.get("detail") or item.get("recorded_outcome") or item.get("outcome")
+    if outcome:
+        details.append(str(outcome))
+    overlap = item.get("tag_overlap")
+    if overlap:
+        details.append(f"Tender-tag overlap: {overlap}")
+    return " · ".join(details)
 
 
 def as_number(value: object) -> float | None:
@@ -931,8 +985,8 @@ def render_snowflake_bid_room() -> None:
             f'<p class="sx-proof__kind">{esc(card.get("kind")) if isinstance(card, dict) and card.get("kind") else "Proof"}</p>'
             f'<p class="sx-proof__label">{esc(record_label(card))}</p>'
             + (
-                f'<p class="sx-proof__detail">{esc(card["detail"])}</p>'
-                if isinstance(card, dict) and card.get("detail")
+                f'<p class="sx-proof__detail">{esc(record_detail(card))}</p>'
+                if record_detail(card)
                 else ""
             )
             + "</div>"
@@ -996,15 +1050,63 @@ def render_snowflake_bid_room() -> None:
             key=f"authenticated-draft::{selected_id}",
             help="Sections are loaded from this run. Edits stay in this session and are not written back to Snowflake.",
         )
+        edited_findings = red_team_persisted_draft(result["blueprint"], edited)
+        if edited_findings:
+            st.warning(
+                "Current edited draft is not review-ready: "
+                + " ".join(f'{item["criterion"]}: {item["finding"]}' for item in edited_findings)
+            )
+        else:
+            st.success("Current edited draft passes the score-map red-team checks.")
         st.download_button(
             "Download proposal draft",
             edited,
             file_name=f"{selected_id}.md",
             mime="text/markdown",
+            disabled=bool(edited_findings),
+            help="Resolve current red-team findings before downloading." if edited_findings else None,
         )
 
-    # 05 · the owned work that closes the remaining gaps.
+    # 05 · persisted adversarial review. Cortex-created rt-* tasks carry the
+    # finding and the closure action under the same run ID as the proposal.
     tasks = result["tasks"] or []
+    review_tasks = [task for task in tasks if str(task.get("task_id") or "").lower().startswith("rt-")]
+    if review_tasks:
+        criterion_names = {
+            "tech": "Technical approach",
+            "deliv": "Comparable delivery",
+            "team": "Delivery team",
+            "price": "Price",
+        }
+        review_rows = "".join(
+            f'<tr><td data-label="Criterion"><span class="sx-crit">'
+            f'{esc(criterion_names.get(str(task.get("task_id") or "").split("-")[2], NOT_RECORDED))}'
+            f'</span></td><td data-label="Finding and closure action">'
+            f'{esc(task.get("task_name") or NOT_RECORDED)}</td>'
+            f'<td data-label="Owner">{esc(task.get("owner") or NOT_RECORDED)}</td>'
+            f'<td data-label="Status"><span class="sx-mark" data-tone="open">'
+            f'{esc(task.get("status") or NOT_RECORDED)}</span></td></tr>'
+            for task in review_tasks
+        )
+        review_html = (
+            '<div class="sx-tablewrap" style="padding-inline:0"><table class="sx-table">'
+            '<caption class="sx-missing" style="text-align:left;padding:0 12px 8px;font-style:normal">'
+            "Cortex Code challenged the score-bearing proposal against recorded supplier data. "
+            "Each unresolved finding is persisted as an owned closure action.</caption>"
+            '<colgroup><col style="width:18%"><col style="width:50%"><col style="width:20%">'
+            '<col style="width:12%"></colgroup><thead><tr><th scope="col">Criterion</th>'
+            '<th scope="col">Finding and closure action</th><th scope="col">Owner</th>'
+            '<th scope="col">Status</th></tr></thead>'
+            f"<tbody>{review_rows}</tbody></table></div>"
+        )
+    else:
+        review_html = '<div class="sx-empty">No persisted red-team finding exists under this run ID.</div>'
+    st.markdown(
+        sx_card("05", "Adversarial proposal review", f"Cortex red-team · {len(review_tasks)} persisted findings", review_html),
+        unsafe_allow_html=True,
+    )
+
+    # 06 · the owned work that closes the remaining gaps.
     if tasks:
         task_rows = "".join(
             f'<tr><td data-label="Task"><span class="sx-crit">{esc(task.get("task_name") or NOT_RECORDED)}</span></td>'
@@ -1024,11 +1126,11 @@ def render_snowflake_bid_room() -> None:
     else:
         task_html = '<div class="sx-empty">No pursuit task is persisted under this run ID.</div>'
     st.markdown(
-        sx_card("05", "Owned pursuit work", f"PURSUIT_TASKS · {len(tasks)} rows", task_html),
+        sx_card("06", "Owned pursuit work", f"PURSUIT_TASKS · {len(tasks)} rows", task_html),
         unsafe_allow_html=True,
     )
 
-    # 06 · provenance. Compact by default, full trace behind the expander.
+    # 07 · provenance. Compact by default, full trace behind the expander.
     provenance = trace.get("execution_provenance") if isinstance(trace.get("execution_provenance"), dict) else {}
     session_id = first_key(provenance, ("cortex_session_id", "session_id")) or first_key(trace, TRACE_SESSION_KEYS)
     query_ids = (
@@ -1037,7 +1139,7 @@ def render_snowflake_bid_room() -> None:
     )
     st.markdown(
         sx_card(
-            "06",
+            "07",
             "Execution provenance",
             "AGENT_RUNS.trace",
             '<div class="sx-facts">'

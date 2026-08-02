@@ -124,6 +124,36 @@ def red_team_tasks(brief: PursuitBrief, draft: str) -> tuple[dict[str, str], ...
     return tuple(tasks)
 
 
+def red_team_persisted_draft(response_plans: list[dict], draft: str) -> tuple[dict[str, str], ...]:
+    """Re-check an edited authenticated draft against persisted response plans."""
+    if not response_plans:
+        return ({"criterion": "Score map", "finding": "No persisted response plan is available."},)
+    weights = [float(item.get("weight") or 0) for item in response_plans]
+    top_weight = max(weights)
+    findings: list[dict[str, str]] = []
+    for item, weight in zip(response_plans, weights, strict=True):
+        criterion = str(item.get("criterion_name") or "").strip()
+        body = _section_body(draft, criterion) if criterion else None
+        assets = item.get("assets") or []
+        if isinstance(assets, str):
+            import json
+
+            try:
+                assets = json.loads(assets)
+            except ValueError:
+                assets = [assets]
+        if body is None:
+            finding = "Missing explicit score-bearing section."
+        elif assets and not any(str(asset) in body for asset in assets):
+            finding = "Selected supplier asset is missing from the edited response."
+        elif weight == top_weight and not _has_high_weight_detail(body):
+            finding = "Highest-weight response needs substantive validation and buyer outcome detail."
+        else:
+            continue
+        findings.append({"criterion": criterion or "Unnamed criterion", "finding": finding})
+    return tuple(findings)
+
+
 def _section_body(draft: str, criterion: str) -> str | None:
     marker = f"## {criterion}"
     start = draft.find(marker)
@@ -142,7 +172,8 @@ def _has_high_weight_detail(body: str) -> bool:
         value_start = start + len(label)
         line_end = body.find("\n", value_start)
         values[label] = body[value_start : line_end if line_end >= 0 else len(body)].strip()
-    return all(values.values())
+    placeholders = {"tbd", "todo", "pending", "n/a", "na", "not recorded", "unknown", "-"}
+    return all(value and value.casefold().strip(" .:;[]()") not in placeholders for value in values.values())
 
 
 def _strategy_markdown(tender: dict, supplier: dict, brief: PursuitBrief, position: WinPosition) -> str:
@@ -153,7 +184,7 @@ def _strategy_markdown(tender: dict, supplier: dict, brief: PursuitBrief, positi
         f"Response priority: {'lead response' if section.weight >= 30 else 'supporting response'} at {section.weight}% of the evaluation.\n\n"
         f"{section.claim}\n\n"
         f"Delivery assets: {', '.join(section.assets)}.\n\n"
-        f"{_weighted_response_detail(section.weight, top_weight, tender['promised_outcome'])}\n\n"
+        f"{_weighted_response_detail(section.weight, top_weight, tender['promised_outcome'], position.title)}\n\n"
         f"Proposal owner: {section.owner}."
         for section in brief.proposal_blueprint
     )
@@ -193,9 +224,7 @@ The buyer needs {brief.buyer_objective.lower()} The proposed response must addre
 
 ## Implementation Plan
 
-1. Confirm the evaluation response plan and evidence owners.
-2. Develop the highest-weighted response first and attach the selected delivery assets.
-3. Validate delivery capacity, operating handoff, and criterion coverage before red-team review.
+{_strategy_plan(position.title)}
 
 ## Team and Governance
 
@@ -217,7 +246,21 @@ The commercial response will be completed against the Price criterion and reconc
 """
 
 
-def _weighted_response_detail(weight: int, top_weight: int, promised_outcome: str) -> str:
+def _strategy_plan(position_title: str) -> str:
+    if position_title == "Operational continuity":
+        return (
+            "1. Map service dependencies, transition windows, and named rollback owners.\n"
+            "2. Rehearse the highest-risk handoff while existing public interfaces remain available.\n"
+            "3. Release through buyer-approved checkpoints and transfer the operating playbook."
+        )
+    return (
+        "1. Confirm the evaluation response plan and evidence owners.\n"
+        "2. Develop the highest-weighted response first and attach the selected delivery assets.\n"
+        "3. Validate delivery capacity, operating handoff, and criterion coverage before red-team review."
+    )
+
+
+def _weighted_response_detail(weight: int, top_weight: int, promised_outcome: str, position_title: str) -> str:
     """Allocate substantive response depth in proportion to the published score."""
     if weight == top_weight:
         emphasis = (
@@ -225,12 +268,21 @@ def _weighted_response_detail(weight: int, top_weight: int, promised_outcome: st
             if weight >= 45
             else ""
         )
+        approach = (
+            "Approach: baseline the live service, rehearse the transition, and release through rollback-safe checkpoints."
+            if position_title == "Operational continuity"
+            else "Approach: define the baseline, execute the selected delivery pattern, and assign acceptance ownership."
+        )
         return (
-            "Approach: define the baseline, execute the selected delivery pattern, and assign acceptance ownership.\n\n"
+            f"{approach}\n\n"
             "Validation: agree measurable acceptance checks with the buyer and record the result in the Bid Room.\n\n"
             f"Buyer outcome: {promised_outcome.capitalize()}."
             f"{emphasis}"
         )
     if weight >= 20:
-        return "Approach: name the accountable owner, delivery inputs, and acceptance checkpoint for this response."
+        return (
+            "Approach: name the service owner, transition dependency, and rollback checkpoint for this response."
+            if position_title == "Operational continuity"
+            else "Approach: name the accountable owner, delivery inputs, and acceptance checkpoint for this response."
+        )
     return "Approach: confirm the required input and reconcile it with the final submission before approval."

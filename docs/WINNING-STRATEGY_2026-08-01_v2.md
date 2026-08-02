@@ -36,13 +36,13 @@ B2G 사업자는 공고를 읽은 뒤 며칠 안에 투입할 입찰 인력과 �
 
 ### 2.1 현재 구현의 판정
 
-현재 저장소에는 합성 RFP hard-gate 데모, 마감된 공개 공고 한 건, 고정 Markdown 템플릿, 실행되지 않은 Snowflake 스케치가 함께 있습니다. 이 상태는 end-to-end agent 제출물로 주장할 수 없습니다.
+현재 저장소에는 합성 replay fixture와 마감된 공개 공고 한 건을 분리한 local mode, authenticated Snowflake Opportunity Graph, Python–Snowpark 2×2 parity, runner-only Cortex Code 산출물, 같은 run ID로 재조회되는 공개 Bid Room이 있습니다. 새 verified run `cortex-final-20260802-a`는 세 전략 비교, 네 weighted plan, 여덟 proposal section, 열두 task와 execution provenance를 가집니다.
 
 | 심사 축 | 현재 판정 | 1위권에 필요한 전이 |
 |---|---|---|
-| 현실 적합성 30 | 문제와 사용자 맥락은 맞음 | 실제 또는 시점이 명시된 공개 공고와 입찰팀 작업 흐름을 한 run으로 보여야 함 |
-| 기술 실행 40 | 로컬 정책과 DDL만 있음 | Snowflake 조회·쓰기, Snowpark 계산, CoCo 단계별 실행 기록이 필요함 |
-| 완성도 30 | 화면은 있으나 결과가 고정됨 | 서로 다른 공고와 회사 프로필에서 다른 전략·초안·작업이 나와야 함 |
+| 현실 적합성 30 | timestamped replay와 증거 공백을 화면에 명시함 | 실제 입찰팀 검증과 열린 공고 증거가 추가로 필요함 |
+| 기술 실행 40 | 최소권한 Snowflake, runner-only 2×2 Snowpark, Cortex query provenance와 complete replay를 확인함 | live demo에서 role, lifecycle, query provenance를 짧게 증명해야 함 |
+| 완성도 30 | 공개 score-map Bid Room, 세 전략, proposal, adversarial review, owned tasks, 3–5분 영상과 PDF 덱이 구현됨 | signed-out 링크 검증과 포털 최종 제출이 필요함 |
 
 ### 2.2 버리는 주장
 
@@ -206,17 +206,16 @@ CoCo는 다음 단계를 하나의 실행으로 연결합니다.
 
 ## 8 시연 설계
 
-### 8.1 100초 시연 구조
+### 8.1 3–5분 시연 구조
 
 | 시간 | 화면 | 한 가지 전달 사실 |
 |---|---|---|
-| 0–10초 | 실제 공고와 평가표 | 이 공고는 기술평가에서 승부가 남 |
-| 10–25초 | CoCo intake와 Snowflake retrieval | 회사의 운영 메모리를 공고와 함께 찾음 |
-| 25–42초 | Pursuit Brief | 투자할지와 어떤 점수를 노릴지 결정함 |
-| 42–58초 | Win Position 선택 | 공고와 회사 자산이 한 문장 전략으로 결합됨 |
-| 58–78초 | Proposal Blueprint와 섹션 초안 | 전략이 실제 작성 구조와 문장으로 바뀜 |
-| 78–90초 | Red-team | 같은 평가표로 약한 섹션만 보완함 |
-| 90–100초 | 저장된 Bid Room과 작업 | 결과가 실행 가능한 팀 작업으로 남음 |
+| 0:00–0:37 | 문제와 제품 질문 | 제안서 작성 전의 pursuit 손실을 정의함 |
+| 0:37–1:09 | Tender intake | URL/PDF와 reviewed source boundary를 보여줌 |
+| 1:09–2:13 | Pursuit verdict와 score map | 작성 권한과 공식 배점 우선순위를 연결함 |
+| 2:13–3:04 | 세 Win Position과 proposal | 비교·선택된 전략이 실제 섹션을 통제함 |
+| 3:04–3:44 | Adversarial review와 owned work | 다운로드 gate와 열두 task를 보여줌 |
+| 3:44–4:38 | Snowflake architecture와 provenance | role, lifecycle, session, query, 비용 경계를 증명함 |
 
 ### 8.2 비교 장면
 
@@ -292,4 +291,6 @@ CoCo 실행은 intake, retrieval, strategy, proposal, red-team, task creation의
 
 ## 11 이력
 
+- 2026-08-02 v3: authenticated 실행 현실, historical bootstrap run 경계, runner-only lifecycle과 failure-safe 재실증 과제를 반영했습니다.
+- 2026-08-02 v4: runner-only Cortex 완주, 공개 앱, 3–5분 데모, PDF 덱과 제출 직전 외부 게이트를 반영했습니다.
 - 2026-08-01 v2: 독립 QA의 제품·구매자·심사·구조 지적을 반영해 고정 hard-gate 데모를 기준안에서 제외하고, Bid Room·Win Position·전략 주도 제안서·Snowflake run trace를 최종 구현 계약으로 고정했습니다.

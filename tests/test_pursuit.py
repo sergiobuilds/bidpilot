@@ -1,10 +1,18 @@
 from pathlib import Path
 import runpy
 
+import pytest
+
 from bidpilot.bid_room import BidRoomStore
 from bidpilot.fixtures import SUPPLIER_PROFILES, TENDERS
-from bidpilot.proposal_writer import build_gap_closure_plan, red_team_proposal, red_team_tasks, write_strategy_proposal
-from bidpilot.pursuit import build_pursuit_brief, select_win_position
+from bidpilot.proposal_writer import (
+    build_gap_closure_plan,
+    red_team_persisted_draft,
+    red_team_proposal,
+    red_team_tasks,
+    write_strategy_proposal,
+)
+from bidpilot.pursuit import PursuitInputError, build_pursuit_brief, select_win_position
 from bidpilot.policy import POLICY_VERSION, pursue_status
 
 
@@ -25,6 +33,19 @@ def test_missing_eligibility_blocks_proposal_generation() -> None:
     assert brief.status == "NO-GO"
     assert not brief.can_generate_proposal
     assert brief.missing_eligibility == ("Information-system maintenance certificate",)
+
+
+def test_pursuit_rejects_empty_duplicate_and_malformed_score_maps() -> None:
+    supplier = SUPPLIER_PROFILES[0]
+    with pytest.raises(PursuitInputError, match="reviewed evaluation"):
+        build_pursuit_brief({**TENDERS[0], "evaluation_criteria": ()}, supplier)
+    with pytest.raises(PursuitInputError, match="unique"):
+        build_pursuit_brief(
+            {**TENDERS[0], "evaluation_criteria": ({"name": "Price", "weight": 50}, {"name": "price", "weight": 50})},
+            supplier,
+        )
+    with pytest.raises(PursuitInputError, match="supplier.people"):
+        build_pursuit_brief(TENDERS[0], {key: value for key, value in supplier.items() if key != "people"})
 
 
 def test_tender_and_supplier_matrix_changes_strategy_and_outcome() -> None:
@@ -68,6 +89,11 @@ def test_selecting_a_position_changes_the_proposal_blueprint_claims() -> None:
     assert continuity.win_positions[1].title in continuity.proposal_blueprint[0].claim
     assert continuity.selected_position_index == 1
     assert continuity.win_positions[1].statement in write_strategy_proposal(tender, supplier, continuity)
+    evidence_draft = write_strategy_proposal(tender, supplier, brief)
+    continuity_draft = write_strategy_proposal(tender, supplier, continuity)
+    assert "rollback-safe checkpoints" not in evidence_draft
+    assert "rollback-safe checkpoints" in continuity_draft
+    assert "Operations lead" in continuity_draft
 
 
 def test_red_team_requires_assets_inside_each_criterion_section() -> None:
@@ -94,9 +120,11 @@ def test_published_weight_changes_response_substance() -> None:
     high = build_pursuit_brief(tender, supplier)
     raised_tender = {
         **tender,
-        "evaluation_criteria": tuple(
-            {**item, "weight": 50 if item["name"] == "Technical approach" else item["weight"]}
-            for item in tender["evaluation_criteria"]
+        "evaluation_criteria": (
+            {"name": "Technical approach", "weight": 50},
+            {"name": "Comparable delivery", "weight": 25},
+            {"name": "Delivery team", "weight": 15},
+            {"name": "Price", "weight": 10},
         ),
     }
     raised = build_pursuit_brief(raised_tender, supplier)
@@ -115,8 +143,8 @@ def test_red_team_uses_relative_top_weight_and_rejects_empty_detail() -> None:
     lowered = {
         **tender,
         "evaluation_criteria": tuple(
-            {**item, "weight": 29 - index}
-            for index, item in enumerate(tender["evaluation_criteria"])
+            {**item, "weight": weight}
+            for item, weight in zip(tender["evaluation_criteria"], (29, 28, 27, 16), strict=True)
         ),
     }
     brief = build_pursuit_brief(lowered, supplier)
@@ -133,6 +161,26 @@ def test_red_team_uses_relative_top_weight_and_rejects_empty_detail() -> None:
     )
 
     assert any(task["criterion"] == brief.proposal_blueprint[0].criterion for task in red_team_tasks(brief, broken))
+
+
+def test_red_team_rejects_placeholders_and_rechecks_authenticated_edits() -> None:
+    tender, supplier = TENDERS[0], SUPPLIER_PROFILES[0]
+    brief = build_pursuit_brief(tender, supplier)
+    draft = write_strategy_proposal(tender, supplier, brief)
+    top = brief.proposal_blueprint[0]
+    broken = draft.replace(
+        "Validation: agree measurable acceptance checks with the buyer and record the result in the Bid Room.",
+        "Validation: TBD",
+        1,
+    ).replace(f"Delivery assets: {', '.join(top.assets)}.", "Delivery assets: pending.", 1)
+    assert any(task["criterion"] == top.criterion for task in red_team_tasks(brief, broken))
+    plans = [
+        {"criterion_name": section.criterion, "weight": section.weight, "assets": list(section.assets)}
+        for section in brief.proposal_blueprint
+    ]
+    findings = red_team_persisted_draft(plans, broken)
+    assert any(item["criterion"] == top.criterion for item in findings)
+    assert red_team_persisted_draft(plans, draft) == ()
 
 
 def test_canonical_sections_survive_nonstandard_evaluation_names() -> None:
@@ -199,9 +247,26 @@ def test_bid_room_persists_the_same_versioned_run_after_refresh(tmp_path: Path) 
     assert loaded["brief"]["win_positions"][0]["proof_cards"]
     assert loaded["tasks"][0]["owner"] == "Solution lead"
     assert loaded["agent_run"]["state"] == "not-executed-in-snowflake-or-coco"
-    latest = store.latest(tender["id"], supplier["id"], "sha256:demo-replay-v1", brief.win_positions[0].statement)
+    latest = store.latest(
+        tender["id"], supplier["id"], "sha256:demo-replay-v1", brief.win_positions[0].statement, brief
+    )
     assert latest is not None
     assert latest["run_id"] == run_id
+
+
+def test_bid_room_latest_is_monotonic_and_rejects_stale_or_blocked_drafts(tmp_path: Path) -> None:
+    tender, supplier = TENDERS[0], SUPPLIER_PROFILES[0]
+    brief = build_pursuit_brief(tender, supplier)
+    store = BidRoomStore(tmp_path / "bidpilot.sqlite")
+    first = store.save(brief, "v1", "FIRST-DRAFT", ())
+    second = store.save(brief, "v1", "SECOND-DRAFT", ())
+    latest = store.latest(tender["id"], supplier["id"], "v1", brief.win_positions[0].statement, brief)
+    assert latest is not None and latest["run_id"] == second and latest["run_id"] != first
+    changed = select_win_position(brief, tender, supplier, 1)
+    assert store.latest(tender["id"], supplier["id"], "v1", brief.win_positions[0].statement, changed) is None
+    blocked = build_pursuit_brief(tender, SUPPLIER_PROFILES[1])
+    with pytest.raises(ValueError, match="cannot persist"):
+        store.save(blocked, "v1", "FLUENT BUT BLOCKED", ())
 
 
 def test_python_and_snowpark_policy_contract_share_version_and_decision_vectors() -> None:
