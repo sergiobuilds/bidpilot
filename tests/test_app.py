@@ -1,69 +1,35 @@
+"""The pursuit workspace's product contract.
+
+Every test drives the real app. The Snowflake connector is faked at the same
+seam the store tests use, so four-stage navigation, the production states and
+the proposal review gate are exercised without live credentials — and without
+the app ever reading a local fixture in place of a failed query.
+"""
+
 from __future__ import annotations
 
 import datetime as dt
-import importlib.util
 import json
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
 import streamlit as st
+from streamlit.runtime.memory_media_file_storage import _calculate_file_id
 from streamlit.testing.v1 import AppTest
+
+from bidpilot import ui
 
 APP_PATH = Path(__file__).parents[1] / "app.py"
 
-
-def app_module(monkeypatch, tmp_path: Path):
-    """Load app.py as a module so its presentation helpers can be unit-tested.
-
-    The script renders on import, so it runs in a temporary directory and
-    without a configured connection: the local simulation path touches no
-    Snowflake session and leaves nothing in the repository.
-    """
-    monkeypatch.delenv("BIDPILOT_SNOWFLAKE_CONNECTION", raising=False)
-    monkeypatch.chdir(tmp_path)
-    spec = importlib.util.spec_from_file_location("bidpilot_app_under_test", APP_PATH)
-    module = importlib.util.module_from_spec(spec)
-    try:
-        spec.loader.exec_module(module)
-    except BaseException as error:
-        # st.stop() ends a Streamlit script by raising. Every helper is
-        # already defined by then; anything else is a real failure.
-        if type(error).__name__ not in ("StopException", "RerunException"):
-            raise
-    return module
-
-
-def test_bid_room_reopens_latest_matching_persisted_run(monkeypatch, tmp_path: Path) -> None:
-    monkeypatch.delenv("BIDPILOT_SNOWFLAKE_CONNECTION", raising=False)
-    monkeypatch.chdir(tmp_path)
-
-    first = AppTest.from_file(APP_PATH)
-    first.run(timeout=30)
-    first.button[0].click()
-    first.run(timeout=30)
-    assert any("Bid Room run saved:" in item.value for item in first.success)
-
-    reopened = AppTest.from_file(APP_PATH)
-    reopened.run(timeout=30)
-    assert any("Bid Room run saved:" in item.value for item in reopened.success)
-
-
-# ---------------------------------------------------------------------------
-# Public product mode. The Snowflake connector is faked at the same seam the
-# store tests use, so the four-screen navigation is exercised without live
-# credentials and without the app ever touching a fixture path.
-# ---------------------------------------------------------------------------
-
 RUN_ID = "run-app-1"
 OLDER_RUN_ID = "run-app-0"
+OTHER_RUN_ID = "run-app-other"
 
-# Every internal store name that must not reach the working screens. They are
-# allowed only inside the Proposal Room's collapsed Run proof disclosure.
+# Internal store names belong to provenance, not to the working screens.
 STORE_NAMES = (
     "AGENT_RUNS",
     "PURSUIT_DECISIONS",
-    "OPPORTUNITIES",
-    "SUPPLIER_PROFILES",
     "RUBRIC_RESPONSE_PLANS",
     "WIN_STRATEGIES",
     "PROPOSAL_SECTIONS",
@@ -72,6 +38,7 @@ STORE_NAMES = (
 
 TRACE = json.dumps(
     {
+        "completed_at": "2026-08-02T00:01:00Z",
         "execution_provenance": {
             "cortex_session_id": "session-1",
             "cortex_write_query_ids": ["q-1", "q-2"],
@@ -79,21 +46,8 @@ TRACE = json.dumps(
     }
 )
 
-# Two completed analyses of the same opportunity, newest first, exactly as the
-# store returns them. The newest is the opportunity's active analysis.
-# CREATED_AT is stored exactly as Snowflake returns it, offset and all. The
-# card must show it as a date a person can read.
+# Stored exactly as Snowflake returns it, offset and all.
 CREATED_AT_RAW = "2026-08-01 17:09:33.705000-07:00"
-
-LIST_ROW = (
-    RUN_ID, "opp-1", "v1", "supplier-1", "2026-08-02.v1", "CORTEX_CODE_CLI",
-    "COMPLETED", CREATED_AT_RAW, 1, 1, 2, 1, 2, 2, 2, True,
-)
-
-OLDER_LIST_ROW = (
-    OLDER_RUN_ID, "opp-1", "v1", "supplier-1", "2026-08-02.v1", "CORTEX_CODE_CLI",
-    "COMPLETED", "2026-08-01", 1, 1, 2, 1, 2, 2, 2, True,
-)
 
 LIST_COLUMNS = (
     "RUN_ID", "OPPORTUNITY_ID", "OPPORTUNITY_VERSION", "SUPPLIER_PROFILE_ID",
@@ -102,22 +56,37 @@ LIST_COLUMNS = (
     "SECTION_COUNT", "TASK_COUNT", "IS_COMPLETE",
 )
 
+LIST_ROW = (
+    RUN_ID, "opp-1", "v1", "supplier-1", "2026-08-02.v1", "CORTEX_CODE_CLI",
+    "COMPLETED", CREATED_AT_RAW, 1, 1, 3, 1, 2, 2, 3, True,
+)
+OLDER_LIST_ROW = (
+    OLDER_RUN_ID, "opp-1", "v1", "supplier-1", "2026-08-02.v1", "CORTEX_CODE_CLI",
+    "COMPLETED", "2026-07-28 09:00:00.000000-07:00", 1, 1, 3, 1, 2, 2, 3, True,
+)
+INCOMPLETE_LIST_ROW = (
+    "run-unfinished", "opp-2", "v1", "supplier-1", "2026-08-02.v1", "SNOWPARK",
+    "COMPLETED", "2026-07-20 09:00:00.000000-07:00", 1, 1, 0, 0, 0, 0, 0, False,
+)
 
-def product_responses() -> list[tuple]:
-    """Fake result sets for the complete runs, in store query order."""
+
+def product_responses(list_rows: list[tuple] | None = None) -> list[tuple]:
+    """Fake result sets for one complete run, in store query order."""
     return [
-        ("SELECT a.run_id", LIST_COLUMNS, [LIST_ROW, OLDER_LIST_ROW]),
+        ("SELECT a.run_id", LIST_COLUMNS, [LIST_ROW, OLDER_LIST_ROW] if list_rows is None else list_rows),
         (
             "SELECT * FROM BIDPILOT_DEMO.BIDPILOT.AGENT_RUNS WHERE run_id",
             ("RUN_ID", "OPPORTUNITY_ID", "OPPORTUNITY_VERSION", "SUPPLIER_PROFILE_ID",
-             "POLICY_VERSION", "PROVIDER", "STATE", "CREATED_AT", "TRACE"),
+             "POLICY_VERSION", "PROVIDER", "STATE", "CREATED_AT", "TRACE",
+             "SUPPLIER_PROFILE_VERSION"),
             [(RUN_ID, "opp-1", "v1", "supplier-1", "2026-08-02.v1", "CORTEX_CODE_CLI",
-              "COMPLETED", "2026-08-02", TRACE)],
+              "COMPLETED", CREATED_AT_RAW, TRACE, "fixture-v1")],
         ),
         (
             "SELECT o.*",
-            ("OPPORTUNITY_ID", "TITLE", "BUYER_OBJECTIVE"),
-            [("opp-1", "Public data quality service", "Improve public-data reliability")],
+            ("OPPORTUNITY_ID", "TITLE", "BUYER_OBJECTIVE", "SCOPE", "SOURCE_STATUS"),
+            [("opp-1", "Public data quality service", "Improve public-data reliability.",
+              "Data quality remediation", "historical-demo-replay")],
         ),
         ("SELECT p.*", ("SUPPLIER_PROFILE_ID", "SUPPLIER_NAME"), [("supplier-1", "Northstar Systems")]),
         (
@@ -130,11 +99,12 @@ def product_responses() -> list[tuple]:
             ("RUN_ID", "STRATEGY_ID", "TITLE", "STATEMENT", "SELECTED", "PROOF_CARDS",
              "WEAKNESS", "MITIGATION"),
             [
-                (RUN_ID, "s-1", "Technical approach", "Win technical approach.", True,
-                 '[{"kind": "past project", "label": "City Open Data"}]',
-                 "No public-sector API reference", "Name the delivery lead"),
-                (RUN_ID, "s-2", "Operational continuity", "Win operational continuity.", False,
-                 "[]", None, None),
+                (RUN_ID, "s-1", "Proven data quality operations", "Win on recorded defect reduction.",
+                 True, '[{"project": "City Open Data", "relevance": "Reduced recurring defects"}]',
+                 "No prior engagement with this buyer.", "Transferable evidence from City Open Data."),
+                (RUN_ID, "s-2", "Zero-interruption continuity", "Win on uninterrupted service.",
+                 False, "[]", None, None),
+                (RUN_ID, "s-3", "Capacity surplus", "Win on available hours.", False, "[]", None, None),
             ],
         ),
         (
@@ -143,20 +113,18 @@ def product_responses() -> list[tuple]:
             [
                 (RUN_ID, "Technical approach", 60, '["City Open Data"]',
                  "Deliver a measured data-quality improvement.", "Solution lead"),
-                (RUN_ID, "Price", 40, "[]", "Price against the delivery envelope.", "Bid manager"),
+                (RUN_ID, "Price", 40, '["availability:900h"]',
+                 "Price against the delivery envelope.", "Commercial lead"),
             ],
         ),
         (
             "SELECT * FROM BIDPILOT_DEMO.BIDPILOT.PURSUIT_TASKS",
             ("RUN_ID", "TASK_ID", "TASK_NAME", "OWNER", "STATUS"),
             [
-                (RUN_ID, "rt-1-tech", "Add validation detail to the technical response",
-                 "Solution lead", "OPEN"),
-                # A real red-team control: it reviews the whole proposal and
-                # maps to no single scored criterion.
                 (RUN_ID, "rt-scope-creep-check", "Confirm the offer stays inside the tendered scope",
-                 "Bid manager", "OPEN"),
-                (RUN_ID, "t-1", "Own the Price response", "Bid manager", "OPEN"),
+                 "Bid manager", "COMPLETE"),
+                (RUN_ID, "t-1", "Own the Price response", "Commercial lead", "COMPLETE"),
+                (RUN_ID, "t-2", "Assemble the submission package", "Bid manager", "IN_PROGRESS"),
             ],
         ),
         (
@@ -179,7 +147,7 @@ def product_responses() -> list[tuple]:
             "AS is_complete",
             ("AGENT_COUNT", "DECISION_COUNT", "STRATEGY_COUNT", "SELECTED_STRATEGY_COUNT",
              "PLAN_COUNT", "SECTION_COUNT", "TASK_COUNT", "IS_COMPLETE"),
-            [(1, 1, 2, 1, 2, 2, 2, True)],
+            [(1, 1, 3, 1, 2, 2, 3, True)],
         ),
     ]
 
@@ -229,217 +197,466 @@ def product_app(monkeypatch) -> AppTest:
     return AppTest.from_file(APP_PATH)
 
 
-def test_public_mode_enters_the_product_without_the_development_selector(monkeypatch) -> None:
-    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
-        connect.return_value = FakeConnection(product_responses())
-        app = product_app(monkeypatch)
-        app.run(timeout=60)
+def markdown_of(app: AppTest) -> str:
+    return " ".join(item.value for item in app.markdown)
+
+
+def opened_at(app: AppTest, stage: int, run_id: str = RUN_ID) -> AppTest:
+    app.session_state[ui.STAGE_KEY] = stage
+    app.session_state[ui.RUN_KEY] = run_id
+    app.run(timeout=60)
+    return app
+
+
+# ---------------------------------------------------------------------------
+# Production states
+# ---------------------------------------------------------------------------
+
+
+def test_missing_connection_is_a_configuration_error_with_a_recovery_instruction(monkeypatch) -> None:
+    monkeypatch.delenv("BIDPILOT_SNOWFLAKE_CONNECTION", raising=False)
+    st.cache_data.clear()
+    app = AppTest.from_file(APP_PATH)
+    app.run(timeout=60)
 
     assert not app.exception
-    workflow_labels = [option for widget in app.radio for option in widget.options]
-    assert "Tender intake" not in workflow_labels
-    assert "Bid Room replay" not in workflow_labels
-    # The primary state carries the current stage. The labels stay bare.
-    stage_labels = [button.label for button in app.button]
-    for label in ("01 · Opportunities", "02 · Bid Decision", "03 · Win Plan", "04 · Proposal Room"):
-        assert label in stage_labels
-    assert not any("current stage" in label for label in stage_labels)
-    assert any("Open bid decision" == button.label for button in app.button)
+    markdown = markdown_of(app)
+    assert "BIDPILOT_SNOWFLAKE_CONNECTION" in markdown
+    assert "does not fall back to local fixtures" in markdown
+    assert "bidpilot-reader" in markdown
+    # No tender is invented while the workspace is unconfigured.
+    assert "Public data quality service" not in markdown
 
 
-def test_opportunities_screen_reads_as_a_tender_choice_not_a_run_table(monkeypatch) -> None:
+def test_connection_failure_stays_visible_and_offers_a_working_retry(monkeypatch) -> None:
     with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
-        connect.return_value = FakeConnection(product_responses())
+        connect.side_effect = RuntimeError("network unreachable")
         app = product_app(monkeypatch)
         app.run(timeout=60)
-
-    assert not app.exception
-    markdown = " ".join(item.value for item in app.markdown)
-    assert "Choose an opportunity" in markdown
-    assert "Opportunities with a persisted run" not in markdown
-    # The opportunity names itself with its stored title and objective.
-    assert "Public data quality service" in markdown
-    assert "Improve public-data reliability" in markdown
-    assert "Northstar Systems" in markdown
-    # The run ID is provenance, never the visible label of the choice.
-    assert RUN_ID not in markdown
-    # No account inventory, no connection or role on the working screen.
-    assert "recorded in this account" not in markdown
-    assert "BIDPILOT_READER" not in markdown
-
-
-def test_opportunities_screen_keeps_older_analyses_under_a_disclosure(monkeypatch) -> None:
-    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
-        connect.return_value = FakeConnection(product_responses())
-        app = product_app(monkeypatch)
-        app.run(timeout=60)
-
-    assert not app.exception
-    # Two completed runs, one opportunity: the latest is active, the earlier
-    # one stays reachable rather than competing as a second choice.
-    assert app.session_state["product_run_id"] == RUN_ID
-    assert any("Previous analyses (1)" in item.label for item in app.expander)
-    assert app.button(key=f"open-analysis-{OLDER_RUN_ID}")
-
-
-def test_working_screens_carry_no_internal_store_names(monkeypatch) -> None:
-    """Stages 0 to 2 speak product language. Store names live in Run proof."""
-    for stage in (0, 1, 2):
-        with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
-            connect.return_value = FakeConnection(product_responses())
-            app = product_app(monkeypatch)
-            app.session_state["product_stage"] = stage
-            app.session_state["product_run_id"] = RUN_ID
-            app.run(timeout=60)
 
         assert not app.exception
-        markdown = " ".join(item.value for item in app.markdown)
-        for name in STORE_NAMES:
-            assert name not in markdown, f"{name} leaked onto stage {stage}"
+        assert "network unreachable" not in markdown_of(app)
+        assert "temporarily unavailable" in markdown_of(app)
+        assert "Snowflake could not be reached" in markdown_of(app)
+
+        # The retry must re-query rather than replay the cached failure.
+        connect.side_effect = None
+        connect.return_value = FakeConnection(product_responses())
+        app.button(key="bp-retry").click()
+        app.run(timeout=60)
+
+    assert not app.exception
+    assert "Snowflake could not be reached" not in markdown_of(app)
+    assert "Public data quality service" in markdown_of(app)
 
 
-def test_public_mode_walks_the_four_stages_of_one_persisted_run(monkeypatch) -> None:
+def test_no_complete_run_is_an_empty_state_that_invents_no_tender(monkeypatch) -> None:
+    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
+        connect.return_value = FakeConnection(product_responses(list_rows=[INCOMPLETE_LIST_ROW]))
+        app = product_app(monkeypatch)
+        app.run(timeout=60)
+
+    assert not app.exception
+    markdown = markdown_of(app)
+    assert "No tender has a completed analysis" in markdown
+    assert "No tender is invented in the meantime." in markdown
+    # The unfinished run is reported as unfinished, never opened as a tender.
+    assert "Analyses that did not finish" in markdown
+    assert not [button for button in app.button if button.label.startswith("Open bid decision")]
+
+
+def test_a_selected_run_that_vanishes_returns_to_opportunities_with_an_explanation(monkeypatch) -> None:
+    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
+        connect.return_value = FakeConnection(product_responses())
+        app = product_app(monkeypatch)
+        app.session_state[ui.STAGE_KEY] = 2
+        app.session_state[ui.RUN_KEY] = OTHER_RUN_ID
+        app.run(timeout=60)
+
+    assert not app.exception
+    assert app.session_state[ui.STAGE_KEY] == 0
+    markdown = markdown_of(app)
+    assert "That analysis is no longer available." in markdown
+    assert "Opportunities" in markdown
+
+
+def test_no_reference_only_control_reaches_production(monkeypatch) -> None:
     with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
         connect.return_value = FakeConnection(product_responses())
         app = product_app(monkeypatch)
         app.run(timeout=60)
-
-        app.button(key="open-bid-decision").click()
-        app.run(timeout=60)
-        assert app.session_state["product_stage"] == 1
-        decision_markdown = " ".join(item.value for item in app.markdown)
-        assert "Why this is the decision" in decision_markdown
-        # Concise natural English, and no repeated "recorded".
-        assert "No eligibility gaps and no capacity shortfall." in decision_markdown
-        assert "no missing eligibility recorded" not in decision_markdown
-        # The header already names the opportunity and the supplier.
-        assert "Opportunity and supplier in context" not in decision_markdown
-
-        app.button(key="forward-to-2").click()
-        app.run(timeout=60)
-        assert app.session_state["product_stage"] == 2
-        assert any("Official weighted evaluation score map" in item.value for item in app.markdown)
-        assert any("Selected Win Position" in item.value for item in app.markdown)
-
-        app.button(key="forward-to-3").click()
-        app.run(timeout=60)
-        assert app.session_state["product_stage"] == 3
+        first = markdown_of(app) + " ".join(button.label for button in app.button)
+        opened_at(app, 3)
+        fourth = markdown_of(app) + " ".join(button.label for button in app.button)
 
     assert not app.exception
-    draft = app.text_area(key=f"authenticated-draft::{RUN_ID}")
-    assert "## Technical approach" in draft.value
-    assert app.download_button
+    for forbidden in ("workspace state", "Detach recorded asset", "Reference control", "Loading state"):
+        assert forbidden not in first
+        assert forbidden not in fourth
 
 
-def test_proposal_room_renders_review_findings_as_readable_cards(monkeypatch) -> None:
-    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
-        connect.return_value = FakeConnection(product_responses())
-        app = product_app(monkeypatch)
-        app.session_state["product_stage"] = 3
-        app.session_state["product_run_id"] = RUN_ID
-        app.run(timeout=60)
-
-    assert not app.exception
-    markdown = " ".join(item.value for item in app.markdown)
-    # Stacked cards, not a three-column table that shreds Owner and Status.
-    assert 'class="br-find"' in markdown
-    assert "Finding and closure action" not in markdown
-    # Every persisted finding stays visible with its owner and its status.
-    assert "Add validation detail to the technical response" in markdown
-    assert "Owner · Solution lead" in markdown
-    # The rt-N-<slug> convention still names the criterion the finding is on.
-    assert "Technical approach" in markdown
-    # A control over the whole proposal is labelled for what it is, not as a
-    # gap in the record.
-    assert "Confirm the offer stays inside the tendered scope" in markdown
-    assert "Cross-cutting review" in markdown
-    assert "Criterion not recorded" not in markdown
-    # Owned work keeps its own zone in the same column.
-    assert "Own the Price response" in markdown
+# ---------------------------------------------------------------------------
+# Stage 1 — Opportunities
+# ---------------------------------------------------------------------------
 
 
-def test_proposal_room_titles_the_work_as_turning_the_plan_into_a_proposal(monkeypatch) -> None:
-    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
-        connect.return_value = FakeConnection(product_responses())
-        app = product_app(monkeypatch)
-        app.session_state["product_stage"] = 3
-        app.session_state["product_run_id"] = RUN_ID
-        app.run(timeout=60)
-
-    assert not app.exception
-    markdown = " ".join(item.value for item in app.markdown)
-    assert "Turn the win plan into a proposal" in markdown
-    assert "Write the proposal this bid earned" not in markdown
-    # The explanatory sentence stays with it.
-    assert "Sections are composed from the stored plan and its written fragments." in markdown
-
-
-def test_opportunity_card_shows_a_readable_date_and_ranks_its_facts(monkeypatch) -> None:
+def test_opportunities_groups_runs_by_tender_and_makes_the_latest_analysis_primary(monkeypatch) -> None:
     with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
         connect.return_value = FakeConnection(product_responses())
         app = product_app(monkeypatch)
         app.run(timeout=60)
 
     assert not app.exception
-    card = next(item.value for item in app.markdown if 'class="br-opp__t"' in item.value)
-    # The raw stored timestamp never reaches the card.
-    assert "Aug 1, 2026" in card
-    assert CREATED_AT_RAW not in card
-    # Supplier and Mapped score lead; the rest is marked secondary so it can
-    # stand down below 640px without leaving the DOM.
-    assert "br-facts--opp" in card
-    assert card.index("Supplier") < card.index("Latest analysis")
-    for secondary in ("Latest analysis", "Proposal sections", "Owned work"):
-        head = card[: card.index(secondary)]
-        assert head.rindex("br-fact--secondary") > head.rindex('class="br-fact"')
+    markdown = markdown_of(app)
+    # One tender row, named by the tender rather than by a run identifier.
+    assert "Public data quality service" in markdown
+    assert "1 recorded" in markdown
+    assert f"Current analysis {RUN_ID}" in markdown
+    assert "Completed 2 August 2026" in markdown
+    # The earlier analysis stays as history, not as a competing choice.
+    assert OLDER_RUN_ID in markdown
+    assert "Superseded" in markdown
+    openers = [button for button in app.button if button.label.startswith("Open bid decision")]
+    assert len(openers) == 1
+    assert "Public data quality service" in openers[0].label
 
 
-def test_display_date_reads_stored_timestamps_without_shifting_them(monkeypatch, tmp_path: Path) -> None:
-    module = app_module(monkeypatch, tmp_path)
-    # An offset timestamp keeps the date its own offset records, even though
-    # the same instant is the next day in UTC.
-    assert module.display_date(CREATED_AT_RAW) == "Aug 1, 2026"
-    assert module.display_date(
+def test_the_current_row_opens_its_bid_decision(monkeypatch) -> None:
+    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
+        connect.return_value = FakeConnection(product_responses())
+        app = product_app(monkeypatch)
+        app.run(timeout=60)
+        app.button(key=f"bp-open-{RUN_ID}").click()
+        app.run(timeout=60)
+
+    assert not app.exception
+    assert app.session_state[ui.STAGE_KEY] == 1
+    assert app.session_state[ui.RUN_KEY] == RUN_ID
+
+
+# ---------------------------------------------------------------------------
+# Stage 2 — Bid decision
+# ---------------------------------------------------------------------------
+
+
+def test_bid_decision_settles_the_verdict_and_edits_nothing(monkeypatch) -> None:
+    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
+        connect.return_value = FakeConnection(product_responses())
+        app = product_app(monkeypatch)
+        opened_at(app, 1)
+
+    assert not app.exception
+    markdown = markdown_of(app)
+    assert "PURSUE" in markdown
+    assert "Should we bid on Public data quality service?" in markdown
+    assert "Improve public-data reliability." in markdown
+    assert "Northstar Systems" in markdown
+    # Recorded versions and provenance sit beside the answer, not inside it.
+    for identifier in ("Tender version", "Supplier profile version", "Policy version", "Analysis run"):
+        assert identifier in markdown
+    assert "historical demo replay" in markdown
+    # The run's own recorded completion is what the word "Completed" names.
+    assert "2 August 2026" in markdown
+    # Plain language, over the two recorded policy facts.
+    assert "every recorded eligibility requirement was met" in markdown
+    assert "Nothing on this screen is editable." in markdown
+    # Nothing settled is offered as a form control.
+    assert not app.text_area
+    assert not app.radio
+    assert not app.selectbox
+    assert not app.text_input
+
+
+def test_policy_dimensions_state_every_result_in_words(monkeypatch) -> None:
+    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
+        connect.return_value = FakeConnection(product_responses())
+        app = product_app(monkeypatch)
+        opened_at(app, 1)
+
+    markdown = markdown_of(app)
+    for name in ("Eligibility", "Delivery capacity", "Comparable delivery"):
+        assert name in markdown
+    assert "3 of 3 passed" in markdown
+    assert "0 hours" in markdown
+    assert "Passed" in markdown
+
+
+# ---------------------------------------------------------------------------
+# Stage 3 — Win plan
+# ---------------------------------------------------------------------------
+
+
+def test_win_plan_shows_the_official_weights_and_every_criterion_fact(monkeypatch) -> None:
+    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
+        connect.return_value = FakeConnection(product_responses())
+        app = product_app(monkeypatch)
+        opened_at(app, 2)
+
+    assert not app.exception
+    markdown = markdown_of(app)
+    assert "Official score map" in markdown
+    assert "Weights are fixed by the tender and total 100." in markdown
+    for fact in ("Technical approach", "Price", "City Open Data", "Solution lead", "Commercial lead"):
+        assert fact in markdown
+    # The gap state is named, never signalled by colour alone.
+    assert "Covered" in markdown
+
+
+def test_persisted_strategies_are_comparative_records_not_editable_inputs(monkeypatch) -> None:
+    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
+        connect.return_value = FakeConnection(product_responses())
+        app = product_app(monkeypatch)
+        opened_at(app, 2)
+
+    assert not app.exception
+    markdown = markdown_of(app)
+    # All three recorded positions are shown, with exactly one selected.
+    for title in ("Proven data quality operations", "Zero-interruption continuity", "Capacity surplus"):
+        assert title in markdown
+    assert markdown.count(">Selected<") == 1
+    assert markdown.count("Comparative record") == 2
+    assert "The submitted analysis is immutable" in markdown
+    # The immutable record offers no way to re-select a position.
+    assert not app.radio
+    assert not app.selectbox
+    # Only the selected position flows onward.
+    assert "Proven data quality operations" in markdown
+
+
+# ---------------------------------------------------------------------------
+# Stage 4 — Proposal room
+# ---------------------------------------------------------------------------
+
+
+def test_proposal_room_composes_the_persisted_fragments_under_their_criteria(monkeypatch) -> None:
+    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
+        connect.return_value = FakeConnection(product_responses())
+        app = product_app(monkeypatch)
+        opened_at(app, 3)
+
+    assert not app.exception
+    draft = app.text_area(key=f"bp-draft::{RUN_ID}").value
+    assert "## Technical approach" in draft
+    assert "## Price" in draft
+    assert "Validation: measured API regression." in draft
+    markdown = markdown_of(app)
+    # Every persisted task is listed with the role that owns it.
+    for task in ("Confirm the offer stays inside the tendered scope", "Own the Price response",
+                 "Assemble the submission package"):
+        assert task in markdown
+    assert "3 recorded tasks" in markdown
+    assert "Review passed" in markdown
+    assert not app.download_button[0].disabled
+
+
+def test_editing_the_draft_reruns_the_review_and_closes_and_reopens_the_download(monkeypatch) -> None:
+    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
+        connect.return_value = FakeConnection(product_responses())
+        app = product_app(monkeypatch)
+        opened_at(app, 3)
+        assert not app.download_button[0].disabled
+
+        # Dropping a score-bearing section's recorded asset must fail review.
+        broken = "## Technical approach\n\nNothing recorded here.\n\n## Price\n\nPriced.\n"
+        app.text_area(key=f"bp-draft::{RUN_ID}").set_value(broken)
+        app.run(timeout=60)
+        assert "Review failed" in markdown_of(app)
+        assert app.download_button[0].disabled
+
+        # Repairing it reopens the download with the exact edited text.
+        repaired = (
+            "## Technical approach\n\nCity Open Data.\n"
+            "Validation: measured API regression.\nBuyer outcome: sustained reliability.\n\n"
+            "## Price\n\nPriced against availability:900h.\n"
+        )
+        app.text_area(key=f"bp-draft::{RUN_ID}").set_value(repaired)
+        app.run(timeout=60)
+
+    assert not app.exception
+    assert "Review passed" in markdown_of(app)
+    download = app.download_button[0]
+    assert not download.disabled
+    # The download carries the edited text, not the composed original: the
+    # media URL is the content's own identity.
+    identity = _calculate_file_id(repaired.encode(), "text/markdown", f"{RUN_ID}.md")
+    assert download.proto.url.endswith(f"/{identity}.md")
+    # The composed original no longer identifies the download.
+    stale = _calculate_file_id(broken.encode(), "text/markdown", f"{RUN_ID}.md")
+    assert stale not in download.proto.url
+    assert app.session_state[f"bp-draft::{RUN_ID}"] == repaired
+
+
+def test_execution_provenance_stays_in_one_collapsed_section(monkeypatch) -> None:
+    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
+        connect.return_value = FakeConnection(product_responses())
+        app = product_app(monkeypatch)
+        opened_at(app, 3)
+
+    assert not app.exception
+    expanders = [item for item in app.expander]
+    assert len(expanders) == 1
+    assert expanders[0].label == "Execution provenance"
+    assert expanders[0].proto.expanded is False
+    # The evidence itself is inside it, not spread across the screen.
+    assert "session-1" in markdown_of(app)
+    assert "q-1" in markdown_of(app)
+
+
+def test_working_screens_keep_internal_store_names_out_of_sight(monkeypatch) -> None:
+    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
+        connect.return_value = FakeConnection(product_responses())
+        app = product_app(monkeypatch)
+        for stage in (0, 1, 2):
+            opened_at(app, stage)
+            markdown = markdown_of(app)
+            for name in STORE_NAMES:
+                assert name not in markdown, f"{name} reached stage {stage + 1}"
+
+
+# ---------------------------------------------------------------------------
+# Shell and accessibility contract
+# ---------------------------------------------------------------------------
+
+
+def test_every_stage_announces_its_own_name_and_keeps_a_named_control(monkeypatch) -> None:
+    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
+        connect.return_value = FakeConnection(product_responses())
+        app = product_app(monkeypatch)
+        for stage, name in enumerate(ui.STAGES):
+            opened_at(app, stage)
+            assert f"Stage {stage + 1} of 4 — {name}" in markdown_of(app)
+            labels = [button.label for button in app.button]
+            for index, stage_name in enumerate(ui.STAGES):
+                assert f"{index + 1} · {stage_name}" in labels
+
+
+def test_the_stepper_moves_between_stages(monkeypatch) -> None:
+    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
+        connect.return_value = FakeConnection(product_responses())
+        app = product_app(monkeypatch)
+        app.run(timeout=60)
+        app.button(key="bp-step-2").click()
+        app.run(timeout=60)
+        assert app.session_state[ui.STAGE_KEY] == 2
+        app.button(key="bp-back-2").click()
+        app.run(timeout=60)
+
+    assert not app.exception
+    assert app.session_state[ui.STAGE_KEY] == 1
+
+
+# ---------------------------------------------------------------------------
+# Projection — no widget needed
+# ---------------------------------------------------------------------------
+
+
+def test_display_date_reads_stored_timestamps_without_shifting_them() -> None:
+    assert ui.display_date(CREATED_AT_RAW) == "1 August 2026"
+    assert ui.display_date(
         dt.datetime(2026, 8, 1, 17, 9, tzinfo=dt.timezone(dt.timedelta(hours=-7)))
-    ) == "Aug 1, 2026"
-    assert module.display_date(dt.date(2026, 8, 1)) == "Aug 1, 2026"
+    ) == "1 August 2026"
+    assert ui.display_date(dt.date(2026, 8, 1)) == "1 August 2026"
     # Anything unparseable is shown exactly as stored rather than hidden.
-    assert module.display_date("first quarter 2026") == "first quarter 2026"
-    assert module.display_date(None) == ""
+    assert ui.display_date("first quarter 2026") == "first quarter 2026"
+    assert ui.display_date(None) == ""
 
 
-def test_cross_cutting_label_covers_every_real_red_team_task(monkeypatch, tmp_path: Path) -> None:
-    """The four authored controls map to no criterion, and none is invented."""
-    module = app_module(monkeypatch, tmp_path)
-    criteria = ["Technical approach", "Comparable delivery", "Delivery team", "Price"]
-    for task_id in (
-        "rt-capacity-overcommit",
-        "rt-credential-drift",
-        "rt-hallucination-audit",
-        "rt-scope-creep-check",
-    ):
-        task = {"task_id": task_id, "task_name": "Recorded control", "owner": "Bid manager"}
-        assert module.finding_criterion(task, criteria) == ""
-        card = module.review_finding_card(task, criteria)
-        assert "Cross-cutting review" in card
-        assert 'data-missing="false"' in card
-    # A criterion-bearing identifier is still named by its criterion.
-    assert module.finding_criterion({"task_id": "rt-1-tech"}, criteria) == "Technical approach"
+def test_group_by_opportunity_keeps_the_newest_analysis_current() -> None:
+    groups = ui.group_by_opportunity(
+        [
+            {"run_id": "b", "opportunity_id": "opp-1"},
+            {"run_id": "a", "opportunity_id": "opp-1"},
+            {"run_id": "c", "opportunity_id": "opp-2"},
+        ]
+    )
+    assert [group["opportunity_id"] for group in groups] == ["opp-1", "opp-2"]
+    assert groups[0]["current"]["run_id"] == "b"
+    assert [run["run_id"] for run in groups[0]["history"]] == ["a"]
+    assert groups[1]["history"] == []
 
 
-def test_public_mode_download_follows_the_edited_draft_review(monkeypatch) -> None:
-    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
-        connect.return_value = FakeConnection(product_responses())
-        app = product_app(monkeypatch)
-        app.session_state["product_stage"] = 3
-        app.session_state["product_run_id"] = RUN_ID
-        app.run(timeout=60)
+@pytest.mark.parametrize(
+    ("missing", "gap", "status", "expected"),
+    [
+        ([], 0.0, "PURSUE", "every recorded eligibility requirement was met"),
+        (["ISO 27001"], 0.0, "NO-GO", "1 eligibility requirement is still unmet"),
+        ([], 120.0, "NO-GO", "delivery capacity is 120 hours short"),
+    ],
+)
+def test_decision_summary_states_the_recorded_facts(missing, gap, status, expected) -> None:
+    view = {
+        "decision": {"status": status},
+        "missing_eligibility": missing,
+        "capacity_gap_hours": gap,
+        "status": status,
+    }
+    assert expected in ui.decision_summary(view)
 
-        assert any("Review passed" in item.value for item in app.markdown)
 
-        app.text_area(key=f"authenticated-draft::{RUN_ID}").set_value("## Price\n\nNothing else.")
-        app.run(timeout=60)
+def test_policy_dimensions_only_claim_comparable_delivery_on_a_pursue_verdict() -> None:
+    pursue = ui.policy_dimensions(
+        {"missing_eligibility": [], "capacity_gap_hours": 0.0, "status": "PURSUE"}
+    )
+    assert [item["name"] for item in pursue] == ["Eligibility", "Delivery capacity", "Comparable delivery"]
+    assert all(item["state"] == "pass" for item in pursue)
 
-    assert not app.exception
-    assert any("Review failed" in item.value for item in app.markdown)
-    assert app.download_button[0].disabled
+    blocked = ui.policy_dimensions(
+        {"missing_eligibility": ["ISO 27001"], "capacity_gap_hours": 40.0, "status": "NO-GO"}
+    )
+    assert [item["name"] for item in blocked] == ["Eligibility", "Delivery capacity"]
+    assert all(item["state"] == "open" for item in blocked)
+    assert "ISO 27001" in blocked[0]["detail"]
+
+
+def test_completion_date_comes_from_the_run_not_from_the_row_that_stored_it() -> None:
+    stored = {
+        "run": {
+            "run_id": RUN_ID,
+            "created_at": CREATED_AT_RAW,
+            "trace": {"completed_at": "2026-08-02T00:01:00Z"},
+        },
+        "opportunity": {}, "supplier": {}, "decision": {},
+        "strategies": [], "blueprint": [], "sections": [], "tasks": [],
+    }
+    view = ui.build_run_view(stored, RUN_ID)
+    assert view["completed_on"] == "2 August 2026"
+    assert view["recorded_on"] == "1 August 2026"
+
+    # A run with no recorded completion claims none.
+    stored["run"]["trace"] = {}
+    bare = ui.build_run_view(stored, RUN_ID)
+    assert bare["completed_on"] == ""
+    assert bare["recorded_on"] == "1 August 2026"
+
+
+def test_build_run_view_reports_coverage_without_supplying_a_missing_asset() -> None:
+    view = ui.build_run_view(
+        {
+            "run": {"run_id": RUN_ID, "opportunity_id": "opp-1", "trace": {}},
+            "opportunity": {"title": "Public data quality service"},
+            "supplier": {"supplier_name": "Northstar Systems"},
+            "decision": {"status": "PURSUE", "missing_eligibility": "[]", "capacity_gap_hours": 0},
+            "strategies": [{"strategy_id": "s-1", "title": "Selected", "selected": True}],
+            "blueprint": [
+                {"criterion_name": "Technical approach", "weight": "60.00", "assets": '["City Open Data"]'},
+                {"criterion_name": "Price", "weight": "40.00", "assets": "[]"},
+            ],
+            "sections": [],
+            "tasks": [],
+        },
+        RUN_ID,
+    )
+    assert view["total_weight"] == 100
+    assert view["covered_weight"] == 60
+    assert view["open_weight"] == 40
+    assert [item["gap"] for item in view["criteria"]] == ["covered", "uncovered"]
+    assert view["criteria"][1]["assets"] == []
+    assert view["headline"] == "Public data quality service"
+
+
+def test_record_helpers_never_expose_a_serialised_row() -> None:
+    assert ui.record_label({"project": "City Open Data", "relevance": "Reduced defects"}) == "City Open Data"
+    assert ui.record_detail({"project": "City Open Data", "relevance": "Reduced defects"}) == "Reduced defects"
+    assert ui.as_records('["a", "b"]') == ["a", "b"]
+    assert ui.as_records(None) == []
+    assert ui.humanise("historical-demo-replay") == "historical demo replay"
