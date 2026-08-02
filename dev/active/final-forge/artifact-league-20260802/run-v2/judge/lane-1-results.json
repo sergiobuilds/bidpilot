@@ -1,0 +1,189 @@
+[
+  {
+    "assignment_id": "V2-L1-A1",
+    "blind_id": "ANCHOR:1:low",
+    "scores": {
+      "relevance": 7,
+      "technical": 4,
+      "completeness": 3
+    },
+    "source_locked_scores": {
+      "relevance": 6,
+      "technical": 1,
+      "completeness": 2
+    },
+    "reason": "The problem is broad, the platform is incidental, and the only observed artifact is a static mockup with no complete or authenticated workflow.",
+    "evidence_gaps": [
+      "platform necessity",
+      "working run",
+      "complete product"
+    ],
+    "confidence": 0.99
+  },
+  {
+    "assignment_id": "V2-L1-A2",
+    "blind_id": "ANCHOR:1:mid",
+    "scores": {
+      "relevance": 21,
+      "technical": 25,
+      "completeness": 18
+    },
+    "source_locked_scores": {
+      "relevance": 19,
+      "technical": 19,
+      "completeness": 15
+    },
+    "reason": "A credible operational use case reaches a saved recommendation with schema and tests, but limited provenance, no authenticated agent evidence, and partial judge readiness keep it mid-tier.",
+    "evidence_gaps": [
+      "authenticated agent run",
+      "public demo",
+      "customer validation"
+    ],
+    "confidence": 0.98
+  },
+  {
+    "assignment_id": "V2-L1-A3",
+    "blind_id": "ANCHOR:1:high",
+    "scores": {
+      "relevance": 29,
+      "technical": 39,
+      "completeness": 29
+    },
+    "source_locked_scores": {
+      "relevance": 28,
+      "technical": 39,
+      "completeness": 29
+    },
+    "reason": "The card establishes a narrow high-value workflow, indispensable governed platform execution, reproducible authenticated proof, failure recovery, and a complete public submission package.",
+    "evidence_gaps": [
+      "production customer outcome"
+    ],
+    "confidence": 0.99
+  },
+  {
+    "assignment_id": "V2-L1-C1",
+    "blind_id": "BLIND-4D4B3DACD573",
+    "scores": {
+      "relevance": 29,
+      "technical": 38,
+      "completeness": 29
+    },
+    "source_locked_scores": {
+      "relevance": 27,
+      "technical": 38,
+      "completeness": 29
+    },
+    "reason": "The bid workflow is specific and economically meaningful, while authenticated Cortex Code and Snowpark execution, exact output cardinalities, tests, responsive deployment, video, and deck provide unusually complete proof.",
+    "evidence_gaps": [
+      "paid customer validation",
+      "open live tender submission outcome"
+    ],
+    "confidence": 0.97
+  },
+  {
+    "assignment_id": "V2-L1-C2",
+    "blind_id": "BLIND-87B23B5AE081",
+    "scores": {
+      "relevance": 28,
+      "technical": 35,
+      "completeness": 25
+    },
+    "source_locked_scores": {
+      "relevance": 27,
+      "technical": 29,
+      "completeness": 22
+    },
+    "reason": "Fraud and sanctions screening has a clear enterprise loss-avoidance case, and the repository describes a broad Snowflake-native pipeline with governed decisions, though dashboard access and captured authenticated execution remain incomplete.",
+    "evidence_gaps": [
+      "signed-out access to Snowflake dashboard",
+      "independent production outcome"
+    ],
+    "confidence": 0.9
+  },
+  {
+    "assignment_id": "V2-L1-C3",
+    "blind_id": "BLIND-BC6FBE07614E",
+    "scores": {
+      "relevance": 22,
+      "technical": 29,
+      "completeness": 22
+    },
+    "source_locked_scores": {
+      "relevance": 20,
+      "technical": 22,
+      "completeness": 18
+    },
+    "reason": "The civic transparency problem and multi-role workflow are substantial, but the first buyer is diffuse and repository integrations plus screenshots do not establish a deployed, authenticated Cortex execution trace.",
+    "evidence_gaps": [
+      "public live URL",
+      "authenticated Cortex run provenance",
+      "measured adoption"
+    ],
+    "confidence": 0.91
+  },
+  {
+    "assignment_id": "V2-L1-C4",
+    "blind_id": "BLIND-306F061E94B8",
+    "scores": {
+      "relevance": 27,
+      "technical": 25,
+      "completeness": 22
+    },
+    "source_locked_scores": {
+      "relevance": 25,
+      "technical": 17,
+      "completeness": 19
+    },
+    "reason": "The inventory-to-procurement use case has a clear buyer, costly failure mode, and visible authorization boundary, but emulator compatibility and absent query provenance weaken proof that the public workflow actually depends on Snowflake.",
+    "evidence_gaps": [
+      "authenticated Snowflake execution trace",
+      "proof that public app uses Snowflake",
+      "production outcome"
+    ],
+    "confidence": 0.92
+  },
+  {
+    "assignment_id": "V2-L1-C5",
+    "blind_id": "BLIND-D31D623FEE21",
+    "scores": {
+      "relevance": 27,
+      "technical": 24,
+      "completeness": 15
+    },
+    "source_locked_scores": {
+      "relevance": 26,
+      "technical": 17,
+      "completeness": 10
+    },
+    "reason": "Contract-to-spend monitoring targets measurable leakage with realistic fixtures and deterministic controls, but setup assets and expected results do not substitute for an authenticated run, tested end-to-end output, public product, or demo.",
+    "evidence_gaps": [
+      "authenticated Snowflake run",
+      "public interface",
+      "demo video",
+      "independent test result"
+    ],
+    "confidence": 0.95
+  },
+  {
+    "assignment_id": "V2-L1-C6",
+    "blind_id": "BLIND-D4DABBE06D86",
+    "scores": {
+      "relevance": 22,
+      "technical": 32,
+      "completeness": 19
+    },
+    "source_locked_scores": {
+      "relevance": 18,
+      "technical": 23,
+      "completeness": 14
+    },
+    "reason": "The architecture combines Agent, Analyst, Search, a semantic view, and dynamic refresh coherently, but crowded positioning, credential friction, fallbacks, unresolved licensing, and no captured authenticated or deployed run reduce readiness.",
+    "evidence_gaps": [
+      "public deployment",
+      "captured authenticated run",
+      "resolved license",
+      "customer validation"
+    ],
+    "confidence": 0.92
+  }
+]

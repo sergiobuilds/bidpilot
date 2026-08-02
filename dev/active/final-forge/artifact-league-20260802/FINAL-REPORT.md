@@ -8,17 +8,17 @@ date: 2026-08-02
 
 ## Verdict
 
-BidPilot ranks first in both the parity-reconstructed and source-locked views of the six scoreable CoCo CLI Hackathon artifacts. Four independent top-two judgments also select BidPilot over VF Logistics after the left/right order is reversed.
+BidPilot ranks first in both the parity-reconstructed and source-locked views of the six scoreable CoCo CLI Hackathon artifacts. The corrected v2 assignment gives every candidate exactly one measurement from each of three independent judges. Four new top-two judgments also select BidPilot over VF Logistics after the left/right order is reversed.
 
 | View | BidPilot | Runner-up | Margin |
 |---|---:|---:|---:|
-| Parity-reconstructed median | 90 | VF Logistics 80 | +10 |
-| Source-locked median | 94 | VF Logistics 78 | +16 |
+| Parity-reconstructed median | 91 | VF Logistics 85 | +6 |
+| Source-locked median | 99 | VF Logistics 83 | +16 |
 
 ## Protocol
 
 - Six candidate cards were frozen before scoring and identified only by random blind IDs.
-- Three independent lanes scored the official rubric: relevance 30, technical execution 40, and completeness 30.
+- Three independent lanes scored the official rubric: relevance 30, technical execution 40, and completeness 30. Every lane contained all six candidates exactly once.
 - Low, mid, and high anchors calibrated each lane before the aggregate was sealed.
 - Every candidate received three measurements. Identity mapping was opened only after `sealed-aggregate.json` existed.
 - The top two then received four fresh pairwise judgments: two in each left/right orientation.
@@ -27,23 +27,23 @@ BidPilot ranks first in both the parity-reconstructed and source-locked views of
 
 | Rank | Candidate | Parity | Source-locked |
 |---:|---|---:|---:|
-| 1 | BidPilot | 90 | 94 |
-| 2 | VF Logistics | 80 | 78 |
-| 3 | Cortex SupplyGuard | 76 | 71 |
-| 4 | Trading Agent App OS | 70 | 65 |
-| 5 | SALAY | 66 | 66 |
-| 6 | Contract Risk and Obligation Auditor | 64 | 64 |
+| 1 | BidPilot | 91 | 99 |
+| 2 | VF Logistics | 85 | 83 |
+| 3 | Cortex SupplyGuard | 74 | 68 |
+| 4 | SALAY | 69 | 65 |
+| 5 | Contract Risk and Obligation Auditor | 67 | 63 |
+| 6 | Trading Agent App OS | 67 | 62 |
 
-SALAY and Trading Agent App OS reverse order between the two views. The top two do not change.
+The top two do not change between views. Contract Risk and Trading Agent tie on the reconstructed view and separate under source lock.
 
 ## Top-two final
 
 | Orientation | BidPilot | VF Logistics | Winner |
 |---|---:|---:|---|
-| BidPilot left, judge 1 | 97 | 90 | BidPilot |
-| BidPilot left, judge 2 | 96 | 92 | BidPilot |
-| BidPilot right, judge 1 | 96 | 90 | BidPilot |
-| BidPilot right, judge 2 | 93 | 90 | BidPilot |
+| BidPilot left, judge 1 | 97 | 88 | BidPilot |
+| BidPilot left, judge 2 | 91 | 87 | BidPilot |
+| BidPilot right, judge 1 | 96 | 87 | BidPilot |
+| BidPilot right, judge 2 | 95 | 91 | BidPilot |
 
 BidPilot wins 4–0. The left item wins two of four non-ties, so observed position bias is 50%, below the 65% warning threshold. All four judgments identify the same decisive advantage: authenticated, persisted, replayable end-to-end execution evidence rather than implementation claims alone.
 
@@ -56,9 +56,12 @@ BidPilot wins 4–0. The left item wins two of four non-ties, so observed positi
 
 ## Evidence index
 
-- Frozen inputs and hashes: `run/protocol/freeze-manifest.json`
-- Balanced assignments: `run/protocol/assignments.json`
-- Three lane results: `run/judge/lane-1-results.json`, `lane-2-results.json`, `lane-3-results.json`
-- Sealed pre-reveal aggregate: `run/sealed-aggregate.json`
-- Post-seal identity reveal: `run/revealed-ranking.json`
-- Top-two judgments: `run/judge/pair-ab-1.json`, `pair-ab-2.json`, `pair-ba-1.json`, `pair-ba-2.json`
+- Frozen v2 inputs and hashes: `run-v2/protocol/freeze-manifest.json`
+- Balanced v2 assignments: `run-v2/protocol/assignments.json`
+- Judge provenance: `run-v2/protocol/judge-provenance.json`
+- Three lane results: `run-v2/judge/lane-1-results.json`, `lane-2-results.json`, `lane-3-results.json`
+- Sealed pre-reveal aggregate: `run-v2/sealed-aggregate.json`
+- Post-seal identity reveal: `run-v2/revealed-ranking.json`
+- Top-two judgments: `run-v2/judge/pair-ab-1.json`, `pair-ab-2.json`, `pair-ba-1.json`, `pair-ba-2.json`
+
+The earlier `run/` directory is retained as superseded audit history. Its assignment plan was not one-candidate-per-lane balanced and must not be used for the final result.

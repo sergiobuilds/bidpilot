@@ -1,0 +1,40 @@
+{
+  "orientation": {
+    "left": "BLIND-4D4B3DACD573",
+    "right": "BLIND-87B23B5AE081"
+  },
+  "rubric": {
+    "official_relevance_max": 30,
+    "technical_max": 40,
+    "completeness_max": 30
+  },
+  "scores": {
+    "LEFT": {
+      "official_relevance": 28,
+      "technical": 36,
+      "completeness": 27,
+      "total": 91
+    },
+    "RIGHT": {
+      "official_relevance": 27,
+      "technical": 34,
+      "completeness": 26,
+      "total": 87
+    }
+  },
+  "verdict": "LEFT",
+  "decisive_reason": "LEFT supplies more direct, end-to-end execution evidence for its stated workflow: a completed authenticated run with quantified outputs, provenance, passing tests, and verified deployed responsive captures. RIGHT describes a broad and credible architecture, but its live Snowflake dashboard cannot be inspected without judge credentials and the packet does not state comparable completed-run results.",
+  "evidence_gaps": {
+    "LEFT": [
+      "No paid-customer validation.",
+      "No outcome from an open live tender submission."
+    ],
+    "RIGHT": [
+      "No signed-out access to the Snowflake dashboard.",
+      "No independent production outcome.",
+      "The supplied evidence does not state completed end-to-end pipeline output or test result comparable to LEFT's quantified run evidence."
+    ]
+  },
+  "confidence": "moderate",
+  "confidence_rationale": "The margin follows the supplied execution and access evidence, but both cards leave customer and independent production validation unproven."
+}

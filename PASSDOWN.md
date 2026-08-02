@@ -12,7 +12,7 @@ BidPilot 최종 제출 직전 상태의 복귀 지점입니다.
 - 제안서 엔진의 raw/locked/REVIEW/NO-GO 차단, 배점별 내용 변화, 필수 8영역, 항목별 자산, 고배점 red-team 반례를 독립 재감사했고 모두 통과했습니다.
 - 세 Seed 후보를 동일 정보량으로 블라인드 평가했습니다. 절대점수는 decision-first가 높았지만, 세 레인의 양방향 결선은 모두 scoremap-first를 선택했습니다. 최종 앱은 score map 중심 하이브리드입니다.
 - 전체 테스트는 47개 통과합니다. authenticated AppTest에서 complete run, 9,202자 편집 초안, provenance 화면을 확인했습니다.
-- 현재 산출물 6개를 세 독립 레인으로 재평가한 artifact blind league에서 BidPilot은 parity 90점, source-locked 94점으로 모두 1위였습니다. 2위 VF Logistics와의 좌우 반전 결선도 4대 0으로 이겼습니다.
+- 후보마다 서로 다른 세 심사자가 한 번씩 보도록 균형 재실행한 내부 artifact blind league에서 BidPilot은 parity 91점, source-locked 99점으로 모두 1위였습니다. 2위 VF Logistics와의 새 좌우 반전 결선도 4대 0으로 이겼습니다. 제출문에는 경쟁 우위의 내부 방향성 자료로만 사용합니다.
 - 공개 영상은 `https://storage.googleapis.com/bidpilot-demo-164282963747/BidPilot-Final-Demo.mp4`이며 signed-out HTTP range 요청이 206으로 통과합니다.
 
 ## 다음 작업
