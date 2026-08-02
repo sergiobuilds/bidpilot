@@ -15,6 +15,8 @@ Most proposal tools begin after a team has already decided to bid. BidPilot star
 
 The differentiator is not tender summarization. It is the visible causal chain from the buyer's 40-point criterion to supplier evidence, strategy, proposal content, review, and owned work.
 
+The authenticated product presents that chain as four screens: `Opportunities`, `Bid Decision`, `Win Plan`, and `Proposal Room`. Snowflake and Cortex provenance stays available inside `Run proof` instead of interrupting the bid workflow.
+
 ## Why Snowflake
 
 Snowflake is the operating memory, not a decorative database. The Opportunity Graph joins external tender versions with internal credentials, availability, people, and delivery records. Snowpark executes the pursuit policy next to that data. Cortex Code reads the same graph and persists the selected strategy, rubric response plan, proposal sections, tasks, and trace under one run identifier.
@@ -44,12 +46,14 @@ The matrix runner persists `RUNNING`, `FAILED`, and `COMPLETED` states, requires
 
 | Surface | Verified state |
 |---|---|
-| Python proposal and policy suite | 48 tests pass |
+| Python proposal, policy, store, and four-screen UI suite | 59 tests pass |
 | Snowpark matrix | Four runner-only tender/supplier combinations match the Python policy and complete their persisted lifecycle |
 | Complete Cortex run | One decision, three strategies, four plans, eight sections, twelve tasks, and trace share one `run_id` |
 | Streamlit authenticated mode | Complete run reloads through `BIDPILOT_READER` with editable/downloadable Markdown |
 | Public deployment | `https://bidpilot-demo-tbauoylpra-uc.a.run.app` renders the authenticated run |
 | Responsive authenticated app | Actual Snowflake-backed renders at 1440, 768, and 390 CSS pixels report no horizontal overflow |
+
+The submitted Cloud Run deployment remains the attempt 1 baseline. The WDS four-screen redesign is verified locally against the authenticated reader connection and is waiting for VivoBook visual sign-off before deployment.
 
 Verified public captures are stored under `dev/active/final-forge/public-app-verified/`, `public-app-768/`, and `public-app-390/`. The portal-ready 278.136-second narrated demo is `dev/active/final-forge/BidPilot-Final-Demo.mp4`. A separate 90-second English pitch with burned subtitles is `dev/active/final-forge/BidPilot-90s-Pitch.mp4`; application scenes can be regenerated with `capture-demo.mjs`.
 
@@ -66,3 +70,4 @@ The replay records are synthetic contest fixtures. The included public G2B notic
 ## Change history
 
 - 2026-08-02: Applied runner lifecycle, least-privilege roles, bounded compute, a new Cortex Code run, responsive public deployment, criterion-grouped persisted drafting, and 48-test verification.
+- 2026-08-02: Rebuilt the authenticated UI through Design Forge and the Wanted Design System as a four-screen workflow, then verified 59 tests and no horizontal overflow at 1440, 768, and 390 CSS pixels.

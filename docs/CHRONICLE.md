@@ -40,4 +40,6 @@ canonical_path: /home/elite/projects/personal/products/bidpilot/docs/CHRONICLE.m
 - 2026-08-02 [correction]: 공개 앱에서 persisted proposal fragment가 criterion heading 없이 합쳐져 false missing-section 경고를 내던 문제를 수정했습니다. 네 score-bearing criterion 아래 여덟 fragment를 조합하고 live red-team 통과와 download 활성화를 signed-out 브라우저에서 확인했습니다.
 - 2026-08-02 [submission]: 실제 포털의 3–5분 요건에는 4분 38초 영문 영상을 사용합니다. Goal의 90초 구조도 별도 companion pitch로 보존하되 포털 필수 영상과 혼동하지 않습니다.
 - 2026-08-02 [gate]: 최종 적대 QA는 0.97 PASS입니다. GitHub public 전환과 Hack2Skill final Submit은 Sergio의 명시 승인 전까지 외부 게이트로 남깁니다.
-- 2026-08-02 [submission]: Sergio가 final submission까지 명시 승인했습니다. `geneva29849@gmail.com` OTP 인증 후 저장소를 public으로 전환하고 signed-out 접근을 확인했습니다. GitHub/Deployed Link와 Prototype/MVP의 attempt 1을 각각 최종 평가 확인창에서 제출했으며, 하드 리로드 뒤 challenge, URL, 878자 brief, 영상 URL과 PDF명이 서버에서 복원됐습니다.
+- 2026-08-02 [submission]: Sergio가 final submission까지 명시 승인했습니다. Hack2Skill 계정의 OTP 인증 후 저장소를 public으로 전환하고 signed-out 접근을 확인했습니다. GitHub/Deployed Link와 Prototype/MVP의 attempt 1을 각각 최종 평가 확인창에서 제출했으며, 하드 리로드 뒤 challenge, URL, 878자 brief, 영상 URL과 PDF명이 서버에서 복원됐습니다.
+- 2026-08-02 [design]: 제출 후 UI를 Design Forge의 `wanted-design-system` pack으로 다시 만들었습니다. 공개 제품의 주 흐름을 Opportunities, Bid Decision, Win Plan, Proposal Room 네 화면으로 제한하고 provenance는 Proposal Room의 Run proof로 내렸습니다. 실제 reader run과 59 tests, 1440/768/390 네 화면의 overflow 0을 확인했으며, 기존 Cloud Run은 VivoBook sign-off 전까지 유지합니다.
+- 2026-08-02 [security]: 공개 저장소의 현재 문서에서 제출 계정 이메일을 제거했습니다. 제출 완료 증거에는 계정 주소가 필요하지 않습니다.
