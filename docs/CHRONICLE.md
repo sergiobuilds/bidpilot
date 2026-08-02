@@ -35,3 +35,8 @@ canonical_path: /home/elite/projects/personal/products/bidpilot/docs/CHRONICLE.m
 - 2026-08-02 [validation]: 제안서 엔진의 packet gate, 배점별 내용 변화, canonical 8영역, criterion-specific asset, 상대 최고배점 red-team 반례를 독립 재감사했고 5개 항목 모두 통과했습니다. 전체 테스트는 33개입니다.
 - 2026-08-02 [design]: Seed design system으로 decision-first, scoremap-first, bidroom-first 세 후보를 만들고 동일 정보량의 ARTIFACT blind league를 실행했습니다. 절대점수는 decision-first가 75점으로 높았지만, 세 lane의 양방향 finalist pairwise는 모두 scoremap-first를 선택해 최종 화면을 score map 중심 하이브리드로 확정했습니다.
 - 2026-08-02 [submission]: 공식 Hack2Skill 페이지에서 한국이 Japan & Korea 권역으로 참가 가능하고 행사는 Global·Online이며, 등록 마감은 8월 2일, prototype 제출 마감은 8월 6일임을 재확인했습니다. 공개 rubric은 Relevance 30, Technical 40, Completeness 30입니다.
+- 2026-08-02 [evidence]: runner-only 최종 run `cortex-final-20260802-a`를 만들고 decision 1, strategy 3 중 selected 1, response plan 4, proposal section 8, task 12, Cortex session과 six write query IDs를 reader 역할로 재조회했습니다. 5-credit resource monitor와 query timeout을 실계정에 적용했습니다.
+- 2026-08-02 [validation]: 현재 artifact 6개를 후보별 독립 3회가 되도록 균형 재실행했습니다. BidPilot은 corrected median 91, source-locked 99로 1위였고 VF Logistics와의 AB 2회·BA 2회 결선을 4대 0으로 이겼습니다. 이는 동결 모집단의 측정 승률이며 우승 보장은 아닙니다.
+- 2026-08-02 [correction]: 공개 앱에서 persisted proposal fragment가 criterion heading 없이 합쳐져 false missing-section 경고를 내던 문제를 수정했습니다. 네 score-bearing criterion 아래 여덟 fragment를 조합하고 live red-team 통과와 download 활성화를 signed-out 브라우저에서 확인했습니다.
+- 2026-08-02 [submission]: 실제 포털의 3–5분 요건에는 4분 38초 영문 영상을 사용합니다. Goal의 90초 구조도 별도 companion pitch로 보존하되 포털 필수 영상과 혼동하지 않습니다.
+- 2026-08-02 [gate]: 최종 적대 QA는 0.97 PASS입니다. GitHub public 전환과 Hack2Skill final Submit은 Sergio의 명시 승인 전까지 외부 게이트로 남깁니다.

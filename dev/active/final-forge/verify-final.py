@@ -76,6 +76,22 @@ def main() -> None:
         "local_bytes": video.stat().st_size,
     }
 
+    pitch = FORGE / "BidPilot-90s-Pitch.mp4"
+    pitch_probe = load_json_command([
+        "ffprobe", "-v", "error", "-show_entries", "format=duration,size",
+        "-show_entries", "stream=codec_name,width,height,sample_rate,channels", "-of", "json", str(pitch),
+    ])
+    pitch_streams = {item["codec_name"]: item for item in pitch_probe["streams"]}
+    pitch_duration = float(pitch_probe["format"]["duration"])
+    checks["pitch_90s"] = {
+        "duration_exact_90": pitch_duration == 90.0,
+        "h264_1440x900": pitch_streams.get("h264", {}).get("width") == 1440 and pitch_streams.get("h264", {}).get("height") == 900,
+        "aac_audio": "aac" in pitch_streams,
+        "english_narration_source": (FORGE / "demo-90s-narration.txt").is_file(),
+        "burned_subtitle_source": (FORGE / "demo-90s-subtitles.srt").is_file(),
+        "qa_frames": len(list((FORGE / "demo-90s-qa").glob("*.png"))),
+    }
+
     run = SnowflakeBidRoomStore("bidpilot-reader").load_run("cortex-final-20260802-a")
     trace = run["run"]["trace"]
     checks["snowflake"] = {
@@ -154,6 +170,12 @@ def flatten_failures(checks: dict[str, object]) -> list[str]:
         "video.aac": checks["video"]["aac_audio"],
         "video.audible": checks["video"]["audible"],
         "video.public": checks["video"]["public_range_206"],
+        "pitch.duration_exact_90": checks["pitch_90s"]["duration_exact_90"],
+        "pitch.h264": checks["pitch_90s"]["h264_1440x900"],
+        "pitch.aac": checks["pitch_90s"]["aac_audio"],
+        "pitch.narration": checks["pitch_90s"]["english_narration_source"],
+        "pitch.subtitles": checks["pitch_90s"]["burned_subtitle_source"],
+        "pitch.qa_frames": checks["pitch_90s"]["qa_frames"] == 6,
         "snowflake.completed": checks["snowflake"]["state_completed"],
         "snowflake.cli_version": checks["snowflake"]["cli_version_matches"],
         "snowflake.counts": checks["snowflake"]["counts"] == {"decisions": 1, "strategies": 3, "blueprint": 4, "sections": 8, "tasks": 12},

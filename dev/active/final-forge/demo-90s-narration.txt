@@ -1,0 +1,15 @@
+Government bid teams often lose before writing begins. They chase tenders they cannot credibly win, then draft without following the buyer's score.
+
+BidPilot starts with the pursuit decision. This supplier clears eligibility, capacity, and comparable-delivery gates, so the result is PURSUE. Other supplier and tender combinations produce REVIEW and NO-GO.
+
+Next, the official evaluation matrix becomes the control plane. The forty-point technical criterion leads the response, linked to specific supplier assets and an accountable owner.
+
+The agent compares three distinct Win Positions. It selects Proven Data Quality Operations because the recorded delivery history best matches the buyer's highest-weighted need.
+
+That choice drives the proposal. Eight persisted section fragments are assembled beneath four score-bearing criteria. The draft remains editable, passes the live score-map review, and downloads from the public Bid Room.
+
+The red team challenges the most valuable claims. Missing evidence becomes owned work instead of hidden prose. Twelve tasks cover five delivery owners, four adversarial checks, and three provenance controls.
+
+This is not a prompt wrapper. Snowpark executes the pursuit policy beside governed data. Cortex Code writes strategies, plans, sections, and tasks. Snowflake reloads the completed run through a least-privilege reader, with session and query provenance.
+
+BidPilot answers one commercial question from decision to delivery: should we bid, and if so, how do we win the score. Every pursuit becomes reusable team memory for the next bid.

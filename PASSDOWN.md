@@ -15,10 +15,11 @@ BidPilot 최종 제출 직전 상태의 복귀 지점입니다.
 - 후보마다 서로 다른 세 심사자가 한 번씩 보도록 균형 재실행한 내부 artifact blind league에서 BidPilot은 parity 91점, source-locked 99점으로 모두 1위였습니다. 2위 VF Logistics와의 새 좌우 반전 결선도 4대 0으로 이겼습니다. 제출문에는 경쟁 우위의 내부 방향성 자료로만 사용합니다.
 - 공개 영상은 `https://storage.googleapis.com/bidpilot-demo-164282963747/BidPilot-Final-Demo.mp4`이며 signed-out HTTP range 요청이 206으로 통과합니다.
 - `uv run python dev/active/final-forge/verify-final.py` 한 번으로 git, 48 tests, live DOM, PDF, 영상, Snowflake trace와 blind-league chain을 재검증할 수 있습니다.
+- 포털용 4분 38초 영상과 별도로 Goal 구조를 만족하는 정확히 90초 영문 자막 pitch `dev/active/final-forge/BidPilot-90s-Pitch.mp4`를 만들었습니다.
 
 ## 다음 작업
 
-1. CDP 9222에 실제 Chrome이 열리면 포털 초안을 채웁니다. 현재 원격 9222는 Chrome이 아니라 `svchost`가 점유해 응답이 없습니다.
+1. CDP 9222에 실제 Chrome이 열리면 포털 초안을 채웁니다. 현재 원격 9222는 Chrome이 아니라 `svchost`가 점유해 응답이 없습니다. 대체 비보북 CDP 9447에는 Hack2Skill 로그인 화면이 열려 있으나 인증되지 않았습니다.
 2. Sergio 승인 후 저장소를 public으로 전환하고 signed-out clone을 검증합니다.
 3. 최종 제출 버튼은 Sergio 승인 후에만 누릅니다.
 

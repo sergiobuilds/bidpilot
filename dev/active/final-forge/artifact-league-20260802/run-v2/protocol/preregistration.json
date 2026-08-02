@@ -1,0 +1,17 @@
+{
+  "protocol_version": 2,
+  "decision": "Measure the strongest current artifact under the official 30/40/30 rubric after correcting same-judge replica exposure.",
+  "population": "Six scoreable frozen artifacts; generic prompt and generic RFP-copilot classes are qualitative UNSCORABLE baselines.",
+  "candidate_count": 6,
+  "lanes": 3,
+  "candidate_measurements": 3,
+  "assignment_constraint": "Every lane contains every candidate exactly once; one judge owns one lane only.",
+  "anchor_levels": ["low", "mid", "high"],
+  "aggregation": "Per-lane anchor correction followed by candidate median under relevance 30, technical 40, completeness 30.",
+  "sensitivity": ["parity reconstructed", "source locked"],
+  "identity_rule": "Identity mapping remains private until sealed-aggregate.json exists.",
+  "pairwise_plan": "Top two receive two AB and two BA judgments; warn when left-position wins exceed 65 percent of non-ties.",
+  "promotion_rule": "Highest corrected median must also pass hard gates and win the balanced pairwise final consistently.",
+  "pre_score_protocol_evidence": ["freeze-manifest.json", "assignments.json", "../../prepare_balanced_v2.py"],
+  "recording_note": "This index was added after execution to make the already-frozen pre-score v2 protocol explicit. It does not replace or rewrite the freeze manifest, assignments, sealed aggregate, or preserved v1 failure history."
+}

@@ -1,0 +1,17 @@
+file 'public-app-verified/01-verdict.png'
+duration 8
+file 'public-app-verified/02-score-map.png'
+duration 12
+file 'public-app-verified/03-win-position.png'
+duration 15
+file 'public-app-verified/04-proposal.png'
+duration 20
+file 'public-app-verified/05-red-team.png'
+duration 7.5
+file 'public-app-verified/06-owned-work.png'
+duration 7.5
+file 'public-app-verified/07-provenance.png'
+duration 12
+file 'submission-deck/rendered/slide-8.png'
+duration 8
+file 'submission-deck/rendered/slide-8.png'
