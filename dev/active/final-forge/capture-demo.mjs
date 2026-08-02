@@ -4,6 +4,9 @@ import { mkdirSync, writeFileSync } from "node:fs";
 
 const target = process.argv[2] || "http://127.0.0.1:8505";
 const out = process.argv[3] || "dev/active/final-forge/demo-frames";
+const width = Number(process.argv[4] || 1440);
+const height = Number(process.argv[5] || 900);
+const workflow = process.argv[6] || "";
 const port = 19000 + (process.pid % 10000);
 const profile = `/tmp/bidpilot-demo-${process.pid}`;
 mkdirSync(out, { recursive: true });
@@ -62,18 +65,28 @@ async function main() {
   await cdp.send("Page.enable", {}, sessionId);
   await cdp.send("Runtime.enable", {}, sessionId);
   await cdp.send("Emulation.setDeviceMetricsOverride", {
-    width: 1440, height: 900, deviceScaleFactor: 1, mobile: false,
+    width, height, deviceScaleFactor: 1, mobile: width < 600,
   }, sessionId);
   await cdp.send("Page.navigate", { url: target }, sessionId);
   await sleep(15000);
 
-  const scenes = [
+  if (workflow) {
+    const switchResult = await cdp.send("Runtime.evaluate", {
+      expression: `(()=>{const e=[...document.querySelectorAll('label')].find(x=>x.textContent.includes(${JSON.stringify(workflow)}));if(!e)return false;e.click();return true})()`,
+      returnByValue: true,
+    }, sessionId);
+    if (!switchResult.result?.result?.value) throw new Error(`Workflow control not found: ${workflow}`);
+    await sleep(10000);
+  }
+
+  const scenes = workflow ? [["01-input", null]] : [
     ["01-verdict", null],
     ["02-score-map", "Official weighted evaluation score map"],
     ["03-win-position", "Selected Win Position"],
     ["04-proposal", "Proposal sections"],
-    ["05-owned-work", "Owned pursuit work"],
-    ["06-provenance", "Execution provenance"],
+    ["05-red-team", "Adversarial proposal review"],
+    ["06-owned-work", "Owned pursuit work"],
+    ["07-provenance", "Execution provenance"],
   ];
   for (const [name, heading] of scenes) {
     const expression = heading

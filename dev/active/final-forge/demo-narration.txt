@@ -1,0 +1,21 @@
+BidPilot answers the question that comes before every government proposal: should we bid, and if so, how do we win the score?
+
+Small business-to-government teams lose time in two places. They pursue tenders they cannot credibly deliver, and they write generic proposals without connecting the buyer's evaluation weights to the supplier's actual strengths. A general chatbot can summarize a notice. BidPilot turns the notice into an accountable pursuit workflow.
+
+This is the live deployed product. The first capability is tender intake. A user can upload a tender document or provide a public URL. BidPilot records the source, extracts the delivery requirements and evaluation criteria, and asks the user to review the structured scope before strategy begins. The document is treated as untrusted data, so instruction-like text inside an upload is flagged, not executed.
+
+For this demonstration, we reload a completed Snowflake run for a public data quality and API continuity service. The run was created through Cortex Code CLI using the least-privilege BidPilot runner role. The decision is Pursue. Both required credentials are active, and the recorded capacity covers the delivery need, so there is no eligibility or capacity shortfall.
+
+The second capability is the official weighted score map. This is where BidPilot moves beyond a bid or no-bid classifier. The buyer's four criteria total exactly one hundred points. Technical approach carries forty points, comparable delivery thirty, delivery team twenty, and price ten. Each row connects the weight to a planned claim, a supplier asset, and an accountable owner. The team can see what will earn points and what still needs work before it starts writing.
+
+Next, BidPilot compares materially different Win Positions. The selected position, Proven Data Quality Operations, leads with relevant delivery and operational continuity. The alternatives are retained so the choice is visible, not hidden inside a chat transcript. The selected strategy then controls the response plan and the proposal structure.
+
+The third capability is proposal execution. BidPilot produces substantive sections under the same run identifier, organized around the scoring model. Teams can edit the draft, but an edited version cannot be downloaded until the current text passes the adversarial review. The review challenges hallucination risk, scoring coverage, delivery credibility, and commercial clarity. Placeholder language such as T B D, T O D O, or pending is rejected for high-weight sections.
+
+Passing review is still not the end. BidPilot converts weaknesses, missing work, and provenance checks into owned pursuit tasks. Here the run contains twelve tasks, including four red-team checks, owned delivery work, and an explicit provenance task. That closes the gap between generating prose and actually preparing a submission.
+
+Snowflake is not a logo added to the architecture. It is the governed memory and execution boundary. The Opportunity Graph stores versioned opportunities, requirements, criteria, supplier credentials, availability, and past delivery. Snowpark runs the same eligibility and capacity policy across a two-by-two replay matrix. Cortex Code creates three strategies, four weighted response plans, eight proposal sections, and twelve tasks. The reader role can only load the eight tables needed by this interface. The runner can read source tables, append derived artifacts, and update only the run lifecycle. A five-credit monthly resource monitor, a sixty-second warehouse auto-suspend, and query timeouts bound the demo cost.
+
+This completed run is not a screenshot fixture. Its state, provider, policy version, Cortex session, Snowflake query identifiers, and completion audit are stored in Snowflake and reloaded by the public application. The app fails closed if the role, lifecycle, cardinality, selected strategy, or provenance contract is wrong.
+
+BidPilot makes qualification, strategy, proposal writing, adversarial review, and ownership one replayable decision chain. Decide whether to bid. Choose how to win. Write to the score. Then leave the team with work it can execute.

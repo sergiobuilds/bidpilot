@@ -1,0 +1,12 @@
+default_connection_name = "bidpilot-reader"
+
+[connections.bidpilot-reader]
+account = "ephgytx-oy38738"
+user = "ROSSI"
+database = "BIDPILOT_DEMO"
+schema = "BIDPILOT"
+warehouse = "BIDPILOT_WH"
+role = "BIDPILOT_READER"
+authenticator = "SNOWFLAKE_JWT"
+private_key_file = "/secrets/bidpilot-reader-key.p8"
+secondary_roles = "NONE"

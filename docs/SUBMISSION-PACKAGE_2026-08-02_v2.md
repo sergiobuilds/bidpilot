@@ -1,7 +1,7 @@
 ---
 doc_kind: project-material
 status: canonical
-version: 2026-08-02_v2
+version: 2026-08-02_v4
 canonical_path: ~/projects/personal/products/bidpilot/docs/SUBMISSION-PACKAGE_2026-08-02_v2.md
 ---
 
@@ -34,12 +34,12 @@ This workflow requires more than a chat transcript. Snowflake holds the versione
 ### What is working
 
 - An authenticated Snowpark 2×2 matrix across two tenders and two supplier profiles.
-- A complete evidence-safe run, `bidpilot-v2-dq-northstar`, with one decision, one selected strategy, four response plans, eight sections, eleven tasks, and Cortex session/query provenance.
+- A complete runner-only run, `cortex-final-20260802-a`, with one decision, three strategies with one selected, four response plans, eight sections, twelve tasks, and Cortex session/query provenance.
 - A proposal gate that rejects raw, locked, `REVIEW`, and `NO-GO` inputs.
 - Score-weighted proposal depth and criterion-specific supplier assets.
 - A red-team that detects missing assets and empty validation or buyer-outcome content in the top-weighted response.
 - An authenticated Streamlit Bid Room with editable/downloadable Markdown and no fixture fallback.
-- Thirty-three passing tests and authenticated app renders with no horizontal overflow at 1440, 768, and 390 CSS pixels.
+- Forty-seven passing tests and public authenticated app renders at 1440, 768, and 390 CSS pixels.
 
 ### Business value
 
@@ -51,24 +51,22 @@ Bid teams lose time before proposal writing even begins. They pursue opportuniti
 
 The workflow combines a versioned public tender with supplier credentials, capacity, people, and past delivery records in a Snowflake Opportunity Graph. Snowpark evaluates transparent eligibility, capacity, and comparable-delivery rules to return PURSUE, REVIEW, or NO-GO. Proposal generation remains locked unless the result is PURSUE. For a viable opportunity, Cortex Code reads the same governed records, selects a proof-backed Win Position, and creates a weighted response plan. Each evaluation criterion is bound to a claim, supplier asset, owner, and evidence gap before eight editable proposal areas are written.
 
-The verified run persists its decision, selected strategy, four weighted plans, eight proposal sections, eleven owned tasks, and Cortex session and query provenance under one run ID. Streamlit reloads that run through a least-privilege reader role without silently falling back to fixtures. Missing personnel, pricing, or metrics are never invented; they become explicit pursuit tasks.
+The verified run persists its decision, three strategies with one selected, four weighted plans, eight proposal sections, twelve owned and adversarial tasks, and Cortex session and query provenance under one run ID. Streamlit reloads that run through a least-privilege reader role without silently falling back to fixtures. Missing personnel, pricing, or metrics become explicit pursuit tasks.
 
 BidPilot is not another tender summarizer. It shows a team whether to bid, where the points are, what it can credibly say now, and what must be closed next.
 
-## Ninety-second demo script
+## Final demo contract
 
-| Time | Screen and action | Voice-over |
+| Time | Screen | Purpose |
 |---:|---|---|
-| 0–8 s | Open the authenticated Bid Room and point to the `PURSUE` verdict and run strip. | “Proposal tools start after the bid decision. BidPilot keeps the decision, strategy, proposal, and work in one Snowflake Bid Room.” |
-| 8–20 s | Focus the 40-point Technical approach row: weight, supplier asset, and claim. | “The buyer's official score map is the control plane. This 40-point criterion is connected to recorded delivery evidence, not a generic prompt.” |
-| 20–30 s | Show the decision dimensions and the two-supplier matrix result. | “Snowpark checks eligibility, capacity, and comparable delivery. The same tender is `PURSUE` for one supplier and `NO-GO` for another, which locks proposal generation.” |
-| 30–43 s | Show the selected Win Position and four response-plan rows. | “Cortex Code turns the strongest evidence into a Win Position, then binds every weighted response to a claim, an asset, and an owner.” |
-| 43–58 s | Scroll the editable eight-section proposal. | “The output is not a form fill. It is an editable strategy-led proposal covering the requirement, technical approach, comparable delivery, team, plan, risk, and commercial response.” |
-| 58–70 s | Show review status and open tasks for people, pricing, and missing metrics. | “Missing personnel and pricing data are not invented. They become owned work, and the top-weighted section must carry validation and a buyer outcome.” |
-| 70–82 s | Open execution provenance and show session ID plus query IDs. | “Snowpark and Cortex Code wrote one complete run. The provider, policy version, session, query IDs, sections, and tasks are reloadable from Snowflake.” |
-| 82–90 s | Return to the 40-point row and proposal download. | “BidPilot turns the question ‘Should we bid?’ into ‘Here is how we win, what we can write now, and what the team must close next.’” |
+| 0:00–0:37 | Title and problem | Establish the pre-writing loss and product question. |
+| 0:37–1:09 | Public tender intake | Show URL/PDF input and reviewed source boundary. |
+| 1:09–2:13 | Pursuit verdict and score map | Show permission to draft and the official weighted control plane. |
+| 2:13–3:04 | Strategy and proposal | Compare three Win Positions and open the selected proposal. |
+| 3:04–3:44 | Adversarial review and owned work | Show review-gated download and twelve closure tasks. |
+| 3:44–4:38 | Snowflake architecture, provenance, and close | Prove runner, reader, session, query, lifecycle, and cost boundaries. |
 
-The repository contains a 90.000-second, 1440×900 H.264 review draft at `dev/active/final-forge/bidpilot-demo-90s-draft.mp4`. It uses six authenticated app captures in this exact sequence. Add the voice-over above and upload the reviewed version as an unlisted or public judge-accessible video before submission.
+The repository contains a 278.136-second, 1440×900 H.264/AAC final demo at `dev/active/final-forge/BidPilot-Final-Demo.mp4`. It uses the public intake, authenticated run, Snowflake architecture, and closing deck frames with English narration. Upload it to a judge-accessible public URL before submission.
 
 ## Pitch deck copy
 
@@ -100,7 +98,7 @@ The repository contains a 90.000-second, 1440×900 H.264 review draft at `dev/ac
 
 **Headline:** One agent run turns evidence into owned work.
 
-**Copy:** Cortex Code queries the graph, selects a Win Position, writes four weighted response plans and eight proposal areas, identifies missing evidence, creates eleven tasks, and stores session and query provenance under one run ID.
+**Copy:** Cortex Code queries the graph, compares three Win Positions, writes four weighted response plans and eight proposal areas, identifies missing evidence, creates twelve tasks, and stores session and query provenance under one run ID.
 
 ### Slide 6 — Failure is a product state
 
@@ -112,7 +110,7 @@ The repository contains a 90.000-second, 1440×900 H.264 review draft at `dev/ac
 
 **Headline:** Authenticated end to end.
 
-**Copy:** Two tenders by two suppliers produce PURSUE, NO-GO, PURSUE, and REVIEW. The complete run contains one decision, one strategy, four plans, eight sections, eleven tasks, and reproducible Snowflake and Cortex provenance. Thirty-three tests pass.
+**Copy:** Two tenders by two suppliers produce PURSUE, NO-GO, PURSUE, and REVIEW. The final Cortex run contains one decision, three strategies with one selected, four plans, eight sections, twelve tasks, and reproducible Snowflake and Cortex provenance. Forty-seven tests pass.
 
 ### Slide 8 — From one bid to operating memory
 
@@ -153,7 +151,7 @@ The authenticated account must contain the objects defined in `snowflake/sql/01_
 | Pursuit policy | Compute eligibility, capacity gap, comparable delivery, and status | Matching Python and authenticated Snowpark vectors |
 | Agent execution | Query the graph and create strategy, response plans, sections, and tasks | Cortex Code CLI complete run with session and query IDs |
 | Bid Room | Reload one complete run, expose the score map, edit proposal text, and download | Streamlit through `BIDPILOT_READER`, without fixture fallback |
-| Verification | Exercise gates, content variation, persistence, and responsive UI | 33 tests, authenticated AppTest, 1440/768/390 captures |
+| Verification | Exercise gates, content variation, persistence, and responsive UI | 47 tests, authenticated AppTest, 1440/768/390 captures |
 
 ## Data, safety, and license disclosure
 
@@ -170,7 +168,7 @@ No final bid is submitted by the product. A human owns source review, company ev
 ## Final submission checklist
 
 - Replace the repository placeholder with the judge-accessible GitHub URL and verified commit SHA.
-- Review the repository's exact 90-second draft, add the approved voice-over, upload it, and verify audio, text size, and URL permissions from a signed-out browser.
+- Upload the exact 278.136-second narrated demo and verify audio, text size, and URL permissions from a signed-out browser.
 - Paste the title, one-line description, problem, solution, Snowflake explanation, and business value without adding unsupported claims.
 - Confirm the repository, video, and any live demo remain accessible for the judging window.
 - Sergio performs the external final-submit click after reviewing the rendered form.
@@ -179,7 +177,12 @@ No final bid is submitted by the product. A human owns source review, company ev
 
 - Korea is explicitly eligible under Japan & Korea, and the event is marked Global and online.
 - Registration closes on 2 August 2026.
-- Prototype submissions close on 6 August 2026.
+- The authenticated dashboard shows prototype and repository-link submissions closing on 7 August 2026 at 03:29 KST.
 - The selected problem statement is Intelligent Workflow Automation Agent.
 - The published rubric is Real-World Relevance 30%, Technical Execution 40%, and Solution Completeness 30%.
 - Official event page: `https://hack2skill.com/event/cococlihack/`.
+
+## Change history
+
+- 2026-08-02 v3: Updated the verified automated test count after lifecycle, least-privilege, completeness, and failure-state hardening.
+- 2026-08-02 v4: Updated the package for the runner-only Cortex run, public deployment, 4 minute 38 second narrated demo, and 8-page PDF deck.

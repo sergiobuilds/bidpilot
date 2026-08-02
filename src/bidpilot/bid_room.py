@@ -7,6 +7,7 @@ contract available while account provisioning is externally blocked.
 from __future__ import annotations
 
 import json
+import hashlib
 import sqlite3
 from dataclasses import asdict
 from pathlib import Path
@@ -33,6 +34,7 @@ class BidRoomStore:
                     status TEXT NOT NULL,
                     selected_position TEXT NOT NULL,
                     brief_json TEXT NOT NULL,
+                    brief_sha256 TEXT NOT NULL DEFAULT '',
                     proposal_markdown TEXT NOT NULL,
                     red_team_json TEXT NOT NULL,
                     tasks_json TEXT NOT NULL DEFAULT '[]',
@@ -46,6 +48,8 @@ class BidRoomStore:
                 connection.execute("ALTER TABLE bid_runs ADD COLUMN tasks_json TEXT NOT NULL DEFAULT '[]'")
             if "agent_run_json" not in existing:
                 connection.execute("ALTER TABLE bid_runs ADD COLUMN agent_run_json TEXT NOT NULL DEFAULT '{}'")
+            if "brief_sha256" not in existing:
+                connection.execute("ALTER TABLE bid_runs ADD COLUMN brief_sha256 TEXT NOT NULL DEFAULT ''")
 
     def save(
         self,
@@ -56,9 +60,14 @@ class BidRoomStore:
         tasks: tuple[dict, ...] = (),
         agent_run: dict | None = None,
     ) -> str:
+        if not brief.can_generate_proposal:
+            raise ValueError(f"A {brief.status} pursuit cannot persist a proposal draft.")
+        if not proposal_markdown.strip():
+            raise ValueError("A persisted proposal draft cannot be empty.")
         run_id = str(uuid4())
         position = brief.win_positions[brief.selected_position_index]
         brief_json = json.dumps(asdict(brief))
+        brief_sha256 = hashlib.sha256(brief_json.encode()).hexdigest()
         agent_run = agent_run or {
             "provider": "local-development-adapter",
             "state": "not-executed-in-snowflake-or-coco",
@@ -69,9 +78,9 @@ class BidRoomStore:
                 """
                 INSERT INTO bid_runs (
                     run_id, opportunity_id, supplier_profile_id, opportunity_version,
-                    status, selected_position, brief_json, proposal_markdown, red_team_json,
+                    status, selected_position, brief_json, brief_sha256, proposal_markdown, red_team_json,
                     tasks_json, agent_run_json
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     run_id,
@@ -81,6 +90,7 @@ class BidRoomStore:
                     brief.status,
                     position.statement,
                     brief_json,
+                    brief_sha256,
                     proposal_markdown,
                     json.dumps(red_team_findings),
                     json.dumps(tasks),
@@ -104,15 +114,33 @@ class BidRoomStore:
         result["agent_run"] = json.loads(result.pop("agent_run_json"))
         return result
 
-    def latest(self, opportunity_id: str, supplier_profile_id: str, opportunity_version: str, selected_position: str) -> dict | None:
+    def latest(
+        self,
+        opportunity_id: str,
+        supplier_profile_id: str,
+        opportunity_version: str,
+        selected_position: str,
+        brief: PursuitBrief | None = None,
+    ) -> dict | None:
+        brief_sha256 = None
+        if brief is not None:
+            brief_sha256 = hashlib.sha256(json.dumps(asdict(brief)).encode()).hexdigest()
         with sqlite3.connect(self.path) as connection:
             row = connection.execute(
                 """
                 SELECT run_id FROM bid_runs
                 WHERE opportunity_id = ? AND supplier_profile_id = ?
                   AND opportunity_version = ? AND selected_position = ?
-                ORDER BY created_at DESC LIMIT 1
+                  AND (? IS NULL OR brief_sha256 = ?)
+                ORDER BY created_at DESC, rowid DESC LIMIT 1
                 """,
-                (opportunity_id, supplier_profile_id, opportunity_version, selected_position),
+                (
+                    opportunity_id,
+                    supplier_profile_id,
+                    opportunity_version,
+                    selected_position,
+                    brief_sha256,
+                    brief_sha256,
+                ),
             ).fetchone()
         return self.load(row[0]) if row else None

@@ -8,6 +8,7 @@ from bidpilot.intake import (
     build_pursuit_tender,
     intake_tender_bytes,
     intake_tender_url,
+    review_tender_snapshot,
 )
 
 
@@ -17,6 +18,7 @@ Eligibility: SME confirmation
 Technical approach: 40 points
 Comparable delivery: 30 points
 Price: 10 points
+Delivery team: 20 points
 Submission: technical proposal and pricing form
 """
 
@@ -89,7 +91,34 @@ def test_korean_percentage_evaluation_matrix_is_extracted() -> None:
 
     assert snapshot.tender["evaluation_criteria"] == (
         {"name": "기술능력평가", "weight": 90},
-        {"name": "정량적 평가", "weight": 20},
-        {"name": "정성적 평가", "weight": 70},
         {"name": "입찰가격평가", "weight": 10},
     )
+
+
+def test_english_percentage_matrix_and_operator_review_are_validated() -> None:
+    snapshot = intake_tender_bytes(
+        b"Data service\nScope: governed delivery\nObjective: reliable operations\nTechnical approach 40%, Comparable delivery 30%, Delivery team 20%, Price 10%",
+        content_type="text/plain",
+    )
+    assert snapshot.tender["evaluation_criteria"] == (
+        {"name": "Technical approach", "weight": 40},
+        {"name": "Comparable delivery", "weight": 30},
+        {"name": "Delivery team", "weight": 20},
+        {"name": "Price", "weight": 10},
+    )
+    reviewed = review_tender_snapshot(
+        snapshot,
+        scope="Governed delivery",
+        buyer_objective="Reliable operations",
+        eligibility_requirements=("SME confirmation",),
+        evaluation_criteria=snapshot.tender["evaluation_criteria"],
+    )
+    assert reviewed.tender["scope"] == "Governed delivery"
+    with pytest.raises(TenderIntakeError, match="total 100"):
+        review_tender_snapshot(
+            snapshot,
+            scope="Governed delivery",
+            buyer_objective="Reliable operations",
+            eligibility_requirements=(),
+            evaluation_criteria=({"name": "Technical", "weight": 40},),
+        )
