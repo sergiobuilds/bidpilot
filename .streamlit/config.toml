@@ -1,0 +1,19 @@
+# Product theme. The palette and typeface are the workspace's own; the app
+# stylesheet builds on these base values rather than fighting them.
+[theme]
+base = "light"
+primaryColor = "#0066FF"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F7F7F8"
+textColor = "#171719"
+font = "sans-serif"
+
+[client]
+toolbarMode = "minimal"
+showErrorDetails = false
+
+[server]
+runOnSave = false
+
+[browser]
+gatherUsageStats = false
