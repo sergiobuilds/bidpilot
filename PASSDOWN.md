@@ -14,6 +14,7 @@ BidPilot 최종 제출 직전 상태의 복귀 지점입니다.
 - 전체 테스트는 48개 통과합니다. 공개 앱이 persisted section fragment를 네 score-bearing criterion 아래로 조합하며, 현재 draft는 red-team을 통과하고 download가 활성화됩니다.
 - 후보마다 서로 다른 세 심사자가 한 번씩 보도록 균형 재실행한 내부 artifact blind league에서 BidPilot은 parity 91점, source-locked 99점으로 모두 1위였습니다. 2위 VF Logistics와의 새 좌우 반전 결선도 4대 0으로 이겼습니다. 제출문에는 경쟁 우위의 내부 방향성 자료로만 사용합니다.
 - 공개 영상은 `https://storage.googleapis.com/bidpilot-demo-164282963747/BidPilot-Final-Demo.mp4`이며 signed-out HTTP range 요청이 206으로 통과합니다.
+- `uv run python dev/active/final-forge/verify-final.py` 한 번으로 git, 48 tests, live DOM, PDF, 영상, Snowflake trace와 blind-league chain을 재검증할 수 있습니다.
 
 ## 다음 작업
 
