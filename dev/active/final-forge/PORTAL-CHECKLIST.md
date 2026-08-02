@@ -20,13 +20,13 @@ version: 2026-08-02_v1
 ## Browser state
 
 - VivoBook CDP 9222 is not serving Chrome; the local tunnel reaches a Windows `svchost` listener and times out.
-- VivoBook CDP 9447 is active and displays the Hack2Skill login page.
-- The 9447 browser profile is not authenticated to Hack2Skill.
+- VivoBook CDP 9447 is active and displays the six-digit Hack2Skill OTP verification page for `jdrnd30@jdac.co.kr`.
+- Login and one OTP resend were triggered. The read-only email automation cache reported no matching INBOX message after two cron cycles, so the browser is still unauthenticated.
 - No portal field has been entered in this final freeze, and no final Submit action has occurred.
 
 ## Required final sequence
 
-1. Sergio logs in to Hack2Skill on the visible 9447 tab.
+1. Sergio reads the current six-digit Hack2Skill OTP from the mailbox or spam folder and provides it for the visible 9447 tab.
 2. Change the GitHub repository from private to public only after Sergio approves.
 3. Verify a signed-out clone resolves to the final `origin/main` SHA.
 4. Enter the challenge, repository, deployed prototype, brief, public video, and PDF.

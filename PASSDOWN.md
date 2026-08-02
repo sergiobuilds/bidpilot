@@ -19,7 +19,7 @@ BidPilot 최종 제출 직전 상태의 복귀 지점입니다.
 
 ## 다음 작업
 
-1. CDP 9222에 실제 Chrome이 열리면 포털 초안을 채웁니다. 현재 원격 9222는 Chrome이 아니라 `svchost`가 점유해 응답이 없습니다. 대체 비보북 CDP 9447에는 Hack2Skill 로그인 화면이 열려 있으나 인증되지 않았습니다.
+1. CDP 9222는 Chrome이 아니라 `svchost`가 점유해 응답이 없습니다. 대체 비보북 CDP 9447에서 `jdrnd30@jdac.co.kr` 로그인과 OTP 재전송까지 진행했으며 현재 6자리 OTP 입력 화면입니다. email-automation INBOX cache에는 두 cron cycle 뒤에도 OTP가 없었습니다.
 2. Sergio 승인 후 저장소를 public으로 전환하고 signed-out clone을 검증합니다.
 3. 최종 제출 버튼은 Sergio 승인 후에만 누릅니다.
 
