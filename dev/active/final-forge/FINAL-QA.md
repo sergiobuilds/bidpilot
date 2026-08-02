@@ -56,4 +56,4 @@ uv run python dev/active/final-forge/verify-final.py
 - There is no paid-customer result or outcome from an open tender submission.
 - Competition judges may reward a different domain or presentation style than the frozen population did.
 - The public prototype uses synthetic supplier fixtures and a closed historical public notice, disclosed in the submission.
-- GitHub remains private and the portal remains unfilled until the owner-controlled gates are approved.
+- Submission is complete. Remaining risk is operational availability during judging, not an open artifact or portal gate.
