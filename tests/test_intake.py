@@ -11,7 +11,6 @@ from bidpilot.intake import (
     review_tender_snapshot,
 )
 
-
 TENDER_TEXT = b"""Public data reliability service
 Scope: data quality remediation and API operations
 Eligibility: SME confirmation

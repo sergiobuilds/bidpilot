@@ -132,6 +132,51 @@ def _blueprint(tender: dict, supplier: dict, position: WinPosition, projects: li
     return tuple(sections)
 
 
+def _is_record_list(value: object) -> bool:
+    return isinstance(value, (list, tuple)) and all(isinstance(item, dict) for item in value)
+
+
+def _is_text_list(value: object) -> bool:
+    return isinstance(value, (list, tuple)) and all(isinstance(item, str) and item.strip() for item in value)
+
+
+def _validate_pursuit_inputs(tender: dict, supplier: dict) -> None:
+    """Fail with one stable domain error before policy code reads nested input."""
+    if not _is_text_list(tender["tags"]):
+        raise PursuitInputError("tender.tags must be a non-empty list of scope labels.")
+    if not _is_text_list(tender["eligibility_requirements"]):
+        raise PursuitInputError("tender.eligibility_requirements must be a list of requirement labels.")
+    if not isinstance(tender["delivery_hours"], int) or isinstance(tender["delivery_hours"], bool):
+        raise PursuitInputError("tender.delivery_hours must be a positive integer.")
+    if tender["delivery_hours"] <= 0:
+        raise PursuitInputError("tender.delivery_hours must be a positive integer.")
+    if not _is_record_list(tender["evaluation_criteria"]):
+        raise PursuitInputError("tender.evaluation_criteria must be a list of score-map rows.")
+
+    if not _is_text_list(supplier["credentials"]):
+        raise PursuitInputError("supplier.credentials must be a list of credential labels.")
+    if not isinstance(supplier["available_hours"], int) or isinstance(supplier["available_hours"], bool):
+        raise PursuitInputError("supplier.available_hours must be a non-negative integer.")
+    if supplier["available_hours"] < 0:
+        raise PursuitInputError("supplier.available_hours must be a non-negative integer.")
+    if not _is_record_list(supplier["past_projects"]):
+        raise PursuitInputError("supplier.past_projects must be a list of project records.")
+    for project in supplier["past_projects"]:
+        if not isinstance(project.get("title"), str) or not project["title"].strip():
+            raise PursuitInputError("supplier.past_projects requires a title for every project.")
+        if not _is_text_list(project.get("tags")):
+            raise PursuitInputError("supplier.past_projects requires scope tags for every project.")
+        if not isinstance(project.get("outcome"), str) or not project["outcome"].strip():
+            raise PursuitInputError("supplier.past_projects requires an outcome for every project.")
+    if not _is_record_list(supplier["people"]):
+        raise PursuitInputError("supplier.people must be a list of delivery-team records.")
+    for person in supplier["people"]:
+        if not isinstance(person.get("name"), str) or not person["name"].strip():
+            raise PursuitInputError("supplier.people requires a name for every person.")
+        if not isinstance(person.get("role"), str) or not person["role"].strip():
+            raise PursuitInputError("supplier.people requires a role for every person.")
+
+
 def build_pursuit_brief(tender: dict, supplier: dict) -> PursuitBrief:
     """Return a reproducible bid decision and strategy from structured input."""
     required_tender = ("id", "buyer_objective", "promised_outcome", "tags", "eligibility_requirements", "delivery_hours", "evaluation_criteria")
@@ -145,6 +190,7 @@ def build_pursuit_brief(tender: dict, supplier: dict) -> PursuitBrief:
             + ("; " if missing_tender and missing_supplier else "")
             + ", ".join(f"supplier.{key}" for key in missing_supplier)
         )
+    _validate_pursuit_inputs(tender, supplier)
     criteria = tender["evaluation_criteria"]
     if not criteria:
         raise PursuitInputError("Pursuit input needs a reviewed evaluation score map.")
@@ -156,8 +202,6 @@ def build_pursuit_brief(tender: dict, supplier: dict) -> PursuitBrief:
         raise PursuitInputError("Score-map criterion names must be unique.")
     if abs(sum(weights) - 100.0) > 0.01:
         raise PursuitInputError(f"Score-map weights must total 100; current total is {sum(weights):g}.")
-    if int(tender["delivery_hours"]) <= 0 or int(supplier["available_hours"]) < 0:
-        raise PursuitInputError("Delivery and availability hours must be valid non-negative values.")
     missing = tuple(sorted(set(tender["eligibility_requirements"]) - set(supplier["credentials"])))
     capacity_gap = max(0, tender["delivery_hours"] - supplier["available_hours"])
     projects = _matches(tender, supplier)

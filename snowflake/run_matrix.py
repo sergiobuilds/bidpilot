@@ -9,9 +9,7 @@ from typing import Any
 
 import snowflake.connector
 from snowflake.snowpark import Session
-
 from snowpark_decision import POLICY_VERSION, evaluate_and_persist
-
 
 MATRIX = (
     ("dq-northstar", "G2B-REPLAY-DATA-QUALITY", "supplier-northstar"),
@@ -23,6 +21,7 @@ MATRIX = (
 EXPECTED_ROLE = "BIDPILOT_RUNNER"
 TENANT_ID = "demo-tenant"
 OPPORTUNITY_VERSION = "fixture-v1"
+SUPPLIER_PROFILE_VERSION = "fixture-v1"
 PROVIDER = "SNOWPARK"
 DEFAULT_STATEMENT_TIMEOUT_SECONDS = 300
 DEFAULT_QUEUED_TIMEOUT_SECONDS = 60
@@ -68,7 +67,7 @@ def _load_run(connection, run_id: str) -> list[tuple[Any, ...]]:
         connection,
         """
         SELECT tenant_id, opportunity_id, opportunity_version, supplier_profile_id,
-               policy_version, provider, state
+               supplier_profile_version, policy_version, provider, state
         FROM BIDPILOT_DEMO.BIDPILOT.AGENT_RUNS
         WHERE run_id = %s
         """,
@@ -118,7 +117,7 @@ def _set_state(
         (state, POLICY_VERSION, _trace(state, run_id, opportunity_id, supplier_profile_id, **extra), run_id),
     )
     rows = _load_run(connection, run_id)
-    if len(rows) != 1 or str(rows[0][6]).upper() != state:
+    if len(rows) != 1 or str(rows[0][7]).upper() != state:
         raise RuntimeError(f"Could not persist lifecycle state {state} for run {run_id!r}.")
 
 
@@ -128,13 +127,21 @@ def _validate_existing_run(
     opportunity_id: str,
     supplier_profile_id: str,
 ) -> str:
-    expected = (TENANT_ID, opportunity_id, OPPORTUNITY_VERSION, supplier_profile_id, POLICY_VERSION, PROVIDER)
-    actual = tuple(str(value) for value in row[:6])
+    expected = (
+        TENANT_ID,
+        opportunity_id,
+        OPPORTUNITY_VERSION,
+        supplier_profile_id,
+        SUPPLIER_PROFILE_VERSION,
+        POLICY_VERSION,
+        PROVIDER,
+    )
+    actual = tuple(str(value) for value in row[:7])
     if actual != expected:
         raise RuntimeError(
             f"Run ID {run_id!r} already belongs to different inputs or execution metadata: {actual!r}."
         )
-    return str(row[6]).upper()
+    return str(row[7]).upper()
 
 
 def _start_run(connection, run_id: str, opportunity_id: str, supplier_profile_id: str) -> bool:
@@ -175,9 +182,9 @@ def _start_run(connection, run_id: str, opportunity_id: str, supplier_profile_id
         """
         INSERT INTO BIDPILOT_DEMO.BIDPILOT.AGENT_RUNS (
             run_id, tenant_id, opportunity_id, opportunity_version, supplier_profile_id,
-            policy_version, provider, state, trace
+            supplier_profile_version, policy_version, provider, state, trace
         )
-        SELECT %s, %s, %s, %s, %s, %s, %s, 'RUNNING', PARSE_JSON(%s)
+        SELECT %s, %s, %s, %s, %s, %s, %s, %s, 'RUNNING', PARSE_JSON(%s)
         WHERE NOT EXISTS (
             SELECT 1 FROM BIDPILOT_DEMO.BIDPILOT.AGENT_RUNS WHERE run_id = %s
         )
@@ -188,6 +195,7 @@ def _start_run(connection, run_id: str, opportunity_id: str, supplier_profile_id
             opportunity_id,
             OPPORTUNITY_VERSION,
             supplier_profile_id,
+            SUPPLIER_PROFILE_VERSION,
             POLICY_VERSION,
             PROVIDER,
             _trace("RUNNING", run_id, opportunity_id, supplier_profile_id),
@@ -221,6 +229,7 @@ def execute_matrix_cell(
             opportunity_id=opportunity_id,
             opportunity_version=OPPORTUNITY_VERSION,
             supplier_profile_id=supplier_profile_id,
+            supplier_profile_version=SUPPLIER_PROFILE_VERSION,
         )
         decision_count = _decision_count(connection, run_id)
         if decision_count != 1:
@@ -247,7 +256,7 @@ def execute_matrix_cell(
                 error=str(error)[:500],
                 decision_count=_decision_count(connection, run_id),
             )
-        except Exception as lifecycle_error:
+        except Exception as lifecycle_error:  # noqa: BLE001 - preserve the primary failure if recovery also fails.
             raise RuntimeError(
                 f"Run {run_id!r} failed and its FAILED lifecycle state could not be persisted: {lifecycle_error}"
             ) from error

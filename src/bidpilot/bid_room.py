@@ -6,14 +6,18 @@ contract available while account provisioning is externally blocked.
 
 from __future__ import annotations
 
-import json
 import hashlib
+import json
 import sqlite3
 from dataclasses import asdict
 from pathlib import Path
 from uuid import uuid4
 
 from bidpilot.pursuit import PursuitBrief
+
+
+class BidRoomStoreError(RuntimeError):
+    """Raised when persisted local Bid Room data violates its contract."""
 
 
 class BidRoomStore:
@@ -108,10 +112,19 @@ class BidRoomStore:
         if row is None:
             raise KeyError(run_id)
         result = dict(zip(columns, row, strict=True))
-        result["brief"] = json.loads(result.pop("brief_json"))
-        result["red_team_findings"] = tuple(json.loads(result.pop("red_team_json")))
-        result["tasks"] = tuple(json.loads(result.pop("tasks_json")))
-        result["agent_run"] = json.loads(result.pop("agent_run_json"))
+        try:
+            brief = json.loads(result.pop("brief_json"))
+            findings = json.loads(result.pop("red_team_json"))
+            tasks = json.loads(result.pop("tasks_json"))
+            agent_run = json.loads(result.pop("agent_run_json"))
+        except (json.JSONDecodeError, TypeError) as error:
+            raise BidRoomStoreError(f"Run '{run_id}' contains malformed persisted data.") from error
+        if not isinstance(brief, dict) or not isinstance(findings, list) or not isinstance(tasks, list) or not isinstance(agent_run, dict):
+            raise BidRoomStoreError(f"Run '{run_id}' contains malformed persisted data.")
+        result["brief"] = brief
+        result["red_team_findings"] = tuple(findings)
+        result["tasks"] = tuple(tasks)
+        result["agent_run"] = agent_run
         return result
 
     def latest(

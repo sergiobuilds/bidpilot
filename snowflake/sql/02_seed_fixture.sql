@@ -65,36 +65,38 @@ VALUES (source.tenant_id, source.supplier_profile_id, source.supplier_name, sour
 
 MERGE INTO BIDPILOT_DEMO.BIDPILOT.CREDENTIALS target
 USING (
-    SELECT 'demo-tenant' tenant_id, 'supplier-northstar' supplier_profile_id, 'SME confirmation' credential_name, 'active' status
-    UNION ALL SELECT 'demo-tenant', 'supplier-northstar', 'Information-system maintenance certificate', 'active'
-    UNION ALL SELECT 'demo-tenant', 'supplier-atlas', 'SME confirmation', 'active'
+    SELECT 'demo-tenant' tenant_id, 'supplier-northstar' supplier_profile_id, 'fixture-v1' profile_version, 'SME confirmation' credential_name, 'active' status
+    UNION ALL SELECT 'demo-tenant', 'supplier-northstar', 'fixture-v1', 'Information-system maintenance certificate', 'active'
+    UNION ALL SELECT 'demo-tenant', 'supplier-atlas', 'fixture-v1', 'SME confirmation', 'active'
 ) source
-ON target.tenant_id = source.tenant_id AND target.supplier_profile_id = source.supplier_profile_id AND target.credential_name = source.credential_name
-WHEN NOT MATCHED THEN INSERT (tenant_id, supplier_profile_id, credential_name, status)
-VALUES (source.tenant_id, source.supplier_profile_id, source.credential_name, source.status);
+ON target.tenant_id = source.tenant_id AND target.supplier_profile_id = source.supplier_profile_id
+   AND target.profile_version = source.profile_version AND target.credential_name = source.credential_name
+WHEN NOT MATCHED THEN INSERT (tenant_id, supplier_profile_id, profile_version, credential_name, status)
+VALUES (source.tenant_id, source.supplier_profile_id, source.profile_version, source.credential_name, source.status);
 
 MERGE INTO BIDPILOT_DEMO.BIDPILOT.AVAILABILITY target
 USING (
-    SELECT 'demo-tenant' tenant_id, 'supplier-northstar' supplier_profile_id, 900 available_hours, CURRENT_DATE() effective_from, DATEADD('day', 365, CURRENT_DATE()) effective_to
-    UNION ALL SELECT 'demo-tenant', 'supplier-atlas', 560, CURRENT_DATE(), DATEADD('day', 365, CURRENT_DATE())
+    SELECT 'demo-tenant' tenant_id, 'supplier-northstar' supplier_profile_id, 'fixture-v1' profile_version, 900 available_hours, CURRENT_DATE() effective_from, DATEADD('day', 365, CURRENT_DATE()) effective_to
+    UNION ALL SELECT 'demo-tenant', 'supplier-atlas', 'fixture-v1', 560, CURRENT_DATE(), DATEADD('day', 365, CURRENT_DATE())
 ) source
 ON target.tenant_id = source.tenant_id AND target.supplier_profile_id = source.supplier_profile_id
-   AND target.effective_from = source.effective_from
-WHEN NOT MATCHED THEN INSERT (tenant_id, supplier_profile_id, available_hours, effective_from, effective_to)
-VALUES (source.tenant_id, source.supplier_profile_id, source.available_hours, source.effective_from, source.effective_to);
+   AND target.profile_version = source.profile_version AND target.effective_from = source.effective_from
+WHEN NOT MATCHED THEN INSERT (tenant_id, supplier_profile_id, profile_version, available_hours, effective_from, effective_to)
+VALUES (source.tenant_id, source.supplier_profile_id, source.profile_version, source.available_hours, source.effective_from, source.effective_to);
 
 MERGE INTO BIDPILOT_DEMO.BIDPILOT.PAST_PROJECTS target
 USING (
-    SELECT 'demo-tenant' tenant_id, 'supplier-northstar' supplier_profile_id, 'project-open-data' project_id,
+    SELECT 'demo-tenant' tenant_id, 'supplier-northstar' supplier_profile_id, 'fixture-v1' profile_version, 'project-open-data' project_id,
            'City Open Data Reliability Program' project_title, ARRAY_CONSTRUCT('public-data', 'data-quality', 'api-operations') tags,
            'Reduced recurring data defects and introduced API change control.' outcome
-    UNION ALL SELECT 'demo-tenant', 'supplier-northstar', 'project-analytics', 'Regional Analytics Governance Rollout',
+    UNION ALL SELECT 'demo-tenant', 'supplier-northstar', 'fixture-v1', 'project-analytics', 'Regional Analytics Governance Rollout',
            ARRAY_CONSTRUCT('analytics', 'governance', 'public-sector'), 'Handed governed dashboards to policy teams with an operating playbook.'
-    UNION ALL SELECT 'demo-tenant', 'supplier-northstar', 'project-api', 'Citizen API Service Transition',
+    UNION ALL SELECT 'demo-tenant', 'supplier-northstar', 'fixture-v1', 'project-api', 'Citizen API Service Transition',
            ARRAY_CONSTRUCT('api-operations', 'public-sector'), 'Transferred API support without a public-service interruption.'
-    UNION ALL SELECT 'demo-tenant', 'supplier-atlas', 'project-commercial', 'Commercial Analytics Modernization',
+    UNION ALL SELECT 'demo-tenant', 'supplier-atlas', 'fixture-v1', 'project-commercial', 'Commercial Analytics Modernization',
            ARRAY_CONSTRUCT('analytics', 'governance'), 'Established a commercial analytics governance model.'
 ) source
-ON target.tenant_id = source.tenant_id AND target.supplier_profile_id = source.supplier_profile_id AND target.project_id = source.project_id
-WHEN NOT MATCHED THEN INSERT (tenant_id, supplier_profile_id, project_id, project_title, tags, outcome)
-VALUES (source.tenant_id, source.supplier_profile_id, source.project_id, source.project_title, source.tags, source.outcome);
+ON target.tenant_id = source.tenant_id AND target.supplier_profile_id = source.supplier_profile_id
+   AND target.profile_version = source.profile_version AND target.project_id = source.project_id
+WHEN NOT MATCHED THEN INSERT (tenant_id, supplier_profile_id, profile_version, project_id, project_title, tags, outcome)
+VALUES (source.tenant_id, source.supplier_profile_id, source.profile_version, source.project_id, source.project_title, source.tags, source.outcome);

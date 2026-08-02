@@ -7,7 +7,6 @@ import json
 import statistics
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parent
 RUN = ROOT / "run-v2"
 AXES = {"relevance": 30, "technical": 40, "completeness": 30}

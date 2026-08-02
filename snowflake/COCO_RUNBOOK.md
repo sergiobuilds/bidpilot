@@ -18,6 +18,13 @@ Apply grants with an administrator, then grant the reader and runner roles to th
 snow sql -c bidpilot -f snowflake/sql/03_roles.sql
 ```
 
+For an existing BidPilot schema created before supplier-version binding, run the
+fail-closed migration once before loading or creating runs:
+
+```bash
+snow sql -c bidpilot -f snowflake/sql/04_profile_version_migration.sql
+```
+
 The role script removes the former schema-wide grants. The reader can select
 only the eight tables rendered by the app. The runner can only read source
 tables, append derived artifacts, and update `AGENT_RUNS` lifecycle state.

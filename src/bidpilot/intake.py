@@ -31,7 +31,7 @@ class TenderIntakeError(ValueError):
 class _PublicRedirectHandler(HTTPRedirectHandler):
     """Reject redirects before urllib connects to a non-public destination."""
 
-    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ANN001, ANN201
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
         if not _is_public_url(newurl):
             raise TenderIntakeError("Tender URL redirected to a non-public host.")
         return super().redirect_request(req, fp, code, msg, headers, newurl)
@@ -87,11 +87,11 @@ def _parse_lines(text: str) -> dict:
     buyer_objective = ""
     for line in lines:
         lower = line.lower()
-        match = re.search(r"(.+?)[\-:：]\s*(\d+)\s*(?:points?|점)", line, flags=re.I)
+        match = re.search(r"(.+?)[\-:：]\s*(\d+)\s*(?:points?|점)", line, flags=re.IGNORECASE)
         if match and any(token in lower for token in ("technical", "delivery", "team", "price", "평가", "가격")):
             criteria.append({"name": match.group(1).strip(" -:："), "weight": int(match.group(2))})
         if any(token in lower for token in ("eligibility", "qualification", "자격", "등록", "certificate", "sme")):
-            eligibility.append(re.sub(r"^(eligibility|qualification|자격)\s*[:：-]\s*", "", line, flags=re.I))
+            eligibility.append(re.sub(r"^(eligibility|qualification|자격)\s*[:：-]\s*", "", line, flags=re.IGNORECASE))
         if any(token in lower for token in ("submission", "submit", "제출", "proposal")):
             submissions.append(line)
         if not scope and any(token in lower for token in ("scope", "service", "과업", "용역")):
@@ -116,7 +116,7 @@ def _parse_lines(text: str) -> dict:
         match = re.search(r"([A-Za-z][A-Za-z0-9 /&_-]{1,80}?)\s*(\d+(?:\.\d+)?)\s*%", clause)
         if not match:
             continue
-        name = re.sub(r"^(?:evaluation|scoring)(?:\s+(?:criteria|weights?))?\s*[:\-]?\s*", "", match.group(1), flags=re.I).strip(" -:：")
+        name = re.sub(r"^(?:evaluation|scoring)(?:\s+(?:criteria|weights?))?\s*[:\-]?\s*", "", match.group(1), flags=re.IGNORECASE).strip(" -:：")
         if not name or name.casefold() in known_criteria:
             continue
         criteria.append({"name": name, "weight": float(match.group(2)) if "." in match.group(2) else int(match.group(2))})
@@ -225,7 +225,7 @@ def intake_tender_bytes(data: bytes, *, source_url: str | None = None, content_t
         raise TenderIntakeError("Tender input must be a PDF, plain text, or HTML document.")
     if not text:
         raise TenderIntakeError("Tender document contains no extractable text.")
-    instruction_like = any(re.search(pattern, text, flags=re.I) for pattern in _INSTRUCTION_PATTERNS)
+    instruction_like = any(re.search(pattern, text, flags=re.IGNORECASE) for pattern in _INSTRUCTION_PATTERNS)
     tender = _parse_lines(text)
     tender["id"] = f"INTAKE-{hashlib.sha256(data).hexdigest()[:12]}"
     tender["source_url"] = source_url
@@ -246,7 +246,7 @@ def intake_tender_url(url: str) -> TenderSnapshot:
         raise TenderIntakeError("Tender URL must resolve to a public HTTP or HTTPS host.")
     request = Request(url, headers={"User-Agent": "BidPilot tender intake/0.1"})
     opener = build_opener(_PublicRedirectHandler())
-    with opener.open(request, timeout=20) as response:  # noqa: S310 - every redirect is validated.
+    with opener.open(request, timeout=20) as response:
         final_url = response.geturl()
         if not _is_public_url(final_url):
             raise TenderIntakeError("Tender URL resolved to a non-public host.")

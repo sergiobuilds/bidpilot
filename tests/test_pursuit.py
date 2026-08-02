@@ -1,20 +1,20 @@
-from pathlib import Path
 import runpy
+from pathlib import Path
 
 import pytest
 
-from bidpilot.bid_room import BidRoomStore
+from bidpilot.bid_room import BidRoomStore, BidRoomStoreError
 from bidpilot.fixtures import SUPPLIER_PROFILES, TENDERS
+from bidpilot.policy import POLICY_VERSION, pursue_status
 from bidpilot.proposal_writer import (
-    compose_persisted_proposal,
     build_gap_closure_plan,
+    compose_persisted_proposal,
     red_team_persisted_draft,
     red_team_proposal,
     red_team_tasks,
     write_strategy_proposal,
 )
 from bidpilot.pursuit import PursuitInputError, build_pursuit_brief, select_win_position
-from bidpilot.policy import POLICY_VERSION, pursue_status
 
 
 def test_qualified_supplier_receives_pursue_and_strategy_bound_blueprint() -> None:
@@ -47,6 +47,30 @@ def test_pursuit_rejects_empty_duplicate_and_malformed_score_maps() -> None:
         )
     with pytest.raises(PursuitInputError, match="supplier.people"):
         build_pursuit_brief(TENDERS[0], {key: value for key, value in supplier.items() if key != "people"})
+
+
+@pytest.mark.parametrize(
+    ("tender_patch", "supplier_patch", "message"),
+    (
+        ({"tags": "public-data"}, {}, "tender.tags"),
+        ({"delivery_hours": "many"}, {}, "tender.delivery_hours"),
+        ({"evaluation_criteria": ("Price",)}, {}, "evaluation_criteria"),
+        ({}, {"credentials": "SME confirmation"}, "supplier.credentials"),
+        ({}, {"past_projects": ({"title": "Broken"},)}, "supplier.past_projects"),
+        ({}, {"people": ({"name": "Ada"},)}, "supplier.people"),
+        ({}, {"available_hours": -1}, "available_hours"),
+    ),
+)
+def test_pursuit_normalizes_malformed_nested_inputs_as_domain_errors(
+    tender_patch: dict,
+    supplier_patch: dict,
+    message: str,
+) -> None:
+    with pytest.raises(PursuitInputError, match=message):
+        build_pursuit_brief(
+            {**TENDERS[0], **tender_patch},
+            {**SUPPLIER_PROFILES[0], **supplier_patch},
+        )
 
 
 def test_tender_and_supplier_matrix_changes_strategy_and_outcome() -> None:
@@ -302,6 +326,20 @@ def test_bid_room_latest_is_monotonic_and_rejects_stale_or_blocked_drafts(tmp_pa
     blocked = build_pursuit_brief(tender, SUPPLIER_PROFILES[1])
     with pytest.raises(ValueError, match="cannot persist"):
         store.save(blocked, "v1", "FLUENT BUT BLOCKED", ())
+
+
+def test_bid_room_normalizes_corrupt_persistence_as_domain_error(tmp_path: Path) -> None:
+    import sqlite3
+
+    tender, supplier = TENDERS[0], SUPPLIER_PROFILES[0]
+    brief = build_pursuit_brief(tender, supplier)
+    store = BidRoomStore(tmp_path / "bidpilot.sqlite")
+    run_id = store.save(brief, "v1", "DRAFT", ())
+    with sqlite3.connect(store.path) as connection:
+        connection.execute("UPDATE bid_runs SET brief_json = '{broken' WHERE run_id = ?", (run_id,))
+
+    with pytest.raises(BidRoomStoreError, match="malformed persisted data"):
+        store.load(run_id)
 
 
 def test_python_and_snowpark_policy_contract_share_version_and_decision_vectors() -> None:

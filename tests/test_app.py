@@ -25,7 +25,7 @@ def app_module(monkeypatch, tmp_path: Path):
     module = importlib.util.module_from_spec(spec)
     try:
         spec.loader.exec_module(module)
-    except BaseException as error:  # noqa: BLE001
+    except BaseException as error:
         # st.stop() ends a Streamlit script by raising. Every helper is
         # already defined by then; anything else is a real failure.
         if type(error).__name__ not in ("StopException", "RerunException"):
@@ -163,9 +163,15 @@ def product_responses() -> list[tuple]:
             "SELECT * FROM BIDPILOT_DEMO.BIDPILOT.PROPOSAL_SECTIONS",
             ("RUN_ID", "SECTION_ID", "CRITERION_NAME", "SECTION_MARKDOWN"),
             [
-                (RUN_ID, "sec-1", "Technical approach",
-                 "## Technical approach\n\nValidation: measured API regression.\n"
-                 "Buyer outcome: sustained public-service reliability."),
+                (
+                    RUN_ID,
+                    "sec-1",
+                    "Technical approach",
+                    (
+                        "## Technical approach\n\nValidation: measured API regression.\n"
+                        "Buyer outcome: sustained public-service reliability."
+                    ),
+                ),
                 (RUN_ID, "sec-2", "Price", "## Price\n\nPriced against the delivery envelope."),
             ],
         ),
@@ -179,7 +185,7 @@ def product_responses() -> list[tuple]:
 
 
 class FakeCursor:
-    def __init__(self, connection: "FakeConnection") -> None:
+    def __init__(self, connection: FakeConnection) -> None:
         self.connection = connection
         self.description: list[tuple] = []
         self.rows: list[tuple] = []
