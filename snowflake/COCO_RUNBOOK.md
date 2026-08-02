@@ -70,8 +70,9 @@ cortex -c bidpilot-runner -w "$PWD" --bypass --effort high --session-name bidpil
 The agent must query the opportunity, requirements, evaluation criteria, credentials, effective availability, past projects, people, and past proposals. It may write strategy and proposal artifacts only for a persisted `PURSUE` decision. Every write uses the same run ID.
 
 The current verified runner-only run is `cortex-final-20260802-a`. Cortex Code
-session evidence is `7d9dc75b-3fd9-4ab0-9d8f-4d0c0e2c18f1` on Cortex Code
-v1.1.52. It contains one decision, three strategies with one selected, four
+session evidence is `7d9dc75b-3fd9-4ab0-9d8f-4d0c0e2c18f1`. The persisted
+trace records Snowflake CLI `snow-v3.23.0`. The run contains one decision,
+three strategies with one selected, four
 weighted plans, eight proposal sections, and twelve tasks. The historical
 bootstrap run `bidpilot-v2-dq-northstar` remains replay evidence.
 
