@@ -5,6 +5,33 @@ from __future__ import annotations
 from bidpilot.pursuit import PursuitBrief, WinPosition
 
 
+def compose_persisted_proposal(response_plans: list[dict], sections: list[dict]) -> str:
+    """Build one criterion-led editable draft from persisted section fragments."""
+    blocks: list[str] = []
+    for plan in response_plans:
+        criterion = str(plan.get("criterion_name") or "").strip()
+        if not criterion:
+            continue
+        assets = _parse_assets(plan.get("assets"))
+        fragments = [
+            str(section.get("section_markdown") or "").strip()
+            for section in sections
+            if str(section.get("criterion_name") or "").strip().casefold() == criterion.casefold()
+            and str(section.get("section_markdown") or "").strip()
+        ]
+        demoted = [fragment.replace("## ", "### ", 1) if fragment.startswith("## ") else fragment for fragment in fragments]
+        block = [f"## {criterion}"]
+        claim = str(plan.get("claim") or "").strip()
+        if claim:
+            block.extend(["", claim])
+        if assets:
+            block.extend(["", "Evidence assets: " + ", ".join(assets) + "."])
+        if demoted:
+            block.extend(["", "\n\n".join(demoted)])
+        blocks.append("\n".join(block))
+    return "\n\n".join(blocks)
+
+
 def write_proposal_draft(packet: dict, company_name: str, positioning: str) -> str:
     """Produce a draft only from the qualification engine's packet contract."""
     if packet.get("kind") != "proposal-start-packet" or packet.get("packet_version") != "1.0":
@@ -134,14 +161,7 @@ def red_team_persisted_draft(response_plans: list[dict], draft: str) -> tuple[di
     for item, weight in zip(response_plans, weights, strict=True):
         criterion = str(item.get("criterion_name") or "").strip()
         body = _section_body(draft, criterion) if criterion else None
-        assets = item.get("assets") or []
-        if isinstance(assets, str):
-            import json
-
-            try:
-                assets = json.loads(assets)
-            except ValueError:
-                assets = [assets]
+        assets = _parse_assets(item.get("assets"))
         if body is None:
             finding = "Missing explicit score-bearing section."
         elif assets and not any(str(asset) in body for asset in assets):
@@ -164,16 +184,41 @@ def _section_body(draft: str, criterion: str) -> str | None:
 
 
 def _has_high_weight_detail(body: str) -> bool:
+    has_explicit_labels = "Validation:" in body or "Buyer outcome:" in body
     values = {}
     for label in ("Validation:", "Buyer outcome:"):
         start = body.find(label)
         if start < 0:
-            return False
+            if has_explicit_labels:
+                return False
+            break
         value_start = start + len(label)
         line_end = body.find("\n", value_start)
         values[label] = body[value_start : line_end if line_end >= 0 else len(body)].strip()
     placeholders = {"tbd", "todo", "pending", "n/a", "na", "not recorded", "unknown", "-"}
-    return all(value and value.casefold().strip(" .:;[]()") not in placeholders for value in values.values())
+    if has_explicit_labels:
+        return len(values) == 2 and all(
+            value and value.casefold().strip(" .:;[]()") not in placeholders for value in values.values()
+        )
+    lowered = body.casefold()
+    validation_signals = ("validation", "validate", "regression", "gate process", "checkpoint", "automated profiling")
+    outcome_signals = ("outcome", "reduced", "elimination", "prevented", "zero public-service", "maintained service")
+    return any(signal in lowered for signal in validation_signals) and any(signal in lowered for signal in outcome_signals)
+
+
+def _parse_assets(raw_assets) -> list[str]:
+    if not raw_assets:
+        return []
+    if isinstance(raw_assets, str):
+        import json
+
+        try:
+            parsed = json.loads(raw_assets)
+        except ValueError:
+            parsed = [raw_assets]
+    else:
+        parsed = raw_assets
+    return [str(asset).strip() for asset in parsed if str(asset).strip()]
 
 
 def _strategy_markdown(tender: dict, supplier: dict, brief: PursuitBrief, position: WinPosition) -> str:

@@ -20,6 +20,7 @@ from bidpilot.intake import (
     review_tender_snapshot,
 )
 from bidpilot.proposal_writer import (
+    compose_persisted_proposal,
     red_team_persisted_draft,
     red_team_proposal,
     red_team_tasks,
@@ -1042,7 +1043,7 @@ def render_snowflake_bid_room() -> None:
     )
     if result["sections"]:
         st.markdown('<span id="proposal-draft"></span>', unsafe_allow_html=True)
-        draft = "\n\n".join(str(item.get("section_markdown") or "") for item in result["sections"])
+        draft = compose_persisted_proposal(result["blueprint"], result["sections"])
         edited = st.text_area(
             "Proposal draft",
             draft,
