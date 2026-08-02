@@ -1,6 +1,6 @@
-# BidPilot 인계
+# BidPilot 최종 제출 기록
 
-BidPilot 최종 제출 직전 상태의 복귀 지점입니다.
+BidPilot 최종 제출 완료 상태의 복귀 지점입니다.
 
 ## 현재 사실
 
@@ -16,12 +16,14 @@ BidPilot 최종 제출 직전 상태의 복귀 지점입니다.
 - 공개 영상은 `https://storage.googleapis.com/bidpilot-demo-164282963747/BidPilot-Final-Demo.mp4`이며 signed-out HTTP range 요청이 206으로 통과합니다.
 - `uv run python dev/active/final-forge/verify-final.py` 한 번으로 git, 48 tests, live DOM, PDF, 영상, Snowflake trace와 blind-league chain을 재검증할 수 있습니다.
 - 포털용 4분 38초 영상과 별도로 Goal 구조를 만족하는 정확히 90초 영문 자막 pitch `dev/active/final-forge/BidPilot-90s-Pitch.mp4`를 만들었습니다.
+- GitHub 저장소를 public으로 전환하고 signed-out `git ls-remote`로 `main`을 확인했습니다.
+- Hack2Skill의 GitHub/Deployed Link와 Prototype/MVP attempt 1을 모두 최종 확인창까지 제출했습니다. 하드 리로드 후 입력값과 PDF명이 서버에서 복원됐습니다.
 
-## 다음 작업
+## 제출 후 유지
 
-1. CDP 9222는 Chrome이 아니라 `svchost`가 점유해 응답이 없습니다. 대체 비보북 CDP 9447에서 `jdrnd30@jdac.co.kr` 로그인과 OTP 재전송까지 진행했으며 현재 6자리 OTP 입력 화면입니다. email-automation INBOX cache에는 두 cron cycle 뒤에도 OTP가 없었습니다.
-2. Sergio 승인 후 저장소를 public으로 전환하고 signed-out clone을 검증합니다.
-3. 최종 제출 버튼은 Sergio 승인 후에만 누릅니다.
+1. 심사 기간 동안 public repository, Cloud Run 앱, GCS 영상을 유지합니다.
+2. 포털 수정이 필요할 때만 새 attempt를 만들고 현재 attempt 1 증거를 보존합니다.
+3. 합성 fixture와 닫힌 역사 공고라는 disclosure를 유지합니다.
 
 ## 금지 경계
 

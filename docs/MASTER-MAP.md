@@ -56,9 +56,9 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 | 제품 | B2G Pursuit Agent와 Bid Room으로 확정 | [CHRONICLE.md](CHRONICLE.md) |
 | 대회 | Snowflake CoCo CLI Hackathon 2026 | [CHRONICLE.md](CHRONICLE.md) |
 | 문제 영역 | Intelligent Workflow Automation Agent | [CHRONICLE.md](CHRONICLE.md) |
-| 저장소 | 비공개 GitHub 저장소 생성 | `sergiobuilds/bidpilot` |
+| 저장소 | 공개 GitHub 저장소 제출 | `sergiobuilds/bidpilot` |
 | 구현 | authenticated Opportunity Graph, Snowpark 2×2, Cortex complete run, score-map Bid Room 구현 | 이 문서의 Work Tree |
-| 제출 | finalizing | runner-only 실제 run, 4분 38초 영문 영상, 8쪽 PDF 덱, 공개 앱을 동결했습니다. |
+| 제출 | submitted | runner-only 실제 run, 4분 38초 영문 영상, 8쪽 PDF 덱, 공개 앱과 두 portal attempt 1을 제출했습니다. |
 
 ## 3 Confirmed Scope
 
@@ -89,12 +89,12 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 | 5 | L5 | root | done | 전략 주도 Proposal Builder 구현 | 평가항목별 section, profile별 출력 변화, NO-GO 차단 | 고정 템플릿 또는 NO-GO 생성 | CoCo orchestration | selected Win Position과 Blueprint를 연결한 local generator를 구현했습니다. |
 | 6 | L6 | root | done | CoCo run과 persistent Bid Room 구현 | complete run의 trace, sections, tasks 재조회 | 브라우저 state에만 남음 | evaluation과 submission | Cortex Code가 동일 run ID로 3 strategies, 4 plans, 8 sections, 12 tasks와 provenance를 저장했습니다. |
 | 7 | L7 | root | done | 실제 run 검증 | input validation, 2×2 parity, complete replay, 48 tests | 같은 run을 재현하지 못함 | 제출물 제작 | reader 역할의 authenticated AppTest와 공개 앱 proposal red-team·download를 통과했습니다. |
-| 8 | L8 | root | in_progress | 제출물 제작과 제출 | 실제 run 기반 영어 자료, 영상, 제출 확인 | 제출 링크가 심사자에게 열리지 않음 | 완료 | 4분 38초 포털 영상, 90초 companion pitch, 8쪽 PDF 덱, 공개 앱·영상과 균형 재실행한 내부 artifact blind league 1위를 확인했고 포털 최종 확인이 남았습니다. |
+| 8 | L8 | root | done | 제출물 제작과 제출 | 실제 run 기반 영어 자료, 영상, 제출 확인 | 제출 링크가 심사자에게 열리지 않음 | 완료 | 4분 38초 포털 영상, 90초 companion pitch, 8쪽 PDF 덱, 공개 앱·영상, public repository와 두 Hack2Skill attempt 1 제출을 확인했습니다. |
 
 ## 5 Open / Unconfirmed
 
-1. 저장소 public 전환 승인과 signed-out clone 검증
-2. Hack2Skill 포털 초안 입력과 최종 제출 승인
+1. 심사 기간 동안 public repository, 앱, 영상의 접근성을 유지합니다.
+2. 포털 수정이 필요하면 현재 attempt 1을 기준으로 변경 범위를 확인합니다.
 
 ## 6 Canonical Documents
 
@@ -113,10 +113,10 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 ## 7 Status
 
 - 마지막 확인 신호: 2026-08-02 KST에 48 tests, runner-only Snowpark 2×2, Cortex Code complete run, review-ready reader reload, Cloud Run 1440/768/390 렌더를 확인했습니다.
-- 진행상황: L1--L7 완료. L8은 저장소 공개 전환, 포털 초안 입력과 승인 제출이 남았습니다. 공개 영상은 signed-out range 검증을 통과했고 균형 재실행한 내부 artifact blind league는 6개 중 1위였습니다.
+- 진행상황: L1--L8 완료. 저장소 공개 전환, signed-out 접근, GitHub/Deployed Link attempt 1, Prototype/MVP attempt 1과 서버 재로드 확인을 마쳤습니다.
 - 현재 주장 가능 범위: authenticated Snowflake Opportunity Graph, Snowpark policy parity, Cortex Code complete run, strategy 비교, proposal, adversarial review, owned tasks, replayable public Bid Room이 있습니다.
-- 외부 게이트: 저장소 public 전환과 제출 폼 최종 버튼은 Sergio 승인 전입니다.
-- 다음 복귀 지점: 산출물 동결 커밋과 blind league를 마친 뒤 포털을 최종 버튼 직전까지 채웁니다.
+- 외부 게이트: 없음. Sergio가 저장소 공개 전환과 final Submit을 명시 승인했고 실행했습니다.
+- 다음 복귀 지점: 심사 접근성 유지와 결과 확인입니다.
 
 ## 8 변경 이력
 
@@ -135,3 +135,4 @@ BidPilot은 외부 B2G 공고의 평가 논리와 회사의 운영 메모리를 
 - 2026-08-02 v13: 후보별 독립 3회가 되도록 blind league를 균형 재실행하고 PDF 작업 수와 CLI 버전 표기를 실데이터에 맞췄습니다.
 - 2026-08-02 v14: persisted section fragment를 평가항목별 초안으로 조합해 공개 앱의 false missing-section 판정을 제거하고 download 활성화를 검증했습니다.
 - 2026-08-02 v15: 최종 QA 보고서, coverage census, portal checklist, v2 protocol index와 90초 영문 자막 companion pitch를 정본 작업층에 추가했습니다.
+- 2026-08-02 v16: GitHub public 전환, signed-out 접근, Hack2Skill 두 attempt 1 최종 제출과 서버 재로드 증거를 반영했습니다.
