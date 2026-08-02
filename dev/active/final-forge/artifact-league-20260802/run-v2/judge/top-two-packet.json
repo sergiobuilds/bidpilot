@@ -1,0 +1,52 @@
+{
+  "rubric": "official 30 relevance / 40 technical / 30 completeness",
+  "pair": [
+    "BLIND-4D4B3DACD573",
+    "BLIND-87B23B5AE081"
+  ],
+  "cards": {
+    "BLIND-4D4B3DACD573": {
+      "problem": "Small government-bid teams waste pursuit effort before drafting and then write without tying official evaluation weights to supplier operating evidence.",
+      "user": "A small B2G proposal team responsible for qualification, win strategy, drafting, review, and owned closure work.",
+      "workflow": "Tender URL or PDF intake leads to a reviewed scope, pursue decision, weighted score map, comparison of three Win Positions, editable proposal, adversarial review, owned tasks, and replay.",
+      "snowflake_role": "A versioned Opportunity Graph joins tender criteria with credentials, availability and delivery memory. Snowpark persists policy decisions. Cortex Code writes strategies, plans, sections and tasks under one run. Reader and runner roles are separated.",
+      "execution_proof": "A runner-only Cortex Code run is COMPLETED with one decision, three strategies, four plans totaling 100 points, eight sections, twelve tasks, session and query provenance. A runner-only Snowpark 2x2 matrix and 47 tests pass.",
+      "product_proof": "A public Streamlit deployment reloads the authenticated run and has verified 1440, 768 and 390 pixel captures. A 278-second narrated demo and an eight-page PDF deck exist.",
+      "business_case": "The product reduces wasted pursuits, directs writing effort by buyer weight, and retains reusable supplier memory for future bids. The intended commercial surface is a team subscription plus agent runs.",
+      "observed_evidence": [
+        "public deployed app",
+        "authenticated Snowflake run",
+        "Cortex and Snowpark query trace",
+        "responsive captures",
+        "tests",
+        "video and PDF"
+      ],
+      "missing_evidence": [
+        "paid customer validation",
+        "open live tender submission outcome"
+      ]
+    },
+    "BLIND-87B23B5AE081": {
+      "problem": "Maritime logistics teams need to detect Bill of Lading fraud and compliance risk before shipments and ERP actions create financial exposure.",
+      "user": "Logistics compliance and operations teams screening shipments, sanctions exposure, anomalies, and remediation actions.",
+      "workflow": "A full pipeline detects anomalies, investigates with Cortex, screens Marketplace sanctions data, chooses BLOCK, ESCALATE or CLEAR, posts ERP actions, and records the decision in an audit log.",
+      "snowflake_role": "Snowflake hosts workflow procedures, Cortex AI and Agent capabilities, Marketplace screening data, dynamic tables, streams and tasks, Snowpark scoring, and Streamlit analytics. A separate Mendix application is the public MVP.",
+      "execution_proof": "The repository provides stored procedures, three agent skills, a Snowpark risk script, sample documents, CLI evidence instructions, an audit-log query, and a callable full-pipeline procedure. The public MVP is linked; the Snowflake dashboard needs judge credentials.",
+      "product_proof": "The submission includes a public Mendix interface, Snowflake Streamlit source, a four-minute narration, compliance checklist, architecture documentation, and reproducible SQL for workflow and audit inspection.",
+      "business_case": "Shipment fraud, sanctions breaches and operational delays have direct enterprise cost. Automated screening and policy-bounded remediation offer a clear buyer and measurable loss-avoidance case.",
+      "observed_evidence": [
+        "public repository",
+        "linked public MVP",
+        "workflow SQL",
+        "Snowpark script",
+        "CLI evidence document",
+        "submission assets"
+      ],
+      "missing_evidence": [
+        "signed-out access to Snowflake dashboard",
+        "independent production outcome"
+      ]
+    }
+  },
+  "instructions": "Judge only the supplied evidence. Do not infer identities."
+}

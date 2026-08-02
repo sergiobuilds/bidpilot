@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent
-RUN = ROOT / "run"
+RUN = ROOT / "run-v2"
 
 
 def load(path: Path):

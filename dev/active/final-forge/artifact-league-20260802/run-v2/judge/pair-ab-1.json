@@ -1,0 +1,42 @@
+{
+  "orientation": {
+    "LEFT": "BLIND-4D4B3DACD573",
+    "RIGHT": "BLIND-87B23B5AE081"
+  },
+  "scores": {
+    "LEFT": {
+      "official_relevance": 29,
+      "technical": 39,
+      "completeness": 29,
+      "total": 97
+    },
+    "RIGHT": {
+      "official_relevance": 28,
+      "technical": 34,
+      "completeness": 26,
+      "total": 88
+    }
+  },
+  "choice": "LEFT",
+  "decisive_reason": "LEFT presents the stronger end-to-end evidence chain: a completed runner-only Cortex Code execution, persisted Snowpark policy decisions, session and query provenance, a runner-only matrix, 47 passing tests, and a public deployment that reloads the authenticated run. RIGHT addresses a highly relevant enterprise risk and supplies substantial implementation material, but its packet primarily establishes repository-level and reproducibility evidence; the credential-gated Snowflake dashboard and separate public Mendix MVP leave the core Snowflake execution and public product proof less tightly connected.",
+  "evidence_gaps": {
+    "LEFT": [
+      "No paid customer validation is supplied.",
+      "No open live tender submission outcome is supplied."
+    ],
+    "RIGHT": [
+      "No signed-out access to the Snowflake dashboard is supplied.",
+      "No independent production outcome is supplied.",
+      "The packet does not report a completed authenticated full-pipeline run, passing test count, or query provenance comparable to LEFT.",
+      "The public Mendix MVP is separate from the Snowflake dashboard, so the packet does not fully demonstrate that the public interface exercises the claimed Snowflake workflow."
+    ],
+    "shared": [
+      "Neither candidate supplies independent customer or production outcome validation."
+    ]
+  },
+  "confidence": {
+    "level": "high",
+    "value": 0.9,
+    "reason": "The supplied evidence creates a clear technical and completeness separation, although confidence is bounded because this judgment is restricted to the frozen packet and cannot independently inspect the deployments, repositories, or execution traces."
+  }
+}

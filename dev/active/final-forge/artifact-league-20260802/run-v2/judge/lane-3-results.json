@@ -1,0 +1,191 @@
+[
+  {
+    "assignment_id": "V2-L3-A1",
+    "blind_id": "ANCHOR:3:low",
+    "scores": {
+      "relevance": 8,
+      "technical": 5,
+      "completeness": 4
+    },
+    "source_locked_scores": {
+      "relevance": 8,
+      "technical": 5,
+      "completeness": 4
+    },
+    "reason": "The use case is broad and weakly monetizable, Snowflake is incidental, and the only demonstrated artifact is a static mockup with no working end-to-end path.",
+    "evidence_gaps": [
+      "platform necessity",
+      "working run",
+      "complete product"
+    ],
+    "confidence": 0.99
+  },
+  {
+    "assignment_id": "V2-L3-A2",
+    "blind_id": "ANCHOR:3:mid",
+    "scores": {
+      "relevance": 20,
+      "technical": 23,
+      "completeness": 18
+    },
+    "source_locked_scores": {
+      "relevance": 20,
+      "technical": 23,
+      "completeness": 18
+    },
+    "reason": "A specific operator and credible exception workflow create solid value, while limited provenance, no authenticated agent run, and an incomplete review and delivery package hold it at the middle anchor.",
+    "evidence_gaps": [
+      "authenticated agent run",
+      "public demo",
+      "customer validation"
+    ],
+    "confidence": 0.99
+  },
+  {
+    "assignment_id": "V2-L3-A3",
+    "blind_id": "ANCHOR:3:high",
+    "scores": {
+      "relevance": 29,
+      "technical": 39,
+      "completeness": 29
+    },
+    "source_locked_scores": {
+      "relevance": 29,
+      "technical": 39,
+      "completeness": 29
+    },
+    "reason": "The artifact combines a high-value owned workflow with indispensable governed Snowflake execution, independently reloadable provenance, failure recovery, public product proof, and a complete submission package.",
+    "evidence_gaps": [
+      "production customer outcome"
+    ],
+    "confidence": 0.99
+  },
+  {
+    "assignment_id": "V2-L3-C1",
+    "blind_id": "BLIND-4D4B3DACD573",
+    "scores": {
+      "relevance": 27,
+      "technical": 38,
+      "completeness": 29
+    },
+    "source_locked_scores": {
+      "relevance": 27,
+      "technical": 38,
+      "completeness": 29
+    },
+    "reason": "A tightly defined bid-team workflow reaches owned action and replay, with Snowflake serving as versioned shared memory and policy infrastructure. Authenticated Cortex Code and Snowpark traces, exact output cardinalities, passing tests, public responsive deployment, video, and deck make this nearly high-anchor complete.",
+    "evidence_gaps": [
+      "paid customer validation",
+      "open live tender submission outcome"
+    ],
+    "confidence": 0.97
+  },
+  {
+    "assignment_id": "V2-L3-C2",
+    "blind_id": "BLIND-87B23B5AE081",
+    "scores": {
+      "relevance": 28,
+      "technical": 34,
+      "completeness": 26
+    },
+    "source_locked_scores": {
+      "relevance": 28,
+      "technical": 31,
+      "completeness": 25
+    },
+    "reason": "Fraud and sanctions screening has a clear enterprise buyer and measurable loss-avoidance value, and the design uses a broad set of native Snowflake capabilities in a policy-bounded pipeline. Inspectable procedures, skills, Snowpark code, audit queries, public MVP, narration, and documentation are strong, but no captured authenticated Snowflake run or signed-out dashboard proof closes the execution gap.",
+    "evidence_gaps": [
+      "captured authenticated full-pipeline run",
+      "signed-out access to Snowflake dashboard",
+      "independent production outcome"
+    ],
+    "confidence": 0.92
+  },
+  {
+    "assignment_id": "V2-L3-C3",
+    "blind_id": "BLIND-BC6FBE07614E",
+    "scores": {
+      "relevance": 25,
+      "technical": 27,
+      "completeness": 22
+    },
+    "source_locked_scores": {
+      "relevance": 24,
+      "technical": 24,
+      "completeness": 20
+    },
+    "reason": "The civic transparency problem and multi-role workflow are meaningful, with source-level Cortex, Snowpark, frontend, and backend integration. Broad stakeholders and an unclear first buyer reduce commercial focus, while screenshots and setup materials cannot substitute for a public deployment or authenticated Cortex provenance.",
+    "evidence_gaps": [
+      "public live URL",
+      "authenticated Cortex run provenance",
+      "measured adoption",
+      "narrow procurement buyer"
+    ],
+    "confidence": 0.91
+  },
+  {
+    "assignment_id": "V2-L3-C4",
+    "blind_id": "BLIND-306F061E94B8",
+    "scores": {
+      "relevance": 27,
+      "technical": 26,
+      "completeness": 24
+    },
+    "source_locked_scores": {
+      "relevance": 26,
+      "technical": 22,
+      "completeness": 23
+    },
+    "reason": "The supply-chain incident-to-procurement workflow targets costly operational failures and includes an explicit human authorization boundary and audit trail. Public UI, tests, skills, and multiple runnable entry points show useful completeness, but emulator substitutability and absent Snowflake query provenance materially weaken proof that the named platform powers the demonstrated product.",
+    "evidence_gaps": [
+      "authenticated Snowflake execution trace",
+      "proof that public app uses Snowflake",
+      "production outcome"
+    ],
+    "confidence": 0.94
+  },
+  {
+    "assignment_id": "V2-L3-C5",
+    "blind_id": "BLIND-D31D623FEE21",
+    "scores": {
+      "relevance": 27,
+      "technical": 25,
+      "completeness": 18
+    },
+    "source_locked_scores": {
+      "relevance": 27,
+      "technical": 22,
+      "completeness": 17
+    },
+    "reason": "Contract-to-spend monitoring has a specific cross-functional buyer and directly measurable leakage reduction. Realistic fixtures, deterministic anomaly rules, three skills, and Snowflake setup demonstrate a coherent build, but manual setup instructions and expected outputs do not establish an authenticated run, usable interface, independent test result, or judge-ready demo.",
+    "evidence_gaps": [
+      "authenticated Snowflake run",
+      "public interface",
+      "demo video",
+      "independent test result"
+    ],
+    "confidence": 0.95
+  },
+  {
+    "assignment_id": "V2-L3-C6",
+    "blind_id": "BLIND-D4DABBE06D86",
+    "scores": {
+      "relevance": 21,
+      "technical": 29,
+      "completeness": 20
+    },
+    "source_locked_scores": {
+      "relevance": 21,
+      "technical": 26,
+      "completeness": 18
+    },
+    "reason": "The solution presents a technically coherent native stack spanning Agent routing, Analyst, Search, Marketplace data, dynamic refresh, and structured human-approved actions. Its crowded market, BYOK friction, delayed data, fallbacks, unresolved license, and lack of a deployed or captured authenticated run limit both demonstrated differentiation and judge readiness.",
+    "evidence_gaps": [
+      "public deployment",
+      "captured authenticated run",
+      "resolved license",
+      "customer validation"
+    ],
+    "confidence": 0.93
+  }
+]

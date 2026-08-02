@@ -1,0 +1,137 @@
+[
+  {
+    "assignment_id": "V2-L1-A1",
+    "lane": 1,
+    "blind_id": "ANCHOR:1:low"
+  },
+  {
+    "assignment_id": "V2-L1-A2",
+    "lane": 1,
+    "blind_id": "ANCHOR:1:mid"
+  },
+  {
+    "assignment_id": "V2-L1-A3",
+    "lane": 1,
+    "blind_id": "ANCHOR:1:high"
+  },
+  {
+    "assignment_id": "V2-L1-C1",
+    "lane": 1,
+    "blind_id": "BLIND-4D4B3DACD573"
+  },
+  {
+    "assignment_id": "V2-L1-C2",
+    "lane": 1,
+    "blind_id": "BLIND-87B23B5AE081"
+  },
+  {
+    "assignment_id": "V2-L1-C3",
+    "lane": 1,
+    "blind_id": "BLIND-BC6FBE07614E"
+  },
+  {
+    "assignment_id": "V2-L1-C4",
+    "lane": 1,
+    "blind_id": "BLIND-306F061E94B8"
+  },
+  {
+    "assignment_id": "V2-L1-C5",
+    "lane": 1,
+    "blind_id": "BLIND-D31D623FEE21"
+  },
+  {
+    "assignment_id": "V2-L1-C6",
+    "lane": 1,
+    "blind_id": "BLIND-D4DABBE06D86"
+  },
+  {
+    "assignment_id": "V2-L2-A1",
+    "lane": 2,
+    "blind_id": "ANCHOR:2:low"
+  },
+  {
+    "assignment_id": "V2-L2-A2",
+    "lane": 2,
+    "blind_id": "ANCHOR:2:mid"
+  },
+  {
+    "assignment_id": "V2-L2-A3",
+    "lane": 2,
+    "blind_id": "ANCHOR:2:high"
+  },
+  {
+    "assignment_id": "V2-L2-C1",
+    "lane": 2,
+    "blind_id": "BLIND-4D4B3DACD573"
+  },
+  {
+    "assignment_id": "V2-L2-C2",
+    "lane": 2,
+    "blind_id": "BLIND-87B23B5AE081"
+  },
+  {
+    "assignment_id": "V2-L2-C3",
+    "lane": 2,
+    "blind_id": "BLIND-BC6FBE07614E"
+  },
+  {
+    "assignment_id": "V2-L2-C4",
+    "lane": 2,
+    "blind_id": "BLIND-306F061E94B8"
+  },
+  {
+    "assignment_id": "V2-L2-C5",
+    "lane": 2,
+    "blind_id": "BLIND-D31D623FEE21"
+  },
+  {
+    "assignment_id": "V2-L2-C6",
+    "lane": 2,
+    "blind_id": "BLIND-D4DABBE06D86"
+  },
+  {
+    "assignment_id": "V2-L3-A1",
+    "lane": 3,
+    "blind_id": "ANCHOR:3:low"
+  },
+  {
+    "assignment_id": "V2-L3-A2",
+    "lane": 3,
+    "blind_id": "ANCHOR:3:mid"
+  },
+  {
+    "assignment_id": "V2-L3-A3",
+    "lane": 3,
+    "blind_id": "ANCHOR:3:high"
+  },
+  {
+    "assignment_id": "V2-L3-C1",
+    "lane": 3,
+    "blind_id": "BLIND-4D4B3DACD573"
+  },
+  {
+    "assignment_id": "V2-L3-C2",
+    "lane": 3,
+    "blind_id": "BLIND-87B23B5AE081"
+  },
+  {
+    "assignment_id": "V2-L3-C3",
+    "lane": 3,
+    "blind_id": "BLIND-BC6FBE07614E"
+  },
+  {
+    "assignment_id": "V2-L3-C4",
+    "lane": 3,
+    "blind_id": "BLIND-306F061E94B8"
+  },
+  {
+    "assignment_id": "V2-L3-C5",
+    "lane": 3,
+    "blind_id": "BLIND-D31D623FEE21"
+  },
+  {
+    "assignment_id": "V2-L3-C6",
+    "lane": 3,
+    "blind_id": "BLIND-D4DABBE06D86"
+  }
+]

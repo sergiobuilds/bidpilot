@@ -1,0 +1,83 @@
+[
+  {
+    "assignment_id": "V2-L2-A1",
+    "blind_id": "ANCHOR:2:low",
+    "scores": {"relevance": 5, "technical": 2, "completeness": 3},
+    "source_locked_scores": {"relevance": 4, "technical": 2, "completeness": 3},
+    "reason": "The stated problem and generic user are broad, while the single chat response neither requires Snowflake nor demonstrates an end-to-end product workflow.",
+    "evidence_gaps": ["platform necessity", "authenticated working run", "complete workflow and failure handling", "buyer and measurable value"],
+    "confidence": 0.99
+  },
+  {
+    "assignment_id": "V2-L2-A2",
+    "blind_id": "ANCHOR:2:mid",
+    "scores": {"relevance": 17, "technical": 19, "completeness": 15},
+    "source_locked_scores": {"relevance": 16, "technical": 17, "completeness": 14},
+    "reason": "A named operator, fixture-backed exception workflow, persisted review result, schema, and tests establish a credible prototype, but the agent path and judge-facing proof remain partial.",
+    "evidence_gaps": ["authenticated agent execution", "public demonstration", "durable multi-step provenance", "customer validation"],
+    "confidence": 0.98
+  },
+  {
+    "assignment_id": "V2-L2-A3",
+    "blind_id": "ANCHOR:2:high",
+    "scores": {"relevance": 28, "technical": 38, "completeness": 29},
+    "source_locked_scores": {"relevance": 27, "technical": 37, "completeness": 29},
+    "reason": "This is the benchmark for a narrow, owned, high-value workflow with indispensable governed Snowflake infrastructure, authenticated provenance, replay and recovery, plus public judge-ready evidence.",
+    "evidence_gaps": ["production customer outcome"],
+    "confidence": 0.99
+  },
+  {
+    "assignment_id": "V2-L2-C1",
+    "blind_id": "BLIND-4D4B3DACD573",
+    "scores": {"relevance": 27, "technical": 38, "completeness": 29},
+    "source_locked_scores": {"relevance": 26, "technical": 38, "completeness": 29},
+    "reason": "A tightly defined B2G decision workflow connects official weighting to supplier evidence, human review, owned tasks and replay. The authenticated runner-only run, query trace, tests, responsive deployment, video and deck substantiate near-benchmark technical and presentation quality.",
+    "evidence_gaps": ["paid customer validation", "live tender submission outcome"],
+    "confidence": 0.96
+  },
+  {
+    "assignment_id": "V2-L2-C2",
+    "blind_id": "BLIND-87B23B5AE081",
+    "scores": {"relevance": 27, "technical": 32, "completeness": 25},
+    "source_locked_scores": {"relevance": 26, "technical": 31, "completeness": 24},
+    "reason": "Fraud and sanctions remediation has a concrete enterprise owner and loss-avoidance case. The recorded pipeline design uses substantial Snowflake capabilities and the public MVP plus narration make it judgeable, but inaccessible Snowflake surfaces prevent full execution verification.",
+    "evidence_gaps": ["signed-out Snowflake dashboard access", "authenticated end-to-end query provenance", "independent production outcome"],
+    "confidence": 0.91
+  },
+  {
+    "assignment_id": "V2-L2-C3",
+    "blind_id": "BLIND-BC6FBE07614E",
+    "scores": {"relevance": 23, "technical": 21, "completeness": 18},
+    "source_locked_scores": {"relevance": 22, "technical": 20, "completeness": 16},
+    "reason": "The public-accountability use case and multi-role workflow are meaningful, with inspectable frontend, backend and Snowflake integration. However, the first buyer and commercial path are diffuse, and screenshots plus setup materials do not establish a deployed or authenticated live run.",
+    "evidence_gaps": ["narrow paying buyer and adoption evidence", "public live URL", "authenticated Cortex provenance", "measured usage or outcome"],
+    "confidence": 0.90
+  },
+  {
+    "assignment_id": "V2-L2-C4",
+    "blind_id": "BLIND-306F061E94B8",
+    "scores": {"relevance": 26, "technical": 19, "completeness": 22},
+    "source_locked_scores": {"relevance": 24, "technical": 17, "completeness": 21},
+    "reason": "The operational risk, buyer, authorization threshold and audit trail make a strong applied workflow, and the public interface is understandable. The ability to use a SQLite emulator and lack of authenticated Snowflake evidence weaken proof that the named platform executes the demonstrated system.",
+    "evidence_gaps": ["authenticated Snowflake execution trace", "proof the public app is Snowflake-backed", "persisted complete Snowflake run", "production outcome"],
+    "confidence": 0.92
+  },
+  {
+    "assignment_id": "V2-L2-C5",
+    "blind_id": "BLIND-D31D623FEE21",
+    "scores": {"relevance": 26, "technical": 21, "completeness": 16},
+    "source_locked_scores": {"relevance": 25, "technical": 19, "completeness": 14},
+    "reason": "Contract-to-spend monitoring identifies a specific, measurable financial problem and contains realistic fixtures, skills and deterministic policy logic. It remains a setup-oriented repository card without a recorded authenticated run, public product, demonstration, or independently observed test result.",
+    "evidence_gaps": ["authenticated Snowflake and Cortex run", "public interface", "recorded end-to-end demo", "independent test result", "customer validation"],
+    "confidence": 0.93
+  },
+  {
+    "assignment_id": "V2-L2-C6",
+    "blind_id": "BLIND-D4DABBE06D86",
+    "scores": {"relevance": 21, "technical": 25, "completeness": 16},
+    "source_locked_scores": {"relevance": 19, "technical": 23, "completeness": 14},
+    "reason": "The implementation plan has a credible Cortex Agent, Analyst, Search, semantic-view and dynamic-table stack, with explicit user approval for actions. The business case is less differentiated because of BYOK friction and crowded alternatives, while absent deployment and captured execution constrain completeness.",
+    "evidence_gaps": ["public deployment", "captured authenticated passing run", "proof of non-stub primary path", "resolved license", "customer validation"],
+    "confidence": 0.90
+  }
+]

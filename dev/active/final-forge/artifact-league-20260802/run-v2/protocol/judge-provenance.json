@@ -1,0 +1,15 @@
+{
+  "lane_judges": [
+    {"handle": "balanced_lane_1", "model": "gpt-5.6-sol", "lane": 1, "candidate_exposures": 6},
+    {"handle": "balanced_lane_2", "model": "gpt-5.6-terra", "lane": 2, "candidate_exposures": 6},
+    {"handle": "balanced_lane_3", "model": "gpt-5.6-sol", "lane": 3, "candidate_exposures": 6}
+  ],
+  "pairwise_judges": [
+    {"handle": "v2_pair_ab_1", "model": "gpt-5.6-sol", "orientation": "AB"},
+    {"handle": "v2_pair_ab_2", "model": "gpt-5.6-terra", "orientation": "AB"},
+    {"handle": "v2_pair_ba_1", "model": "gpt-5.6-sol", "orientation": "BA"},
+    {"handle": "v2_pair_ba_2", "model": "gpt-5.6-terra", "orientation": "BA"}
+  ],
+  "identity_visibility": "No judge received the identity mapping or repository access.",
+  "limitations": "Agent handles and model families are recorded; provider session UUIDs and token-level traces are not available in the artifact."
+}
