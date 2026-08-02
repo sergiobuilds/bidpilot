@@ -22,6 +22,7 @@ BidPilot 최종 제출 완료 상태의 복귀 지점입니다.
 - Cloud Run revision `bidpilot-demo-00005-fc2`가 트래픽 100%를 받고 있으며 공개 URL은 새 WDS source를 제공합니다.
 - 공개 source는 strict complete-run 계약, supplier profile version binding, 안전한 연결 오류 화면을 포함합니다. `bidpilot-reader`로 final run의 strategy 3, plan 4, section 8, task 12를 재확인했습니다.
 - Sergio의 시각 승인 후 공개 Stage 1·4를 1440과 390에서 다시 열어 가로 overflow가 없음을 확인했습니다. 첫 cold start는 Snowflake JWT 연결 때문에 지연될 수 있습니다.
+- Savepoint: `origin/main`은 `1c19e5d`입니다. 작업은 배포까지 끝났고 다음 행동은 코드 수정 없이 공개 URL과 Snowflake reader 연결을 관찰하는 일입니다.
 
 ## 2 제출 후 유지
 
@@ -47,6 +48,7 @@ BidPilot 최종 제출 완료 상태의 복귀 지점입니다.
 
 ## 5 변경 이력
 
+- 2026-08-03: savepoint를 `1c19e5d`와 공개 revision `bidpilot-demo-00005-fc2`에 고정했습니다.
 - 2026-08-03: strict data contract, supplier version migration, blank-slate WDS source, 83 tests와 배포 전 시각 승인 게이트를 반영했습니다.
 - 2026-08-03: Sergio 승인 후 Cloud Run `bidpilot-demo-00005-fc2`를 배포하고 공개 Stage 1·4의 desktop/mobile readback을 반영했습니다.
 - 2026-08-02: WDS 공개 배포, Cloud Run revision, Hack2Skill attempt 2와 서버 재로드 검증을 반영했습니다.
