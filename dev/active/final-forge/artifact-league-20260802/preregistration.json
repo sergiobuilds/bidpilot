@@ -1,0 +1,27 @@
+{
+  "decision": "Select the strongest current Snowflake CoCo CLI Hackathon artifact and expose any reason BidPilot is not first-place-ready.",
+  "population_label": "Six discoverable exact-event public GitHub submissions in the selected workflow or AI-native application population, plus the current local BidPilot freeze.",
+  "evidence_cutoff": "2026-08-02T09:35:00+09:00",
+  "information_parity": {
+    "min_total_characters": 1600,
+    "max_total_characters": 1750,
+    "field_min_characters": 80,
+    "field_max_characters": 300,
+    "narrative_fields": ["problem", "user", "workflow", "snowflake_role", "execution_proof", "product_proof", "business_case"],
+    "required_fields": ["problem", "user", "workflow", "snowflake_role", "execution_proof", "product_proof", "business_case", "observed_evidence", "missing_evidence"],
+    "candidate_order": "seeded independent shuffle",
+    "identity_visibility": "sealed until final aggregate",
+    "source_locked_variant": "score only observed_evidence and explicitly described repository or deployment behavior",
+    "parity_reconstructed_variant": "score the complete neutral card while discounting unsupported claims"
+  },
+  "replicas_per_lane": 3,
+  "lanes": 3,
+  "seed": 20260802,
+  "scorer_policy": "Three fresh no-history model sessions. Each scores one lane packet in isolation and returns machine-readable JSON.",
+  "disagreement_rule": "Adjudicate when total range is at least 18 or any official axis range is at least 8.",
+  "tie_rule": "Prefer higher technical score, then completeness, then lower score variance.",
+  "pairwise_plan": "Run the top two finalists in both left-right orientations across three fresh replicas and flag position bias above 65 percent.",
+  "promotion_count": 2,
+  "unscoreable_policy": "Report as unscoreable rather than assigning zero.",
+  "output_schema": "Candidate code, three integer axis scores, total, decisive reason, strongest evidence, largest gap, confidence."
+}

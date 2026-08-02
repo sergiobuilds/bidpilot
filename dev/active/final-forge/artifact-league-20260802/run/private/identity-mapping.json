@@ -1,0 +1,32 @@
+{
+  "BLIND-306F061E94B8": {
+    "name": "Cortex SupplyGuard",
+    "revision": "81cee81afecac8d6ad53b1afc341af1e3d256d57",
+    "source": "public GitHub repository and linked Vercel app"
+  },
+  "BLIND-4D4B3DACD573": {
+    "name": "BidPilot",
+    "revision": "d6eb3df0b66e70baea114ebfdd33ed66a9b379f5",
+    "source": "local repository plus public Cloud Run deployment"
+  },
+  "BLIND-87B23B5AE081": {
+    "name": "VF Logistics",
+    "revision": "442dc486b548eaab5d719d1ae5715d63c6038354",
+    "source": "public GitHub repository and linked public MVP"
+  },
+  "BLIND-BC6FBE07614E": {
+    "name": "SALAY",
+    "revision": "738eb006f679ae8ea15393286f993c389211c23f",
+    "source": "public GitHub repository"
+  },
+  "BLIND-D31D623FEE21": {
+    "name": "Contract Risk and Obligation Auditor",
+    "revision": "decd2e7a1363897c61d86bd808446b643e794cf3",
+    "source": "public GitHub repository"
+  },
+  "BLIND-D4DABBE06D86": {
+    "name": "Trading Agent App OS",
+    "revision": "c2dd8617f62bb6cdfa68e5f66cfea2f0fa807b8e",
+    "source": "public GitHub repository"
+  }
+}

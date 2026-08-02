@@ -1,0 +1,189 @@
+[
+  {
+    "assignment_id": "A-000025",
+    "blind_id": "ANCHOR:3:low",
+    "scores": {
+      "relevance": 8,
+      "technical": 5,
+      "completeness": 4
+    },
+    "source_locked_scores": {
+      "relevance": 5,
+      "technical": 2,
+      "completeness": 3
+    },
+    "reason": "The card describes a generic time-saving use case with no defined buyer, adoption path, or measurable business outcome. Snowflake is incidental rather than necessary, and the only directly observed product evidence is a static mockup that does not demonstrate a working or complete workflow.",
+    "evidence_gaps": [
+      "platform necessity",
+      "working run",
+      "complete product"
+    ],
+    "confidence": 0.99
+  },
+  {
+    "assignment_id": "A-000026",
+    "blind_id": "ANCHOR:3:mid",
+    "scores": {
+      "relevance": 22,
+      "technical": 23,
+      "completeness": 17
+    },
+    "source_locked_scores": {
+      "relevance": 18,
+      "technical": 18,
+      "completeness": 14
+    },
+    "reason": "A named operational owner, repeatable exception workflow, and plausible avoided effort make the use case credible. Source, schema, tests, and a local prototype support meaningful execution, but the absence of an authenticated agent run, public demo, and complete ownership/review package prevents a stronger technical or judge-readiness score.",
+    "evidence_gaps": [
+      "authenticated agent run",
+      "public demo",
+      "customer validation"
+    ],
+    "confidence": 0.98
+  },
+  {
+    "assignment_id": "A-000027",
+    "blind_id": "ANCHOR:3:high",
+    "scores": {
+      "relevance": 29,
+      "technical": 39,
+      "completeness": 29
+    },
+    "source_locked_scores": {
+      "relevance": 28,
+      "technical": 39,
+      "completeness": 29
+    },
+    "reason": "The entry targets a recurring high-value decision for a specific professional owner and makes Snowflake indispensable to governed state, policy execution, agent work, and provenance. Direct evidence covers an authenticated end-to-end run, reproducible tests, public responsive product, recovery behavior, and complete submission assets; only a production customer outcome remains unproven.",
+    "evidence_gaps": [
+      "production customer outcome"
+    ],
+    "confidence": 0.99
+  },
+  {
+    "assignment_id": "A-000003",
+    "blind_id": "BLIND-D31D623FEE21",
+    "scores": {
+      "relevance": 26,
+      "technical": 26,
+      "completeness": 16
+    },
+    "source_locked_scores": {
+      "relevance": 22,
+      "technical": 22,
+      "completeness": 12
+    },
+    "reason": "Contract-to-spend risk has a specific cross-functional buyer, clear loss-avoidance value, and a well-scoped anomaly workflow. Six fixtures, matching spend data, three skills, setup SQL, and a control case support substantial implementation, but the card shows instructions and expected results rather than an authenticated run, independent test result, public interface, or recorded end-to-end demonstration.",
+    "evidence_gaps": [
+      "authenticated Snowflake run",
+      "public interface",
+      "demo video",
+      "independent test result"
+    ],
+    "confidence": 0.95
+  },
+  {
+    "assignment_id": "A-000006",
+    "blind_id": "BLIND-BC6FBE07614E",
+    "scores": {
+      "relevance": 23,
+      "technical": 28,
+      "completeness": 23
+    },
+    "source_locked_scores": {
+      "relevance": 19,
+      "technical": 24,
+      "completeness": 19
+    },
+    "reason": "Public-contract transparency is consequential and the multi-role workflow addresses real citizen, auditor, and government needs, though the first paying buyer and procurement path are diffuse. Frontend, backend, Snowflake connector, Snowpark integration, setup scripts, and role-based screenshots show breadth, but authenticated Cortex provenance and a signed-out live product are not directly demonstrated.",
+    "evidence_gaps": [
+      "public live URL",
+      "authenticated Cortex run provenance",
+      "measured adoption"
+    ],
+    "confidence": 0.93
+  },
+  {
+    "assignment_id": "A-000008",
+    "blind_id": "BLIND-D31D623FEE21",
+    "scores": {
+      "relevance": 26,
+      "technical": 26,
+      "completeness": 16
+    },
+    "source_locked_scores": {
+      "relevance": 22,
+      "technical": 22,
+      "completeness": 12
+    },
+    "reason": "Contract-to-spend risk has a specific cross-functional buyer, clear loss-avoidance value, and a well-scoped anomaly workflow. Six fixtures, matching spend data, three skills, setup SQL, and a control case support substantial implementation, but the card shows instructions and expected results rather than an authenticated run, independent test result, public interface, or recorded end-to-end demonstration.",
+    "evidence_gaps": [
+      "authenticated Snowflake run",
+      "public interface",
+      "demo video",
+      "independent test result"
+    ],
+    "confidence": 0.95
+  },
+  {
+    "assignment_id": "A-000011",
+    "blind_id": "BLIND-4D4B3DACD573",
+    "scores": {
+      "relevance": 29,
+      "technical": 39,
+      "completeness": 30
+    },
+    "source_locked_scores": {
+      "relevance": 27,
+      "technical": 39,
+      "completeness": 30
+    },
+    "reason": "The entry addresses a costly, recurring qualification and proposal workflow for a specific B2G team and connects official evaluation weights to supplier evidence and owned closure work. Directly observed evidence includes a completed authenticated Cortex Code lifecycle, Snowpark matrix, query provenance, 47 passing tests, a responsive public deployment, narrated demo, and PDF deck, making it technically rigorous and fully judge-ready; paid-market validation remains absent.",
+    "evidence_gaps": [
+      "paid customer validation",
+      "open live tender submission outcome"
+    ],
+    "confidence": 0.99
+  },
+  {
+    "assignment_id": "A-000013",
+    "blind_id": "BLIND-306F061E94B8",
+    "scores": {
+      "relevance": 26,
+      "technical": 25,
+      "completeness": 23
+    },
+    "source_locked_scores": {
+      "relevance": 22,
+      "technical": 19,
+      "completeness": 20
+    },
+    "reason": "Inventory disruption and emergency procurement create a clear operational buyer, measurable downtime exposure, and a useful human authorization boundary. The repository, Python entry points, tests, three skills, public web interface, and policy narrative show a coherent product, but the inspected evidence does not establish an authenticated persisted Snowflake run or that the public app uses Snowflake rather than the SQLite emulator.",
+    "evidence_gaps": [
+      "authenticated Snowflake execution trace",
+      "proof that public app uses Snowflake",
+      "production outcome"
+    ],
+    "confidence": 0.94
+  },
+  {
+    "assignment_id": "A-000016",
+    "blind_id": "BLIND-87B23B5AE081",
+    "scores": {
+      "relevance": 27,
+      "technical": 33,
+      "completeness": 27
+    },
+    "source_locked_scores": {
+      "relevance": 24,
+      "technical": 29,
+      "completeness": 25
+    },
+    "reason": "Shipment fraud and sanctions screening create a concrete enterprise compliance buyer and strong loss-avoidance value. Stored procedures, three skills, Snowpark scoring, sample documents, an audit query, callable full-pipeline procedure, public MVP, four-minute narration, and submission documentation support an advanced end-to-end design, while credential-gated Snowflake access and the lack of an independently verified production outcome limit source-locked credit.",
+    "evidence_gaps": [
+      "signed-out access to Snowflake dashboard",
+      "independent production outcome"
+    ],
+    "confidence": 0.96
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "axes": [
+    {"id": "relevance", "label": "Real-world relevance and business value", "range": [0, 30], "official_mapping": "Official relevance 30 percent"},
+    {"id": "technical", "label": "Snowflake, Cortex Code and technical execution", "range": [0, 40], "official_mapping": "Official technical execution 40 percent"},
+    {"id": "completeness", "label": "End-to-end completeness and judge-ready demonstration", "range": [0, 30], "official_mapping": "Official solution completeness 30 percent"}
+  ],
+  "hard_gates": [
+    "The entry is scoreable from a frozen repository or deployed artifact.",
+    "Snowflake and Cortex Code participation are supported by inspectable implementation evidence.",
+    "The main workflow reaches an output rather than stopping at a concept screen.",
+    "Claims beyond direct evidence are marked as inference or missing evidence."
+  ]
+}

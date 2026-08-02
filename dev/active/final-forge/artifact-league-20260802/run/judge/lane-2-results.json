@@ -1,0 +1,83 @@
+[
+  {
+    "assignment_id": "A-000022",
+    "blind_id": "ANCHOR:2:low",
+    "scores": {"relevance": 8, "technical": 4, "completeness": 5},
+    "source_locked_scores": {"relevance": 7, "technical": 3, "completeness": 4},
+    "reason": "The broad pain is understandable, but the buyer, platform necessity, and measurable value are unspecified. Only a static mockup is observed; the described chat flow does not establish a working or complete product.",
+    "evidence_gaps": ["named buyer and adoption path", "working authenticated run", "Snowflake or Cortex Code implementation", "complete workflow and failure handling", "deployment and submission proof"],
+    "confidence": 0.98
+  },
+  {
+    "assignment_id": "A-000023",
+    "blind_id": "ANCHOR:2:mid",
+    "scores": {"relevance": 20, "technical": 24, "completeness": 19},
+    "source_locked_scores": {"relevance": 17, "technical": 21, "completeness": 16},
+    "reason": "A named operational user, working local prototype, schema, and tests support a practical rules-and-exception workflow. The lack of authenticated agent evidence and public demo limits technical certainty and judge readiness.",
+    "evidence_gaps": ["authenticated Cortex Code or agent run", "public deployment", "durable multi-step provenance", "customer validation", "complete review and ownership flow"],
+    "confidence": 0.96
+  },
+  {
+    "assignment_id": "A-000024",
+    "blind_id": "ANCHOR:2:high",
+    "scores": {"relevance": 29, "technical": 39, "completeness": 29},
+    "source_locked_scores": {"relevance": 28, "technical": 38, "completeness": 29},
+    "reason": "The card presents a narrow professional user, repeatable high-value decision, authenticated complete run, reproducible technical audit, and public judge-ready materials. Production customer outcomes remain unproven.",
+    "evidence_gaps": ["production customer outcome", "independent business-impact measurement"],
+    "confidence": 0.97
+  },
+  {
+    "assignment_id": "A-000002",
+    "blind_id": "BLIND-87B23B5AE081",
+    "scores": {"relevance": 26, "technical": 35, "completeness": 24},
+    "source_locked_scores": {"relevance": 22, "technical": 31, "completeness": 21},
+    "reason": "The logistics compliance problem has a credible enterprise buyer and clear loss-avoidance rationale. Directly listed SQL, Snowpark, agent skills, audit procedure, public MVP, and submission assets support substantial implementation, but the core dashboard is not signed-out inspectable and outcome claims are not independently evidenced.",
+    "evidence_gaps": ["signed-out Snowflake dashboard access", "authenticated end-to-end run evidence", "independent production outcome", "public verification of ERP posting and recovery"],
+    "confidence": 0.88
+  },
+  {
+    "assignment_id": "A-000005",
+    "blind_id": "BLIND-4D4B3DACD573",
+    "scores": {"relevance": 27, "technical": 39, "completeness": 29},
+    "source_locked_scores": {"relevance": 25, "technical": 37, "completeness": 28},
+    "reason": "A specific B2G proposal-team workflow connects qualification, weighted strategy, drafting, review, tasks, and replay. The card directly supplies an authenticated Cortex Code run, Snowpark matrix, query provenance, tests, public responsive deployment, narrated demo, and deck; customer and live-tender outcomes remain absent.",
+    "evidence_gaps": ["paid customer validation", "open live tender submission outcome", "independent business-impact measurement"],
+    "confidence": 0.93
+  },
+  {
+    "assignment_id": "A-000007",
+    "blind_id": "BLIND-87B23B5AE081",
+    "scores": {"relevance": 26, "technical": 35, "completeness": 24},
+    "source_locked_scores": {"relevance": 22, "technical": 31, "completeness": 21},
+    "reason": "The logistics compliance problem has a credible enterprise buyer and clear loss-avoidance rationale. Directly listed SQL, Snowpark, agent skills, audit procedure, public MVP, and submission assets support substantial implementation, but the core dashboard is not signed-out inspectable and outcome claims are not independently evidenced.",
+    "evidence_gaps": ["signed-out Snowflake dashboard access", "authenticated end-to-end run evidence", "independent production outcome", "public verification of ERP posting and recovery"],
+    "confidence": 0.88
+  },
+  {
+    "assignment_id": "A-000010",
+    "blind_id": "BLIND-BC6FBE07614E",
+    "scores": {"relevance": 23, "technical": 27, "completeness": 21},
+    "source_locked_scores": {"relevance": 21, "technical": 23, "completeness": 18},
+    "reason": "The civic-transparency problem is socially meaningful and the source, Snowflake integration, Snowpark, role-based screenshots, and setup flow support a substantive prototype. The buyer and commercial path are diffuse, while no public URL or authenticated Cortex provenance demonstrates the main workflow under real execution.",
+    "evidence_gaps": ["public live URL", "authenticated Cortex run and query provenance", "measured adoption or buyer validation", "signed-out end-to-end workflow", "independent proof of role-based behavior"],
+    "confidence": 0.87
+  },
+  {
+    "assignment_id": "A-000015",
+    "blind_id": "BLIND-BC6FBE07614E",
+    "scores": {"relevance": 23, "technical": 27, "completeness": 21},
+    "source_locked_scores": {"relevance": 21, "technical": 23, "completeness": 18},
+    "reason": "The civic-transparency problem is socially meaningful and the source, Snowflake integration, Snowpark, role-based screenshots, and setup flow support a substantive prototype. The buyer and commercial path are diffuse, while no public URL or authenticated Cortex provenance demonstrates the main workflow under real execution.",
+    "evidence_gaps": ["public live URL", "authenticated Cortex run and query provenance", "measured adoption or buyer validation", "signed-out end-to-end workflow", "independent proof of role-based behavior"],
+    "confidence": 0.87
+  },
+  {
+    "assignment_id": "A-000018",
+    "blind_id": "BLIND-4D4B3DACD573",
+    "scores": {"relevance": 27, "technical": 39, "completeness": 29},
+    "source_locked_scores": {"relevance": 25, "technical": 37, "completeness": 28},
+    "reason": "A specific B2G proposal-team workflow connects qualification, weighted strategy, drafting, review, tasks, and replay. The card directly supplies an authenticated Cortex Code run, Snowpark matrix, query provenance, tests, public responsive deployment, narrated demo, and deck; customer and live-tender outcomes remain absent.",
+    "evidence_gaps": ["paid customer validation", "open live tender submission outcome", "independent business-impact measurement"],
+    "confidence": 0.93
+  }
+]

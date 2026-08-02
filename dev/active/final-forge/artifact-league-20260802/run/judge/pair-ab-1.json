@@ -1,0 +1,35 @@
+{
+  "judge": "pair-ab-1",
+  "orientation": {
+    "LEFT": "BLIND-4D4B3DACD573",
+    "RIGHT": "BLIND-87B23B5AE081"
+  },
+  "left": "BLIND-4D4B3DACD573",
+  "right": "BLIND-87B23B5AE081",
+  "left_scores": {
+    "relevance": 29,
+    "technical": 39,
+    "completeness": 29,
+    "total": 97
+  },
+  "right_scores": {
+    "relevance": 29,
+    "technical": 35,
+    "completeness": 26,
+    "total": 90
+  },
+  "winner": "LEFT",
+  "decisive_reason": "LEFT provides stronger end-to-end execution proof: an authenticated completed Snowflake run with query provenance, persisted outputs, passing tests, a publicly reloadable deployment, responsive captures, and finished demo assets, while RIGHT relies more heavily on repository artifacts and a credential-gated Snowflake dashboard.",
+  "evidence_gaps": {
+    "LEFT": [
+      "No paid customer validation.",
+      "No outcome from an open live tender submission."
+    ],
+    "RIGHT": [
+      "No signed-out access to the Snowflake dashboard.",
+      "No independent production outcome.",
+      "The supplied evidence does not show an authenticated completed pipeline run with result-level provenance comparable to LEFT."
+    ]
+  },
+  "confidence": 0.91
+}

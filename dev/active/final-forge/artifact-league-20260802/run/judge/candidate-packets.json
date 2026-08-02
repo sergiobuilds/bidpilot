@@ -1,0 +1,150 @@
+[
+  {
+    "blind_id": "BLIND-D31D623FEE21",
+    "card": {
+      "business_case": "Avoided overspend and renewal leakage provide a specific buyer, measurable financial value and a credible expansion path into continuous contract operations.",
+      "execution_proof": "The repository contains six realistic sample contracts, matching spend data, three skill definitions and setup SQL. The README gives expected results and manual setup steps, but describes how to run once a trial account is connected rather than a recorded authenticated run.",
+      "missing_evidence": [
+        "authenticated Snowflake run",
+        "public interface",
+        "demo video",
+        "independent test result"
+      ],
+      "observed_evidence": [
+        "public repository",
+        "six contract fixtures",
+        "spend dataset",
+        "three skills",
+        "Snowflake setup SQL",
+        "expected control case"
+      ],
+      "problem": "Mid-size companies miss contract ceilings, notice windows, renewals and liability exposure because legal terms and vendor spend are reviewed separately.",
+      "product_proof": "The anomaly mix includes overspend, expired agreements, missed renewal windows, commitment shortfall, uncapped liability and a clean control. No public deployed product or recorded end-to-end demo is supplied in the inspected card.",
+      "snowflake_role": "Snowflake stores raw contracts, extracted terms, vendor spend, risk flags, reports and an action queue. Cortex COMPLETE performs extraction and SQL rules produce deterministic anomaly flags.",
+      "user": "Finance, procurement and legal teams that need continuous contract-to-spend risk monitoring.",
+      "workflow": "Three CoCo skills extract fifteen contract fields, join them to spend, detect five anomaly classes, produce a prioritized report, and stage human-approved actions."
+    }
+  },
+  {
+    "blind_id": "BLIND-306F061E94B8",
+    "card": {
+      "business_case": "Inventory disruption and emergency procurement have direct cost, a clear operational buyer and plausible automation value, although the demonstrated data and production outcomes are not independently validated.",
+      "execution_proof": "The repository provides Python demo, CLI, web and test entry points, SQL-oriented architecture, three skills, diagrams and a public Vercel link. The README describes Snowflake and an emulator but the inspected card does not expose authenticated query IDs or a complete persisted Snowflake run.",
+      "missing_evidence": [
+        "authenticated Snowflake execution trace",
+        "proof that public app uses Snowflake",
+        "production outcome"
+      ],
+      "observed_evidence": [
+        "public repository",
+        "linked web app",
+        "Python demo and tests",
+        "three skills",
+        "policy workflow"
+      ],
+      "problem": "Supply-chain teams discover stock, lead-time and supplier failures too late, then coordinate emergency procurement manually.",
+      "product_proof": "A public web interface, terminal visualizer, architecture diagrams and end-to-end anomaly-to-action narrative make the workflow easy to understand. Financial guardrails create a visible human escalation boundary.",
+      "snowflake_role": "The design names Snowflake warehouse tables, Cortex COMPLETE reasoning, three CoCo skills, and an audit ledger. The web stack can operate against a high-performance SQLite enterprise emulator as well as Snowflake.",
+      "user": "Supply-chain managers and operations teams monitoring inventory risk and authorizing mitigation actions.",
+      "workflow": "The system scans inventory, synthesizes incident logs, quantifies downtime risk, applies a 50000-dollar authorization threshold, issues or escalates a purchase action, and records an audit trail."
+    }
+  },
+  {
+    "blind_id": "BLIND-4D4B3DACD573",
+    "card": {
+      "business_case": "The product reduces wasted pursuits, directs writing effort by buyer weight, and retains reusable supplier memory for future bids. The intended commercial surface is a team subscription plus agent runs.",
+      "execution_proof": "A runner-only Cortex Code run is COMPLETED with one decision, three strategies, four plans totaling 100 points, eight sections, twelve tasks, session and query provenance. A runner-only Snowpark 2x2 matrix and 47 tests pass.",
+      "missing_evidence": [
+        "paid customer validation",
+        "open live tender submission outcome"
+      ],
+      "observed_evidence": [
+        "public deployed app",
+        "authenticated Snowflake run",
+        "Cortex and Snowpark query trace",
+        "responsive captures",
+        "tests",
+        "video and PDF"
+      ],
+      "problem": "Small government-bid teams waste pursuit effort before drafting and then write without tying official evaluation weights to supplier operating evidence.",
+      "product_proof": "A public Streamlit deployment reloads the authenticated run and has verified 1440, 768 and 390 pixel captures. A 278-second narrated demo and an eight-page PDF deck exist.",
+      "snowflake_role": "A versioned Opportunity Graph joins tender criteria with credentials, availability and delivery memory. Snowpark persists policy decisions. Cortex Code writes strategies, plans, sections and tasks under one run. Reader and runner roles are separated.",
+      "user": "A small B2G proposal team responsible for qualification, win strategy, drafting, review, and owned closure work.",
+      "workflow": "Tender URL or PDF intake leads to a reviewed scope, pursue decision, weighted score map, comparison of three Win Positions, editable proposal, adversarial review, owned tasks, and replay."
+    }
+  },
+  {
+    "blind_id": "BLIND-BC6FBE07614E",
+    "card": {
+      "business_case": "Public accountability has strong social relevance and multiple stakeholders, while procurement, willingness to pay and a narrow first buyer are less explicit than the product vision.",
+      "execution_proof": "The repository contains a React frontend, FastAPI backend, Snowflake connector and Snowpark integration, setup scripts, screenshots of four role-based dashboards, and a terminal image. README setup supports live Snowflake or mock-disabled modes.",
+      "missing_evidence": [
+        "public live URL",
+        "authenticated Cortex run provenance",
+        "measured adoption"
+      ],
+      "observed_evidence": [
+        "public repository",
+        "frontend and backend source",
+        "Snowflake integration",
+        "role-based screenshots",
+        "setup flow"
+      ],
+      "problem": "Citizens and auditors struggle to understand dense public works contracts, budgets and expenditures, which limits independent scrutiny.",
+      "product_proof": "A polished multi-role interface and extensive screenshot showcase communicate civic transparency and anomaly review. The inspected repository card did not provide a signed-out deployed application or authenticated run trace.",
+      "snowflake_role": "Snowflake Cortex AI performs document intelligence and chat, Snowpark handles tabular budget analysis, and Snowflake stores structured project metadata. A CoCo-labelled API route exposes automation and diagnostics.",
+      "user": "Citizens, journalists, auditors and government officials exploring public contract and budget information.",
+      "workflow": "Users ingest contract PDFs, extract budgets and departments, query civic data in natural language, review anomaly alerts, inspect proof, and use separate citizen, auditor, official and admin dashboards."
+    }
+  },
+  {
+    "blind_id": "BLIND-D4DABBE06D86",
+    "card": {
+      "business_case": "Retail and professional equity research is a large market, but BYOK setup, delayed market data and crowded analyst products raise adoption and differentiation risk.",
+      "execution_proof": "The repository includes agent SQL, semantic view, search setup, dynamic table, role grants, CoCo skill definitions and smoke-test scripts. It documents setup and authenticated tests, while the inspected card does not provide a public deployed URL or captured passing run.",
+      "missing_evidence": [
+        "public deployment",
+        "captured authenticated run",
+        "resolved license",
+        "customer validation"
+      ],
+      "observed_evidence": [
+        "public repository",
+        "Cortex Agent SQL",
+        "Analyst semantic view",
+        "Search setup",
+        "dynamic table",
+        "smoke scripts"
+      ],
+      "problem": "Equity users need grounded natural-language analysis across price indicators, filings and personal research notes without manually combining tools.",
+      "product_proof": "A React and FastAPI product supports chat, file upload, backend switching and user-approved broker actions. The system retains a stub and non-Snowflake fallbacks, and the README license remains unresolved.",
+      "snowflake_role": "Snowflake Marketplace supplies equity and filing data. A semantic view powers Cortex Analyst, a Search service indexes notes, a dynamic table refreshes signals, and a Cortex Agent selects the tool.",
+      "user": "Self-directed equity analysts who connect their own Snowflake and broker credentials and approve any trading action.",
+      "workflow": "A Cortex Agent routes questions to Cortex Analyst over market data or Cortex Search over an uploaded knowledge base, then returns a grounded answer and optional structured action card."
+    }
+  },
+  {
+    "blind_id": "BLIND-87B23B5AE081",
+    "card": {
+      "business_case": "Shipment fraud, sanctions breaches and operational delays have direct enterprise cost. Automated screening and policy-bounded remediation offer a clear buyer and measurable loss-avoidance case.",
+      "execution_proof": "The repository provides stored procedures, three agent skills, a Snowpark risk script, sample documents, CLI evidence instructions, an audit-log query, and a callable full-pipeline procedure. The public MVP is linked; the Snowflake dashboard needs judge credentials.",
+      "missing_evidence": [
+        "signed-out access to Snowflake dashboard",
+        "independent production outcome"
+      ],
+      "observed_evidence": [
+        "public repository",
+        "linked public MVP",
+        "workflow SQL",
+        "Snowpark script",
+        "CLI evidence document",
+        "submission assets"
+      ],
+      "problem": "Maritime logistics teams need to detect Bill of Lading fraud and compliance risk before shipments and ERP actions create financial exposure.",
+      "product_proof": "The submission includes a public Mendix interface, Snowflake Streamlit source, a four-minute narration, compliance checklist, architecture documentation, and reproducible SQL for workflow and audit inspection.",
+      "snowflake_role": "Snowflake hosts workflow procedures, Cortex AI and Agent capabilities, Marketplace screening data, dynamic tables, streams and tasks, Snowpark scoring, and Streamlit analytics. A separate Mendix application is the public MVP.",
+      "user": "Logistics compliance and operations teams screening shipments, sanctions exposure, anomalies, and remediation actions.",
+      "workflow": "A full pipeline detects anomalies, investigates with Cortex, screens Marketplace sanctions data, chooses BLOCK, ESCALATE or CLEAR, posts ERP actions, and records the decision in an audit log."
+    }
+  }
+]

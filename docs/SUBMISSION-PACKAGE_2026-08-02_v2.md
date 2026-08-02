@@ -19,6 +19,20 @@ BidPilot — Turn tender scoring into a proposal-winning Bid Room
 
 BidPilot combines a public tender's evaluation matrix with supplier operating memory to decide whether to pursue, choose a proof-backed Win Position, draft the proposal, red-team it, and persist the work as one replayable Snowflake run.
 
+### Portal brief, under 1,024 characters
+
+BidPilot is a Snowflake-native Bid Room for small B2G teams. It joins a public tender's requirements and evaluation weights with governed supplier credentials, capacity, people, and delivery history. Snowpark returns PURSUE, REVIEW, or NO-GO before drafting is allowed. For a viable bid, Cortex Code compares three Win Positions, creates score-weighted response plans, drafts eight editable proposal areas, red-teams the highest-value claims, and assigns missing evidence as owned work. Every decision, strategy, section, task, Cortex session, and query reference persists under one replayable run ID. A least-privilege Streamlit app reloads that run without fixture fallback. The verified prototype includes an authenticated 2x2 decision matrix, a complete runner-only Cortex run, 47 passing tests, responsive public deployment, a 4:38 English demo, and an eight-page PDF deck.
+
+### Portal links and file
+
+| Field | Value |
+|---|---|
+| Challenge | Intelligent Workflow Automation Agent |
+| GitHub public repository | `https://github.com/sergiobuilds/bidpilot` — private until Sergio approves the public transition |
+| Deployed prototype | `https://bidpilot-demo-tbauoylpra-uc.a.run.app` |
+| Public demo video | `https://storage.googleapis.com/bidpilot-demo-164282963747/BidPilot-Final-Demo.mp4` |
+| PDF deck | `dev/active/final-forge/submission-deck/BidPilot-Submission-Deck.pdf` |
+
 ### Problem
 
 Small B2G teams lose weeks in two places: they pursue opportunities they cannot credibly win, and they begin writing without connecting the buyer's scoring model to their own delivery evidence. Qualification, strategy, drafting, review, and task ownership live in separate files and meetings. Generic AI can summarize the notice or produce fluent prose, but it does not maintain an accountable chain from official evaluation weights to supplier evidence and an executable bid plan.
@@ -66,7 +80,7 @@ BidPilot is not another tender summarizer. It shows a team whether to bid, where
 | 3:04–3:44 | Adversarial review and owned work | Show review-gated download and twelve closure tasks. |
 | 3:44–4:38 | Snowflake architecture, provenance, and close | Prove runner, reader, session, query, lifecycle, and cost boundaries. |
 
-The repository contains a 278.136-second, 1440×900 H.264/AAC final demo at `dev/active/final-forge/BidPilot-Final-Demo.mp4`. It uses the public intake, authenticated run, Snowflake architecture, and closing deck frames with English narration. Upload it to a judge-accessible public URL before submission.
+The repository contains a 278.136-second, 1440×900 H.264/AAC final demo at `dev/active/final-forge/BidPilot-Final-Demo.mp4`. It uses the public intake, authenticated run, Snowflake architecture, and closing deck frames with English narration. The public copy returns HTTP 206 for signed-out range requests at `https://storage.googleapis.com/bidpilot-demo-164282963747/BidPilot-Final-Demo.mp4`.
 
 ## Pitch deck copy
 
@@ -124,7 +138,7 @@ The repository contains a 278.136-second, 1440×900 H.264/AAC final demo at `dev
 |---|---|
 | Why is this different from pasting the tender into a general LLM? | A general LLM has no governed supplier memory, deterministic pursuit gate, official-weight control plane, durable run contract, or owned evidence-gap workflow. BidPilot proves each link in that chain. |
 | Why does Snowflake need to be in the core path? | Snowflake joins versioned external requirements with controlled internal evidence, executes Snowpark policy next to those records, and stores every downstream artifact and query provenance under one replayable run ID. Removing it removes the shared operating memory. |
-| What exactly did Cortex Code do? | The recorded CLI session queried ten Snowflake object families, created the selected strategy and four response plans, wrote eight proposal sections and eleven tasks, and persisted its session and query IDs in the run trace. |
+| What exactly did Cortex Code do? | The recorded CLI session queried ten Snowflake object families, created the selected strategy and four response plans, wrote eight proposal sections and twelve tasks, and persisted its session and query IDs in the run trace. |
 | How do you prevent hallucinated business facts? | The verified fixture deliberately has zero people and prior proposals and no pricing table. The resulting proposal names those gaps and creates tasks; it does not invent names, rates, prices, or outcome metrics. Tests cover the generation gates and weak high-weight content. |
 | Is this only a qualification checker? | No. Qualification is the permission boundary. The visible product value is the next chain: weighted score map, Win Position, criterion-level blueprint, editable proposal, red-team, and owned work. |
 | Does changing input change the output meaningfully? | Yes. The authenticated 2×2 matrix changes status across PURSUE, REVIEW, and NO-GO. Supplier projects, credentials, people, availability, official weights, and the selected Win Position change the claims, assets, owners, and response depth. |
@@ -168,7 +182,7 @@ No final bid is submitted by the product. A human owns source review, company ev
 ## Final submission checklist
 
 - Replace the repository placeholder with the judge-accessible GitHub URL and verified commit SHA.
-- Upload the exact 278.136-second narrated demo and verify audio, text size, and URL permissions from a signed-out browser.
+- Keep the exact 278.136-second narrated demo public and verify audio, text size, and URL permissions from a signed-out browser.
 - Paste the title, one-line description, problem, solution, Snowflake explanation, and business value without adding unsupported claims.
 - Confirm the repository, video, and any live demo remain accessible for the judging window.
 - Sergio performs the external final-submit click after reviewing the rendered form.

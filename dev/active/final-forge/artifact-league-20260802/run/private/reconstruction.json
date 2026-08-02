@@ -1,0 +1,62 @@
+[
+  {
+    "assumptions": [
+      "Public deployment remains available during judging"
+    ],
+    "candidate_index": 0,
+    "card_sha256": "000ba10dcf3e54be4d48517072855e4965392bf92ed3e74d853decfc79d452ec",
+    "research_budget_units": 5,
+    "source_tier": "repository_deployment_authenticated_run",
+    "status": "SCOREABLE"
+  },
+  {
+    "assumptions": [
+      "Snowflake dashboard credentials are supplied through the portal"
+    ],
+    "candidate_index": 1,
+    "card_sha256": "766618ce3e51a966c8ec9581ee5595cc2fbaba09e74e96b397c14356d38246e9",
+    "research_budget_units": 5,
+    "source_tier": "public_repository_and_linked_mvp",
+    "status": "SCOREABLE"
+  },
+  {
+    "assumptions": [
+      "Screenshots represent the checked revision"
+    ],
+    "candidate_index": 2,
+    "card_sha256": "fe12b1d89f2bcc260d22230a46d6298fdd911c391ffa58e8732b4d648985594b",
+    "research_budget_units": 5,
+    "source_tier": "public_repository_and_screenshots",
+    "status": "SCOREABLE"
+  },
+  {
+    "assumptions": [
+      "Linked app represents the checked revision"
+    ],
+    "candidate_index": 3,
+    "card_sha256": "54badb5aae4c727d03b1ce11907d404f2fc4fbb4234afe75e2594062e94f03e6",
+    "research_budget_units": 5,
+    "source_tier": "public_repository_and_linked_app",
+    "status": "SCOREABLE"
+  },
+  {
+    "assumptions": [
+      "Expected fixture outputs follow the documented setup"
+    ],
+    "candidate_index": 4,
+    "card_sha256": "98b5f622c36bba50eb81bd37e163e70eddcc880c86f63c34815efb16f98ed37c",
+    "research_budget_units": 5,
+    "source_tier": "public_repository",
+    "status": "SCOREABLE"
+  },
+  {
+    "assumptions": [
+      "Smoke scripts can run in a configured Snowflake account"
+    ],
+    "candidate_index": 5,
+    "card_sha256": "f40a196233add2b209e61a9fcf6efcd17353cfb2c3a558b919bfba3387709ae7",
+    "research_budget_units": 5,
+    "source_tier": "public_repository",
+    "status": "SCOREABLE"
+  }
+]
