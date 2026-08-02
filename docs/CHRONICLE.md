@@ -49,3 +49,4 @@ canonical_path: /home/elite/projects/personal/products/bidpilot/docs/CHRONICLE.m
 - 2026-08-03 [direction]: Sergio의 지시에 따라 기존 프론트의 시각 구조를 폐기하고 Design Forge의 `wanted-design-system` pack으로 Opportunities, Bid decision, Win plan, Proposal room을 blank-slate 재구축했습니다. 저장된 run은 불변 비교 기록으로 유지하고 proposal draft만 편집 가능하게 했습니다.
 - 2026-08-03 [security]: Snowflake 연결 실패 시 connector 원문과 로컬 profile 목록이 화면에 노출되던 경로를 닫았습니다. 사용자 화면은 복구 지침만 제공하고 상세 예외는 서버 로그에 남기며 Streamlit 상세 오류 표시를 비활성화했습니다.
 - 2026-08-03 [gate]: 새 source는 Ruff, compileall, 83 tests, 실제 reader run과 1440/768/390 화면 검증을 통과했습니다. 기존 Cloud Run revision은 유지하며 새 화면은 Sergio가 VivoBook에서 확인하기 전 배포하지 않습니다.
+- 2026-08-03 [deployment]: Sergio의 시각 승인 후 blank-slate WDS source를 Cloud Run revision `bidpilot-demo-00005-fc2`로 배포했습니다. reader 연결, secret mount와 service account를 보존했고 새 revision이 100% 트래픽을 받습니다. 공개 Stage 1·4는 1440과 390에서 재렌더됐으며 가로 overflow가 없습니다.
