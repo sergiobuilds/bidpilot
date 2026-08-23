@@ -367,6 +367,38 @@ def test_bid_decision_settles_the_verdict_and_edits_nothing(monkeypatch) -> None
     assert not app.text_input
 
 
+def test_bid_room_first_viewport_uses_only_the_selected_persisted_run(monkeypatch) -> None:
+    with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
+        connect.return_value = FakeConnection(product_responses())
+        app = product_app(monkeypatch)
+        app.run(timeout=60)
+
+    assert not app.exception
+    markdown = markdown_of(app)
+    assert 'data-workspace-view="bid-room"' in markdown
+    for recorded_value in (
+        "PURSUE",
+        "60 points",
+        "1 cited · 0 open gaps",
+        "Proven data quality operations",
+        "Assemble the submission package",
+        "Bid manager",
+        RUN_ID,
+    ):
+        assert recorded_value in markdown
+
+
+def test_bid_room_first_viewport_is_absent_without_persisted_run_data(monkeypatch) -> None:
+    monkeypatch.delenv("BIDPILOT_SNOWFLAKE_CONNECTION", raising=False)
+    st.cache_data.clear()
+    app = AppTest.from_file(APP_PATH)
+    app.run(timeout=60)
+
+    assert not app.exception
+    assert 'data-workspace-view="bid-room"' not in markdown_of(app)
+    assert "Proven data quality operations" not in markdown_of(app)
+
+
 def test_policy_dimensions_state_every_result_in_words(monkeypatch) -> None:
     with patch("bidpilot.snowflake_store.snowflake.connector.connect") as connect:
         connect.return_value = FakeConnection(product_responses())

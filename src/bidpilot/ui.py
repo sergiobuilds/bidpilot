@@ -19,7 +19,6 @@ import logging
 
 import streamlit as st
 
-from bidpilot.policy import POLICY_VERSION
 from bidpilot.proposal_writer import (
     compose_persisted_proposal,
     red_team_persisted_draft,
@@ -30,6 +29,7 @@ from bidpilot.snowflake_store import (
     SnowflakeBidRoomStore,
     configured_connection_name,
 )
+from bidpilot.workspace_ui import bid_room_first_viewport
 
 PRODUCT_NAME = "BidPilot"
 PRODUCT_TAGLINE = "pursuit workspace"
@@ -248,7 +248,42 @@ def decision_summary(view: dict) -> str:
         "REVIEW": "so the recorded policy returned REVIEW. The gap has to be closed before a proposal is written.",
         "NO-GO": "so the recorded policy returned NO-GO. No proposal is written against this analysis.",
     }.get(verdict, f"and the recorded policy returned {verdict}.")
-    return f"On policy version {POLICY_VERSION}, {eligibility}{joiner}{capacity} — {tail}"
+    run = view.get("run") if isinstance(view.get("run"), dict) else {}
+    policy_version = run.get("policy_version") or NOT_RECORDED
+    return f"On recorded policy version {policy_version}, {eligibility}{joiner}{capacity} — {tail}"
+
+
+def bid_room_causal_summary(view: dict) -> str:
+    """Project one causal first viewport from the selected persisted run."""
+    criteria = [item for item in view.get("criteria") or [] if isinstance(item, dict)]
+    highest = max(criteria, key=lambda item: as_number(item.get("weight")) or 0.0, default={})
+    weight = as_number(highest.get("weight"))
+    assets = [item for item in highest.get("assets") or [] if str(item).strip()]
+    open_gaps = 1 if highest and highest.get("gap") == "uncovered" else 0
+
+    selected = view.get("selected") if isinstance(view.get("selected"), dict) else {}
+    tasks = [item for item in view.get("tasks") or [] if isinstance(item, dict)]
+    finished_states = {"COMPLETE", "COMPLETED", "CLOSED", "DONE"}
+    next_task = next(
+        (
+            item
+            for item in tasks
+            if str(item.get("status") or "").upper() not in finished_states
+        ),
+        {},
+    )
+
+    return bid_room_first_viewport(
+        verdict=view.get("status") or NOT_RECORDED,
+        principal_reason=(decision_summary(view) if view.get("decision") else NOT_RECORDED),
+        criterion=highest.get("name") or NOT_RECORDED,
+        official_weight=f"{trim(weight)} points" if weight is not None else NOT_RECORDED,
+        evidence_state=f"{len(assets)} cited · {open_gaps} open gaps",
+        selected_position=selected.get("title") or NOT_RECORDED,
+        owner=next_task.get("owner") or NOT_RECORDED,
+        next_action=next_task.get("task_name") or NOT_RECORDED,
+        run_id=view.get("run_id") or NOT_RECORDED,
+    )
 
 
 def policy_dimensions(view: dict) -> list[dict]:
@@ -1740,6 +1775,9 @@ def render() -> None:
         loading.empty()
 
     render_shell_header(stage, enabled=bool(view))
+
+    if view is not None:
+        write(bid_room_causal_summary(view))
 
     if detail_failed and stage > 0:
         render_connection_error()

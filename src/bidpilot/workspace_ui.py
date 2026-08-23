@@ -91,6 +91,42 @@ def workspace_navigation(active_key: str) -> str:
     )
 
 
+def workspace_route_navigation(active_key: str) -> str:
+    """Return reachable in-document routing for an existing Streamlit shell.
+
+    The desktop route bar uses ordinary links.  Mobile uses a native details
+    drawer containing the same links, so routing never depends on a hidden
+    Streamlit sidebar or on inline JavaScript surviving HTML sanitisation.
+    """
+    if active_key not in WORKSPACE_BY_KEY:
+        raise ValueError(f"Unknown workspace: {active_key}")
+
+    active = WORKSPACE_BY_KEY[active_key]
+    links = []
+    for index, workspace in enumerate(WORKSPACES, start=1):
+        current = ' aria-current="page"' if workspace.key == active_key else ""
+        links.append(
+            f'<a href="?workspace={workspace.key}"{current}>'
+            f'<span aria-hidden="true">{index:02d}</span>'
+            f'<strong>{esc(workspace.label)}</strong>'
+            f'<small>{esc(workspace.note)}</small>'
+            "</a>"
+        )
+
+    return (
+        '<div class="bpw-route-frame" aria-label="BidPilot workspace routes">'
+        '<nav class="bpw-route-desktop" aria-label="BidPilot workspace routes">'
+        + "".join(links)
+        + "</nav>"
+        '<details class="bpw-route-mobile">'
+        '<summary><span>Workspace</span>'
+        f'<strong>{esc(active.label)}</strong></summary>'
+        '<nav aria-label="BidPilot workspace routes">'
+        + "".join(links)
+        + "</nav></details></div>"
+    )
+
+
 def tender_intake_first_viewport(
     *,
     source_title: object,
@@ -240,6 +276,12 @@ html, body { height: auto !important; overflow-y: auto !important; }
 [data-testid="stAppViewContainer"], section.stMain, [data-testid="stMain"] {
   height: auto !important; overflow: visible !important;
 }
+[data-testid="stHeader"],[data-testid="stToolbar"],[data-testid="stAppToolbar"],
+[data-testid="stDecoration"],[data-testid="stStatusWidget"] {
+  display:none !important; visibility:hidden !important; height:0 !important;
+}
+.stMainBlockContainer, .block-container { width:100% !important; max-width:1240px !important;
+  padding:20px 24px 96px !important; }
 .bpw-shell, .bpw-shell * { box-sizing:border-box; }
 .bpw-shell { display:grid; grid-template-columns:248px minmax(0,1fr); gap:32px;
   max-width:1440px; margin:0 auto; color:var(--bpw-ink); font-family:var(--bpw-font); }
@@ -264,6 +306,21 @@ html, body { height: auto !important; overflow-y: auto !important; }
 .bpw-workspace-link__copy strong { font-size:13px; line-height:18px; }
 .bpw-workspace-link__copy small { margin-top:2px; color:var(--bpw-muted); font-size:11px; line-height:15px; }
 .bpw-mobile-workspace { display:none; }
+.bpw-route-frame { width:100%; margin:0 auto 12px; font-family:var(--bpw-font); }
+.bpw-route-desktop { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px;
+  padding:6px; border:1px solid var(--bpw-line-soft); border-radius:14px; background:rgba(247,247,248,.86); }
+.bpw-route-desktop a,.bpw-route-mobile nav a { min-width:0; min-height:52px; padding:8px 10px;
+  border-radius:10px; color:var(--bpw-neutral); text-decoration:none; }
+.bpw-route-desktop a { display:grid; grid-template-columns:24px minmax(0,1fr); gap:1px 8px; align-content:center; }
+.bpw-route-desktop a > span { grid-row:1 / span 2; align-self:start; color:var(--bpw-blue-strong);
+  font-size:10px; line-height:18px; font-weight:650; }
+.bpw-route-desktop a strong,.bpw-route-mobile nav a strong { min-width:0; font-size:13px; line-height:18px; }
+.bpw-route-desktop a small,.bpw-route-mobile nav a small { min-width:0; color:var(--bpw-muted);
+  font-size:10px; line-height:14px; overflow-wrap:anywhere; }
+.bpw-route-desktop a[aria-current="page"],.bpw-route-mobile nav a[aria-current="page"] {
+  color:var(--bpw-blue-strong); background:#fff; box-shadow:0 1px 2px -1px rgba(23,23,23,.1); }
+.bpw-route-desktop a:hover,.bpw-route-mobile nav a:hover { background:var(--bpw-blue-95); }
+.bpw-route-mobile { display:none; }
 .bpw-first { border-top:3px solid var(--bpw-blue); }
 .bpw-first__header { display:flex; justify-content:space-between; align-items:flex-start; gap:24px;
   padding:20px 0 24px; }
@@ -345,12 +402,25 @@ html, body { height: auto !important; overflow-y: auto !important; }
   .bpw-receipt__item:nth-last-child(-n + 2) { border-bottom:0; }
 }
 @media (max-width: 760px) {
+  .stMainBlockContainer, .block-container { padding:16px 16px 72px !important; }
   .bpw-shell { display:block; }
   .bpw-desktop-workspaces { display:none; }
   .bpw-mobile-workspace { display:block; padding:12px 16px; border-bottom:1px solid var(--bpw-line-soft); }
   .bpw-mobile-workspace label { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
   .bpw-mobile-workspace select { width:100%; min-height:44px; padding:0 38px 0 12px; border:1px solid var(--bpw-line);
     border-radius:10px; color:var(--bpw-ink); background:#fff; font:600 13px var(--bpw-font); }
+  .bpw-route-desktop { display:none; }
+  .bpw-route-mobile { display:block; border:1px solid var(--bpw-line); border-radius:12px; background:#fff; }
+  .bpw-route-mobile summary { display:grid; grid-template-columns:auto minmax(0,1fr); gap:4px 10px;
+    align-items:center; min-height:48px; padding:8px 12px; cursor:pointer; list-style:none; }
+  .bpw-route-mobile summary::-webkit-details-marker { display:none; }
+  .bpw-route-mobile summary::after { content:"⌄"; grid-column:3; grid-row:1 / span 2; color:var(--bpw-muted); }
+  .bpw-route-mobile summary span { color:var(--bpw-muted); font-size:10px; line-height:13px;
+    text-transform:uppercase; letter-spacing:.08em; }
+  .bpw-route-mobile summary strong { grid-column:1 / span 2; font-size:13px; line-height:18px; }
+  .bpw-route-mobile nav { display:grid; gap:4px; padding:4px 6px 6px; border-top:1px solid var(--bpw-line-soft); }
+  .bpw-route-mobile nav a { display:grid; grid-template-columns:22px minmax(0,1fr); gap:1px 8px; }
+  .bpw-route-mobile nav a > span { grid-row:1 / span 2; color:var(--bpw-blue-strong); font-size:10px; }
   .bpw-main { padding:20px 16px 72px; }
   .bpw-first__header { display:block; padding-top:16px; }
   .bpw-first__header .bpw-badge { margin-top:12px; }

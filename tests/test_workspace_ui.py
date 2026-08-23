@@ -20,6 +20,7 @@ from bidpilot.workspace_ui import (
     synthetic_simulation_first_viewport,
     tender_intake_first_viewport,
     workspace_navigation,
+    workspace_route_navigation,
 )
 
 
@@ -160,3 +161,32 @@ def test_render_atoms_escape_untrusted_source_and_supplier_text() -> None:
 def test_navigation_rejects_an_unknown_workspace() -> None:
     with pytest.raises(ValueError, match="Unknown workspace"):
         workspace_navigation("invented")
+
+
+def test_integrated_route_navigation_needs_no_streamlit_sidebar_or_inline_script() -> None:
+    markup = workspace_route_navigation("bid-room")
+
+    assert 'aria-label="BidPilot workspace routes"' in markup
+    assert 'class="bpw-route-desktop"' in markup
+    assert 'class="bpw-route-mobile"' in markup
+    assert '<details' in markup
+    assert '<summary' in markup
+    assert 'href="?workspace=tender-intake"' in markup
+    assert 'href="?workspace=bid-room" aria-current="page"' in markup
+    assert 'href="?workspace=synthetic-simulation"' in markup
+    assert "onchange=" not in markup
+    assert "stSidebar" not in markup
+
+
+def test_integrated_navigation_reflows_without_reserving_a_tablet_sidebar() -> None:
+    css = shell_css()
+
+    assert ".bpw-route-desktop" in css
+    assert ".bpw-route-mobile" in css
+    assert "grid-template-columns:repeat(3,minmax(0,1fr))" in css
+    assert ".stMainBlockContainer, .block-container" in css
+    assert "max-width:1240px !important" in css
+    assert "padding:20px 24px 96px !important" in css
+    assert "@media (max-width: 760px)" in css
+    assert ".bpw-route-desktop { display:none; }" in css
+    assert ".bpw-route-mobile { display:block;" in css

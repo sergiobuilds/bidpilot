@@ -14,7 +14,7 @@ from bidpilot.workspace_ui import (
     shell_css,
     synthetic_simulation_first_viewport,
     tender_intake_first_viewport,
-    workspace_navigation,
+    workspace_route_navigation,
 )
 
 DEFAULT_WORKSPACE = "bid-room"
@@ -102,11 +102,8 @@ def synthetic_demo_result(scenario: str) -> dict[str, object]:
 
 
 def _render_navigation(workspace: str) -> None:
-    st.sidebar.markdown(shell_css(), unsafe_allow_html=True)
-    st.sidebar.markdown(workspace_navigation(workspace), unsafe_allow_html=True)
-    st.sidebar.caption(
-        "Public demo · curated tender · synthetic supplier profile · legal submission remains human-owned"
-    )
+    render_markup(shell_css())
+    render_markup(workspace_route_navigation(workspace))
 
 
 def _render_tender_intake() -> None:
