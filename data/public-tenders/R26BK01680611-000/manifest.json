@@ -1,0 +1,39 @@
+{
+  "schema_version": "bidpilot.g2b-source-manifest.v1",
+  "notice_number": "R26BK01680611-000",
+  "issuer": "Suwon City, Gyeonggi-do",
+  "public_fixture_sha256": "40205777115243909d564a2fc2e81342a5a0550fab3d6dfd8ac3e16cc5f8e82b",
+  "capture": {
+    "captured_at": "2026-08-24T01:30:42+09:00",
+    "raw_storage": "restricted-staging",
+    "public_repository_contains_raw_source": false
+  },
+  "artifacts": [
+    {
+      "artifact_id": "notice-pdf",
+      "kind": "pdf",
+      "official_url": "https://www.g2b.go.kr/pn/pnp/pnpe/UntyAtchFile/downloadFile.do?bidPbancNo=R26BK01680611&bidPbancOrd=000&fileSeq=2&fileType=&prcmBsneSeCd=03",
+      "sha256": "d196bed74cc66e9ce95331bdf0aef825f87b39ec1a85738d425b2dc4d48b476c",
+      "observed_content_type": "application/pdf",
+      "accepted_content_types": [
+        "application/pdf"
+      ],
+      "retrieved_at": "2026-08-24T01:30:42+09:00"
+    },
+    {
+      "artifact_id": "rfp-hwpx",
+      "kind": "hwpx",
+      "official_url": "https://www.g2b.go.kr/pn/pnp/pnpe/UntyAtchFile/downloadFile.do?bidPbancNo=R26BK01680611&bidPbancOrd=000&fileSeq=3&fileType=&prcmBsneSeCd=03",
+      "sha256": "39315ec9c5ad2b4712fd1684171cd5ac5a5b49312e9a4c183732fa5f4672a1ce",
+      "observed_content_type": "application/octet-stream",
+      "accepted_content_types": [
+        "application/octet-stream",
+        "application/zip",
+        "application/x-hwp+zip"
+      ],
+      "retrieved_at": "2026-08-24T01:30:42+09:00",
+      "extraction_status": "not_extracted",
+      "extraction_message": "Detailed RFP not extracted"
+    }
+  ]
+}

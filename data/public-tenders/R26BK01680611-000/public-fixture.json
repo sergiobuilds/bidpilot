@@ -1,0 +1,158 @@
+{
+  "schema_version": "bidpilot.g2b-public-fixture.v1",
+  "notice_number": "R26BK01680611-000",
+  "operator_review": {
+    "status": "required",
+    "gate": "analysis-blocked",
+    "required_scope": [
+      "eligibility",
+      "evaluation_weights",
+      "deliverables",
+      "dates"
+    ]
+  },
+  "public_projection": {
+    "schema_version": "bidpilot.g2b-public-projection.v1",
+    "source_facts": [
+      {
+        "fact_id": "notice-title",
+        "field": "title",
+        "value": "K패스 기반 수원시 사회초년생 청년 교통비 지원사업 서비스 개발 용역",
+        "classification": "source-fact",
+        "review_required": true,
+        "provenance": {
+          "artifact_id": "notice-pdf",
+          "locator": "page 1, section 1(a)"
+        }
+      },
+      {
+        "fact_id": "issuer",
+        "field": "issuer",
+        "value": "Suwon City, Gyeonggi-do",
+        "classification": "source-fact",
+        "review_required": true,
+        "provenance": {
+          "artifact_id": "notice-pdf",
+          "locator": "page 11, notice issuer"
+        }
+      },
+      {
+        "fact_id": "contract-value",
+        "field": "contract_value_krw",
+        "value": 250000000,
+        "classification": "source-fact",
+        "review_required": true,
+        "provenance": {
+          "artifact_id": "notice-pdf",
+          "locator": "page 1, section 1(d)"
+        }
+      },
+      {
+        "fact_id": "delivery-term",
+        "field": "delivery_term",
+        "value": "Contract start through 2026-12-31",
+        "classification": "source-fact",
+        "review_required": true,
+        "provenance": {
+          "artifact_id": "notice-pdf",
+          "locator": "page 1, section 1(c)"
+        }
+      },
+      {
+        "fact_id": "proposal-deadline",
+        "field": "proposal_deadline",
+        "value": "2026-09-03T16:00:00+09:00",
+        "classification": "source-fact",
+        "review_required": true,
+        "provenance": {
+          "artifact_id": "notice-pdf",
+          "locator": "page 2, section 3(b)"
+        }
+      },
+      {
+        "fact_id": "evaluation-weights",
+        "field": "evaluation_weights",
+        "value": {
+          "technical": 90,
+          "price": 10
+        },
+        "classification": "source-fact",
+        "review_required": true,
+        "provenance": {
+          "artifact_id": "notice-pdf",
+          "locator": "page 6, section 7(a)"
+        }
+      },
+      {
+        "fact_id": "eligibility-requirements",
+        "field": "eligibility_requirements",
+        "value": [
+          "Registered software business for computer-related services, industry code 1468",
+          "Direct-production certificate for package software development and introduction service 8111159801 or information-system development service 8111159901",
+          "Valid SME or small-business confirmation for public procurement",
+          "Not a large, mid-sized, or cross-shareholding-group software business excluded from sub-KRW-2B projects"
+        ],
+        "classification": "source-fact",
+        "review_required": true,
+        "provenance": {
+          "artifact_id": "notice-pdf",
+          "locator": "pages 2-3, section 4(a)-(c)"
+        }
+      },
+      {
+        "fact_id": "submission-method",
+        "field": "submission_method",
+        "value": "In-person submission; fax, email, and registered post are not accepted",
+        "classification": "source-fact",
+        "review_required": true,
+        "provenance": {
+          "artifact_id": "notice-pdf",
+          "locator": "page 5, section 6(b)-(c)"
+        }
+      }
+    ],
+    "supplier_assumptions": [
+      {
+        "assumption_id": "supplier-eligibility",
+        "field": "supplier_eligibility",
+        "value": "Evidence not supplied",
+        "classification": "synthetic-assumption",
+        "source_provenance": null
+      },
+      {
+        "assumption_id": "supplier-capacity",
+        "field": "delivery_capacity",
+        "value": "Synthetic demo capacity; operator evidence required",
+        "classification": "synthetic-assumption",
+        "source_provenance": null
+      },
+      {
+        "assumption_id": "supplier-pricing",
+        "field": "pricing",
+        "value": "Not provided by the public notice fixture",
+        "classification": "synthetic-assumption",
+        "source_provenance": null
+      }
+    ],
+    "public_labels": [
+      {
+        "label_id": "supplier-profile-boundary",
+        "field": "supplier_profile_boundary",
+        "value": "Synthetic demo supplier profile",
+        "classification": "public-label"
+      }
+    ],
+    "derived_claims": [
+      {
+        "claim_id": "eligibility-conclusion",
+        "field": "eligibility_conclusion",
+        "value": "REVIEW — evidence required",
+        "classification": "policy-conclusion",
+        "basis": [
+          "eligibility-requirements",
+          "supplier-eligibility"
+        ]
+      }
+    ]
+  }
+}
