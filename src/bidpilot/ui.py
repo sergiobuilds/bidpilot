@@ -37,10 +37,10 @@ NOT_RECORDED = "Not recorded in this analysis"
 LOGGER = logging.getLogger(__name__)
 
 STAGES = (
-    "Opportunities",
-    "Bid decision",
-    "Win plan",
-    "Proposal room",
+    "Public tender",
+    "Pursuit decision",
+    "Win Position",
+    "Proposal review",
 )
 
 STAGE_KEY = "bp_stage"
@@ -83,7 +83,9 @@ def record_label(item: object) -> str:
             candidate = item.get(key)
             if isinstance(candidate, str) and candidate.strip():
                 return candidate.strip()
-        return ", ".join(f"{key}: {value}" for key, value in item.items() if value not in (None, ""))
+        return ", ".join(
+            f"{key}: {value}" for key, value in item.items() if value not in (None, "")
+        )
     return str(item).strip()
 
 
@@ -121,7 +123,11 @@ def flatten(value: object) -> str:
     if isinstance(value, (list, tuple)):
         return ", ".join(flatten(item) for item in value if item not in (None, ""))
     if isinstance(value, dict):
-        return ", ".join(f"{key}: {flatten(item)}" for key, item in value.items() if item not in (None, ""))
+        return ", ".join(
+            f"{key}: {flatten(item)}"
+            for key, item in value.items()
+            if item not in (None, "")
+        )
     return str(value)
 
 
@@ -159,14 +165,21 @@ def build_run_view(result: dict, run_id: str, opportunity_id: str = "") -> dict:
     supplier = result.get("supplier") or {}
     decision = result.get("decision") or {}
     strategies = list(result.get("strategies") or [])
-    selected = next((item for item in strategies if item.get("selected")), strategies[0] if strategies else {})
+    selected = next(
+        (item for item in strategies if item.get("selected")),
+        strategies[0] if strategies else {},
+    )
 
     criteria: list[dict] = []
     total_weight = 0.0
     covered_weight = 0.0
     for item in result.get("blueprint") or []:
         weight = as_number(item.get("weight")) or 0.0
-        assets = [record_label(asset) for asset in as_records(item.get("assets")) if record_label(asset)]
+        assets = [
+            record_label(asset)
+            for asset in as_records(item.get("assets"))
+            if record_label(asset)
+        ]
         total_weight += weight
         if assets:
             covered_weight += weight
@@ -182,7 +195,11 @@ def build_run_view(result: dict, run_id: str, opportunity_id: str = "") -> dict:
         )
 
     sections = list(result.get("sections") or [])
-    status = str(decision.get("status") or first_key(trace, ("pursuit_status", "status")) or "RECORDED")
+    status = str(
+        decision.get("status")
+        or first_key(trace, ("pursuit_status", "status"))
+        or "RECORDED"
+    )
     return {
         "run_id": run_id,
         "run": run,
@@ -210,11 +227,16 @@ def build_run_view(result: dict, run_id: str, opportunity_id: str = "") -> dict:
             or NOT_RECORDED
         ),
         "opportunity_id": run.get("opportunity_id") or opportunity_id or "",
-        "objective": opportunity.get("buyer_objective") or first_key(trace, ("buyer_objective", "objective")),
+        "objective": opportunity.get("buyer_objective")
+        or first_key(trace, ("buyer_objective", "objective")),
         "scope": opportunity.get("scope") or "",
         "source_type": humanise(opportunity.get("source_status")),
-        "supplier_name": supplier.get("supplier_name") or run.get("supplier_profile_id"),
-        "missing_eligibility": [record_label(item) for item in as_records(decision.get("missing_eligibility"))],
+        "supplier_name": supplier.get("supplier_name")
+        or run.get("supplier_profile_id"),
+        "missing_eligibility": [
+            record_label(item)
+            for item in as_records(decision.get("missing_eligibility"))
+        ],
         "capacity_gap_hours": as_number(decision.get("capacity_gap_hours")),
         # The run records when it completed. Only when it does not is the row's
         # creation time used, and then it is labelled for what it is.
@@ -256,7 +278,9 @@ def decision_summary(view: dict) -> str:
 def bid_room_causal_summary(view: dict) -> str:
     """Project one causal first viewport from the selected persisted run."""
     criteria = [item for item in view.get("criteria") or [] if isinstance(item, dict)]
-    highest = max(criteria, key=lambda item: as_number(item.get("weight")) or 0.0, default={})
+    highest = max(
+        criteria, key=lambda item: as_number(item.get("weight")) or 0.0, default={}
+    )
     weight = as_number(highest.get("weight"))
     assets = [item for item in highest.get("assets") or [] if str(item).strip()]
     open_gaps = 1 if highest and highest.get("gap") == "uncovered" else 0
@@ -270,14 +294,30 @@ def bid_room_causal_summary(view: dict) -> str:
             for item in tasks
             if str(item.get("status") or "").upper() not in finished_states
         ),
-        {},
+        tasks[-1] if tasks else {},
     )
+
+    missing = view.get("missing_eligibility") or []
+    capacity_gap = as_number(view.get("capacity_gap_hours"))
+    verdict = str(view.get("status") or "").upper()
+    if missing:
+        principal_reason = (
+            f"{len(missing)} eligibility gap{'s' if len(missing) != 1 else ''} remain."
+        )
+    elif capacity_gap is not None and capacity_gap > 0:
+        principal_reason = f"{trim(capacity_gap)} delivery hours remain uncovered."
+    elif verdict == "PURSUE":
+        principal_reason = "Eligibility and delivery-capacity gates passed."
+    else:
+        principal_reason = "Supplier evidence requires review."
 
     return bid_room_first_viewport(
         verdict=view.get("status") or NOT_RECORDED,
-        principal_reason=(decision_summary(view) if view.get("decision") else NOT_RECORDED),
+        principal_reason=(principal_reason if view.get("decision") else NOT_RECORDED),
         criterion=highest.get("name") or NOT_RECORDED,
-        official_weight=f"{trim(weight)} points" if weight is not None else NOT_RECORDED,
+        official_weight=f"{trim(weight)} points"
+        if weight is not None
+        else NOT_RECORDED,
         evidence_state=f"{len(assets)} cited · {open_gaps} open gaps",
         selected_position=selected.get("title") or NOT_RECORDED,
         owner=next_task.get("owner") or NOT_RECORDED,
@@ -313,7 +353,9 @@ def policy_dimensions(view: dict) -> list[dict]:
             "name": "Delivery capacity",
             "state": "pass" if gap is not None and gap <= 0 else "open",
             "badge": (
-                f"{trim(gap)} hour gap" if gap else ("0 hours" if gap is not None else "Not assessed")
+                f"{trim(gap)} hour gap"
+                if gap
+                else ("0 hours" if gap is not None else "Not assessed")
             ),
             "detail": (
                 "No capacity gap between the required delivery window and the recorded supplier profile."
@@ -351,12 +393,18 @@ def group_by_opportunity(complete: list[dict]) -> list[dict]:
             groups[key] = []
             order.append(key)
         groups[key].append(run)
-    return [{"opportunity_id": key, "current": groups[key][0], "history": groups[key][1:]} for key in order]
+    return [
+        {"opportunity_id": key, "current": groups[key][0], "history": groups[key][1:]}
+        for key in order
+    ]
 
 
 def review_state(criteria: list[dict], findings: tuple[dict, ...]) -> dict[str, str]:
     """Map each score-bearing criterion to its current open finding, if any."""
-    open_findings = {str(item.get("criterion") or ""): str(item.get("finding") or "") for item in findings}
+    open_findings = {
+        str(item.get("criterion") or ""): str(item.get("finding") or "")
+        for item in findings
+    }
     return {item["name"]: open_findings.get(item["name"], "") for item in criteria}
 
 
@@ -501,6 +549,7 @@ html, body { height: auto !important; }
   display: none !important; visibility: hidden !important; height: 0 !important;
 }
 [data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"] { display: none !important; }
+[data-testid="stSkeleton"], .stSkeleton { display:none !important; }
 
 .stMainBlockContainer, .block-container {
   max-width: 1240px !important;
@@ -563,6 +612,69 @@ table.bp-crit p, .bp-verdict p { margin:0 !important; }
 .bp-brandname { letter-spacing:-.03em; }
 .bp-brandsub { color: var(--bp-label-alt); }
 .bp-rule { height:1px; background: var(--bp-line-alt); margin: 0 0 24px; }
+
+/* ---- KOAT result-page grammar ---- */
+.bp-result-topbar { display:flex; align-items:center; justify-content:space-between; min-height:52px;
+  padding:0 0 16px; border-bottom:1px solid var(--bp-line-alt); }
+.bp-result-brand { display:flex; align-items:center; gap:9px; color:var(--bp-label); text-decoration:none; }
+.bp-result-topbar__label { color:var(--bp-label-alt); }
+.bp-result-case { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:24px; align-items:end;
+  padding:38px 0 26px; }
+.bp-result-case h1 { max-width:800px; margin:7px 0 8px !important; font-size:clamp(1.8rem,3vw,2.6rem) !important;
+  line-height:1.2 !important; letter-spacing:-.035em !important; }
+.bp-result-case__meta { display:flex; flex-wrap:wrap; gap:6px 16px; color:var(--bp-label-alt); }
+.bp-result-case__state { align-self:center; }
+.bp-result-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
+  border-top:1px solid var(--bp-line-neutral); border-bottom:1px solid var(--bp-line-neutral); }
+.bp-result-metric { min-width:0; min-height:132px; padding:22px; border-left:1px solid var(--bp-line-alt); }
+.bp-result-metric:first-child { border-left:0; }
+.bp-result-metric::before { content:""; display:block; width:24px; height:2px; margin:-22px 0 19px; background:var(--bp-cn-95); }
+.bp-result-metric[data-tone="go"]::before { background:var(--bp-green-50); }
+.bp-result-metric[data-tone="review"]::before { background:var(--bp-orange-50); }
+.bp-result-metric[data-tone="stop"]::before { background:var(--bp-red-40); }
+.bp-result-metric p,.bp-result-metric strong,.bp-result-metric small { display:block; margin:0 !important; }
+.bp-result-metric p { color:var(--bp-label-alt); font-size:.75rem; line-height:1rem; }
+.bp-result-metric strong { margin-top:8px !important; color:var(--bp-label); font-size:1.45rem; line-height:1.8rem;
+  letter-spacing:-.025em; overflow-wrap:anywhere; }
+.bp-result-metric[data-tone="go"] strong { color:var(--bp-green-40); font-size:2rem; line-height:2.3rem; }
+.bp-result-metric[data-tone="review"] strong { color:var(--bp-orange-39); font-size:2rem; line-height:2.3rem; }
+.bp-result-metric[data-tone="stop"] strong { color:var(--bp-red-40); font-size:2rem; line-height:2.3rem; }
+.bp-result-metric small { margin-top:5px !important; color:var(--bp-label-alt); font-size:.75rem; line-height:1rem; }
+.bp-result-runline { display:flex; justify-content:space-between; gap:16px; padding:12px 4px;
+  border-bottom:1px solid var(--bp-line-alt); color:var(--bp-label-alt); }
+.bp-result-runline b { color:var(--bp-label-neutral); margin-right:6px; }
+.bp-result-section { margin-top:42px; }
+.bp-result-section__head { display:grid; grid-template-columns:28px minmax(0,1fr); gap:10px; align-items:baseline;
+  padding-bottom:12px; margin-bottom:14px; border-bottom:1px solid var(--bp-line-neutral); }
+.bp-result-section__head span { color:var(--bp-primary); font-size:.75rem; font-weight:700; }
+.bp-result-section__head h2 { margin:0 !important; font-size:1.25rem !important; line-height:1.75rem !important; }
+.bp-result-section__head p { grid-column:2; margin:2px 0 0 !important; color:var(--bp-label-alt); }
+.bp-result-rows { border-top:1px solid var(--bp-line-alt); }
+.bp-result-row { display:grid; grid-template-columns:180px minmax(0,1fr) auto; gap:18px; align-items:center;
+  min-height:64px; padding:12px 4px; border-bottom:1px solid var(--bp-line-alt); }
+.bp-result-row__title { font-weight:600; }
+.bp-result-row__detail { color:var(--bp-label-neutral); }
+.bp-score-summary { display:grid; grid-template-columns:minmax(0,1.3fr) minmax(220px,.7fr); gap:16px;
+  padding:20px; border:1px solid var(--bp-blue-80); border-radius:var(--bp-r-16); background:var(--bp-blue-99); }
+.bp-score-summary h3 { margin:6px 0 4px !important; font-size:1.25rem !important; line-height:1.65rem !important; }
+.bp-score-summary p { margin:0 !important; }
+.bp-score-summary__coverage { align-self:center; padding-left:20px; border-left:1px solid var(--bp-blue-90); }
+.bp-score-summary__coverage strong { display:block; font-size:1.8rem; line-height:2.2rem; }
+.bp-score-row { display:grid; grid-template-columns:72px minmax(170px,.65fr) minmax(0,1.35fr) minmax(120px,.55fr);
+  gap:16px; align-items:start; padding:16px 4px; border-bottom:1px solid var(--bp-line-alt); }
+.bp-score-row__weight { color:var(--bp-primary-strong); font-size:1.5rem; line-height:1.8rem; font-weight:700; }
+.bp-score-row p { margin:0 !important; }
+.bp-score-row small { display:block; margin-top:4px; color:var(--bp-label-alt); }
+.bp-review-result { display:flex; align-items:flex-start; gap:10px; margin:12px 0; padding:14px 16px;
+  border-radius:var(--bp-r-12); background:var(--bp-green-95); color:var(--bp-green-40); }
+.bp-review-result[data-state="open"] { background:var(--bp-orange-95); color:var(--bp-orange-39); }
+.bp-review-result p { margin:0 !important; }
+.bp-work-row { display:grid; grid-template-columns:28px minmax(0,1fr) minmax(130px,.35fr) auto; gap:14px;
+  align-items:center; min-height:58px; padding:10px 4px; border-bottom:1px solid var(--bp-line-alt); }
+.bp-work-row__mark { width:24px; height:24px; display:grid; place-items:center; border-radius:8px;
+  color:var(--bp-primary); background:var(--bp-blue-95); }
+.bp-work-row[data-done="true"] .bp-work-row__mark { color:var(--bp-green-40); background:var(--bp-green-95); }
+.bp-result-actions { display:flex; justify-content:flex-end; margin-top:12px; }
 
 /* ---- generic buttons ---- */
 .stButton button, .stDownloadButton button {
@@ -736,7 +848,7 @@ table.bp-crit p, .bp-verdict p { margin:0 !important; }
 .bp-verdict__q { color: var(--bp-label-alt); }
 .bp-verdict__word {
   font-size: clamp(2.25rem, 7vw, 3.25rem) !important; line-height:1.05 !important;
-  font-weight:700 !important; letter-spacing:-.04em; color: var(--bp-primary);
+  font-weight:700 !important; letter-spacing:-.04em; color: var(--bp-green-40);
 }
 .bp-verdict__word[data-tone="open"] { color: var(--bp-orange-39); }
 .bp-verdict__word[data-tone="stop"] { color: var(--bp-red-40); }
@@ -881,6 +993,15 @@ table.bp-crit tbody tr[data-gap="uncovered"] { background: var(--bp-cn-99); }
   border-top:1px solid var(--bp-line-alt); margin-top:56px !important; padding:24px 0 0;
   color: var(--bp-label-alt);
 }
+.bp-loading {
+  display:flex; align-items:center; gap:12px; min-height:72px; padding:16px 18px;
+  border:1px solid var(--bp-line-neutral); border-radius:var(--bp-r-12); background:#fff;
+  box-shadow:var(--bp-shadow-xs); color:var(--bp-label-neutral);
+}
+.bp-loading__mark { width:10px; height:10px; flex:none; border-radius:50%; background:var(--bp-primary);
+  box-shadow:0 0 0 5px var(--bp-blue-95); animation:bp-pulse 1.2s var(--bp-ease) infinite; }
+.bp-loading p { margin:0 !important; }
+@keyframes bp-pulse { 50% { opacity:.45; transform:scale(.82); } }
 
 /* one orchestrated reveal per stage */
 @keyframes bp-rise { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform:none; } }
@@ -922,6 +1043,11 @@ table.bp-crit tbody tr[data-gap="uncovered"] { background: var(--bp-cn-99); }
     text-transform:uppercase; letter-spacing:.06em; font-weight:600; padding-top:4px;
   }
   .bp-statrow { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .bp-result-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .bp-result-metric:nth-child(3) { border-left:0; border-top:1px solid var(--bp-line-alt); }
+  .bp-result-metric:nth-child(4) { border-top:1px solid var(--bp-line-alt); }
+  .bp-score-row { grid-template-columns:64px minmax(140px,.55fr) minmax(0,1fr); }
+  .bp-score-row__owner { grid-column:2 / -1; }
 }
 @media (max-width: 760px) {
   .stMainBlockContainer, .block-container { padding: 16px 16px 72px !important; }
@@ -937,20 +1063,28 @@ table.bp-crit tbody tr[data-gap="uncovered"] { background: var(--bp-cn-99); }
   .bp-tasks, .bp-ladder { grid-template-columns: minmax(0,1fr); }
   .bp-statrow { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .bp-brandsub { display:none; }
-  /* the stage name stays in the accessible name; only its pixels are folded away */
-  .st-key-bp-stepper .stButton button > * {
-    position:absolute !important; width:1px !important; height:1px !important;
-    overflow:hidden !important; clip:rect(0 0 0 0) !important; white-space:nowrap !important;
-    margin:0 !important; padding:0 !important;
-  }
-  .st-key-bp-stepper .stButton button { position:relative; min-height:40px; }
-  .st-key-bp-stepper [data-testid="stColumn"] .stButton button::before {
-    font-size:.875rem; font-weight:700;
-  }
-  .st-key-bp-stepper [data-testid="stColumn"]:nth-of-type(1) .stButton button::before { content:"1" / ""; }
-  .st-key-bp-stepper [data-testid="stColumn"]:nth-of-type(2) .stButton button::before { content:"2" / ""; }
-  .st-key-bp-stepper [data-testid="stColumn"]:nth-of-type(3) .stButton button::before { content:"3" / ""; }
-  .st-key-bp-stepper [data-testid="stColumn"]:nth-of-type(4) .stButton button::before { content:"4" / ""; }
+  .bp-result-case { display:block; padding:28px 0 22px; }
+  .bp-result-case h1 { font-size:1.75rem !important; line-height:2.15rem !important; }
+  .bp-result-case__state { margin-top:14px; }
+  .bp-result-metrics { grid-template-columns:minmax(0,1fr); }
+  .bp-result-metric,.bp-result-metric:nth-child(3),.bp-result-metric:nth-child(4) { min-height:0;
+    padding:18px 4px; border-left:0; border-top:1px solid var(--bp-line-alt); }
+  .bp-result-metric:first-child { border-top:0; }
+  .bp-result-metric::before { display:none; }
+  .bp-result-runline { display:grid; }
+  .bp-result-section { margin-top:34px; }
+  .bp-result-row { grid-template-columns:minmax(0,1fr) auto; gap:5px 10px; }
+  .bp-result-row__detail { grid-column:1 / -1; }
+  .bp-score-summary { grid-template-columns:minmax(0,1fr); padding:16px; }
+  .bp-score-summary__coverage { padding:14px 0 0; border-left:0; border-top:1px solid var(--bp-blue-90); }
+  .bp-score-row { grid-template-columns:54px minmax(0,1fr); gap:8px 12px; }
+  .bp-score-row__claim,.bp-score-row__owner { grid-column:2; }
+  .bp-work-row { grid-template-columns:26px minmax(0,1fr); gap:4px 10px; }
+  .bp-work-row__owner,.bp-work-row__state { grid-column:2; }
+  .st-key-bp-stepper [data-testid="stHorizontalBlock"] { display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  .st-key-bp-stepper [data-testid="stColumn"] { width:100% !important; }
+  .st-key-bp-stepper .stButton button { min-height:44px; font-size:.75rem; padding:6px 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1002,28 +1136,12 @@ def adopt_stage_from_query() -> None:
 def render_shell_header(stage: int, enabled: bool) -> None:
     write(STYLE + sprite())
     write(
-        '<div class="bp-appbar">'
+        '<nav class="bp-result-topbar" aria-label="BidPilot">'
+        '<a class="bp-result-brand" href="?">'
         f'<span class="bp-mark">{icon("instance", "bp-ic bp-ic--18")}</span>'
-        f'<span class="bp-t-headline2 bp-bold bp-brandname">{esc(PRODUCT_NAME)}</span>'
-        f'<span class="bp-t-caption1 bp-brandsub">{esc(PRODUCT_TAGLINE)}</span>'
-        "</div>"
-    )
-    with st.container(key="bp-stepper"):
-        columns = st.columns(len(STAGES), gap="small")
-        for index, (column, label) in enumerate(zip(columns, STAGES, strict=True)):
-            with column:
-                if st.button(
-                    f"{index + 1} · {label}",
-                    key=f"bp-step-{index}",
-                    type="primary" if index == stage else "secondary",
-                    disabled=not enabled and index > 0,
-                    width="stretch",
-                    help=f"Go to stage {index + 1} of {len(STAGES)}: {label}",
-                ):
-                    go_to_stage(index)
-    write('<div class="bp-rule"></div>')
-    write(
-        f'<p class="bp-sr" role="status">Stage {stage + 1} of {len(STAGES)} — {esc(STAGES[stage])}</p>'
+        f'<span class="bp-t-headline2 bp-bold bp-brandname">{esc(PRODUCT_NAME)}</span></a>'
+        '<span class="bp-t-caption1 bp-result-topbar__label">Verified result</span>'
+        "</nav>"
     )
 
 
@@ -1063,7 +1181,9 @@ def tender_card(group: dict, view: dict | None, primary: bool) -> str:
         else ""
     ]
     if source:
-        facts.append(f'<span class="bp-chip">{icon("storage")}Source type: {esc(source)}</span>')
+        facts.append(
+            f'<span class="bp-chip">{icon("storage")}Source type: {esc(source)}</span>'
+        )
     history = group["history"]
     history_line = (
         f"Current analysis {esc(run.get('run_id'))} · {len(history)} earlier "
@@ -1081,19 +1201,31 @@ def tender_card(group: dict, view: dict | None, primary: bool) -> str:
     )
 
 
-def render_opportunities(groups: list[dict], all_runs: list[dict], view: dict | None) -> None:
-    write(page_head(1, "Opportunities", (
-        "Pick the tender you are pursuing. Each tender carries one current completed analysis; "
-        "earlier analyses stay in its history."
-    )))
+def render_opportunities(
+    groups: list[dict], all_runs: list[dict], view: dict | None
+) -> None:
+    write(
+        page_head(
+            1,
+            "Opportunities",
+            (
+                "Pick the tender you are pursuing. Each tender carries one current completed analysis; "
+                "earlier analyses stay in its history."
+            ),
+        )
+    )
 
     if st.session_state.pop(LOST_RUN_KEY, None):
-        write(notice(
-            '<p class="bp-t-body2 bp-bold">That analysis is no longer available.</p>'
-            '<p class="bp-t-body2">The run you had open is not in the current list of completed analyses, '
-            "so the workspace returned here. Choose a tender to continue.</p>",
-            "warn", "warning", role="status",
-        ))
+        write(
+            notice(
+                '<p class="bp-t-body2 bp-bold">That analysis is no longer available.</p>'
+                '<p class="bp-t-body2">The run you had open is not in the current list of completed analyses, '
+                "so the workspace returned here. Choose a tender to continue.</p>",
+                "warn",
+                "warning",
+                role="status",
+            )
+        )
 
     main, side = st.columns([1, 0.44], gap="medium")
 
@@ -1111,20 +1243,28 @@ def render_opportunities(groups: list[dict], all_runs: list[dict], view: dict | 
             if all_runs:
                 rows = "".join(
                     f'<div class="bp-hist__item"><span class="bp-t-caption1 bp-mono">'
-                    f'{esc(item.get("run_id"))}</span>'
+                    f"{esc(item.get('run_id'))}</span>"
                     f'<span class="bp-t-body2">{esc(item.get("opportunity_id") or NOT_RECORDED)}</span>'
                     f'<span class="bp-t-caption1 bp-note">State {esc(item.get("state") or NOT_RECORDED)} · '
-                    f'{esc(item.get("decision_count"))} decision · {esc(item.get("plan_count"))} plan · '
-                    f'{esc(item.get("section_count"))} section · {esc(item.get("task_count"))} task</span></div>'
+                    f"{esc(item.get('decision_count'))} decision · {esc(item.get('plan_count'))} plan · "
+                    f"{esc(item.get('section_count'))} section · {esc(item.get('task_count'))} task</span></div>"
                     for item in all_runs[:8]
                 )
                 write(
                     '<span class="bp-gap-lg"></span>'
-                    + section_head("Analyses that did not finish", f"{len(all_runs)} recorded in total")
+                    + section_head(
+                        "Analyses that did not finish",
+                        f"{len(all_runs)} recorded in total",
+                    )
                     + f'<div class="bp-hist">{rows}</div>'
                 )
         with side:
-            write(rail("Analysis history", '<p class="bp-t-body2 bp-note">No completed analysis is recorded yet.</p>'))
+            write(
+                rail(
+                    "Analysis history",
+                    '<p class="bp-t-body2 bp-note">No completed analysis is recorded yet.</p>',
+                )
+            )
         return
 
     with main:
@@ -1140,7 +1280,11 @@ def render_opportunities(groups: list[dict], all_runs: list[dict], view: dict | 
         )
         for index, group in enumerate(groups):
             write('<span class="bp-gap-lg"></span>')
-            title = (view or {}).get("headline") if index == 0 and view else group["opportunity_id"]
+            title = (
+                (view or {}).get("headline")
+                if index == 0 and view
+                else group["opportunity_id"]
+            )
             if st.button(
                 f"Open bid decision — {title}",
                 key=f"bp-open-{group['current']['run_id']}",
@@ -1151,17 +1295,35 @@ def render_opportunities(groups: list[dict], all_runs: list[dict], view: dict | 
 
         write(
             '<span class="bp-gap-lg"></span>'
-            + section_head("What each stage answers", "Opening a tender walks these four in order.")
+            + section_head(
+                "What each stage answers", "Opening a tender walks these four in order."
+            )
             + '<div class="bp-ladder bp-reveal bp-d2">'
             + "".join(
                 f'<div class="bp-ladder__item"><span class="bp-ladder__n">{number}</span>'
                 f'<span class="bp-t-headline2 bp-bold">{esc(name)}</span>'
                 f'<span class="bp-t-body2 bp-note">{esc(text)}</span></div>'
                 for number, name, text in (
-                    (1, "Opportunities", "Which tender you are working, and which analysis is the current one."),
-                    (2, "Bid decision", "Whether to bid — and which recorded policy facts that rests on."),
-                    (3, "Win plan", "Where the score weight sits, and which win position was recorded."),
-                    (4, "Proposal room", "What is written, what the review found, and whether it can be sent."),
+                    (
+                        1,
+                        "Opportunities",
+                        "Which tender you are working, and which analysis is the current one.",
+                    ),
+                    (
+                        2,
+                        "Bid decision",
+                        "Whether to bid — and which recorded policy facts that rests on.",
+                    ),
+                    (
+                        3,
+                        "Win plan",
+                        "Where the score weight sits, and which win position was recorded.",
+                    ),
+                    (
+                        4,
+                        "Proposal room",
+                        "What is written, what the review found, and whether it can be sent.",
+                    ),
                 )
             )
             + "</div>"
@@ -1174,12 +1336,12 @@ def render_opportunities(groups: list[dict], all_runs: list[dict], view: dict | 
             f'<div class="bp-hist__item" data-current="true">'
             f'<span class="bp-t-caption1 bp-mono">{esc(current.get("run_id"))}</span>'
             f'<span class="bp-t-body2 bp-bold">Recorded {esc(display_date(current.get("created_at")))}</span>'
-            f'{badge("Current analysis", "pass", "check-circle")}</div>'
+            f"{badge('Current analysis', 'pass', 'check-circle')}</div>"
         )
         items += "".join(
             f'<div class="bp-hist__item"><span class="bp-t-caption1 bp-mono">{esc(item.get("run_id"))}</span>'
             f'<span class="bp-t-body2">Recorded {esc(display_date(item.get("created_at")))}</span>'
-            f'{badge("Superseded", "neutral", "clock")}</div>'
+            f"{badge('Superseded', 'neutral', 'clock')}</div>"
             for item in history
         )
         note = (
@@ -1189,7 +1351,12 @@ def render_opportunities(groups: list[dict], all_runs: list[dict], view: dict | 
             else "The current analysis is what every later stage reads. No earlier completed analysis is "
             "recorded for this tender. The date is when the run was recorded."
         )
-        write(rail("Analysis history", f'<p class="bp-t-body2 bp-note">{note}</p><div class="bp-hist">{items}</div>'))
+        write(
+            rail(
+                "Analysis history",
+                f'<p class="bp-t-body2 bp-note">{note}</p><div class="bp-hist">{items}</div>',
+            )
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -1213,11 +1380,13 @@ def render_decision(view: dict) -> None:
             f'<p class="bp-verdict__word" data-tone="{tone}">{esc(verdict)}</p></div>'
             f'<p class="bp-t-body1-reading bp-verdict__say">{esc(decision_summary(view))}</p>'
             '<div class="bp-kvgrid">'
-            + kv_rows([
-                ("Buyer objective", str(view["objective"] or "")),
-                ("Supplier", str(view["supplier_name"] or "")),
-                ("Scope", str(view["scope"] or "")),
-            ])
+            + kv_rows(
+                [
+                    ("Buyer objective", str(view["objective"] or "")),
+                    ("Supplier", str(view["supplier_name"] or "")),
+                    ("Scope", str(view["scope"] or "")),
+                ]
+            )
             + "</div></div>"
         )
         write(
@@ -1254,24 +1423,38 @@ def render_decision(view: dict) -> None:
             if st.button("← Back to opportunities", key="bp-back-1", width="stretch"):
                 go_to_stage(0)
         with forward:
-            if st.button("Open win plan →", key="bp-next-3", type="primary", width="stretch"):
+            if st.button(
+                "Open win plan →", key="bp-next-3", type="primary", width="stretch"
+            ):
                 go_to_stage(2)
 
     with side:
         run = view["run"]
-        write(rail("Record identifiers", '<div class="bp-kvstack">' + kv_rows([
-            ("Tender version", str(run.get("opportunity_version") or "")),
-            ("Supplier profile version", str(run.get("supplier_profile_version") or "")),
-            ("Policy version", str(run.get("policy_version") or "")),
-            ("Analysis run", str(view["run_id"])),
-            ("Provider", str(run.get("provider") or "")),
-            ("Run state", str(run.get("state") or "")),
-            ("Source type", str(view["source_type"] or "")),
-            (
-                "Completed" if view["completed_on"] else "Recorded",
-                str(view["completed_on"] or view["recorded_on"] or ""),
-            ),
-        ]) + "</div>"))
+        write(
+            rail(
+                "Record identifiers",
+                '<div class="bp-kvstack">'
+                + kv_rows(
+                    [
+                        ("Tender version", str(run.get("opportunity_version") or "")),
+                        (
+                            "Supplier profile version",
+                            str(run.get("supplier_profile_version") or ""),
+                        ),
+                        ("Policy version", str(run.get("policy_version") or "")),
+                        ("Analysis run", str(view["run_id"])),
+                        ("Provider", str(run.get("provider") or "")),
+                        ("Run state", str(run.get("state") or "")),
+                        ("Source type", str(view["source_type"] or "")),
+                        (
+                            "Completed" if view["completed_on"] else "Recorded",
+                            str(view["completed_on"] or view["recorded_on"] or ""),
+                        ),
+                    ]
+                )
+                + "</div>",
+            )
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -1280,26 +1463,36 @@ def render_decision(view: dict) -> None:
 
 
 def render_win_plan(view: dict) -> None:
-    write(page_head(3, "Win plan", (
-        "The official score map decides where effort is worth spending. The recorded run selected one win "
-        "position; the criteria below are the plan it carries into the proposal."
-    )))
+    write(
+        page_head(
+            3,
+            "Win plan",
+            (
+                "The official score map decides where effort is worth spending. The recorded run selected one win "
+                "position; the criteria below are the plan it carries into the proposal."
+            ),
+        )
+    )
     criteria = view["criteria"]
 
     main, side = st.columns([1, 0.44], gap="medium")
 
     with main:
         if not criteria:
-            write(notice(
-                '<p class="bp-t-body2">This analysis recorded no weighted response plan, so there is no '
-                "score map to show.</p>", "warn", "warning",
-            ))
+            write(
+                notice(
+                    '<p class="bp-t-body2">This analysis recorded no weighted response plan, so there is no '
+                    "score map to show.</p>",
+                    "warn",
+                    "warning",
+                )
+            )
         else:
             segments = "".join(
                 f'<div class="bp-band__seg" data-gap="{item["gap"]}" style="flex:{item["weight"]:g} 1 0">'
                 f'<span class="bp-band__w bp-num">{trim(item["weight"])}</span>'
                 f'<span class="bp-band__n"><b>{esc(item["name"])}</b>'
-                f'{"Covered" if item["gap"] == "covered" else "No recorded asset"}</span></div>'
+                f"{'Covered' if item['gap'] == 'covered' else 'No recorded asset'}</span></div>"
                 for item in criteria
             )
             write(
@@ -1321,10 +1514,17 @@ def render_win_plan(view: dict) -> None:
             for item in strategies:
                 chosen = bool(item.get("selected"))
                 proof = as_records(item.get("proof_cards"))
-                proof_line = "; ".join(
-                    " — ".join(part for part in (record_label(card), record_detail(card)) if part)
-                    for card in proof
-                ) or "No proof card is recorded."
+                proof_line = (
+                    "; ".join(
+                        " — ".join(
+                            part
+                            for part in (record_label(card), record_detail(card))
+                            if part
+                        )
+                        for card in proof
+                    )
+                    or "No proof card is recorded."
+                )
                 weakness = str(item.get("weakness") or "").strip()
                 mark = (
                     badge("Selected", "brand", "check")
@@ -1357,7 +1557,9 @@ def render_win_plan(view: dict) -> None:
             )
 
         if criteria:
-            selected_title = str(view["selected"].get("title") or "the selected win position")
+            selected_title = str(
+                view["selected"].get("title") or "the selected win position"
+            )
             rows = ""
             for item in criteria:
                 assets = (
@@ -1409,18 +1611,29 @@ def render_win_plan(view: dict) -> None:
             if st.button("← Back to bid decision", key="bp-back-2", width="stretch"):
                 go_to_stage(1)
         with forward:
-            if st.button("Open proposal room →", key="bp-next-4", type="primary", width="stretch"):
+            if st.button(
+                "Open proposal room →", key="bp-next-4", type="primary", width="stretch"
+            ):
                 go_to_stage(3)
 
     with side:
         selected_title = str(view["selected"].get("title") or NOT_RECORDED)
         uncovered = [item["name"] for item in criteria if item["gap"] == "uncovered"]
-        body = '<div class="bp-kvstack">' + kv_rows([
-            ("Selected position", selected_title),
-            ("Weight covered", f"{trim(view['covered_weight'])} of {trim(view['total_weight'])}"),
-            ("Weight with no recorded asset", trim(view["open_weight"])),
-            ("Positions recorded", str(len(view["strategies"]))),
-        ]) + "</div>"
+        body = (
+            '<div class="bp-kvstack">'
+            + kv_rows(
+                [
+                    ("Selected position", selected_title),
+                    (
+                        "Weight covered",
+                        f"{trim(view['covered_weight'])} of {trim(view['total_weight'])}",
+                    ),
+                    ("Weight with no recorded asset", trim(view["open_weight"])),
+                    ("Positions recorded", str(len(view["strategies"]))),
+                ]
+            )
+            + "</div>"
+        )
         if uncovered:
             body += notice(
                 f'<p class="bp-t-body2">{trim(view["open_weight"])} points of score weight carry no recorded '
@@ -1448,18 +1661,224 @@ def _is_complete(task: dict) -> bool:
     return str(task.get("status") or "").upper() in {"COMPLETE", "COMPLETED", "DONE"}
 
 
+def result_section_head(number: int, title: str, note: str = "") -> str:
+    tail = f'<p class="bp-t-body2">{esc(note)}</p>' if note else ""
+    return (
+        '<header class="bp-result-section__head">'
+        f"<span>{number:02d}</span><h2>{esc(title)}</h2>{tail}</header>"
+    )
+
+
+def render_replay(view: dict) -> None:
+    """Render one KOAT-grammar result page from one immutable run."""
+    criteria = list(view.get("criteria") or [])
+    tasks = list(view.get("tasks") or [])
+    strategies = list(view.get("strategies") or [])
+    selected = view.get("selected") if isinstance(view.get("selected"), dict) else {}
+    highest = max(criteria, key=lambda item: item.get("weight") or 0, default={})
+    finished_states = {"COMPLETE", "COMPLETED", "CLOSED", "DONE"}
+    next_task = next(
+        (
+            task
+            for task in tasks
+            if str(task.get("status") or "").upper() not in finished_states
+        ),
+        tasks[-1] if tasks else {},
+    )
+    verdict = str(view.get("status") or NOT_RECORDED).upper()
+    verdict_tone = {"PURSUE": "go", "REVIEW": "review", "NO-GO": "stop"}.get(
+        verdict, "review"
+    )
+    highest_weight = as_number(highest.get("weight"))
+    highest_assets = list(highest.get("assets") or [])
+    highest_open_gaps = 1 if highest and highest.get("gap") == "uncovered" else 0
+
+    write(
+        '<header class="bp-result-case" data-workspace-view="bid-room">'
+        '<div><p class="bp-t-label2 bp-bold bp-eyebrow">Verified capability replay · separate synthetic fixture</p>'
+        f"<h1>{esc(view.get('headline') or NOT_RECORDED)}</h1>"
+        '<p class="bp-t-body2 bp-result-case__meta">'
+        f"<span>{esc(view.get('supplier_name') or NOT_RECORDED)}</span>"
+        f"<span>{esc(view.get('source_type') or 'Recorded source')}</span>"
+        f"<span>{esc(view.get('completed_on') or view.get('recorded_on') or NOT_RECORDED)}</span>"
+        "</p></div>"
+        f'<div class="bp-result-case__state">{badge("Same-run replay", "brand", "check")}</div>'
+        "</header>"
+        '<section class="bp-result-metrics" aria-label="Pursuit result">'
+        f'<div class="bp-result-metric" data-tone="{verdict_tone}"><p>Decision</p>'
+        f"<strong>{esc(verdict)}</strong><small>{esc(decision_summary(view))}</small></div>"
+        '<div class="bp-result-metric"><p>Highest official weight</p>'
+        f"<strong>{esc(trim(highest_weight) if highest_weight is not None else NOT_RECORDED)} points</strong>"
+        f"<small>{esc(highest.get('name') or NOT_RECORDED)} · {len(highest_assets)} cited · "
+        f"{highest_open_gaps} open gaps</small></div>"
+        '<div class="bp-result-metric"><p>Win Position</p>'
+        f"<strong>{esc(selected.get('title') or NOT_RECORDED)}</strong>"
+        f"<small>{len(strategies)} compared · 1 selected</small></div>"
+        '<div class="bp-result-metric"><p>Owned action</p>'
+        f"<strong>{esc(next_task.get('task_name') or 'No open action')}</strong>"
+        f"<small>{esc(next_task.get('owner') or 'All recorded work complete')}</small></div>"
+        "</section>"
+        '<div class="bp-result-runline bp-t-caption1">'
+        f"<span><b>Run ID</b>{esc(view.get('run_id') or NOT_RECORDED)}</span>"
+        f"<span><b>Weight covered</b>{esc(trim(view.get('covered_weight') or 0))} / "
+        f"{esc(trim(view.get('total_weight') or 0))}</span></div>"
+    )
+
+    dimensions = policy_dimensions(view)
+    passed_dimensions = sum(1 for item in dimensions if item["state"] == "pass")
+    write(
+        '<section class="bp-result-section">'
+        + result_section_head(
+            1,
+            "Decision rationale",
+            f"{passed_dimensions} of {len(dimensions)} passed · recorded policy inputs in plain language.",
+        )
+        + '<div class="bp-result-rows">'
+        + "".join(
+            '<div class="bp-result-row">'
+            f'<span class="bp-result-row__title">{esc(item["name"])}</span>'
+            f'<span class="bp-result-row__detail bp-t-body2">{esc(item["detail"])}</span>'
+            f"{badge(item['badge'], 'pass' if item['state'] == 'pass' else 'pending')}</div>"
+            for item in dimensions
+        )
+        + "</div>"
+        '<div class="bp-result-rows" style="margin-top:12px">'
+        '<div class="bp-result-row"><span class="bp-result-row__title">Buyer objective</span>'
+        f'<span class="bp-result-row__detail bp-t-body2">{esc(view.get("objective") or NOT_RECORDED)}</span>'
+        f"{badge('Recorded', 'outline')}</div>"
+        '<div class="bp-result-row"><span class="bp-result-row__title">Scope</span>'
+        f'<span class="bp-result-row__detail bp-t-body2">{esc(view.get("scope") or NOT_RECORDED)}</span>'
+        f"{badge('Recorded', 'outline')}</div></div></section>"
+    )
+
+    alternatives = [
+        item for item in strategies if not item.get("selected") and item.get("title")
+    ]
+    alternatives_markup = (
+        "".join(
+            '<span class="bp-badge bp-badge--outline">Comparative record</span> '
+            f"{esc(item.get('title'))}{' · ' if index < len(alternatives) - 1 else ''}"
+            for index, item in enumerate(alternatives)
+        )
+        or "None recorded"
+    )
+    score_rows = "".join(
+        '<div class="bp-score-row">'
+        f'<span class="bp-score-row__weight bp-num">{trim(item["weight"])}</span>'
+        f'<div><p class="bp-bold">{esc(item["name"] or NOT_RECORDED)}</p>'
+        f"<small>{'Covered · ' if item['assets'] else 'Open · '}"
+        f"{esc(', '.join(item['assets']) or 'No evidence asset')}</small></div>"
+        f'<p class="bp-score-row__claim bp-t-body2">{esc(item["claim"] or NOT_RECORDED)}</p>'
+        f'<p class="bp-score-row__owner bp-t-body2">{esc(item["owner"] or NOT_RECORDED)}</p></div>'
+        for item in criteria
+    )
+    write(
+        '<section class="bp-result-section">'
+        + result_section_head(
+            2,
+            "Score-weighted Win Position",
+            f"Official score map · Weights are fixed by the tender and total {trim(view.get('total_weight') or 0)}.",
+        )
+        + '<div class="bp-score-summary"><div>'
+        f'<p class="bp-t-caption1 bp-eyebrow">Selected position {badge("Selected", "brand")}</p>'
+        f"<h3>{esc(selected.get('title') or NOT_RECORDED)}</h3>"
+        f'<p class="bp-t-body2">{esc(selected.get("statement") or NOT_RECORDED)}</p>'
+        '<p class="bp-t-caption1 bp-note" style="margin-top:8px !important">'
+        f"{alternatives_markup}</p>"
+        '<p class="bp-t-caption1 bp-note" style="margin-top:6px !important">The submitted analysis is immutable.</p></div>'
+        '<div class="bp-score-summary__coverage"><span class="bp-t-caption1 bp-note">Covered score weight</span>'
+        f'<strong class="bp-num">{trim(view.get("covered_weight") or 0)} / '
+        f"{trim(view.get('total_weight') or 0)}</strong></div></div>"
+        f'<div class="bp-result-rows">{score_rows}</div></section>'
+    )
+
+    if view.get("sections") and criteria:
+        composed = compose_persisted_proposal(view["blueprint"], view["sections"])
+        draft_key = f"bp-draft::{view['run_id']}"
+        write(
+            '<section class="bp-result-section">'
+            + result_section_head(
+                3,
+                "Proposal & red-team result",
+                f"{len(view['blueprint'])} response plans · {len(view['sections'])} proposal sections",
+            )
+        )
+        edited = st.text_area(
+            "Proposal draft",
+            value=st.session_state.get(draft_key, composed),
+            height=360,
+            key=draft_key,
+            help="Edits stay in this session; the recorded run remains unchanged.",
+        )
+        findings = red_team_persisted_draft(view["blueprint"], edited)
+        if findings:
+            write(
+                '<div class="bp-review-result" data-state="open">'
+                f'{icon("warning")}<div><p class="bp-bold">Review failed · {len(findings)} open</p>'
+                + "".join(
+                    f'<p class="bp-t-body2">{esc(item.get("criterion"))}: {esc(item.get("finding"))}</p>'
+                    for item in findings
+                )
+                + "</div></div>"
+            )
+        else:
+            write(
+                '<div class="bp-review-result" data-state="passed">'
+                f'{icon("check-circle")}<div><p class="bp-bold">Review passed</p>'
+                '<p class="bp-t-body2">All score-bearing sections retain their recorded evidence.</p>'
+                "</div></div>"
+            )
+        st.download_button(
+            "Download proposal draft",
+            edited,
+            file_name=f"{view['run_id']}.md",
+            mime="text/markdown",
+            disabled=bool(findings),
+            key=f"bp-download::{view['run_id']}",
+            help="Resolve open review findings before downloading."
+            if findings
+            else "Download this edited draft.",
+        )
+        write("</section>")
+
+    work_rows = "".join(
+        f'<div class="bp-work-row" data-done="{str(_is_complete(task)).lower()}">'
+        f'<span class="bp-work-row__mark">{icon("check" if _is_complete(task) else "clock")}</span>'
+        f'<span class="bp-bold">{esc(task.get("task_name") or NOT_RECORDED)}</span>'
+        f'<span class="bp-work-row__owner bp-t-body2">{esc(task.get("owner") or NOT_RECORDED)}</span>'
+        f'<span class="bp-work-row__state">{badge(str(task.get("status") or NOT_RECORDED).replace("_", " ").title(), "pass" if _is_complete(task) else "brand")}</span>'
+        "</div>"
+        for task in tasks
+    )
+    write(
+        '<section class="bp-result-section">'
+        + result_section_head(4, "Owned work", f"{len(tasks)} recorded tasks")
+        + f'<div class="bp-result-rows">{work_rows}</div></section>'
+    )
+    write(
+        '<section class="bp-result-section">'
+        + result_section_head(5, "Snowflake proof", "Technical provenance stays last.")
+    )
+    with st.expander("Snowflake proof"):
+        render_provenance(view)
+    write("</section>")
+
+
 def render_proposal(view: dict) -> None:
     write(page_head(4, "Proposal room"))
     run_id = view["run_id"]
     criteria = view["criteria"]
 
     if not view["sections"] or not criteria:
-        write(notice(
-            '<p class="bp-t-body2 bp-bold">This analysis recorded no proposal section.</p>'
-            '<p class="bp-t-body2">There is nothing to draft here, and no text is generated to stand in for '
-            "it. Choose another tender on the Opportunities stage.</p>",
-            "warn", "warning",
-        ))
+        write(
+            notice(
+                '<p class="bp-t-body2 bp-bold">This analysis recorded no proposal section.</p>'
+                '<p class="bp-t-body2">There is nothing to draft here, and no text is generated to stand in for '
+                "it. Choose another tender on the Opportunities stage.</p>",
+                "warn",
+                "warning",
+            )
+        )
         if st.button("← Back to win plan", key="bp-back-3-empty"):
             go_to_stage(2)
         return
@@ -1479,7 +1898,7 @@ def render_proposal(view: dict) -> None:
             '<span class="bp-gap-lg"></span>'
             + section_head(
                 "Response plans",
-                f'Carried in from the recorded win position “{esc(view["selected"].get("title") or NOT_RECORDED)}”.',
+                f"Carried in from the recorded win position “{esc(view['selected'].get('title') or NOT_RECORDED)}”.",
             )
             + "".join(
                 '<div class="bp-plan"><div class="bp-plan__top">'
@@ -1488,16 +1907,19 @@ def render_proposal(view: dict) -> None:
                 + "</div>"
                 f'<p class="bp-t-body2-reading">{esc(item["claim"] or NOT_RECORDED)}</p>'
                 f'<p class="bp-t-caption1 bp-plan__meta">Owner: {esc(item["owner"] or NOT_RECORDED)} · '
-                f'Assets: {esc(", ".join(item["assets"]) or "none recorded")}</p></div>'
+                f"Assets: {esc(', '.join(item['assets']) or 'none recorded')}</p></div>"
                 for item in criteria
             )
         )
 
-        write('<span class="bp-gap-lg"></span>' + section_head(
-            "Proposal draft",
-            "Composed from the recorded response plans and their written fragments. Editing changes only "
-            "this session; Snowflake keeps the analysis as it was submitted.",
-        ))
+        write(
+            '<span class="bp-gap-lg"></span>'
+            + section_head(
+                "Proposal draft",
+                "Composed from the recorded response plans and their written fragments. Editing changes only "
+                "this session; Snowflake keeps the analysis as it was submitted.",
+            )
+        )
         edited = st.text_area(
             "Proposal draft — the only editable text in the workspace",
             value=st.session_state.get(draft_key, composed),
@@ -1528,7 +1950,7 @@ def render_proposal(view: dict) -> None:
                 '<span class="bp-gap-lg"></span>'
                 + notice(
                     f'<p class="bp-t-body2 bp-bold">Review failed — {len(findings)} open '
-                    f'finding{"s" if len(findings) != 1 else ""}.</p>'
+                    f"finding{'s' if len(findings) != 1 else ''}.</p>"
                     + "".join(
                         f'<p class="bp-t-body2">{esc(item.get("criterion"))}: {esc(item.get("finding"))}</p>'
                         for item in findings
@@ -1581,7 +2003,7 @@ def render_proposal(view: dict) -> None:
                 f'<span class="bp-task__i">{icon("check-circle" if _is_complete(task) else "clock")}</span>'
                 f'<span class="bp-t-body2 bp-bold">{esc(task.get("task_name") or NOT_RECORDED)}</span>'
                 f'<span class="bp-t-caption1 bp-task__owner">{esc(task.get("owner") or NOT_RECORDED)} · '
-                f'{esc(str(task.get("status") or NOT_RECORDED).capitalize())}</span></div>'
+                f"{esc(str(task.get('status') or NOT_RECORDED).capitalize())}</span></div>"
                 for task in tasks
             )
             + "</div>"
@@ -1596,10 +2018,10 @@ def render_proposal(view: dict) -> None:
         states = review_state(criteria, findings)
         items = "".join(
             f'<div class="bp-secnav__item" data-open="{"true" if states.get(item["name"]) else "false"}">'
-            f'<span>{esc(item["name"])}</span>'
+            f"<span>{esc(item['name'])}</span>"
             f'<span class="bp-secnav__w bp-num">{trim(item["weight"])}</span>'
             f'<span class="bp-secnav__s">'
-            f'{esc(states.get(item["name"]) or "Present with its recorded asset.")}</span></div>'
+            f"{esc(states.get(item['name']) or 'Present with its recorded asset.')}</span></div>"
             for item in criteria
         )
         fragments = "".join(
@@ -1608,41 +2030,58 @@ def render_proposal(view: dict) -> None:
             f'<span class="bp-t-caption1 bp-mono">{esc(section.get("section_id"))}</span></div>'
             for section in view["sections"]
         )
-        write(rail("Proposal review", (
-            '<p class="bp-t-body2 bp-note">Score-bearing criteria, with the weight each one carries and its '
-            "current review state.</p>"
-            f'<div class="bp-secnav">{items}</div>'
-            '<p class="bp-t-label1 bp-bold bp-rail__title" style="margin-top:6px">Persisted fragments</p>'
-            f'<div class="bp-secnav">{fragments}</div>'
-        )))
+        write(
+            rail(
+                "Proposal review",
+                (
+                    '<p class="bp-t-body2 bp-note">Score-bearing criteria, with the weight each one carries and its '
+                    "current review state.</p>"
+                    f'<div class="bp-secnav">{items}</div>'
+                    '<p class="bp-t-label1 bp-bold bp-rail__title" style="margin-top:6px">Persisted fragments</p>'
+                    f'<div class="bp-secnav">{fragments}</div>'
+                ),
+            )
+        )
 
 
 def render_provenance(view: dict) -> None:
     run = view["run"]
     trace = view["trace"]
-    provenance = trace.get("execution_provenance") if isinstance(trace.get("execution_provenance"), dict) else {}
-    session_id = first_key(provenance, ("cortex_session_id", "session_id")) or first_key(
-        trace, ("session_id", "snowflake_session_id")
+    provenance = (
+        trace.get("execution_provenance")
+        if isinstance(trace.get("execution_provenance"), dict)
+        else {}
     )
-    query_ids = as_records(first_key(provenance, ("cortex_write_query_ids", "query_ids")))
+    session_id = first_key(
+        provenance, ("cortex_session_id", "session_id")
+    ) or first_key(trace, ("session_id", "snowflake_session_id"))
+    query_ids = as_records(
+        first_key(provenance, ("cortex_write_query_ids", "query_ids"))
+    )
     write(
         '<div class="bp-kvgrid">'
-        + kv_rows([
-            ("Analysis run", str(view["run_id"])),
-            ("Provider", str(run.get("provider") or "")),
-            ("Run state", str(run.get("state") or "")),
-            ("Policy version", str(run.get("policy_version") or "")),
-            ("Supplier profile version", str(run.get("supplier_profile_version") or "")),
-            ("Cortex session", flatten(session_id) if session_id else ""),
-            ("Connection", str(configured_connection_name() or "")),
-            ("Reader role", EXPECTED_READER_ROLE),
-        ])
+        + kv_rows(
+            [
+                ("Analysis run", str(view["run_id"])),
+                ("Tender version", str(run.get("opportunity_version") or "")),
+                ("Provider", str(run.get("provider") or "")),
+                ("Run state", str(run.get("state") or "")),
+                ("Policy version", str(run.get("policy_version") or "")),
+                (
+                    "Supplier profile version",
+                    str(run.get("supplier_profile_version") or ""),
+                ),
+                ("Cortex session", flatten(session_id) if session_id else ""),
+                ("Connection", str(configured_connection_name() or "")),
+                ("Reader role", EXPECTED_READER_ROLE),
+            ]
+        )
         + "</div>"
     )
     if query_ids:
         write(
             f'<p class="bp-t-label1 bp-bold" style="margin-top:16px">Query evidence '
-            f'({len(query_ids)} recorded)</p>'
+            f"({len(query_ids)} recorded)</p>"
             + '<div class="bp-queries">'
             + "".join(
                 f'<div class="bp-query">{icon("lock")}<span>{esc(flatten(item))}</span></div>'
@@ -1651,7 +2090,9 @@ def render_provenance(view: dict) -> None:
             + "</div>"
         )
     else:
-        write('<p class="bp-t-body2 bp-note">No query evidence is recorded for this run.</p>')
+        write(
+            '<p class="bp-t-body2 bp-note">No query evidence is recorded for this run.</p>'
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -1661,32 +2102,36 @@ def render_provenance(view: dict) -> None:
 
 def render_configuration_error() -> None:
     write(page_head(1, "Workspace is not configured"))
-    write(notice(
-        '<p class="bp-t-body2 bp-bold">No Snowflake connection is configured.</p>'
-        f'<p class="bp-t-body2-reading">{esc(PRODUCT_NAME)} reads every screen from an authenticated '
-        f"Snowflake run and does not fall back to local fixtures. Set <code>{CONNECTION_VARIABLE}</code> to "
-        f"a named Snowflake CLI connection that uses the {EXPECTED_READER_ROLE} role, then reload this "
-        "page.</p>"
-        f'<p class="bp-t-caption1 bp-note">For example: {CONNECTION_VARIABLE}=bidpilot-reader '
-        "streamlit run app.py</p>",
-        "error",
-        "warning",
-        role="alert",
-    ))
+    write(
+        notice(
+            '<p class="bp-t-body2 bp-bold">No Snowflake connection is configured.</p>'
+            f'<p class="bp-t-body2-reading">{esc(PRODUCT_NAME)} reads every screen from an authenticated '
+            f"Snowflake run and does not fall back to local fixtures. Set <code>{CONNECTION_VARIABLE}</code> to "
+            f"a named Snowflake CLI connection that uses the {EXPECTED_READER_ROLE} role, then reload this "
+            "page.</p>"
+            f'<p class="bp-t-caption1 bp-note">For example: {CONNECTION_VARIABLE}=bidpilot-reader '
+            "streamlit run app.py</p>",
+            "error",
+            "warning",
+            role="alert",
+        )
+    )
 
 
 def render_connection_error() -> None:
     write(page_head(1, "Opportunities"))
-    write(notice(
-        '<p class="bp-t-body2 bp-bold">Snowflake could not be reached.</p>'
-        '<p class="bp-t-body2-reading">The recorded analysis is temporarily unavailable.</p>'
-        f'<p class="bp-t-body2">Authenticated mode stays authenticated: no fixture is shown in place of a '
-        f"failed query. Check that the connection is reachable and uses the {EXPECTED_READER_ROLE} role, "
-        "then try again.</p>",
-        "error",
-        "warning",
-        role="alert",
-    ))
+    write(
+        notice(
+            '<p class="bp-t-body2 bp-bold">Snowflake could not be reached.</p>'
+            '<p class="bp-t-body2-reading">The recorded analysis is temporarily unavailable.</p>'
+            f'<p class="bp-t-body2">Authenticated mode stays authenticated: no fixture is shown in place of a '
+            f"failed query. Check that the connection is reachable and uses the {EXPECTED_READER_ROLE} role, "
+            "then try again.</p>",
+            "error",
+            "warning",
+            role="alert",
+        )
+    )
     if st.button("Retry the connection", key="bp-retry", type="primary"):
         st.cache_data.clear()
         st.rerun()
@@ -1708,8 +2153,7 @@ def load_run(connection_name: str, run_id: str) -> dict:
 
 
 def render() -> None:
-    """Draw the workspace for whatever the configured connection can supply."""
-    adopt_stage_from_query()
+    """Draw one result page from one complete, authenticated run."""
     st.session_state.setdefault(RUN_KEY, None)
 
     connection_name = configured_connection_name()
@@ -1719,12 +2163,16 @@ def render() -> None:
         render_footer()
         return
 
-    # Loading is announced above the workspace and then taken away, so a
-    # finished screen never carries the scaffolding that produced it.
+    render_shell_header(0, enabled=True)
     loading = st.empty()
     runs: list[dict] = []
     listing_failed = False
-    with loading.container(), st.spinner("Reading completed analyses from Snowflake…"):
+    with loading.container():
+        write(
+            '<div class="bp-loading" role="status"><span class="bp-loading__mark" aria-hidden="true"></span>'
+            '<div><p class="bp-t-label1 bp-bold">Opening verified pursuit run</p>'
+            '<p class="bp-t-caption1 bp-note">Decision package and owned work are loading.</p></div></div>'
+        )
         try:
             runs = load_runs(connection_name)
         except (SnowflakeBidRoomError, KeyError):
@@ -1733,73 +2181,91 @@ def render() -> None:
     loading.empty()
 
     if listing_failed:
-        render_shell_header(0, enabled=False)
         render_connection_error()
         render_footer()
         return
 
-    complete = [run for run in runs if str(run.get("state")) == "COMPLETED" and run.get("is_complete")]
-    groups = group_by_opportunity(complete)
+    complete = [
+        run
+        for run in runs
+        if str(run.get("state")) == "COMPLETED" and run.get("is_complete")
+    ]
     known = {run["run_id"] for run in complete}
 
     selected_id = st.session_state.get(RUN_KEY)
     if selected_id is not None and selected_id not in known:
-        # A run that vanished does not silently become a different run.
         st.session_state[RUN_KEY] = None
-        st.session_state[LOST_RUN_KEY] = True
         st.session_state[STAGE_KEY] = 0
-        st.query_params["stage"] = "1"
-        selected_id = None
+        write(
+            '<div class="bp-empty"><p class="bp-t-heading2 bp-bold">That analysis is no longer available.</p>'
+            '<p class="bp-t-body2 bp-note">The selected run is not in the complete-run readback. Return to '
+            "the public opportunities dashboard to continue.</p></div>"
+        )
+        render_footer()
+        return
     if selected_id is None and complete:
         selected_id = complete[0]["run_id"]
         st.session_state[RUN_KEY] = selected_id
 
-    stage = current_stage()
     if not complete:
-        stage = 0
-        st.session_state[STAGE_KEY] = 0
+        unfinished = "".join(
+            f'<span class="bp-t-caption1 bp-mono">{esc(item.get("run_id") or NOT_RECORDED)}</span>'
+            for item in runs[:8]
+        )
+        write(
+            '<div class="bp-empty"><p class="bp-t-heading2 bp-bold">No tender has a completed analysis</p>'
+            '<p class="bp-t-body2 bp-note">Only complete same-run results appear here. No tender is invented '
+            "in the meantime.</p>"
+            f'<p class="bp-t-caption1 bp-note">Analyses that did not finish: {unfinished or "none"}</p></div>'
+        )
+        render_footer()
+        return
 
     view: dict | None = None
     detail_failed = False
     if selected_id:
-        with loading.container(), st.spinner("Opening the recorded analysis from Snowflake…"):
+        with loading.container():
+            write(
+                '<div class="bp-loading" role="status"><span class="bp-loading__mark" aria-hidden="true"></span>'
+                '<div><p class="bp-t-label1 bp-bold">Reading the selected run</p>'
+                '<p class="bp-t-caption1 bp-note">One run supplies every downstream result.</p></div></div>'
+            )
             try:
                 result = load_run(connection_name, selected_id)
             except (SnowflakeBidRoomError, KeyError):
                 LOGGER.exception("Snowflake run detail failed for %s", selected_id)
                 detail_failed = True
             else:
-                view = build_run_view(result, selected_id, str((
-                    next((run for run in complete if run["run_id"] == selected_id), {})
-                ).get("opportunity_id") or ""))
+                view = build_run_view(
+                    result,
+                    selected_id,
+                    str(
+                        (
+                            next(
+                                (
+                                    run
+                                    for run in complete
+                                    if run["run_id"] == selected_id
+                                ),
+                                {},
+                            )
+                        ).get("opportunity_id")
+                        or ""
+                    ),
+                )
         loading.empty()
 
-    render_shell_header(stage, enabled=bool(view))
-
-    if view is not None:
-        write(bid_room_causal_summary(view))
-
-    if detail_failed and stage > 0:
+    if detail_failed:
         render_connection_error()
         render_footer()
         return
 
-    if stage == 0:
-        if detail_failed:
-            write(notice(
-                '<p class="bp-t-body2">The current analysis is temporarily unavailable. '
-                "Retry before continuing to its bid decision.</p>",
-                "error", "warning", role="alert",
-            ))
-        render_opportunities(groups, runs, view)
-    elif view is None:
-        st.session_state[STAGE_KEY] = 0
-        render_opportunities(groups, runs, None)
-    elif stage == 1:
-        render_decision(view)
-    elif stage == 2:
-        render_win_plan(view)
+    if view is None:
+        write(
+            '<div class="bp-empty"><p class="bp-t-heading2 bp-bold">Run detail unavailable</p>'
+            '<p class="bp-t-body2 bp-note">No local fixture is shown in its place.</p></div>'
+        )
     else:
-        render_proposal(view)
+        render_replay(view)
 
     render_footer()

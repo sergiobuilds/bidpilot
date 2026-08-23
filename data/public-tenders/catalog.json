@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "retrieved_at": "2026-08-24T02:25:13+09:00",
+  "verification_method": "official_g2b_detail_rendered",
+  "verified_fields": [
+    "notice_number",
+    "title",
+    "issuer",
+    "proposal_deadline",
+    "official_url"
+  ],
+  "unverified_fields": [
+    "contract_value_krw",
+    "technical_weight",
+    "price_weight"
+  ],
+  "records": [
+    {
+      "notice_number": "R26BK01692732-000",
+      "title": "자동차 사출 성형 부품 비전·중량 데이터 취득 및 검사 모듈 시제품 제작",
+      "issuer": "한국생산기술연구원",
+      "proposal_deadline": "2026-09-02T10:00:00+09:00",
+      "official_url": "https://www.g2b.go.kr/link/PNPE027_01/general/?bidPbancNo=R26BK01692732&bidPbancOrd=000"
+    },
+    {
+      "notice_number": "R26BK01691398-000",
+      "title": "2026년 공공 IP 사업화 성장 지원사업 수행용역",
+      "issuer": "한국생산기술연구원",
+      "proposal_deadline": "2026-08-31T10:00:00+09:00",
+      "official_url": "https://www.g2b.go.kr/link/PNPE027_01/general/?bidPbancNo=R26BK01691398&bidPbancOrd=000"
+    },
+    {
+      "notice_number": "R26BK01691317-000",
+      "title": "2026년 연구원창업 액셀러레이팅 수행 용역",
+      "issuer": "한국생산기술연구원",
+      "proposal_deadline": "2026-08-31T10:00:00+09:00",
+      "official_url": "https://www.g2b.go.kr/link/PNPE027_01/general/?bidPbancNo=R26BK01691317&bidPbancOrd=000"
+    },
+    {
+      "notice_number": "R26BK01689261-000",
+      "title": "학연협력 공동학과 중장기 발전전략 및 성과관리체계 구축 연구",
+      "issuer": "한국생산기술연구원",
+      "proposal_deadline": "2026-08-31T10:00:00+09:00",
+      "official_url": "https://www.g2b.go.kr/link/PNPE027_01/general/?bidPbancNo=R26BK01689261&bidPbancOrd=000"
+    },
+    {
+      "notice_number": "R26BK01686970-000",
+      "title": "양식장 관리 로봇 개발",
+      "issuer": "해양수산부 국립수산과학원 중앙내수면연구소",
+      "proposal_deadline": "2026-09-01T10:00:00+09:00",
+      "official_url": "https://www.g2b.go.kr/link/PNPE027_01/general/?bidPbancNo=R26BK01686970&bidPbancOrd=000"
+    }
+  ]
+}

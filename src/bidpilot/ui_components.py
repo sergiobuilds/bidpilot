@@ -52,7 +52,17 @@ def decision_path(items: Sequence[tuple[object, object, object]]) -> str:
         )
     cells = []
     for index, (label, value, detail) in enumerate(items, start=1):
-        tone = "caution" if index in {1, 3} else "brand"
+        normalized = str(value).strip().upper()
+        if index == 1:
+            tone = {
+                "PURSUE": "positive",
+                "REVIEW": "caution",
+                "NO-GO": "negative",
+            }.get(normalized, "caution")
+        elif index == 3:
+            tone = "positive" if "0 OPEN" in normalized else "caution"
+        else:
+            tone = "brand"
         cells.append(
             f'<section class="bpw-path__item" data-step="{index:02d}">'
             '<div class="bpw-path__label">'

@@ -9,7 +9,12 @@ from typing import Any
 import streamlit as st
 
 from bidpilot import ui
+from bidpilot.g2b_source import G2BSourceError, load_public_source
+from bidpilot.tender_catalog import load_public_tender_catalog
 from bidpilot.workspace_ui import (
+    koat_css,
+    koat_dashboard,
+    koat_tender_detail,
     render_markup,
     shell_css,
     synthetic_simulation_first_viewport,
@@ -33,6 +38,13 @@ def resolve_workspace(value: object) -> str:
     return candidate if candidate in ALLOWED_WORKSPACES else DEFAULT_WORKSPACE
 
 
+def resolve_walkthrough(value: object) -> bool:
+    """Require an explicit action before opening the authenticated replay."""
+    if isinstance(value, (list, tuple)):
+        value = value[0] if value else None
+    return str(value or "").strip().lower() in {"1", "true", "yes"}
+
+
 def _read_json(name: str) -> dict[str, Any]:
     path = DATA_ROOT / name
     with path.open(encoding="utf-8") as handle:
@@ -42,30 +54,31 @@ def _read_json(name: str) -> dict[str, Any]:
     return value
 
 
-def curated_tender_view() -> dict[str, str]:
+def curated_tender_view() -> dict[str, Any]:
     """Project the verified public fixture into the intake first viewport."""
-    manifest = _read_json("manifest.json")
-    fixture = _read_json("public-fixture.json")
-    source_facts = {
-        item["field"]: item["value"]
-        for item in fixture["public_projection"]["source_facts"]
-    }
-    labels = {
-        item["field"]: item["value"]
-        for item in fixture["public_projection"]["public_labels"]
-    }
+    source = load_public_source()
+    projection = source["public_projection"]
+    source_facts = {item["field"]: item["value"] for item in projection["source_facts"]}
+    labels = {item["field"]: item["value"] for item in projection["public_labels"]}
     notice = next(
-        item for item in manifest["artifacts"] if item["artifact_id"] == "notice-pdf"
+        item for item in source["artifacts"] if item["artifact_id"] == "notice-pdf"
     )
     weights = source_facts["evaluation_weights"]
+    eligibility = source_facts["eligibility_requirements"]
     return {
-        "notice_number": manifest["notice_number"],
+        "notice_number": source["notice_number"],
         "title": str(source_facts["title"]),
         "issuer": str(source_facts["issuer"]),
         "source_url": str(notice["official_url"]),
         "source_sha256": str(notice["sha256"]),
         "retrieved_at": str(notice["retrieved_at"]),
         "proposal_deadline": str(source_facts["proposal_deadline"]),
+        "contract_value": f"KRW {int(source_facts['contract_value_krw']) // 1_000_000}M",
+        "technical_weight": str(weights["technical"]),
+        "price_weight": str(weights["price"]),
+        "eligibility_count": str(len(eligibility)),
+        "eligibility_requirements": tuple(str(item) for item in eligibility),
+        "delivery_term": str(source_facts["delivery_term"]),
         "evaluation_total": f"Technical {weights['technical']} · Price {weights['price']}",
         "supplier_boundary": str(labels["supplier_profile_boundary"]),
         "analysis_gate": "Operator review required",
@@ -109,7 +122,7 @@ def _render_navigation(workspace: str) -> None:
 def _render_tender_intake() -> None:
     try:
         view = curated_tender_view()
-    except (OSError, ValueError, KeyError, TypeError):
+    except (G2BSourceError, OSError, ValueError, KeyError, TypeError):
         st.error("The curated public-source manifest is unavailable.")
         return
     render_markup(shell_css())
@@ -156,12 +169,41 @@ def _render_synthetic_simulation() -> None:
 
 
 def render() -> None:
-    """Render one workspace while keeping the verified Bid Room as default."""
-    workspace = resolve_workspace(st.query_params.get("workspace"))
-    _render_navigation(workspace)
-    if workspace == "tender-intake":
-        _render_tender_intake()
-    elif workspace == "synthetic-simulation":
-        _render_synthetic_simulation()
-    else:
+    """Render the KOAT-grammar public catalogue, detail, or separate replay."""
+    tender = str(st.query_params.get("tender") or "").strip()
+    if tender:
+        try:
+            catalogue = load_public_tender_catalog()
+        except (G2BSourceError, OSError, ValueError, KeyError, TypeError):
+            render_markup(koat_css())
+            st.error("The public tender record is temporarily unavailable.")
+            return
+        row = next(
+            (item for item in catalogue if item["notice_number"] == tender), None
+        )
+        render_markup(koat_css())
+        if row is None:
+            st.error("That public tender is not in the verified catalogue.")
+            return
+        reviewed_view = (
+            curated_tender_view()
+            if row["evidence_level"] == "source-reviewed"
+            else None
+        )
+        render_markup(koat_tender_detail(row, reviewed_view=reviewed_view))
+        return
+
+    if resolve_walkthrough(st.query_params.get("walkthrough")):
+        render_markup(shell_css())
         ui.render()
+        return
+
+    try:
+        catalogue = load_public_tender_catalog()
+    except (G2BSourceError, OSError, ValueError, KeyError, TypeError):
+        render_markup(koat_css())
+        st.error("The public tender record is temporarily unavailable.")
+        return
+
+    render_markup(koat_css())
+    render_markup(koat_dashboard(catalogue))

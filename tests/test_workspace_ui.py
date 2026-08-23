@@ -10,12 +10,18 @@ from __future__ import annotations
 
 import pytest
 
+from bidpilot.tender_catalog import load_public_tender_catalog
 from bidpilot.ui_components import decision_path, state_panel
 from bidpilot.workspace_ui import (
     SYNTHETIC_BOUNDARY,
     UI_STATES,
     WORKSPACES,
     bid_room_first_viewport,
+    judge_overview,
+    judge_tender_detail,
+    koat_css,
+    koat_dashboard,
+    koat_tender_detail,
     shell_css,
     synthetic_simulation_first_viewport,
     tender_intake_first_viewport,
@@ -163,14 +169,16 @@ def test_navigation_rejects_an_unknown_workspace() -> None:
         workspace_navigation("invented")
 
 
-def test_integrated_route_navigation_needs_no_streamlit_sidebar_or_inline_script() -> None:
+def test_integrated_route_navigation_needs_no_streamlit_sidebar_or_inline_script() -> (
+    None
+):
     markup = workspace_route_navigation("bid-room")
 
     assert 'aria-label="BidPilot workspace routes"' in markup
     assert 'class="bpw-route-desktop"' in markup
     assert 'class="bpw-route-mobile"' in markup
-    assert '<details' in markup
-    assert '<summary' in markup
+    assert "<details" in markup
+    assert "<summary" in markup
     assert 'href="?workspace=tender-intake"' in markup
     assert 'href="?workspace=bid-room" aria-current="page"' in markup
     assert 'href="?workspace=synthetic-simulation"' in markup
@@ -190,3 +198,157 @@ def test_integrated_navigation_reflows_without_reserving_a_tablet_sidebar() -> N
     assert "@media (max-width: 760px)" in css
     assert ".bpw-route-desktop { display:none; }" in css
     assert ".bpw-route-mobile { display:block;" in css
+
+
+def test_judge_overview_is_a_source_backed_opportunity_dashboard() -> None:
+    markup = judge_overview(
+        notice_number="R26BK01680611-000",
+        title="K-pass youth transport support service",
+        issuer="Suwon City",
+        deadline="2026-09-03 16:00 KST",
+        contract_value="KRW 250M",
+        technical_weight="90",
+        price_weight="10",
+        supplier_boundary="Synthetic demo supplier profile",
+        eligibility_count="4",
+        source_url="https://example.com/notice.pdf",
+    )
+
+    assert 'data-surface="judge-overview"' in markup
+    assert markup.count('class="bpw-primary-cta"') == 1
+    assert 'href="?tender=R26BK01680611-000"' in markup
+    for value in (
+        "Pursuit dashboard",
+        "Verified public sources",
+        "Pursuit funnel",
+        "Recent activity",
+        "Source-backed opportunities",
+        "R26BK01680611-000",
+        "REVIEW",
+        "Synthetic demo supplier profile",
+        "4 eligibility requirements",
+        "Open pursuit review",
+    ):
+        assert value in markup
+    for column in (
+        "Tender",
+        "Issuer",
+        "Value",
+        "Deadline",
+        "Weights",
+        "Status",
+        "Action",
+    ):
+        assert f">{column}<" in markup
+    for forbidden in (
+        "Workspace 01",
+        "Workspace 02",
+        "least-privilege",
+        "Reader authenticated",
+        "Analysis history",
+        "LOCAL SYNTHETIC SIMULATION",
+    ):
+        assert forbidden not in markup
+
+
+def test_judge_overview_css_uses_wds_tokens_and_responsive_named_stages() -> None:
+    css = shell_css()
+
+    assert "--semantic-primary-normal:#0066FF" in css
+    assert ".bpw-overview-metrics" in css
+    assert ".bpw-flow-step strong" in css
+    assert "@media (max-width: 760px)" in css
+    assert "overflow-x:hidden" in css
+    assert '[data-testid="stSkeleton"]' in css
+
+
+def test_selected_real_tender_stops_before_an_unrecorded_run() -> None:
+    markup = judge_tender_detail(
+        notice_number="R26BK01680611-000",
+        title="K-pass youth transport support service",
+        issuer="Suwon City",
+        deadline="2026-09-03 16:00 KST",
+        contract_value="KRW 250M",
+        delivery_term="Through 2026-12-31",
+        technical_weight="90",
+        price_weight="10",
+        supplier_boundary="Synthetic demo supplier profile",
+        eligibility_requirements=("Requirement A", "Requirement B"),
+        source_digest="abc…123",
+        source_url="https://example.com/notice.pdf",
+    )
+
+    assert 'data-surface="tender-detail"' in markup
+    expected_order = (
+        "Decision rationale",
+        "Score-weighted Win Position",
+        "Proposal & red-team result",
+        "Owned work",
+        "Snowflake proof",
+    )
+    assert [markup.index(label) for label in expected_order] == sorted(
+        markup.index(label) for label in expected_order
+    )
+    assert "No run created for this notice" in markup
+    assert "View separate verified capability replay" in markup
+    assert "PURSUE" not in markup
+
+
+def test_literal_koat_dashboard_renders_kpis_funnel_recent_and_six_source_rows() -> (
+    None
+):
+    markup = koat_dashboard(load_public_tender_catalog())
+
+    for css_class in (
+        "nav-in",
+        "kpi-band",
+        "grid",
+        "funnel",
+        "recent",
+        "tbl tender-table",
+    ):
+        assert css_class in markup
+    for label in ("Public sources", "Needs review", "PURSUE", "Due soon"):
+        assert label in markup
+    assert markup.count("<tr>") == 7
+    assert markup.count('state-source-found">SOURCE FOUND</span>') == 5
+    assert "R26BK01680611-000" in markup
+    assert ">—<" in markup
+
+
+def test_literal_koat_detail_keeps_public_tender_and_historical_replay_separate() -> (
+    None
+):
+    rows = load_public_tender_catalog()
+    reviewed = rows[0]
+    found = rows[1]
+    reviewed_view = {
+        "eligibility_requirements": ("Requirement A", "Requirement B"),
+    }
+
+    detail = koat_tender_detail(reviewed, reviewed_view=reviewed_view)
+    discovered = koat_tender_detail(found)
+
+    for css_class in (
+        "topbar-inner",
+        "idhead",
+        "id-contract",
+        "timeline",
+        "an",
+        "panel",
+    ):
+        assert css_class in detail
+    assert "REVIEW" in detail
+    assert "No Snowflake run for this notice" in detail
+    assert "separate synthetic fixture" in detail
+    assert "SOURCE FOUND" in discovered
+    assert "Supplier evidence required" not in discovered
+
+
+def test_literal_koat_css_locks_source_container_widths_and_breakpoints() -> None:
+    css = koat_css()
+
+    assert "max-width:1200px" in css
+    assert "max-width:1080px" in css
+    assert "@media(max-width:768px)" in css
+    assert "grid-template-columns:repeat(4,1fr)" in css

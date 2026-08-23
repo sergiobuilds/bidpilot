@@ -3,6 +3,7 @@ from __future__ import annotations
 from bidpilot.refinement_app import (
     DEFAULT_WORKSPACE,
     curated_tender_view,
+    resolve_walkthrough,
     resolve_workspace,
     synthetic_demo_result,
 )
@@ -38,3 +39,22 @@ def test_synthetic_demo_result_is_local_and_never_persisted() -> None:
     assert result["verdict"] == "NO-GO"
     assert result["persisted"] is False
     assert result["provider"] == "LOCAL_PYTHON_POLICY"
+
+
+def test_walkthrough_is_opt_in_so_the_public_first_paint_never_waits_for_snowflake() -> (
+    None
+):
+    assert resolve_walkthrough(None) is False
+    assert resolve_walkthrough("0") is False
+    assert resolve_walkthrough(["1"]) is True
+    assert resolve_walkthrough("true") is True
+
+
+def test_curated_tender_view_carries_the_decision_package_facts() -> None:
+    view = curated_tender_view()
+
+    assert view["notice_number"] == "R26BK01680611-000"
+    assert view["contract_value"] == "KRW 250M"
+    assert view["technical_weight"] == "90"
+    assert view["price_weight"] == "10"
+    assert view["eligibility_count"] == "4"
