@@ -17,13 +17,13 @@ SOURCE_ROOT = Path(__file__).parent / "src"
 if str(SOURCE_ROOT) not in sys.path:
     sys.path.insert(0, str(SOURCE_ROOT))
 
-from bidpilot import ui
+from bidpilot import refinement_app
 
 st.set_page_config(
     page_title="BidPilot — pursuit workspace",
     page_icon="◈",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="auto",
 )
 
-ui.render()
+refinement_app.render()

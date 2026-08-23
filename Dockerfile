@@ -11,6 +11,7 @@ RUN pip install --no-cache-dir uv==0.8.4
 
 COPY pyproject.toml uv.lock README.md LICENSE ./
 COPY src ./src
+COPY data ./data
 RUN uv sync --frozen --no-dev
 
 COPY app.py ./
