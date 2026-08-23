@@ -324,6 +324,29 @@ def test_literal_koat_dashboard_renders_kpis_funnel_recent_and_six_source_rows()
     assert ">—<" in markup
 
 
+def test_literal_koat_dashboard_puts_real_opportunities_before_supporting_analytics() -> (
+    None
+):
+    markup = koat_dashboard(load_public_tender_catalog())
+
+    causal_labels = (
+        "Public tender + supplier evidence",
+        "Decision",
+        "Score-weighted Win Position",
+        "Proposal + red-team",
+        "Owned work",
+        "Same-run Snowflake replay",
+    )
+    assert [markup.index(label) for label in causal_labels] == sorted(
+        markup.index(label) for label in causal_labels
+    )
+    css = koat_css()
+    assert ".tender-section{order:4" in css
+    assert ".grid{order:5" in css
+    assert 'href="?workspace=tender-intake"' in markup
+    assert 'href="?workspace=synthetic-simulation"' in markup
+
+
 def test_literal_koat_detail_keeps_public_tender_and_historical_replay_separate() -> (
     None
 ):

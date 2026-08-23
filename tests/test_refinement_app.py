@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from types import SimpleNamespace
+
+from bidpilot import refinement_app
 from bidpilot.refinement_app import (
     DEFAULT_WORKSPACE,
     curated_tender_view,
@@ -7,6 +10,42 @@ from bidpilot.refinement_app import (
     resolve_workspace,
     synthetic_demo_result,
 )
+
+
+def _record_render_calls(monkeypatch, query_params: dict[str, str]) -> list[str]:
+    calls: list[str] = []
+    monkeypatch.setattr(
+        refinement_app,
+        "st",
+        SimpleNamespace(query_params=query_params),
+    )
+    monkeypatch.setattr(
+        refinement_app,
+        "_render_navigation",
+        lambda workspace: calls.append(f"navigation:{workspace}"),
+    )
+    monkeypatch.setattr(
+        refinement_app,
+        "_render_tender_intake",
+        lambda: calls.append("tender-intake"),
+    )
+    monkeypatch.setattr(
+        refinement_app,
+        "_render_synthetic_simulation",
+        lambda: calls.append("synthetic-simulation"),
+    )
+    monkeypatch.setattr(refinement_app.ui, "render", lambda: calls.append("bid-room"))
+    monkeypatch.setattr(
+        refinement_app,
+        "load_public_tender_catalog",
+        lambda: calls.append("catalogue-load") or [],
+    )
+    monkeypatch.setattr(
+        refinement_app,
+        "render_markup",
+        lambda markup: calls.append("dashboard-markup"),
+    )
+    return calls
 
 
 def test_default_workspace_preserves_the_authenticated_bid_room() -> None:
@@ -18,6 +57,75 @@ def test_workspace_query_accepts_only_the_three_public_routes() -> None:
     assert resolve_workspace("tender-intake") == "tender-intake"
     assert resolve_workspace(["synthetic-simulation"]) == "synthetic-simulation"
     assert resolve_workspace("invented") == "bid-room"
+
+
+def test_explicit_tender_intake_workspace_renders_navigation_and_intake(
+    monkeypatch,
+) -> None:
+    calls = _record_render_calls(monkeypatch, {"workspace": "tender-intake"})
+
+    refinement_app.render()
+
+    assert calls == ["navigation:tender-intake", "tender-intake"]
+
+
+def test_explicit_bid_room_workspace_renders_navigation_and_authenticated_ui(
+    monkeypatch,
+) -> None:
+    calls = _record_render_calls(monkeypatch, {"workspace": "bid-room"})
+
+    refinement_app.render()
+
+    assert calls == ["navigation:bid-room", "bid-room"]
+
+
+def test_explicit_synthetic_workspace_renders_navigation_and_isolated_view(
+    monkeypatch,
+) -> None:
+    calls = _record_render_calls(monkeypatch, {"workspace": "synthetic-simulation"})
+
+    refinement_app.render()
+
+    assert calls == ["navigation:synthetic-simulation", "synthetic-simulation"]
+
+
+def test_missing_or_invalid_workspace_preserves_the_koat_dashboard(monkeypatch) -> None:
+    for query_params in ({}, {"workspace": "invented"}):
+        calls = _record_render_calls(monkeypatch, query_params)
+
+        refinement_app.render()
+
+        assert calls == ["catalogue-load", "dashboard-markup", "dashboard-markup"]
+
+
+def test_walkthrough_keeps_precedence_over_workspace_routing(monkeypatch) -> None:
+    calls = _record_render_calls(
+        monkeypatch,
+        {"walkthrough": "1", "workspace": "tender-intake"},
+    )
+
+    refinement_app.render()
+
+    assert calls == ["dashboard-markup", "bid-room"]
+
+
+def test_tender_detail_keeps_precedence_over_workspace_routing(monkeypatch) -> None:
+    calls = _record_render_calls(
+        monkeypatch,
+        {"tender": "NOTICE-1", "workspace": "synthetic-simulation"},
+    )
+    monkeypatch.setattr(
+        refinement_app,
+        "load_public_tender_catalog",
+        lambda: (
+            calls.append("catalogue-load")
+            or [{"notice_number": "NOTICE-1", "evidence_level": "source-found"}]
+        ),
+    )
+
+    refinement_app.render()
+
+    assert calls == ["catalogue-load", "dashboard-markup", "dashboard-markup"]
 
 
 def test_curated_tender_view_uses_the_verified_public_manifest() -> None:

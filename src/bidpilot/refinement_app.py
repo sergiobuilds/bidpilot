@@ -198,6 +198,21 @@ def render() -> None:
         ui.render()
         return
 
+    workspace_value = st.query_params.get("workspace")
+    if isinstance(workspace_value, (list, tuple)):
+        workspace_value = workspace_value[0] if workspace_value else None
+    requested_workspace = str(workspace_value or "").strip()
+    if requested_workspace in ALLOWED_WORKSPACES:
+        workspace = resolve_workspace(requested_workspace)
+        _render_navigation(workspace)
+        if workspace == "tender-intake":
+            _render_tender_intake()
+        elif workspace == "synthetic-simulation":
+            _render_synthetic_simulation()
+        else:
+            ui.render()
+        return
+
     try:
         catalogue = load_public_tender_catalog()
     except (G2BSourceError, OSError, ValueError, KeyError, TypeError):
