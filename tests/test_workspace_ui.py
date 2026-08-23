@@ -65,6 +65,14 @@ def test_shell_uses_one_document_scroll_owner_and_compacts_navigation_on_mobile(
     assert "overflow-y: scroll" not in css
 
 
+def test_koat_pages_release_streamlits_fixed_height_scroll_container() -> None:
+    css = koat_css()
+
+    assert ".stApp" in css
+    assert "min-height:100vh!important" in css
+    assert "overflow:visible!important" in css
+
+
 def test_tender_intake_first_viewport_reads_source_to_next_review_action() -> None:
     markup = tender_intake_first_viewport(
         source_title="K패스 기반 수원시 사회초년생 청년 교통비 지원사업",
