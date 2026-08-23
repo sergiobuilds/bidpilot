@@ -56,13 +56,15 @@ def test_refinement_runs_has_immutable_identity_and_no_mutable_status_column() -
         "SUPPLIER_PROFILE_VERSION STRING NOT NULL",
         "POLICY_VERSION STRING NOT NULL",
         "REVIEWED_REQUEST_SHA256 STRING NOT NULL",
-        "OPERATOR_LEASE_ID STRING NOT NULL",
+        "SERIALIZED_OPERATOR_TOKEN STRING NOT NULL",
         "CREATED_AT TIMESTAMP_TZ NOT NULL",
     ):
         assert column in block
     assert "STATUS STRING" not in block
     assert "STATE STRING" not in block
     assert "OUTCOME STRING" not in block
+    assert "CONCURRENT CALLERS ARE NOT SUPPORTED" in _schema()
+    assert "PUBLIC ASYNC MULTI-WORKER EXECUTION IS OUT OF SCOPE" in _schema()
 
 
 def test_run_events_carry_sanitized_execution_evidence() -> None:

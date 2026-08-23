@@ -435,9 +435,14 @@ class SnowflakeRefinementStore:
         reviewed_request_sha256: str,
         execution_attempt: int,
         created_by: str,
-        operator_lease_id: str,
+        serialized_operator_token: str,
     ) -> RefinementRunIdentity:
-        """Create or reuse one run while the caller holds a request-scoped operator lease."""
+        """Create or reuse a sequential retry from one serialized private operator.
+
+        The caller must serialize create_run calls in one private operator process
+        and reuse its token. The pre-insert lookup is not an atomic uniqueness
+        guarantee; concurrent or public async multi-worker callers are unsupported.
+        """
 
         normalized_source_sha256 = _sha256("source_sha256", source_sha256)
         normalized_supplier_version = _required_text(
@@ -457,13 +462,13 @@ class SnowflakeRefinementStore:
         normalized_request_sha256 = _sha256(
             "reviewed_request_sha256", reviewed_request_sha256
         )
-        normalized_lease_id = _safe_evidence_identifier(
-            "operator_lease_id", operator_lease_id
+        normalized_operator_token = _safe_evidence_identifier(
+            "serialized_operator_token", serialized_operator_token
         )
         existing = self._writer_query(
             """
             SELECT request_id, run_id, execution_attempt, reviewed_request_sha256,
-                   operator_lease_id
+                   serialized_operator_token
             FROM BIDPILOT_DEMO.BIDPILOT.REFINEMENT_RUN_READBACK_V2
             WHERE request_id = %s AND execution_attempt = %s
             ORDER BY created_at
@@ -483,9 +488,9 @@ class SnowflakeRefinementStore:
                 raise RefinementStoreError(
                     "Refinement request identity conflicts with the reviewed request digest."
                 )
-            if persisted.get("operator_lease_id") != normalized_lease_id:
+            if persisted.get("serialized_operator_token") != normalized_operator_token:
                 raise RefinementStoreError(
-                    "Refinement request is owned by a different operator lease."
+                    "Refinement request belongs to a different serialized operator token."
                 )
             return identity
         self._insert(
@@ -494,7 +499,7 @@ class SnowflakeRefinementStore:
                 request_id, run_id, execution_attempt, tenant_id, opportunity_id,
                 opportunity_version, source_sha256, supplier_profile_id,
                 supplier_profile_version, policy_version, reviewed_request_sha256,
-                operator_lease_id, created_by
+                serialized_operator_token, created_by
             ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
@@ -509,7 +514,7 @@ class SnowflakeRefinementStore:
                 normalized_supplier_version,
                 normalized_policy_version,
                 normalized_request_sha256,
-                normalized_lease_id,
+                normalized_operator_token,
                 _required_text("created_by", created_by),
             ),
         )

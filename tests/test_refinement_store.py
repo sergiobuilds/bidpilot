@@ -39,7 +39,7 @@ class FakeCursor:
                 ("RUN_ID",),
                 ("EXECUTION_ATTEMPT",),
                 ("REVIEWED_REQUEST_SHA256",),
-                ("OPERATOR_LEASE_ID",),
+                ("SERIALIZED_OPERATOR_TOKEN",),
             ]
             row = self.connection.run_identities.get((params[0], params[1]))
             self.rows = [row] if row else []
@@ -287,7 +287,7 @@ def test_store_inserts_run_and_event_without_update_or_legacy_dml() -> None:
         reviewed_request_sha256=REQUEST_SHA256,
         execution_attempt=1,
         created_by="operator-1",
-        operator_lease_id="lease-request-1",
+        serialized_operator_token="private-operator-1",
     )
     store.append_event(valid_evidence(request_id=identity.request_id, run_id=identity.run_id))
 
@@ -302,7 +302,7 @@ def test_store_inserts_run_and_event_without_update_or_legacy_dml() -> None:
     assert all("AGENT_RUNS" not in sql.upper() for sql, _ in writes)
 
 
-def test_create_run_reuses_the_existing_identity_without_duplicate_insert() -> None:
+def test_create_run_reuses_a_sequential_retry_from_one_serialized_operator() -> None:
     connection = FakeConnection()
     store = SnowflakeRefinementStore(connection)
     inputs = {
@@ -316,13 +316,15 @@ def test_create_run_reuses_the_existing_identity_without_duplicate_insert() -> N
         "reviewed_request_sha256": REQUEST_SHA256,
         "execution_attempt": 1,
         "created_by": "operator-1",
-        "operator_lease_id": "lease-request-1",
+        "serialized_operator_token": "private-operator-1",
     }
 
     first = store.create_run(**inputs)
     second = store.create_run(**inputs)
-    with pytest.raises(RefinementStoreError, match="operator lease"):
-        store.create_run(**{**inputs, "operator_lease_id": "lease-request-2"})
+    with pytest.raises(RefinementStoreError, match="serialized operator"):
+        store.create_run(
+            **{**inputs, "serialized_operator_token": "private-operator-2"}
+        )
 
     assert second == first
     inserts = [

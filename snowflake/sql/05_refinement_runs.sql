@@ -1,5 +1,10 @@
 -- Additive refinement-run persistence. The v2 writer can append to these
 -- objects but cannot mutate the verified legacy run or artifact tables.
+-- Sequential retry reuse requires one private operator process to serialize
+-- create_run calls and reuse its serialized_operator_token. Snowflake standard
+-- tables do not enforce atomic uniqueness here.
+-- Concurrent callers are not supported.
+-- Public async multi-worker execution is out of scope.
 
 CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.REFINEMENT_RUNS (
     request_id STRING NOT NULL,
@@ -13,7 +18,7 @@ CREATE TABLE IF NOT EXISTS BIDPILOT_DEMO.BIDPILOT.REFINEMENT_RUNS (
     supplier_profile_version STRING NOT NULL,
     policy_version STRING NOT NULL,
     reviewed_request_sha256 STRING NOT NULL,
-    operator_lease_id STRING NOT NULL,
+    serialized_operator_token STRING NOT NULL,
     created_by STRING NOT NULL,
     created_at TIMESTAMP_TZ NOT NULL DEFAULT CURRENT_TIMESTAMP()
 );
