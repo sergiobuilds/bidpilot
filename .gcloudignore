@@ -1,0 +1,12 @@
+.gcloudignore
+.git
+.gitignore
+.venv
+.pytest_cache
+__pycache__
+*.pyc
+.streamlit
+dev/active
+shot-*.png
+submission
+tests
