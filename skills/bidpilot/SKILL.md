@@ -1,6 +1,6 @@
 ---
 name: bidpilot
-description: "Evidence-aware B2G pursuit decisions over public tenders. Use when the user asks about a tender, bid, notice, RFP, pursue/no-go, eligibility, win position, proposal readiness, or a BidPilot run. Korean triggers: 공고, 입찰, 나라장터, 제안, 수주, 적격. Lists tenders, opens one notice, decides PURSUE / REVIEW / NO-GO from supplier evidence the user supplies, and replays a completed Bid Room run. Read-only: never starts a Cortex run or writes to Snowflake."
+description: "Evidence-aware B2G pursuit decisions over public tenders. Use when the user asks about a tender, bid, notice, RFP, pursue/no-go, eligibility, win position, proposal readiness, or a BidPilot run. Korean triggers: 공고, 입찰, 나라장터, 제안, 수주, 적격. Lists tenders, opens one notice, decides PURSUE / REVIEW / NO-GO from supplier evidence the user supplies, drafts a proposal only behind an open PURSUE gate, and replays a completed Bid Room run. Read-only: never starts a Cortex run or writes to Snowflake."
 ---
 
 # BidPilot — pursuit decision skill
@@ -14,13 +14,19 @@ prints one JSON document per call.
 
 1. A proposal or Win Position is discussed only when the decision is `PURSUE` and
    `proposal_gate` is `OPEN`. On `REVIEW` or `NO-GO`, report the gaps or the
-   failing requirement and stop. Never draft proposal text on REVIEW or NO-GO.
+   failing requirement and stop. Never draft proposal text on REVIEW or NO-GO;
+   `draft-proposal` itself refuses with `proposal_locked` and lists the gaps.
+   The draft's supplier is always a synthetic demo profile
+   (`supplier-northstar` by default); repeat its `disclosure` line to the user
+   and never present the draft as a real company's claim.
 2. Never invent evidence. A requirement is `PASS` or `FAIL` only when the user
    states it; otherwise it stays `EVIDENCE REQUIRED`. Do not fill the evidence map
    from company names, prior chats, or assumptions. Ask the user per requirement.
 3. Closed notices are historical. When `deadline_state` is `closed`, say so first;
    the decision is a qualification exercise on a past notice, not an open
-   opportunity, and the proposal gate stays `LOCKED`.
+   opportunity, and the proposal gate stays `LOCKED`. `draft-proposal` answers
+   `notice_closed`; ask the user before re-running with `--historical`, and
+   then keep the `HISTORICAL EXERCISE` banner in front of the draft.
 4. This skill is reader-only. It never starts a Cortex run, never writes to
    Snowflake, and never calls the runner. Never start a Cortex run for an
    anonymous user; runs are only read back by `run_id`.
@@ -42,12 +48,25 @@ prints one JSON document per call.
 4. `decide NOTICE --evidence '<json>'` — report `decision`, each check with its
    status, `evidence_gaps`, `weights`, `proposal_gate`, `next_actions`.
    Without an evidence map the reviewed notice returns `REVIEW` with 4 gaps.
-5. Only on `PURSUE` with `proposal_gate: OPEN`: explain how the Win Position is
-   built by replaying a completed run (`list-runs`, then `replay RUN_ID`) —
-   selected strategy, weighted sections, owned tasks, Cortex provenance.
-   `list-runs`/`replay` need `BIDPILOT_SNOWFLAKE_CONNECTION` (reader) or
-   `BIDPILOT_API_URL`; otherwise the script returns `snowflake_not_configured`
-   and you report that instead of guessing.
+   On `REVIEW`, list every `EVIDENCE REQUIRED` requirement and ask the user
+   which of them they can evidence. When they answer, run `decide` again with
+   the fuller evidence map. Do not draft in between.
+5. Only on `PURSUE` with `proposal_gate: OPEN`: run
+   `draft-proposal NOTICE --evidence '<same json>'`. Present `selected_position`
+   (title and summary), then the `sections` in order (heading, and for the
+   score-bearing ones the `criterion` and its weight from `score_map`), then
+   the `red_team` findings and the `tasks` with owners. Read out
+   `assumptions` (planned hours are a stated constant, not a source fact) and
+   the `disclosure`. `--position N` binds another Win Position;
+   `--supplier ID` picks another synthetic profile. If the script returns
+   `notice_closed`, ask the user whether a historical exercise is wanted before
+   adding `--historical`.
+6. To show how a persisted Bid Room run looks, replay a completed run
+   (`list-runs`, then `replay RUN_ID`) — selected strategy, weighted sections,
+   owned tasks, Cortex provenance. `list-runs`/`replay` need
+   `BIDPILOT_SNOWFLAKE_CONNECTION` (reader) or `BIDPILOT_API_URL`; otherwise the
+   script returns `snowflake_not_configured` and you report that instead of
+   guessing.
 
 ## Running the script
 
@@ -56,6 +75,9 @@ scripts/bidpilot.sh list-tenders
 scripts/bidpilot.sh get-tender R26BK01680611-000
 scripts/bidpilot.sh decide R26BK01680611-000
 scripts/bidpilot.sh decide R26BK01680611-000 --evidence '{"0": true, "1": true, "2": false}'
+scripts/bidpilot.sh draft-proposal R26BK01680611-000 --evidence '{"0": true, "1": true, "2": true, "3": true}'
+scripts/bidpilot.sh draft-proposal G2B-REPLAY-DATA-QUALITY --position 1
+scripts/bidpilot.sh draft-proposal R26BK01680611-000 --evidence '{"0": true, "1": true, "2": true, "3": true}' --historical
 scripts/bidpilot.sh list-runs
 scripts/bidpilot.sh replay cortex-final-20260802-a
 ```
@@ -119,6 +141,43 @@ Expected replay shape:
  "sections": [{"criterion": "...", "title": "...", "weight": 40}],
  "tasks": [{"title": "...", "owner": "..."}],
  "provenance": {"cortex_session_id": "...", "query_ids": ["..."]}}
+```
+
+### Example 4 — "We can evidence all four. Draft the proposal."
+
+Run `decide R26BK01680611-000 --evidence '{"0": true, "1": true, "2": true, "3": true}'`.
+Only if it returns `PURSUE` with `proposal_gate: OPEN`, run
+`draft-proposal R26BK01680611-000 --evidence '{"0": true, "1": true, "2": true, "3": true}'`.
+Present the selected Win Position, the sections (`Technical`, 90 points, and
+`Price`, 10 points, are the score-bearing ones; the others frame the draft),
+the `red_team` findings, the `tasks` with owners, the `assumptions`, and the
+`disclosure`. If the user still lacks one item, `draft-proposal` returns
+`proposal_locked` with `detail.gaps`: report the gap and stop. If the notice
+has closed, it returns `notice_closed`: ask before re-running with
+`--historical`, and lead with the `HISTORICAL EXERCISE` banner.
+
+Expected shape:
+
+```json
+{"notice_number": "R26BK01680611-000", "decision": "PURSUE",
+ "proposal_gate": "OPEN", "deadline_state": "open",
+ "supplier": {"id": "supplier-northstar", "name": "...", "synthetic": true},
+ "score_map": [{"name": "Technical", "weight": 90}, {"name": "Price", "weight": 10}],
+ "win_positions": [{"title": "...", "summary": "..."}],
+ "selected_position": {"index": 0, "title": "...", "summary": "..."},
+ "sections": [{"criterion": "Technical", "heading": "Technical (90 points)", "markdown": "## ..."}],
+ "markdown": "# ...", "red_team": ["..."], "tasks": [{"title": "...", "owner": "..."}],
+ "gap_closure_plan": [], "assumptions": ["delivery_hours=800 is a planning constant, ..."],
+ "provider": "LOCAL_PYTHON_POLICY", "persisted": false,
+ "disclosure": "Synthetic demo supplier profile; nothing here is a real company claim."}
+```
+
+Locked shape (exit code 1 locally, HTTP 423 remotely):
+
+```json
+{"error": "proposal_locked", "detail": {"decision": "REVIEW", "proposal_gate": "LOCKED",
+ "gaps": ["..."], "checks": [{"requirement": "...", "status": "EVIDENCE REQUIRED"}],
+ "next_actions": ["Supply evidence for: ..."]}}
 ```
 
 ## Reporting style
