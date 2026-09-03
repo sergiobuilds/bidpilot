@@ -35,10 +35,10 @@ if [ -n "${BIDPILOT_API_URL:-}" ]; then
   base="${BIDPILOT_API_URL%/}"
   case "$command" in
     list-tenders)
-      exec curl -fsS "$base/tenders" ;;
+      exec curl -sS --fail-with-body "$base/tenders" ;;
     get-tender)
       [ $# -ge 1 ] || usage
-      exec curl -fsS "$base/tenders/$(urlencode "$1")" ;;
+      exec curl -sS --fail-with-body "$base/tenders/$(urlencode "$1")" ;;
     decide)
       [ $# -ge 1 ] || usage
       notice="$1"; shift
@@ -50,12 +50,12 @@ if [ -n "${BIDPILOT_API_URL:-}" ]; then
         esac
       done
       body="$(python3 -c 'import json, sys; print(json.dumps({"notice_number": sys.argv[1], "supplier_evidence": json.loads(sys.argv[2])}))' "$notice" "$evidence")"
-      exec curl -fsS -H 'Content-Type: application/json' -X POST "$base/decide" --data "$body" ;;
+      exec curl -sS --fail-with-body -H 'Content-Type: application/json' -X POST "$base/decide" --data "$body" ;;
     list-runs)
-      exec curl -fsS "$base/runs" ;;
+      exec curl -sS --fail-with-body "$base/runs" ;;
     replay)
       [ $# -ge 1 ] || usage
-      exec curl -fsS "$base/runs/$(urlencode "$1")" ;;
+      exec curl -sS --fail-with-body "$base/runs/$(urlencode "$1")" ;;
     *) usage ;;
   esac
 fi
