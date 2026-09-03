@@ -1,0 +1,166 @@
+{
+  "url": "https://bidpilot-api-164282963747.us-central1.run.app/mcp",
+  "initialize": {
+    "protocol_version": "2025-11-25",
+    "capabilities": {
+      "experimental": {},
+      "prompts": {
+        "list_changed": false
+      },
+      "resources": {
+        "subscribe": false,
+        "list_changed": false
+      },
+      "tools": {
+        "list_changed": false
+      }
+    },
+    "server_info": {
+      "name": "bidpilot",
+      "title": "BidPilot pursuit capability",
+      "version": "0.1.0"
+    },
+    "instructions": "BidPilot is an evidence-first B2G pursuit capability. Use list_tenders and get_tender to read the public catalogue, decide to apply the pursuit policy with supplier evidence you actually hold (never invent evidence), and list_runs/replay to read completed Cortex analyses. A REVIEW or NO-GO decision means no proposal is drafted; closed notices are historical."
+  },
+  "tools/list": [
+    "list_tenders",
+    "get_tender",
+    "decide",
+    "list_runs",
+    "replay"
+  ],
+  "tools/call": {
+    "name": "replay",
+    "arguments": {
+      "run_id": "cortex-final-20260802-a"
+    },
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"run_id\": \"cortex-final-20260802-a\",\n  \"opportunity_id\": \"G2B-REPLAY-DATA-QUALITY\",\n  \"title\": \"Public data quality and API continuity service\",\n  \"supplier_name\": \"Northstar Systems\",\n  \"decision\": \"PURSUE\",\n  \"selected_strategy\": \"Proven Data Quality Operations\",\n  \"strategy_count\": 3,\n  \"plan_count\": 4,\n  \"section_count\": 8,\n  \"task_count\": 12,\n  \"sections\": [\n    {\n      \"criterion\": \"Comparable delivery\",\n      \"title\": \"Citizen API Service Transition\",\n      \"weight\": 30\n    },\n    {\n      \"criterion\": \"Comparable delivery\",\n      \"title\": \"City Open Data Reliability Program\",\n      \"weight\": 30\n    },\n    {\n      \"criterion\": \"Price\",\n      \"title\": \"Pricing Model\",\n      \"weight\": 10\n    },\n    {\n      \"criterion\": \"Price\",\n      \"title\": \"Value Demonstration\",\n      \"weight\": 10\n    },\n    {\n      \"criterion\": \"Delivery team\",\n      \"title\": \"Credentials and Certifications\",\n      \"weight\": 20\n    },\n    {\n      \"criterion\": \"Delivery team\",\n      \"title\": \"Team Structure and Allocation\",\n      \"weight\": 20\n    },\n    {\n      \"criterion\": \"Technical approach\",\n      \"title\": \"API Change-Control Gates\",\n      \"weight\": 40\n    },\n    {\n      \"criterion\": \"Technical approach\",\n      \"title\": \"Data Quality Remediation Methodology\",\n      \"weight\": 40\n    }\n  ],\n  \"tasks\": [\n    {\n      \"title\": \"Validate that claimed hours do not exceed verified availability window\",\n      \"owner\": \"Resource Manager\"\n    },\n    {\n      \"title\": \"Confirm all cited credentials match active records in supplier profile\",\n      \"owner\": \"Compliance Lead\"\n    },\n    {\n      \"title\": \"Verify no fabricated project references or outcomes in proposal sections\",\n      \"owner\": \"QA Specialist\"\n    },\n    {\n      \"title\": \"Ensure proposal sections do not promise deliverables beyond stated opportunity scope\",\n      \"owner\": \"Delivery Manager\"\n    },\n    {\n      \"title\": \"Confirm delivery hours fit within availability window and assign team\",\n      \"owner\": \"Resource Manager\"\n    },\n    {\n      \"title\": \"Verify supplier eligibility against all stated requirements\",\n      \"owner\": \"Compliance Lead\"\n    },\n    {\n      \"title\": \"Assemble pricing model within delivery-hour envelope\",\n      \"owner\": \"Commercial Lead\"\n    },\n    {\n      \"title\": \"Draft all proposal sections against rubric response plans\",\n      \"owner\": \"Technical Lead\"\n    },\n    {\n      \"title\": \"Evaluate win strategies and select primary positioning\",\n      \"owner\": \"Bid Director\"\n    },\n    {\n      \"title\": \"Bind policy version 2026-08-02.v1 to all decision outputs\",\n      \"owner\": \"System\"\n    },\n    {\n      \"title\": \"Capture run ID lineage linking all derived artifacts to source rows\",\n      \"owner\": \"System\"\n    },\n    {\n      \"title\": \"Record source SHA256 and retrieval timestamp for opportunity data\",\n      \"owner\": \"System\"\n    }\n  ],\n  \"completed_at\": \"2026-08-02T00:01:00Z\",\n  \"provenance\": {\n    \"cortex_session_id\": \"7d9dc75b-3fd9-4ab0-9d8f-4d0c0e2c18f1\",\n    \"query_ids\": [\n      \"01c61be9-0001-d7d1-0001-929e0004f896\",\n      \"01c61be9-0001-d7d1-0001-929e0004f8a2\",\n      \"01c61bea-0001-d7d1-0001-929e0004f8ae\",\n      \"01c61bea-0001-d7d1-0001-929e0004f8b6\",\n      \"01c61bea-0001-d7d1-0001-929e0004f8be\",\n      \"01c61beb-0001-d7d1-0001-929e0004f8c6\"\n    ],\n    \"provider\": \"CORTEX_CODE_CLI\",\n    \"policy_version\": \"2026-08-02.v1\"\n  }\n}"
+        }
+      ],
+      "structured_content": {
+        "run_id": "cortex-final-20260802-a",
+        "opportunity_id": "G2B-REPLAY-DATA-QUALITY",
+        "title": "Public data quality and API continuity service",
+        "supplier_name": "Northstar Systems",
+        "decision": "PURSUE",
+        "selected_strategy": "Proven Data Quality Operations",
+        "strategy_count": 3,
+        "plan_count": 4,
+        "section_count": 8,
+        "task_count": 12,
+        "sections": [
+          {
+            "criterion": "Comparable delivery",
+            "title": "Citizen API Service Transition",
+            "weight": 30
+          },
+          {
+            "criterion": "Comparable delivery",
+            "title": "City Open Data Reliability Program",
+            "weight": 30
+          },
+          {
+            "criterion": "Price",
+            "title": "Pricing Model",
+            "weight": 10
+          },
+          {
+            "criterion": "Price",
+            "title": "Value Demonstration",
+            "weight": 10
+          },
+          {
+            "criterion": "Delivery team",
+            "title": "Credentials and Certifications",
+            "weight": 20
+          },
+          {
+            "criterion": "Delivery team",
+            "title": "Team Structure and Allocation",
+            "weight": 20
+          },
+          {
+            "criterion": "Technical approach",
+            "title": "API Change-Control Gates",
+            "weight": 40
+          },
+          {
+            "criterion": "Technical approach",
+            "title": "Data Quality Remediation Methodology",
+            "weight": 40
+          }
+        ],
+        "tasks": [
+          {
+            "title": "Validate that claimed hours do not exceed verified availability window",
+            "owner": "Resource Manager"
+          },
+          {
+            "title": "Confirm all cited credentials match active records in supplier profile",
+            "owner": "Compliance Lead"
+          },
+          {
+            "title": "Verify no fabricated project references or outcomes in proposal sections",
+            "owner": "QA Specialist"
+          },
+          {
+            "title": "Ensure proposal sections do not promise deliverables beyond stated opportunity scope",
+            "owner": "Delivery Manager"
+          },
+          {
+            "title": "Confirm delivery hours fit within availability window and assign team",
+            "owner": "Resource Manager"
+          },
+          {
+            "title": "Verify supplier eligibility against all stated requirements",
+            "owner": "Compliance Lead"
+          },
+          {
+            "title": "Assemble pricing model within delivery-hour envelope",
+            "owner": "Commercial Lead"
+          },
+          {
+            "title": "Draft all proposal sections against rubric response plans",
+            "owner": "Technical Lead"
+          },
+          {
+            "title": "Evaluate win strategies and select primary positioning",
+            "owner": "Bid Director"
+          },
+          {
+            "title": "Bind policy version 2026-08-02.v1 to all decision outputs",
+            "owner": "System"
+          },
+          {
+            "title": "Capture run ID lineage linking all derived artifacts to source rows",
+            "owner": "System"
+          },
+          {
+            "title": "Record source SHA256 and retrieval timestamp for opportunity data",
+            "owner": "System"
+          }
+        ],
+        "completed_at": "2026-08-02T00:01:00Z",
+        "provenance": {
+          "cortex_session_id": "7d9dc75b-3fd9-4ab0-9d8f-4d0c0e2c18f1",
+          "query_ids": [
+            "01c61be9-0001-d7d1-0001-929e0004f896",
+            "01c61be9-0001-d7d1-0001-929e0004f8a2",
+            "01c61bea-0001-d7d1-0001-929e0004f8ae",
+            "01c61bea-0001-d7d1-0001-929e0004f8b6",
+            "01c61bea-0001-d7d1-0001-929e0004f8be",
+            "01c61beb-0001-d7d1-0001-929e0004f8c6"
+          ],
+          "provider": "CORTEX_CODE_CLI",
+          "policy_version": "2026-08-02.v1"
+        }
+      },
+      "is_error": false,
+      "result_type": "complete"
+    }
+  }
+}

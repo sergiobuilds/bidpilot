@@ -15,9 +15,12 @@ COPY data ./data
 RUN uv sync --frozen --no-dev
 
 COPY app.py ./
+COPY deploy/entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 COPY deploy/snowflake-config.toml /root/.snowflake/config.toml
 RUN chmod 600 /root/.snowflake/config.toml
 
 EXPOSE 8080
 
-CMD ["sh", "-c", ".venv/bin/streamlit run app.py --server.address=0.0.0.0 --server.port=${PORT:-8080} --server.headless=true --browser.gatherUsageStats=false"]
+# Default remains the public Streamlit app; BIDPILOT_MODE=api serves the agent surface.
+CMD ["./entrypoint.sh"]
