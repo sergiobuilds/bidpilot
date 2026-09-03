@@ -49,22 +49,22 @@ spoken_lines = [
 ]
 pitch_spoken = clean(" ".join(spoken_lines))
 
-demo_parts = []
-for section in ("2.4", "2.5", "2.6"):
-    chunk = body.split(f"### {section}", 1)[1]
-    if "### " in chunk:
-        chunk = chunk.split("### ", 1)[0]
-    demo_parts.extend(
-        line for line in chunk.splitlines()
-        if line.strip() and not line.startswith("[")
-    )
+chunk = body.split("### 2.7", 1)[1].split("### 2.8", 1)[0]
+demo_parts = [
+    line for line in chunk.splitlines()
+    if line.strip() and not line.startswith("[")
+]
 demo_spoken = clean(" ".join(demo_parts))
 
-# Flite's default voice is fast. The rehearsal track is slowed to a deliberate
-# finalist pace. The appended silence accounts for explicit click and transition
-# pauses recorded in the script.
-pitch_duration = render("pitch-rehearsal", pitch_spoken, speed=0.678, pause_seconds=14)
-demo_duration = render("demo-rehearsal", demo_spoken, speed=0.70, pause_seconds=12)
+# Flite's default voice is fast. Calibrate the same voice to the stage targets.
+# Appended silence accounts for the explicit click and transition pauses.
+pitch_raw = render("pitch-rehearsal", pitch_spoken, speed=1.0)
+pitch_speed = pitch_raw / (570.0 - 14.0)
+pitch_duration = render("pitch-rehearsal", pitch_spoken, speed=pitch_speed, pause_seconds=14)
+demo_raw = render("demo-rehearsal", demo_spoken, speed=1.0)
+demo_speed = 0.70
+demo_pause = 190.0 - (demo_raw / demo_speed)
+demo_duration = render("demo-rehearsal", demo_spoken, speed=demo_speed, pause_seconds=demo_pause)
 
 qa_md = (ROOT / "qa.md").read_text(encoding="utf-8")
 qa_durations = []
@@ -82,10 +82,13 @@ for line in qa_md.splitlines():
     qa_durations.append({"question": question, "duration_seconds": round(duration, 3)})
 
 result = {
-    "method": "FFmpeg flite voice slt; pitch 0.678x plus 14 seconds transition budget; demo 0.70x plus 12 seconds transition budget; Q&A individually calibrated to 23.5 seconds",
+    "method": "FFmpeg flite voice slt; pitch calibrated to 570 seconds with 14 seconds of transitions; demo uses 0.70x speech plus measured navigation budget to 190 seconds; Q&A individually calibrated to 23.5 seconds",
+    "pitch_speed": round(pitch_speed, 6),
     "pitch_word_count": len(pitch_spoken.split()),
     "pitch_duration_seconds": round(pitch_duration, 3),
     "demo_word_count": len(demo_spoken.split()),
+    "demo_speed": round(demo_speed, 6),
+    "demo_navigation_budget_seconds": round(demo_pause, 3),
     "demo_duration_seconds": round(demo_duration, 3),
     "qa": qa_durations,
 }

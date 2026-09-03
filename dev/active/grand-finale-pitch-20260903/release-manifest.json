@@ -1,18 +1,21 @@
 {
-  "release_id": "grand-finale-pitch-20260903",
-  "source_commit_sha": "bf7fd4d56f95220677f86358d0004905b497872a",
+  "release_id": "grand-finale-pitch-20260903-wds",
+  "source_commit_sha": "f72a0565c6d804b26b77f00febbecbdd6908c5a2",
+  "public_app_source_commit": "c78c40c",
+  "public_app_revision": "bidpilot-demo-00012-vvg",
   "public_app_url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app",
-  "screenshot_capture_time": "2026-09-03T10:49:03.575749621+09:00",
+  "screenshot_capture_time": "2026-09-03T11:40:00+09:00",
   "verified_run_id": "cortex-final-20260802-a",
-  "deck_sha256": "618067f4cefb7613208cad7bb4b91921dfaca2434d2da84c3242745d155016eb",
-  "pdf_sha256": "dfe88c4b2f4e116bbf3168b7bf87b6f579407926ee3e5912c80f9671207ec304",
-  "pptx_sha256": "2c5e82e0b15beed81023792921026eefa2e1fb263368f0d161dd5079540879c1",
-  "page_count": 10,
-  "measured_narration_duration_seconds": 569.948,
-  "measured_live_demo_duration_seconds": 194.652,
-  "qa_answer_duration_range_seconds": [23.475, 23.513],
+  "deck_sha256": "245d128f71fce9884af8dadcc54914f8a8fd1fe1a5413a534fef01972b7e5e88",
+  "pdf_sha256": "a4682977097e4e78201ca46f6ef26eedc38a3f4a24e78d28ff0aff00e13a2ebb",
+  "pptx_sha256": "9070f35c615a5dd89ba95a6315a773865a4f4fd8a7990030534b91328e4311f4",
+  "page_count": 12,
+  "measured_narration_duration_seconds": 569.978,
+  "measured_live_demo_duration_seconds": 189.988,
+  "qa_answer_count": 18,
+  "qa_answer_duration_range_seconds": [23.469, 23.517],
   "data_boundary_assertions": [
-    "The Suwon G2B notice is a real public tender source and is not represented as a currently open opportunity.",
+    "The Suwon G2B notice is a real public tender source and is not presented as a currently biddable opportunity.",
     "The supplier profile shown with the real tender is synthetic demo data.",
     "The real-tender REVIEW and historical replay PURSUE are separate evidence paths.",
     "No customer, award, revenue, market-share, win-rate, or time-saving result is claimed.",
@@ -20,8 +23,6 @@
     "The historical Snowflake and Cortex run is replayed and is not modified or recreated during the presentation."
   ],
   "unresolved_warnings": [
-    "The public app can cold-start while the Snowflake reader connects; prewarm both tabs before 15:15 KST.",
-    "The current public tender screen shows its source deadline. The spoken presentation must retain the approved historical-source wording and must not call it open.",
-    "laptop CDP ports 9222 and 9447 did not respond during this session, so final presenter-device visual sign-off remains a human preflight item."
+    "Prewarm the real-tender and verified-replay tabs before 15:15 KST even though the deployed Cloud Run revision keeps one instance warm."
   ]
 }

@@ -2,5 +2,8 @@ timing/*.txt
 timing/*.wav
 rendered-pptx/
 design-forge-build/
+design-forge-wds-build/
 .verify-shot/
 assets/diagnostic/
+shot-*.png
+laptop-render/

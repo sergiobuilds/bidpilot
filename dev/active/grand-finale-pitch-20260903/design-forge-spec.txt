@@ -1,27 +1,138 @@
-Build a self-contained horizontal presentation for a ten-minute hackathon grand finale.
+Build a self-contained 12-slide horizontal presentation for the Snowflake CoCo CLI Hackathon 2026 Grand Finale.
 
-Functional requirements:
-- Produce exactly ten 16:9 slides in one HTML file named index.html.
-- Support ArrowLeft, ArrowRight, PageUp, PageDown, Home, End, and Space navigation.
-- Support direct hash navigation from #1 through #10.
-- Show a small slide number and restrained progress indicator.
-- Fit each slide fully inside the viewport with no document scrolling.
-- Use large remote-readable typography. Body text must remain at least 24 CSS pixels at 1440 by 810.
-- Use one claim per slide.
-- Use the supplied current public-product screenshots as the only image evidence.
-- Keep all text in HTML, not baked into raster images.
-- Do not use em dash characters.
-- Do not use decorative illustrations, generated people, icons as decoration, gradients, glow, glass effects, card grids, or dashboard-style density.
-- Keep product screenshots large and sharply cropped.
+The presentation is a calm professional data narrative. Every slide is led by one central SVG graph, diagram, table, geometric composition, or process visualization. Text and numbers label the visual. They are never the visual by themselves.
 
-Slide content:
-1. Eyebrow: SNOWFLAKE COCO CLI HACKATHON 2026 · GRAND FINALE. Title: BidPilot. Subtitle: Win the score, not the prompt. Footer: Sergio Lee · Washington State CPA · sergiobuilds.
-2. Rubric label: 30% REAL-WORLD RELEVANCE. Title: The bid is often lost before writing begins. Supporting line: Eligibility · Score · Evidence · Ownership. Small line: Proposal teams commit resources before the buyer’s score and the supplier’s proof agree.
-3. Title: One accountable chain. Main line: public tender + supplier evidence → PURSUE · REVIEW · NO-GO → score-weighted Win Position → evidence-bound proposal → red-team → owned work → same-run Snowflake readback. Small line: A general LLM summarizes. BidPilot preserves the decision and execution contract.
-4. Rubric label: 30% REAL-WORLD RELEVANCE. Title: REVIEW is a trusted answer. Use assets/live/tender.png as the main visual. Evidence labels: Real public tender · Synthetic demo supplier · 4 evidence gaps · No run created.
-5. Rubric label: 30% SOLUTION COMPLETENESS. Title: Separate verified replay. Use assets/live/walkthrough.png as the main visual. Evidence labels: PURSUE · 40 points · 3 compared · 1 selected. Boundary line: Separate synthetic historical replay.
-6. Rubric label: 30% SOLUTION COMPLETENESS. Title: The score controls the work. Use assets/live/replay-03.png and assets/live/replay-04.png as paired visual evidence. Evidence labels: 4 weighted plans · 8 proposal sections · Red-team passed · 12 owned and review tasks.
-7. Rubric label: 40% TECHNICAL EXECUTION. Title: Snowflake is the operating memory. Main architecture line: Opportunity Graph → Snowpark policy → Cortex Code CLI → Streamlit reader. Supporting lines: Versioned tender + governed supplier evidence. Runner writes. Reader replays complete runs. Authenticated failures fail closed.
-8. Rubric label: 40% TECHNICAL EXECUTION. Title: One recorded run. Large numbers: 1 decision · 3 strategies · 4 plans · 8 sections · 12 tasks. Small line: cortex-final-20260802-a · Cortex session + Snowflake query provenance · same run_id.
-9. Title: Human approval stays in the loop. Main line: Source review → supplier evidence → pricing → final edit → legal submission. Supporting line: BidPilot prepares and governs the work. The first buyer is a small B2G proposal team. Commercial path: team subscription + usage-based runs.
-10. Title: Win the score, not the prompt. Supporting line: A defensible pursuit decision. A score-weighted win strategy. Execution-ready proposal work. Footer: Persisted and replayable in Snowflake.
+Global functional requirements:
+- Produce exactly 12 slides in one HTML file named index.html.
+- Use a fixed 1440 by 810 design canvas and scale it to fit the viewport.
+- Support ArrowLeft, ArrowRight, PageUp, PageDown, Home, End, Space, and direct hash navigation from #1 through #12.
+- Keep every slide inside one viewport with no document scroll.
+- Use wanted-design-system tokens, type classes, semantic colors, and icons only.
+- Use Wanted Sans Variable as the visible typeface.
+- Keep the canvas calm and light. This is a data and operations presentation.
+- Make each slide title an English noun phrase separated by middle dots. Do not use question titles.
+- Keep titles concise and place them close to the central visual rather than in a repeated presentation header.
+- Do not add a repeated logo bar, progress bar, navigation chrome, rubric badge, or dashboard shell.
+- Show only a small page number in the lower-right corner.
+- Keep ordinary visible text at 24 CSS pixels or larger on the 1440 by 810 canvas. Source notes may be 16 to 18 pixels.
+- Keep on-screen prose below 35 words per slide, excluding table labels and source notes.
+- Use one dominant visual per slide, centered on the canvas with generous negative space.
+- Use SVG for charts, flows, score bars, gates, connectors, curves, evidence nodes, and diagrams.
+- Use flat WDS semantic colors and precise hairlines. Avoid decorative atmosphere that competes with data.
+- Use WDS primary blue only for verified, selected, or active paths.
+- Use WDS caution color only for REVIEW and unresolved evidence.
+- Use cool-neutral gray for inactive, alternative, or contextual paths.
+- Use actual product screenshots only as small authenticity insets on slides 7 and 8. Do not make a screenshot the main composition.
+- Keep all slide copy as HTML text. SVG labels may remain SVG text if needed.
+- Add accessible labels to diagrams and meaningful alt text to screenshots.
+- Use quiet 200 to 300 millisecond transitions and support prefers-reduced-motion.
+
+Hard anti-pattern rules:
+- No row of three or four equal number cards.
+- No KPI tiles.
+- No repeated cards with icon, title, and body.
+- No generic dashboard grids.
+- No sequence made only from rounded rectangles.
+- No giant standalone number without a meaningful scale, relationship, or graph.
+- No decorative AI network, neural nodes, sparkles, floating blobs, glass panels, or generated imagery.
+- No stock illustration or human portrait.
+- No em dash.
+- No “not just X, but Y”, “more than X”, or “revolutionize”.
+
+Slide 1
+Title: Sergio Lee · USCPA · Government-Support Programs
+Purpose: Establish founder authority as the source of the product discipline.
+Central visual: A single vertical provenance line. The top node is “Washington State CPA”. The middle node is “Government grants · public programs · application support”. The lower node is “Repeated enterprise friction”. The line terminates in one small BidPilot mark. The visual should feel like a credential-to-product derivation, not a resume.
+Visible supporting labels: “Three-time AI hackathon winner” and “sergiobuilds”.
+Narrative fact: Founder authority explains why eligibility, evidence, and ownership govern the product.
+
+Slide 2
+Title: Accounting-Firm + Enterprise Friction · 6 Breakpoints
+Purpose: Show the same pursuit friction from the accounting-firm and enterprise sides.
+Central visual: A two-lane process map. The upper lane is “Accounting firm”. The lower lane is “Enterprise”. Both travel toward one fixed submission deadline and both break at six aligned vertical fault lines: Opportunity, Eligibility, Evidence, Score, Strategy, Ownership. Use curved connectors and visible discontinuities. Do not put the six items in six cards.
+Small comparison table integrated beneath the graphic with three columns: Breakpoint, Accounting-firm burden, Enterprise burden. Use only the three highest-value rows: Eligibility, Evidence, Ownership.
+Key numeric labels: “2 perspectives · 6 breakpoints · 1 deadline”.
+
+Slide 3
+Title: Global Public-Sector Pursuit · Shared Operating Pattern
+Purpose: Establish global repetition with authoritative public evidence.
+Central visual: A simplified globe ring or circular system with three anchored regions: Korea G2B, US SAM.gov, EU TED. Around the ring place five shared structural markers: Public notice, Eligibility rules, Scored evaluation, Private supplier evidence, Fixed submission boundary. Do not use a decorative world map.
+Quantitative anchors: “12.9% of GDP” with label “OECD public procurement · 2021”; “3,000+ notices / weekday” with label “EU TED”. These numbers must be placed on meaningful radial scales or callout arcs rather than cards.
+Small source note: “OECD Public Procurement · TED About · SAM.gov Contract Opportunities”.
+
+Slide 4
+Title: Verification · Context · Strategy
+Purpose: Show the three conditions required for a defensible pursuit decision.
+Central visual: Three separate input streams converge on one decision aperture. Verification carries source, eligibility, and evidence checks. Context carries credentials, people, availability, and delivery history. Strategy carries weights, position, and owner. If any stream is incomplete, the aperture stops at REVIEW. Avoid a Venn diagram and avoid three columns of cards.
+Center label: “Defensible pursuit decision”.
+Small output labels: “PURSUE · REVIEW · NO-GO”.
+
+Slide 5
+Title: BidPilot · Decision-to-Execution Workspace
+Purpose: Define the product as one accountable causal chain.
+Central visual: One continuous blue path across the canvas. It begins as a public tender document merged with supplier evidence nodes, passes through a decision gate, changes thickness according to an official score profile, turns toward one selected Win Position, becomes an evidence-bound proposal, crosses a red-team inspection line, reaches named owners, and loops back as a same-run Snowflake readback. Use changing geometry along one path, not a line of boxes.
+Small comparison table with two rows: “General LLM · prompt to prose · session context” and “BidPilot · evidence to owned execution · replayable run”.
+
+Slide 6
+Title: Public Tender + Supplier Evidence · Controlled Decision
+Purpose: Lock the data and trust boundary before the live demo.
+Central visual: Two differently styled input streams enter a single policy gate. The top stream is “Real public tender · source-reviewed”. The lower stream is “Synthetic demo supplier profile”. The gate has three exits: PURSUE, REVIEW, NO-GO. Continue two separate evidence paths on the right: “Real source · decision-boundary proof” and “Separate historical replay · full capability proof”. Make the separation visually unmistakable.
+Small line: “No silent fixture fallback”.
+
+Slide 7
+Title: Two Evidence Paths · REVIEW / PURSUE
+Purpose: Launch and back up the live demonstration.
+Central visual: A diagonal split composition, not two equal cards. The upper-left path is the real Suwon G2B source and ends at REVIEW. The lower-right path is the separate synthetic historical replay and ends at PURSUE. Place a strong visual break between them.
+Real-path data: “Technical 90 · Price 10 · 4 evidence gaps · Run 0”.
+Replay-path data: “40 / 30 / 20 / 10 · 3 compared · 1 selected”.
+Use assets/live/tender.png as a small cropped authenticity inset for the real path. Use assets/live/walkthrough.png as a small cropped authenticity inset for the replay path.
+Boundary label: “Separate evidence paths”.
+
+Slide 8
+Title: Score-to-Work · 40 / 30 / 20 / 10
+Purpose: Explain how official weight controls strategy, proposal content, review, and ownership.
+Central visual: One vertical 100-point score spine divided proportionally into 40, 30, 20, and 10. The 40-point segment emits a blue flow that passes through “Selected Win Position”, one evidence node, one proposal section shape, one red-team inspection mark, and one owner endpoint. Secondary score segments remain gray and feed smaller branches.
+Aggregate labels should sit on the flow: “4 weighted plans · 8 proposal sections · 12 tasks”. Do not show these as separate number cards.
+Use assets/live/replay-03.png and assets/live/replay-04.png only as two narrow proof strips beside the relevant proposal and owner points.
+
+Slide 9
+Title: Snowflake · Governed Context · Same-Run Memory
+Purpose: Prove why Snowflake is structurally necessary.
+Central visual: A circular or orbital Opportunity Graph around a central run_id. On the left orbit: Tender version, Criteria, Requirements. On the lower orbit: Credentials, People, Availability, Delivery history. The center executes “Snowpark policy”. On the right orbit: Strategy, Plans, Sections, Tasks. A readback arc returns the same run to “Streamlit reader”.
+Integrate a compact three-row table into the lower third: “Governed join · external + internal context”; “Least privilege · runner writes / reader replays”; “Durable state · same run_id”.
+Small line: “Authenticated read failure · fail closed”.
+
+Slide 10
+Title: CoCo CLI · Evidence-to-Action Execution
+Purpose: Prove why Cortex Code CLI is necessary and what it actually created.
+Central visual: One execution trajectory with six changes of state: Query → Compare → Select → Write → Challenge → Persist. Each stage changes the geometry of the same artifact rather than appearing as six boxes. Query begins as data points; Compare becomes three directional hypotheses; Select leaves one blue path; Write expands into plans and sections; Challenge adds inspection marks; Persist anchors artifacts to the run spine.
+Integrated event table with three high-value rows: “Query governed records”; “Create 3 strategies · 4 plans · 8 sections”; “Persist 12 tasks · session · query provenance”.
+Small line: “Authenticated CLI session · repository workspace · no LLM API key”.
+
+Slide 11
+Title: Verified Run · 1 / 3 / 4 / 8 / 12 · Human Approval
+Purpose: Show complete machine execution and the final human boundary.
+Central visual: A branching tree that begins with 1 decision, expands to 3 strategy branches, selects one branch, produces 4 weighted plan branches, 8 section leaves, and 12 task endpoints. Do not arrange the numbers horizontally or place them in equal boxes. The selected path is blue; rejected alternatives are cool-neutral. All branches terminate at one “Internal work ready” boundary. A human approval gate stands between that boundary and “Legal submission”.
+Small buyer line: “Buyer · small B2G proposal teams”.
+Small commercial line: “Team workspace + usage-based runs”.
+Small proof line: “cortex-final-20260802-a · Cortex session + Snowflake query provenance”.
+
+Slide 12
+Title: Win the Score, Not the Prompt
+Purpose: Leave one memorable visual and one sentence.
+Central visual: A precise 100-point circular score instrument built from proportional 40, 30, 20, and 10 arcs. The four arcs converge on one selected blue center point labeled “Win Position”. Three thin output rays lead to “Defensible decision”, “Weighted strategy”, and “Owned execution”. Do not add cards or a feature list.
+Closing sentence: “Public tender + company context · persisted and replayable in Snowflake”.
+
+Timing behavior:
+- Slides 1 to 6 occupy 3 minutes 20 seconds.
+- Slide 7 launches a 3 minute 15 second live demo.
+- Slides 8 to 12 occupy 2 minutes 55 seconds.
+- Total target is 9 minutes 30 seconds including transitions.
+
+Verification requirements:
+- Run the mandatory Design Forge self-correction loop at 1440, 768, and 390 widths.
+- Additionally render every individual slide at 1440 by 810.
+- Inspect a 12-slide contact sheet and each slide with dense diagrams or tables.
+- Report overflow=false at all three widths.
+- Confirm that no slide uses equal KPI cards or a generic three-column number layout.
+- Confirm that the central visual occupies more area than all text combined on slides 2 through 12.

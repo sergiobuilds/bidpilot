@@ -1,69 +1,84 @@
 {
-  "method": "FFmpeg flite voice slt; pitch 0.678x plus 14 seconds transition budget; demo 0.70x plus 12 seconds transition budget; Q&A individually calibrated to 23.5 seconds",
-  "pitch_word_count": 917,
-  "pitch_duration_seconds": 569.948,
-  "demo_word_count": 319,
-  "demo_duration_seconds": 194.652,
+  "method": "FFmpeg flite voice slt; pitch calibrated to 570 seconds with 14 seconds of transitions; demo uses 0.70x speech plus measured navigation budget to 190 seconds; Q&A individually calibrated to 23.5 seconds",
+  "pitch_speed": 0.669925,
+  "pitch_word_count": 909,
+  "pitch_duration_seconds": 569.978,
+  "demo_word_count": 227,
+  "demo_speed": 0.7,
+  "demo_navigation_budget_seconds": 58.566,
+  "demo_duration_seconds": 189.988,
   "qa": [
     {
+      "question": "Why are you the right founder for this problem?",
+      "duration_seconds": 23.503
+    },
+    {
+      "question": "Is this problem global?",
+      "duration_seconds": 23.501
+    },
+    {
       "question": "Why not use a general LLM?",
-      "duration_seconds": 23.51
+      "duration_seconds": 23.494
     },
     {
       "question": "Why is Snowflake necessary?",
-      "duration_seconds": 23.499
+      "duration_seconds": 23.488
     },
     {
-      "question": "What exactly did Cortex Code CLI do?",
-      "duration_seconds": 23.475
+      "question": "Why is CoCo CLI necessary?",
+      "duration_seconds": 23.485
+    },
+    {
+      "question": "What exactly did Cortex Code CLI create?",
+      "duration_seconds": 23.487
     },
     {
       "question": "Is the tender data real?",
-      "duration_seconds": 23.492
+      "duration_seconds": 23.469
     },
     {
       "question": "Is the supplier data real?",
-      "duration_seconds": 23.513
+      "duration_seconds": 23.509
     },
     {
       "question": "Why does the real tender show REVIEW?",
-      "duration_seconds": 23.495
+      "duration_seconds": 23.51
     },
     {
       "question": "Is this an automated legal bid submission tool?",
+      "duration_seconds": 23.51
+    },
+    {
+      "question": "How do you prevent hallucinated credentials or results?",
       "duration_seconds": 23.491
     },
     {
-      "question": "How do you prevent hallucinated credentials or project results?",
-      "duration_seconds": 23.496
-    },
-    {
       "question": "What happens when evidence is missing?",
-      "duration_seconds": 23.496
+      "duration_seconds": 23.488
     },
     {
-      "question": "What is already built versus future work?",
-      "duration_seconds": 23.499
+      "question": "What is already built?",
+      "duration_seconds": 23.496
     },
     {
       "question": "Who is the buyer and what is the business model?",
-      "duration_seconds": 23.498
+      "duration_seconds": 23.517
     },
     {
       "question": "How would this work with a company\u2019s private operating data?",
-      "duration_seconds": 23.496
+      "duration_seconds": 23.49
     },
     {
       "question": "How do reader and runner permissions differ?",
-      "duration_seconds": 23.492
+      "duration_seconds": 23.514
     },
     {
-      "question": "Can judges reproduce or inspect the run?",
-      "duration_seconds": 23.513
+      "question": "Can judges inspect the run?",
+      "duration_seconds": 23.506
     },
     {
       "question": "What is the strongest measurable proof today?",
-      "duration_seconds": 23.494
+      "duration_seconds": 23.5
     }
   ]
 }

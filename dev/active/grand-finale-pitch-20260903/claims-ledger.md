@@ -1,72 +1,87 @@
 # BidPilot Grand Finale Claims Ledger
 
-This ledger fixes the evidence, wording, and data boundaries for the 3 September 2026 presentation.
+This ledger fixes the authoritative facts, global evidence, product boundaries, and excluded claims for the rebuilt presentation.
 
-**Contents**: 1 Release identity · 2 Permitted claims · 3 Data boundaries · 4 Evaluation proof · 5 Excluded claims · 6 Sources · 7 Change history
+**Contents**: 1 Release identity · 2 Founder authority · 3 Global evidence · 4 Product evidence · 5 Data boundaries · 6 Evaluation proof · 7 Excluded claims · 8 Change history
 
 ## 1 Release identity
 
 | Field | Verified value |
 |---|---|
-| Source commit | `bf7fd4d56f95220677f86358d0004905b497872a` |
+| Current `origin/main` | `f72a0565c6d804b26b77f00febbecbdd6908c5a2` |
+| Public-app source | `c78c40c` · Cloud Run revision `bidpilot-demo-00012-vvg` |
 | Public repository | `https://github.com/sergiobuilds/bidpilot` |
-| Public app | `https://bidpilot-demo-tbauoylpra-uc.a.run.app` |
+| Public application | `https://bidpilot-demo-tbauoylpra-uc.a.run.app` |
 | Real-tender route | `/?tender=R26BK01680611-000` |
 | Verified replay route | `/?walkthrough=1` |
 | Historical run | `cortex-final-20260802-a` |
 | Cortex session | `7d9dc75b-3fd9-4ab0-9d8f-4d0c0e2c18f1` |
-| Public app capture | 3 September 2026 KST |
 
-## 2 Permitted claims
+## 2 Founder authority
 
-| Claim | Evidence | Presentation wording |
+| Claim | Authority | Permitted wording |
 |---|---|---|
-| Product definition | README, MASTER-MAP, Top 16 plan | “BidPilot is a pursuit decision and execution workspace for B2G proposal teams.” |
-| End-to-end chain | Public replay and persisted run | “Tender and supplier evidence become a decision, weighted strategy, proposal, review, owned work, and same-run readback.” |
-| Runtime | Repository and runbook | Python, Streamlit, Snowflake, Snowpark, Cortex Code CLI. |
-| Completed replay | Runbook and public replay | One decision, three strategies with one selected, four weighted plans, eight proposal sections, and twelve tasks. |
-| Least privilege | Role SQL, runbook, README | Runner writes execution artifacts. Reader reloads complete runs. |
-| Fail closed | Store contract and public wording | Authenticated reader errors do not silently switch to fixtures. |
-| Founder fit | Sergio Lee biography supplied for the finale | Washington State CPA, government grants and public-program accounting specialist, three-time AI hackathon winner. |
-| Finalist status | Event contract supplied for the finale | Global Top 16 finalist. No total applicant count is stated. |
+| Washington State CPA | Sergio-provided biography | `Washington State CPA` or `USCPA` |
+| Government grants and public-program accounting | Sergio-provided biography | `Government grants and public-program accounting specialist` |
+| Government-support application work | Sergio-provided professional experience | `Government-support application specialist` |
+| Three AI hackathon wins | Sergio-provided biography | `Three-time AI hackathon winner` |
+| Accounting-firm friction | Founder observation | Present as repeated professional observation, not measured market research. |
 
-## 3 Data boundaries
+The founder experience explains the product discipline. It does not classify BidPilot as an audit, accounting-opinion, or grant-settlement product.
 
-| Surface | Data status | Required wording |
+## 3 Global evidence
+
+| Claim | Official source | Verified wording |
 |---|---|---|
-| Suwon G2B notice `R26BK01680611-000` | Real public notice used as a source case | “Real public tender source. It is not represented as a currently open opportunity.” |
-| Supplier profile on the real-tender screen | Synthetic demo data | “Synthetic demo supplier profile.” |
-| Real-tender result | `REVIEW` with four evidence gaps | “REVIEW is the trusted answer when supplier evidence is insufficient.” |
-| Verified replay | Separate synthetic historical fixture | “Separate historical replay used to prove the complete product and Snowflake execution.” |
-| Verified replay result | `PURSUE` | Never describe it as the result for the Suwon notice. |
-| Customer outcomes | No verified customer evidence | Do not claim customers, wins, revenue, time savings, or award results. |
+| OECD public procurement scale | `https://www.oecd.org/en/topics/public-procurement.html` | Public procurement expenditure increased to 12.9% of GDP across the OECD in 2021. |
+| EU notice volume | `https://ted.europa.eu/en/about-ted` | TED publishes over 3,000 public procurement notices each weekday. |
+| US federal opportunity structure | `https://sam.gov/content/opportunities` | SAM.gov contract opportunities are procurement notices from federal contracting offices and are publicly searchable. |
+| Korea source structure | Current public G2B notice and BidPilot source record | The public notice provides official requirements, dates, and evaluation structure. |
 
-## 4 Evaluation proof
+The global claim is structural: public notice, eligibility rules, scored evaluation, private supplier evidence, and a fixed submission boundary recur across systems. The deck does not claim that legal rules are identical across countries.
 
-| Official criterion | Weight | Direct proof in the presentation |
+## 4 Product evidence
+
+| Claim | Verified evidence |
+|---|---|
+| Runtime | Python, Streamlit, Snowflake, Snowpark, Cortex Code CLI |
+| Decision outcomes | `PURSUE`, `REVIEW`, `NO-GO` |
+| Historical run | One decision, three strategies with one selected, four plans, eight sections, twelve tasks |
+| Role boundary | `BIDPILOT_RUNNER` writes execution artifacts; `BIDPILOT_READER` reloads complete runs |
+| Failure boundary | Authenticated reader failure does not silently switch to a fixture |
+| Snowflake purpose | Governed join, policy execution, least privilege, durable same-run memory |
+| CoCo CLI purpose | Query, compare, select, write, challenge, and persist with session and query provenance |
+
+## 5 Data boundaries
+
+| Evidence path | Data status | Required presentation boundary |
+|---|---|---|
+| Suwon G2B notice `R26BK01680611-000` | Real public source | Source and decision-boundary proof; not represented as a currently open opportunity |
+| Supplier profile on the real-tender screen | Synthetic demo data | Labeled on the slide, in narration, and in Q&A |
+| Real-tender result | `REVIEW`, four evidence gaps, no run | Reliability proof |
+| Verified replay | Separate synthetic historical fixture | Full product and Snowflake execution proof |
+| Verified replay result | `PURSUE` | Never attributed to the Suwon notice |
+
+## 6 Evaluation proof
+
+| Criterion | Weight | Direct evidence |
 |---|---:|---|
-| Real-World Relevance | 30% | Real public G2B notice, pre-writing pursuit decision, four evidence gaps, proposal-team buyer. |
-| Technical Execution | 40% | Snowpark policy, runner and reader role separation, Cortex session and query provenance, same-run Snowflake replay, fail-closed reader. |
-| Solution Completeness | 30% | Decision, selected Win Position, four weighted plans, eight sections, red-team result, twelve owned and review tasks, replayable run. |
+| Real-World Relevance | 30% | Founder authority, accounting-firm and enterprise friction, global public-sector structure, real G2B source |
+| Technical Execution | 40% | Snowpark policy, CoCo CLI execution, reader and runner roles, session and query provenance, same-run replay |
+| Solution Completeness | 30% | Decision, weighted strategy, proposal, red-team, owned work, human approval boundary |
 
-## 5 Excluded claims
+## 7 Excluded claims
 
-1. BidPilot is not described as a general RFP summarizer, chatbot, audit product, grant-settlement product, or automated legal submission tool.
-2. The real G2B case is not described as the same execution as the historical verified replay.
-3. Internal blind evaluations are not presented as official rankings or win probabilities.
-4. Test counts are excluded because the finale deck does not rerun the complete suite at this commit.
-5. Product changes outside `origin/main` and the public deployment are excluded.
-6. Unverified market size, time-saving percentages, customer counts, revenue, and win-rate claims are excluded.
+1. No customer count, revenue, market share, time-saving percentage, bid win rate, or award result.
+2. No official ranking or winning probability derived from internal blind evaluation.
+3. No test count in the main presentation.
+4. No claim that the real tender and historical replay are one execution.
+5. No claim that BidPilot automatically submits a legal bid.
+6. No claim that national procurement laws or procedures are identical.
+7. No product screen from an unmerged or undeployed branch.
 
-## 6 Sources
+## 8 Change history
 
-1. `git:refs/heads/main:docs/MASTER-MAP.md`, returned by the project authority router.
-2. `PASSDOWN.md`, `docs/CHRONICLE.md`, `README.md`, and `snowflake/COCO_RUNBOOK.md` at the source commit.
-3. `docs/SUBMISSION-PACKAGE_2026-08-02_v2.md`.
-4. Public app captures in `assets/live/`, captured from the two finale URLs.
-5. Public GitHub `refs/heads/main`, verified against the local `origin/main` SHA.
-6. The 78-second Top 16 refinement video downloaded from the supplied public URL.
-
-## 7 Change history
-
-- 2026-09-03 v1: Fixed the finale evidence baseline, permitted wording, and data boundaries.
+- 2026-09-03 v1: Added founder authority, accounting-firm friction, official OECD, TED, and SAM.gov evidence, Snowflake necessity, CoCo CLI necessity, and data-boundary controls.
+- 2026-09-03 v2: Synchronized the source identity and screenshots to the deployed finale product after production readback.
+- 2026-09-03 v3: Advanced the repository source identity after the reader-only agent surface and simplified dashboard reached `origin/main`; the public-app source remains separately identified.

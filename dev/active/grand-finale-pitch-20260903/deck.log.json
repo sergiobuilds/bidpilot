@@ -1,26 +1,32 @@
 {
-  "release": "grand-finale-pitch-20260903",
-  "source_commit": "bf7fd4d56f95220677f86358d0004905b497872a",
+  "release": "grand-finale-pitch-20260903-wds",
+  "source_commit": "f72a0565c6d804b26b77f00febbecbdd6908c5a2",
+  "design_system": "wanted-design-system",
   "checks": [
     {
       "name": "authority",
       "status": "PASS",
-      "evidence": "project-authority-route returned CANONICAL_DIRECTION with git-blob authority_map_content"
+      "evidence": "project-authority-route returned managed direction from the canonical main ref git blob"
     },
     {
-      "name": "public_repository_identity",
+      "name": "design_forge",
       "status": "PASS",
-      "evidence": "signed-out git ls-remote main equals bf7fd4d56f95220677f86358d0004905b497872a"
+      "evidence": "build-with-ds used the wanted-design-system pack and completed three visual correction rounds"
     },
     {
-      "name": "public_application",
+      "name": "visual_structure",
       "status": "PASS",
-      "evidence": "both finale routes returned HTTP 200 and rendered current product content"
+      "evidence": "twelve slides use distinct central diagrams, graphs, tables, or geometric instruments; equal KPI cards and three-column number tiles are absent"
+    },
+    {
+      "name": "public_application_sync",
+      "status": "PASS",
+      "evidence": "slide screenshots match production-readback captures from deployed revision bidpilot-demo-00012-vvg"
     },
     {
       "name": "html_navigation",
       "status": "PASS",
-      "evidence": "10 direct hash renders succeeded; Design Forge CDP key test reached s2, s3, s4, s10, s1, and s7"
+      "evidence": "twelve direct hash renders produced twelve distinct 1440 by 810 PNG slides"
     },
     {
       "name": "html_viewports",
@@ -30,37 +36,37 @@
     {
       "name": "html_visual_review",
       "status": "PASS",
-      "evidence": "10-slide contact sheet and individual evidence slides inspected; no clipping, overlap, broken font, or missing image"
+      "evidence": "the twelve-slide contact sheet and all evidence-heavy slides were inspected with no clipping, overlap, broken font, or missing image"
     },
     {
       "name": "pptx_integrity",
       "status": "PASS",
-      "evidence": "Microsoft PowerPoint 2007+ package; unzip test has no errors; 10 slide XML parts; editable text extracted"
+      "evidence": "the package contains twelve slide XML parts, unzip reports no errors, and each slide contains editable core text"
     },
     {
       "name": "pptx_visual_review",
       "status": "PASS",
-      "evidence": "LibreOffice reopened and rendered all 10 slides; contact sheet inspected"
+      "evidence": "LibreOffice reopened the PPTX, rendered all twelve slides, and the rendered contact sheet matches the HTML visual source"
     },
     {
       "name": "pdf_integrity",
       "status": "PASS",
-      "evidence": "LibreOffice PDF opened with 10 pages at 960.009 by 540 points; pdftotext retained slide text"
+      "evidence": "the PDF opens with twelve 16:9 pages at 960.009 by 540 points and retains extractable core text"
     },
     {
       "name": "narration_timing",
       "status": "PASS",
-      "evidence": "FFmpeg Flite render plus transition budget measured 569.948 seconds"
+      "evidence": "FFmpeg Flite render plus fourteen seconds of documented transitions measured 569.978 seconds"
     },
     {
       "name": "demo_timing",
       "status": "PASS",
-      "evidence": "FFmpeg Flite render plus transition budget measured 194.652 seconds"
+      "evidence": "FFmpeg Flite render plus 58.566 seconds of navigation time measured 189.988 seconds"
     },
     {
       "name": "qa_timing",
       "status": "PASS",
-      "evidence": "15 answer renders measured 23.475 through 23.513 seconds"
+      "evidence": "eighteen answer renders measured 23.469 through 23.517 seconds"
     },
     {
       "name": "data_boundaries",
@@ -70,20 +76,44 @@
     {
       "name": "language_lint",
       "status": "PASS",
-      "evidence": "no em dash, not-just construction, more-than construction, or revolutionize wording in finale text outputs"
+      "evidence": "no em dash, not-just construction, more-than construction, or revolutionize wording appears in the finale outputs"
+    },
+    {
+      "name": "vivobook_package",
+      "status": "PASS",
+      "evidence": "device hashes match; PowerPoint opened twelve slides with one editable text layer each and exported twelve clean 1440 by 810 PNGs; Chrome rendered local HTML slides 1 and 12 at 1440 by 810"
     }
   ],
   "markdown_self_review": [
-    {"rule": "4.1.1 hierarchy", "status": "PASS", "evidence": "numbered sections separate purpose, content, verification, and history"},
-    {"rule": "4.1.2 tables and lists", "status": "PASS", "evidence": "repeated fields use tables; procedures use ordered lists"},
-    {"rule": "4.1.3 one item one meaning", "status": "PASS", "evidence": "claims, timing, boundaries, and sources are separated"},
-    {"rule": "4.1.4 one sentence one meaning", "status": "PASS", "evidence": "dense parenthetical and dash constructions were avoided"},
-    {"rule": "4.1.5 opening line", "status": "PASS", "evidence": "each Markdown file begins with a one-line purpose"},
-    {"rule": "4.1.6 diagrams are auxiliary", "status": "PASS", "evidence": "the causal chain is preserved as text"},
-    {"rule": "4.1.7 restrained tone", "status": "PASS", "evidence": "unsupported superlatives and decorative language are absent"},
-    {"rule": "4.1.8 length", "status": "PASS", "evidence": "long material is divided into numbered sections"},
-    {"rule": "4.1.9 rewrite preservation", "status": "PASS", "evidence": "new work-layer documents do not replace existing project documents"},
-    {"rule": "4.1.10 numbering", "status": "PASS", "evidence": "headings use cumulative decimal numbering"},
-    {"rule": "4.1.11 indexing", "status": "PASS", "evidence": "each multi-section Markdown file includes Contents"}
+    {
+      "rule": "hierarchy",
+      "status": "PASS",
+      "evidence": "numbered sections separate purpose, content, verification, and change history"
+    },
+    {
+      "rule": "tables_and_lists",
+      "status": "PASS",
+      "evidence": "repeated fields use tables and procedures use ordered lists"
+    },
+    {
+      "rule": "one_item_one_meaning",
+      "status": "PASS",
+      "evidence": "claims, timing, boundaries, and sources are separated"
+    },
+    {
+      "rule": "opening_line",
+      "status": "PASS",
+      "evidence": "each Markdown file begins with a one-line purpose"
+    },
+    {
+      "rule": "restrained_tone",
+      "status": "PASS",
+      "evidence": "unsupported superlatives and decorative language are absent"
+    },
+    {
+      "rule": "numbering_and_index",
+      "status": "PASS",
+      "evidence": "multi-section Markdown files use numbered headings and a Contents line"
+    }
   ]
 }

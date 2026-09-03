@@ -32,9 +32,9 @@ This checklist fixes the room, files, live tabs, timing, and fallback state for 
 ## 3 Live slot
 
 - [ ] Start the presentation at 15:40 KST.
-- [ ] Begin the live demo at approximately 2:05.
-- [ ] End the live demo by 5:47.
-- [ ] Return to slide 7 immediately after the Snowflake proof.
+- [ ] Begin the live demo from slide 7 at approximately 3:20.
+- [ ] End the live demo by 6:35.
+- [ ] Return to slide 8 immediately after the Snowflake proof.
 - [ ] Observe the ten-minute stop signal.
 - [ ] Keep the final twenty seconds for the product sentence and “Win the score, not the prompt.”
 - [ ] Use the three-minute Q&A for short evidence-first answers.
@@ -43,10 +43,11 @@ This checklist fixes the room, files, live tabs, timing, and fallback state for 
 
 1. If one live tab fails, use the corresponding backup slide.
 2. If the walkthrough fails, use the local Top 16 video.
-3. If the internet fails, complete slides 4 through 8 without the browser.
+3. If the internet fails, complete slides 7 through 10 without the browser.
 4. If PowerPoint fails, use the local PDF.
 5. If presenter view fails, read from the separate script window or printed script.
 
 ## 5 Change history
 
 - 2026-09-03 v1: Prepared the finale room, technology, timing, and fallback checklist.
+- 2026-09-03 v2: Updated the live-demo transition and fallback range for the twelve-slide rebuild.
