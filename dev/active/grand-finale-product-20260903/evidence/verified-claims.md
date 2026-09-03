@@ -17,7 +17,7 @@ Verified on 2026-09-03 KST on dev host against branch `fix/grand-finale-product-
 | Keyboard Tab reaches brand, Opportunities, Verified replay, then evaluator links in order | `browser-results.json` keyboard_focus_path | both |
 | Row actions are 44 px tall on mobile | `browser-results.json` ctas height | both |
 | Warm public loads: dashboard 2.5–3.4 s, detail 2.6–3.6 s, replay 2.7–3.1 s to content (n=3 at 1440 for each) | `browser-results.json` live section | live |
-| Cold-start decomposition | see `cold-start.md` | live + container |
+| First touch after 18 min idle: dashboard 17.4 s (9.0 s Cloud Run instance start, then Streamlit boot); replay right after 10.8 s (first reader connection); warm loads 2.7–3.5 s | `cold-start.md`, `cold-start-results.json` | live + container |
 | No fixture fallback in authenticated mode; connection failure shows a visible error with a working retry | `tests/test_app.py::test_connection_failure_stays_visible_and_offers_a_working_retry` | both |
 | No tracked secret; the reader key is a Cloud Run secret mount referenced by path only | `test-results.txt` | both |
 | Container image builds from the candidate branch and serves the dashboard 3.4 s after `docker run` (HTTP 200 at 1.6 s) | `release-candidate-manifest.json` | candidate |

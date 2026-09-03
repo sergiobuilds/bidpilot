@@ -8,15 +8,68 @@
   "worktree": "~/projects/personal/products/.worktrees/bidpilot-grand-finale-product-20260903",
   "canonical_checkout_touched": false,
   "public_app_currently_serving": "origin/main bf7fd4d via Cloud Run revision bidpilot-demo-00010-fjt (unchanged by this session)",
-  "tests": {"command": "uv run pytest tests/ -q", "passed": 168, "failed": 0, "baseline_before": "160 passed, 1 failed"},
-  "static_checks": {"ruff_changed_files": "clean", "ruff_whole_repo": "12 pre-existing hits in untouched files", "compileall": "ok", "git_diff_check": "ok", "tracked_secret_scan": "none"},
-  "container_image": {"tag": "bidpilot-candidate:20260903", "id": "fdd1e249cb2a", "built_on": "dev-host (local docker build only, not pushed)"},
+  "tests": {
+    "command": "uv run pytest tests/ -q",
+    "passed": 168,
+    "failed": 0,
+    "baseline_before": "160 passed, 1 failed"
+  },
+  "static_checks": {
+    "ruff_changed_files": "clean",
+    "ruff_whole_repo": "12 pre-existing hits in untouched files",
+    "compileall": "ok",
+    "git_diff_check": "ok",
+    "tracked_secret_scan": "none"
+  },
+  "container_image": {
+    "tag": "bidpilot-candidate:20260903",
+    "id": "fdd1e249cb2a",
+    "built_on": "dev-host (local docker build only, not pushed)"
+  },
   "fixes": [
-    {"commit": "8d544f4", "what": "dashboard order test asserts DOM position instead of a stale CSS literal"},
-    {"commit": "cbb46ab", "what": "deadline states judged against an injected aware clock; Open/Closed tags; KST named; Due soon removed; tender-intake status derived from deadline"},
-    {"commit": "f7928c0", "what": "Verified replay link in tender-detail top bar and PURSUE tile; REVIEW explained as the correct outcome"},
-    {"commit": "994f616", "what": "replay loading states name the Snowflake/BIDPILOT_READER step being waited on"}
+    {
+      "commit": "8d544f4",
+      "what": "dashboard order test asserts DOM position instead of a stale CSS literal"
+    },
+    {
+      "commit": "cbb46ab",
+      "what": "deadline states judged against an injected aware clock; Open/Closed tags; KST named; Due soon removed; tender-intake status derived from deadline"
+    },
+    {
+      "commit": "f7928c0",
+      "what": "Verified replay link in tender-detail top bar and PURSUE tile; REVIEW explained as the correct outcome"
+    },
+    {
+      "commit": "994f616",
+      "what": "replay loading states name the Snowflake/BIDPILOT_READER step being waited on"
+    }
   ],
-  "invariants_preserved": ["run cortex-final-20260802-a untouched", "no new Cortex run", "no Snowflake write", "REVIEW + 4 evidence gaps on R26BK01680611-000", "no anonymous runner", "authenticated mode still fail-closed, no fixture fallback"],
-  "approval_needed_from_sergio": ["Cloud Run no-traffic revision build (external state)", "traffic promotion", "merge to main", "optional --min-instances=1 for the finale window"]
+  "invariants_preserved": [
+    "run cortex-final-20260802-a untouched",
+    "no new Cortex run",
+    "no Snowflake write",
+    "REVIEW + 4 evidence gaps on R26BK01680611-000",
+    "no anonymous runner",
+    "authenticated mode still fail-closed, no fixture fallback"
+  ],
+  "approval_needed_from_sergio": [
+    "Cloud Run no-traffic revision build (external state)",
+    "traffic promotion",
+    "merge to main",
+    "optional --min-instances=1 for the finale window"
+  ],
+  "cold_start": {
+    "first_touch_after_18min_idle_dashboard_s": 17.36,
+    "dom_loaded_s": 8.98,
+    "replay_first_open_same_instance_s": 10.77,
+    "warm_dashboard_s": [
+      2.77,
+      3.46
+    ],
+    "warm_replay_s": [
+      2.73,
+      2.82
+    ],
+    "source": "cold-start.md"
+  }
 }

@@ -1,0 +1,50 @@
+[
+  {
+    "label": "first-touch-after-idle dashboard",
+    "path": "/",
+    "at": "2026-09-03T11:20:24+0900",
+    "dom_loaded_s": 8.98,
+    "content_ready_s": 17.36,
+    "skeleton_seen": true
+  },
+  {
+    "label": "replay right after",
+    "path": "/?walkthrough=1",
+    "at": "2026-09-03T11:20:35+0900",
+    "dom_loaded_s": 0.96,
+    "content_ready_s": 10.77,
+    "skeleton_seen": true
+  },
+  {
+    "label": "warm dashboard 0",
+    "path": "/",
+    "at": "2026-09-03T11:20:43+0900",
+    "dom_loaded_s": 0.9,
+    "content_ready_s": 2.77,
+    "skeleton_seen": true
+  },
+  {
+    "label": "warm replay 0",
+    "path": "/?walkthrough=1",
+    "at": "2026-09-03T11:20:46+0900",
+    "dom_loaded_s": 0.82,
+    "content_ready_s": 2.73,
+    "skeleton_seen": true
+  },
+  {
+    "label": "warm dashboard 1",
+    "path": "/",
+    "at": "2026-09-03T11:20:50+0900",
+    "dom_loaded_s": 1.6,
+    "content_ready_s": 3.46,
+    "skeleton_seen": true
+  },
+  {
+    "label": "warm replay 1",
+    "path": "/?walkthrough=1",
+    "at": "2026-09-03T11:20:53+0900",
+    "dom_loaded_s": 1.15,
+    "content_ready_s": 2.82,
+    "skeleton_seen": true
+  }
+]
