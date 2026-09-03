@@ -426,3 +426,30 @@ def test_dashboard_and_detail_name_the_deadline_timezone() -> None:
     assert "2026.09.02 · 10:00 KST" in closed
     assert 'class="due-tag due-closed">Closed<' in closed
     assert "REVIEW" in reviewed
+
+
+def test_detail_offers_the_verified_replay_before_the_long_scroll() -> None:
+    rows = load_public_tender_catalog()
+    reviewed_view = {"eligibility_requirements": ("A", "B", "C", "D")}
+
+    detail = koat_tender_detail(rows[0], now=FINALE_CLOCK, reviewed_view=reviewed_view)
+
+    top_nav = detail.index('class="detail-nav"')
+    history = detail.index("Processing history")
+    first_replay_link = detail.index('href="?walkthrough=1"')
+    assert top_nav < first_replay_link < history
+    assert "REVIEW is the correct outcome" in detail
+    assert "4 eligibility requirements" in detail
+    summary = detail.index("Decision summary")
+    win_position = detail.index("Score-weighted Win Position")
+    assert summary < detail.index("REVIEW is the correct outcome") < win_position
+    assert detail.count('href="?walkthrough=1"') >= 3
+
+
+def test_dashboard_pursue_kpi_points_to_the_verified_pursue_replay() -> None:
+    markup = koat_dashboard(load_public_tender_catalog(), now=FINALE_CLOCK)
+
+    kpi = markup[markup.index('<span class="kpi-lab">PURSUE</span>') :]
+    kpi = kpi[: kpi.index("</div></section>")]
+    assert 'href="?walkthrough=1"' in kpi
+    assert "No cleared opportunity" in kpi
