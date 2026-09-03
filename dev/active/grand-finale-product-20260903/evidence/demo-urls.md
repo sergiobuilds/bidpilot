@@ -6,7 +6,8 @@ All public URLs serve `c78c40c` on Cloud Run revision `bidpilot-demo-00012-vvg` 
 
 | Surface | URL | Serves today |
 |---|---|---|
-| Dashboard | https://bidpilot-demo-tbauoylpra-uc.a.run.app | c78c40c (Open/Closed tags, KST, Open deadlines tile) |
+| Landing | https://bidpilot-demo-tbauoylpra-uc.a.run.app | 337ce21 (SEAL-grammar landing) |
+| Dashboard | https://bidpilot-demo-tbauoylpra-uc.a.run.app/?view=opportunities | c78c40c (Open/Closed tags, KST, Open deadlines tile) |
 | Real tender detail | https://bidpilot-demo-tbauoylpra-uc.a.run.app/?tender=R26BK01680611-000 | c78c40c (Verified replay in top bar, REVIEW explanation) |
 | Verified Replay | https://bidpilot-demo-tbauoylpra-uc.a.run.app/?walkthrough=1 | c78c40c (named Snowflake loading steps) |
 | Repository | https://github.com/sergiobuilds/bidpilot | branch pushed |
