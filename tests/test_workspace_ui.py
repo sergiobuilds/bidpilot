@@ -306,51 +306,44 @@ def test_selected_real_tender_stops_before_an_unrecorded_run() -> None:
     assert "PURSUE" not in markup
 
 
-def test_literal_koat_dashboard_renders_kpis_funnel_recent_and_six_source_rows() -> (
-    None
-):
+def test_lean_koat_dashboard_shows_two_kpis_the_table_and_one_replay_button() -> None:
     markup = koat_dashboard(load_public_tender_catalog(), now=FINALE_CLOCK)
 
-    for css_class in (
-        "nav-in",
-        "kpi-band",
-        "grid",
-        "funnel",
-        "recent",
-        "tbl tender-table",
-    ):
+    for css_class in ("nav-in", "kpi-band", "tbl tender-table", "primary-cta"):
         assert css_class in markup
-    for label in ("Public sources", "Needs review", "PURSUE", "Open deadlines"):
+    assert (
+        markup.count('<div class="kpi focal">') + markup.count('<div class="kpi">') == 2
+    )
+    for label in ("Needs review", "Open deadlines"):
         assert label in markup
+    for gone in (
+        "Public sources</span>",
+        'kpi-lab">PURSUE',
+        "Pursuit funnel",
+        "Recent activity",
+        'class="causal"',
+        'class="tool-links"',
+        'class="grid"',
+    ):
+        assert gone not in markup
     assert markup.count("<tr>") == 7
     assert markup.count('state-source-found">SOURCE FOUND</span>') == 5
     assert "R26BK01680611-000" in markup
     assert ">—<" in markup
 
 
-def test_literal_koat_dashboard_puts_real_opportunities_before_supporting_analytics() -> (
-    None
-):
+def test_lean_koat_dashboard_reads_replay_button_then_table_then_footer_links() -> None:
     markup = koat_dashboard(load_public_tender_catalog(), now=FINALE_CLOCK)
 
-    causal_labels = (
-        "Public tender + supplier evidence",
-        "Decision",
-        "Score-weighted Win Position",
-        "Proposal + red-team",
-        "Owned work",
-        "Same-run Snowflake replay",
-    )
-    assert [markup.index(label) for label in causal_labels] == sorted(
-        markup.index(label) for label in causal_labels
-    )
+    cta_at = markup.index('class="primary-cta" href="?walkthrough=1"')
     table_at = markup.index("Official tender catalogue")
     first_row_action = markup.index('class="row-action"')
-    funnel_at = markup.index("Pursuit funnel")
-    recent_at = markup.index("Recent activity")
-    assert table_at < first_row_action < funnel_at < recent_at
-    assert 'href="?workspace=tender-intake"' in markup
-    assert 'href="?workspace=synthetic-simulation"' in markup
+    footer_at = markup.index('class="foot-links"')
+    assert cta_at < table_at < first_row_action < footer_at
+    assert markup.index('href="?workspace=tender-intake"') > footer_at
+    assert markup.index('href="?workspace=synthetic-simulation"') > footer_at
+    assert markup.index('href="?workspace=bid-room"') > footer_at
+    assert "Open verified PURSUE replay" in markup
 
 
 def test_literal_koat_detail_keeps_public_tender_and_historical_replay_separate() -> (
@@ -446,10 +439,23 @@ def test_detail_offers_the_verified_replay_before_the_long_scroll() -> None:
     assert detail.count('href="?walkthrough=1"') >= 3
 
 
-def test_dashboard_pursue_kpi_points_to_the_verified_pursue_replay() -> None:
+def test_dashboard_offers_exactly_one_primary_replay_button() -> None:
     markup = koat_dashboard(load_public_tender_catalog(), now=FINALE_CLOCK)
 
-    kpi = markup[markup.index('<span class="kpi-lab">PURSUE</span>') :]
-    kpi = kpi[: kpi.index("</div></section>")]
-    assert 'href="?walkthrough=1"' in kpi
-    assert "No cleared opportunity" in kpi
+    assert markup.count('class="primary-cta"') == 1
+    assert markup.count('href="?walkthrough=1"') == 2  # top nav + primary button
+
+
+def test_lean_detail_folds_history_and_source_evidence_under_the_decision() -> None:
+    rows = load_public_tender_catalog()
+
+    detail = koat_tender_detail(
+        rows[0], now=FINALE_CLOCK, reviewed_view={"eligibility_requirements": ("A",)}
+    )
+
+    fold_at = detail.index('<details class="sec-fold">')
+    assert detail.index("<summary") > fold_at
+    assert fold_at < detail.index("Processing history")
+    assert fold_at < detail.index("Source evidence")
+    assert detail.index("Decision summary") < fold_at
+    assert detail.index("Owned work") > fold_at
