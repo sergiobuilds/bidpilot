@@ -1,14 +1,14 @@
-NOT DEPLOYED: DO NOT PRESENT AS THE CURRENT PUBLIC APP
+DEPLOYED AND VERIFIED — production readback passed 2026-09-03 11:40 KST on Cloud Run revision bidpilot-demo-00012-vvg (100% traffic, min-instances 1); main = c78c40c
 
 # Demo URLs
 
-The public URLs below currently serve `origin/main` (bf7fd4d, Cloud Run revision `bidpilot-demo-00010-fjt`). The deadline and CTA fixes on branch `fix/grand-finale-product-20260903` are only in the local preview until Sergio approves deployment.
+All public URLs serve `c78c40c` on Cloud Run revision `bidpilot-demo-00012-vvg` with one instance kept warm. The PPT may present these screens as the current public app.
 
 | Surface | URL | Serves today |
 |---|---|---|
-| Dashboard | https://bidpilot-demo-tbauoylpra-uc.a.run.app | main (still says `Due soon 6` / `After 24 Aug 2026`) |
-| Real tender detail | https://bidpilot-demo-tbauoylpra-uc.a.run.app/?tender=R26BK01680611-000 | main (replay link only at page end) |
-| Verified Replay | https://bidpilot-demo-tbauoylpra-uc.a.run.app/?walkthrough=1 | main (unchanged by this branch except loading captions) |
+| Dashboard | https://bidpilot-demo-tbauoylpra-uc.a.run.app | c78c40c (Open/Closed tags, KST, Open deadlines tile) |
+| Real tender detail | https://bidpilot-demo-tbauoylpra-uc.a.run.app/?tender=R26BK01680611-000 | c78c40c (Verified replay in top bar, REVIEW explanation) |
+| Verified Replay | https://bidpilot-demo-tbauoylpra-uc.a.run.app/?walkthrough=1 | c78c40c (named Snowflake loading steps) |
 | Repository | https://github.com/sergiobuilds/bidpilot | branch pushed |
 | Candidate branch | https://github.com/sergiobuilds/bidpilot/tree/fix/grand-finale-product-20260903 | 4 commits over main |
 

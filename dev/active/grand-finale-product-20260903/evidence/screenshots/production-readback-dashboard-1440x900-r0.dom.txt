@@ -1,0 +1,131 @@
+B
+BidPilot
+Pursuit workspace
+Opportunities
+Verified replay
+Public sources
+G2B opportunities
+Pursuit dashboard
+
+Official public notices, separated by evidence level.
+
+All
+Source reviewed 1
+Source found 5
+01
+Public tender + supplier evidence
+02
+Decision
+03
+Score-weighted Win Position
+04
+Proposal + red-team
+05
+Owned work
+06
+Same-run Snowflake replay
+Evaluator workspaces
+Tender intake
+Authenticated Bid Room
+Synthetic decision simulation
+Public sources
+6
+notices
+
+Official G2B URLs
+
+Needs review
+1
+notice
+
+Supplier evidence required
+
+PURSUE
+0
+notices
+
+No cleared opportunity · verified PURSUE replay →
+
+Open deadlines
+1
+notice
+
+5 closed · next 2026.09.03 · 16:00 KST
+
+Official tender catalogue
+6 rows
+Tender	Issuer	Value	Deadline	Weights	Status	Action
+
+K패스 기반 수원시 사회초년생 청년 교통비 지원사업 서비스 개발 용역
+R26BK01680611-000
+	Suwon City, Gyeonggi-do	KRW 250M	2026.09.03 · 16:00 KST Open	T 90 · P 10	REVIEW	Review →
+
+자동차 사출 성형 부품 비전·중량 데이터 취득 및 검사 모듈 시제품 제작
+R26BK01692732-000
+	한국생산기술연구원	—	2026.09.02 · 10:00 KST Closed	—	SOURCE FOUND	Inspect →
+
+2026년 공공 IP 사업화 성장 지원사업 수행용역
+R26BK01691398-000
+	한국생산기술연구원	—	2026.08.31 · 10:00 KST Closed	—	SOURCE FOUND	Inspect →
+
+2026년 연구원창업 액셀러레이팅 수행 용역
+R26BK01691317-000
+	한국생산기술연구원	—	2026.08.31 · 10:00 KST Closed	—	SOURCE FOUND	Inspect →
+
+학연협력 공동학과 중장기 발전전략 및 성과관리체계 구축 연구
+R26BK01689261-000
+	한국생산기술연구원	—	2026.08.31 · 10:00 KST Closed	—	SOURCE FOUND	Inspect →
+
+양식장 관리 로봇 개발
+R26BK01686970-000
+	해양수산부 국립수산과학원 중앙내수면연구소	—	2026.09.01 · 10:00 KST Closed	—	SOURCE FOUND	Inspect →
+
+Source found means the official listing URL and deadline were captured. Source reviewed means the notice facts and score map passed the committed source contract. Deadline states are computed against 2026.09.03 · 11:38 KST.
+
+Pursuit funnel
+source → work
+Discovered
+official URLs
+6
+Source reviewed
+deep contract
+1
+Decision
+REVIEW
+1
+Strategy
+after PURSUE
+0
+Proposal
+after strategy
+0
+Owned work
+after review
+0
+Recent activity
+latest source records
+✓
+R26BK01680611-000
+REVIEW
+K패스 기반 수원시 사회초년생 청년 교통비 지원사업 서비스 개발 용역
+2026.08.24 · 01:30 KST
+✓
+R26BK01692732-000
+SOURCE FOUND
+자동차 사출 성형 부품 비전·중량 데이터 취득 및 검사 모듈 시제품 제작
+2026.08.24 · 02:25 KST
+✓
+R26BK01691398-000
+SOURCE FOUND
+2026년 공공 IP 사업화 성장 지원사업 수행용역
+2026.08.24 · 02:25 KST
+✓
+R26BK01691317-000
+SOURCE FOUND
+2026년 연구원창업 액셀러레이팅 수행 용역
+2026.08.24 · 02:25 KST
+✓
+R26BK01689261-000
+SOURCE FOUND
+학연협력 공동학과 중장기 발전전략 및 성과관리체계 구축 연구
+2026.08.24 · 02:25 KST

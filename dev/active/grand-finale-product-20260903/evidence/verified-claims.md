@@ -1,4 +1,4 @@
-NOT DEPLOYED: DO NOT PRESENT AS THE CURRENT PUBLIC APP
+DEPLOYED AND VERIFIED — production readback passed 2026-09-03 11:40 KST on Cloud Run revision bidpilot-demo-00012-vvg (100% traffic, min-instances 1); main = c78c40c
 
 # Verified claims (what the PPT may state, with the evidence that backs each line)
 

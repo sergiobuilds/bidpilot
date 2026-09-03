@@ -1,5 +1,5 @@
 {
-  "status": "NOT DEPLOYED: DO NOT PRESENT AS THE CURRENT PUBLIC APP",
+  "status": "DEPLOYED AND VERIFIED",
   "candidate": {
     "branch": "fix/grand-finale-product-20260903",
     "commit": "994f61697004baf2d18effcf2231565141cac3fe",
@@ -13,10 +13,9 @@
   },
   "current_production": {
     "service": "bidpilot-demo",
-    "region": "us-central1 (URL suffix -uc)",
-    "revision": "bidpilot-demo-00010-fjt",
-    "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app",
-    "note": "unchanged by this session; read from PASSDOWN.md, not from gcloud (gcloud is not installed on dev-host)"
+    "region": "us-central1",
+    "revision": "bidpilot-demo-00012-vvg",
+    "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app"
   },
   "gates_before_any_deploy_step": [
     "Sergio approves creating a no-traffic revision (external state change)",
@@ -39,5 +38,12 @@
     "portal update",
     "Snowflake write",
     "runner execution"
-  ]
+  ],
+  "executed": {
+    "no_traffic_revision": "bidpilot-demo-00017-qen (tag finale)",
+    "promotion": "update-traffic --to-latest",
+    "min_instances": "services update --min-instances 1 → revision bidpilot-demo-00012-vvg, same image, 100% traffic",
+    "rollback_now": "gcloud run services update-traffic bidpilot-demo --region us-central1 --to-revisions bidpilot-demo-00010-fjt=100",
+    "after_event": "gcloud run services update bidpilot-demo --region us-central1 --min-instances 0"
+  }
 }

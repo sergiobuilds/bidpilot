@@ -1,5 +1,5 @@
 {
-  "status": "NOT DEPLOYED: DO NOT PRESENT AS THE CURRENT PUBLIC APP",
+  "status": "DEPLOYED AND VERIFIED",
   "candidate_local_preview": {
     "base": "http://127.0.0.1:8611",
     "label": "candidate-local",
@@ -1819,6 +1819,1924 @@
         ],
         "screenshot": "screenshots/live-current-replay-390x844-r0.png",
         "dom_text_excerpt": null
+      }
+    ]
+  },
+  "finale_preview_revision_00017": {
+    "base": "https://finale---bidpilot-demo-tbauoylpra-uc.a.run.app",
+    "label": "finale-preview",
+    "started": "2026-09-03T11:35:59+0900",
+    "pages": [
+      {
+        "page": "dashboard",
+        "viewport": "1440x900",
+        "run": 0,
+        "url": "https://finale---bidpilot-demo-tbauoylpra-uc.a.run.app/",
+        "dom_loaded_s": 7.77,
+        "content_ready_s": 17.16,
+        "ready_selector": "text=Pursuit dashboard",
+        "metrics": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "scrollWidth": 1440,
+          "bodyScrollWidth": 1440,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 2090,
+          "maxScrollY": 1190,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot\nPursuit workspace",
+              "href": "?",
+              "top": 33,
+              "height": 30,
+              "width": 224,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Opportunities",
+              "href": "?",
+              "top": 29,
+              "height": 38,
+              "width": 127,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 29,
+              "height": 38,
+              "width": 132,
+              "inFirstViewport": true
+            },
+            {
+              "text": "verified PURSUE replay →",
+              "href": "?walkthrough=1",
+              "top": 560,
+              "height": 33,
+              "width": 190,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Review →",
+              "href": "?tender=R26BK01680611-000",
+              "top": 806,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01692732-000",
+              "top": 899,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691398-000",
+              "top": 983,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691317-000",
+              "top": 1058,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01689261-000",
+              "top": 1142,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01686970-000",
+              "top": 1226,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot\nPursuit workspace\nOpportuniti",
+          "A B\nBidPilot\nPursuit workspace",
+          "A Opportunities",
+          "A Verified replay",
+          "A Link to heading",
+          "A Tender intake",
+          "A Authenticated Bid Room",
+          "A Synthetic decision simulation"
+        ],
+        "screenshot": "screenshots/finale-preview-dashboard-1440x900-r0.png"
+      },
+      {
+        "page": "dashboard",
+        "viewport": "1440x900",
+        "run": 1,
+        "url": "https://finale---bidpilot-demo-tbauoylpra-uc.a.run.app/",
+        "dom_loaded_s": 1.62,
+        "content_ready_s": 3.19,
+        "ready_selector": "text=Pursuit dashboard",
+        "metrics": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "scrollWidth": 1440,
+          "bodyScrollWidth": 1440,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 2090,
+          "maxScrollY": 1190,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot\nPursuit workspace",
+              "href": "?",
+              "top": 33,
+              "height": 30,
+              "width": 224,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Opportunities",
+              "href": "?",
+              "top": 29,
+              "height": 38,
+              "width": 127,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 29,
+              "height": 38,
+              "width": 132,
+              "inFirstViewport": true
+            },
+            {
+              "text": "verified PURSUE replay →",
+              "href": "?walkthrough=1",
+              "top": 560,
+              "height": 33,
+              "width": 190,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Review →",
+              "href": "?tender=R26BK01680611-000",
+              "top": 806,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01692732-000",
+              "top": 899,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691398-000",
+              "top": 983,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691317-000",
+              "top": 1058,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01689261-000",
+              "top": 1142,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01686970-000",
+              "top": 1226,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot\nPursuit workspace\nOpportuniti",
+          "A B\nBidPilot\nPursuit workspace",
+          "A Opportunities",
+          "A Verified replay",
+          "A Link to heading",
+          "A Tender intake",
+          "A Authenticated Bid Room",
+          "A Synthetic decision simulation"
+        ],
+        "screenshot": "screenshots/finale-preview-dashboard-1440x900-r1.png"
+      },
+      {
+        "page": "dashboard",
+        "viewport": "768x900",
+        "run": 0,
+        "url": "https://finale---bidpilot-demo-tbauoylpra-uc.a.run.app/",
+        "dom_loaded_s": 0.83,
+        "content_ready_s": 2.38,
+        "ready_selector": "text=Pursuit dashboard",
+        "metrics": {
+          "innerWidth": 768,
+          "innerHeight": 900,
+          "scrollWidth": 768,
+          "bodyScrollWidth": 768,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 4084,
+          "maxScrollY": 3184,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot",
+              "href": "?",
+              "top": 33,
+              "height": 30,
+              "width": 99,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Opportunities",
+              "href": "?",
+              "top": 29,
+              "height": 38,
+              "width": 127,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 29,
+              "height": 38,
+              "width": 132,
+              "inFirstViewport": true
+            },
+            {
+              "text": "verified PURSUE replay →",
+              "href": "?walkthrough=1",
+              "top": 992,
+              "height": 14,
+              "width": 157,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Review →",
+              "href": "?tender=R26BK01680611-000",
+              "top": 1389,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01692732-000",
+              "top": 1691,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691398-000",
+              "top": 1993,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691317-000",
+              "top": 2296,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01689261-000",
+              "top": 2598,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01686970-000",
+              "top": 2900,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot\nOpportunities\nVerified replay",
+          "A B\nBidPilot",
+          "A Opportunities",
+          "A Verified replay",
+          "A Link to heading",
+          "A Tender intake",
+          "A Authenticated Bid Room",
+          "A Synthetic decision simulation"
+        ],
+        "screenshot": "screenshots/finale-preview-dashboard-768x900-r0.png"
+      },
+      {
+        "page": "dashboard",
+        "viewport": "390x844",
+        "run": 0,
+        "url": "https://finale---bidpilot-demo-tbauoylpra-uc.a.run.app/",
+        "dom_loaded_s": 0.78,
+        "content_ready_s": 2.37,
+        "ready_selector": "text=Pursuit dashboard",
+        "metrics": {
+          "innerWidth": 390,
+          "innerHeight": 844,
+          "scrollWidth": 390,
+          "bodyScrollWidth": 390,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 4485,
+          "maxScrollY": 3641,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot",
+              "href": "?",
+              "top": 33,
+              "height": 30,
+              "width": 99,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Opportunities",
+              "href": "?",
+              "top": 18,
+              "height": 61,
+              "width": 115,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 18,
+              "height": 61,
+              "width": 100,
+              "inFirstViewport": true
+            },
+            {
+              "text": "verified PURSUE replay →",
+              "href": "?walkthrough=1",
+              "top": 1134,
+              "height": 33,
+              "width": 123,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Review →",
+              "href": "?tender=R26BK01680611-000",
+              "top": 1614,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01692732-000",
+              "top": 1937,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691398-000",
+              "top": 2239,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691317-000",
+              "top": 2542,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01689261-000",
+              "top": 2844,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01686970-000",
+              "top": 3146,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot\nOpportunities\nVerified replay",
+          "A B\nBidPilot",
+          "A Opportunities",
+          "A Verified replay",
+          "A Link to heading",
+          "A Tender intake",
+          "A Authenticated Bid Room",
+          "A Synthetic decision simulation"
+        ],
+        "screenshot": "screenshots/finale-preview-dashboard-390x844-r0.png"
+      },
+      {
+        "page": "detail",
+        "viewport": "1440x900",
+        "run": 0,
+        "url": "https://finale---bidpilot-demo-tbauoylpra-uc.a.run.app/?tender=R26BK01680611-000",
+        "dom_loaded_s": 0.94,
+        "content_ready_s": 3.08,
+        "ready_selector": "text=Decision summary",
+        "metrics": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "scrollWidth": 1440,
+          "bodyScrollWidth": 1440,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 2351,
+          "maxScrollY": 1451,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot · pursuit workspace",
+              "href": "?",
+              "top": 34,
+              "height": 24,
+              "width": 236,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Dashboard",
+              "href": "?",
+              "top": 28,
+              "height": 36,
+              "width": 99,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 28,
+              "height": 36,
+              "width": 123,
+              "inFirstViewport": true
+            },
+            {
+              "text": "‹ Opportunities",
+              "href": "?",
+              "top": 107,
+              "height": 21,
+              "width": 93,
+              "inFirstViewport": true
+            },
+            {
+              "text": "separate verified replay →",
+              "href": "?walkthrough=1",
+              "top": 1247,
+              "height": 16,
+              "width": 187,
+              "inFirstViewport": false
+            },
+            {
+              "text": "View verified capability replay →",
+              "href": "?walkthrough=1",
+              "top": 2229,
+              "height": 22,
+              "width": 231,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot · pursuit workspace\nDashboard",
+          "A B\nBidPilot · pursuit workspace",
+          "A Dashboard",
+          "A Tender detail",
+          "A Verified replay",
+          "A ‹ Opportunities",
+          "A Link to heading",
+          "A Link to heading"
+        ],
+        "screenshot": "screenshots/finale-preview-detail-1440x900-r0.png"
+      },
+      {
+        "page": "detail",
+        "viewport": "1440x900",
+        "run": 1,
+        "url": "https://finale---bidpilot-demo-tbauoylpra-uc.a.run.app/?tender=R26BK01680611-000",
+        "dom_loaded_s": 0.91,
+        "content_ready_s": 2.98,
+        "ready_selector": "text=Decision summary",
+        "metrics": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "scrollWidth": 1440,
+          "bodyScrollWidth": 1440,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 2351,
+          "maxScrollY": 1451,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot · pursuit workspace",
+              "href": "?",
+              "top": 34,
+              "height": 24,
+              "width": 236,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Dashboard",
+              "href": "?",
+              "top": 28,
+              "height": 36,
+              "width": 99,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 28,
+              "height": 36,
+              "width": 123,
+              "inFirstViewport": true
+            },
+            {
+              "text": "‹ Opportunities",
+              "href": "?",
+              "top": 107,
+              "height": 21,
+              "width": 93,
+              "inFirstViewport": true
+            },
+            {
+              "text": "separate verified replay →",
+              "href": "?walkthrough=1",
+              "top": 1247,
+              "height": 16,
+              "width": 187,
+              "inFirstViewport": false
+            },
+            {
+              "text": "View verified capability replay →",
+              "href": "?walkthrough=1",
+              "top": 2229,
+              "height": 22,
+              "width": 231,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot · pursuit workspace\nDashboard",
+          "A B\nBidPilot · pursuit workspace",
+          "A Dashboard",
+          "A Tender detail",
+          "A Verified replay",
+          "A ‹ Opportunities",
+          "A Link to heading",
+          "A Link to heading"
+        ],
+        "screenshot": "screenshots/finale-preview-detail-1440x900-r1.png"
+      },
+      {
+        "page": "detail",
+        "viewport": "768x900",
+        "run": 0,
+        "url": "https://finale---bidpilot-demo-tbauoylpra-uc.a.run.app/?tender=R26BK01680611-000",
+        "dom_loaded_s": 0.74,
+        "content_ready_s": 2.29,
+        "ready_selector": "text=Decision summary",
+        "metrics": {
+          "innerWidth": 768,
+          "innerHeight": 900,
+          "scrollWidth": 768,
+          "bodyScrollWidth": 768,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 3172,
+          "maxScrollY": 2272,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot",
+              "href": "?",
+              "top": 34,
+              "height": 24,
+              "width": 90,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Dashboard",
+              "href": "?",
+              "top": 28,
+              "height": 36,
+              "width": 99,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 28,
+              "height": 36,
+              "width": 123,
+              "inFirstViewport": true
+            },
+            {
+              "text": "‹ Opportunities",
+              "href": "?",
+              "top": 103,
+              "height": 21,
+              "width": 93,
+              "inFirstViewport": true
+            },
+            {
+              "text": "separate verified replay →",
+              "href": "?walkthrough=1",
+              "top": 1892,
+              "height": 16,
+              "width": 187,
+              "inFirstViewport": false
+            },
+            {
+              "text": "View verified capability replay →",
+              "href": "?walkthrough=1",
+              "top": 3083,
+              "height": 22,
+              "width": 231,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot\nDashboard\nTender detail\nVerif",
+          "A B\nBidPilot",
+          "A Dashboard",
+          "A Tender detail",
+          "A Verified replay",
+          "A ‹ Opportunities",
+          "A Link to heading",
+          "A Link to heading"
+        ],
+        "screenshot": "screenshots/finale-preview-detail-768x900-r0.png"
+      },
+      {
+        "page": "detail",
+        "viewport": "390x844",
+        "run": 0,
+        "url": "https://finale---bidpilot-demo-tbauoylpra-uc.a.run.app/?tender=R26BK01680611-000",
+        "dom_loaded_s": 0.93,
+        "content_ready_s": 2.74,
+        "ready_selector": "text=Decision summary",
+        "metrics": {
+          "innerWidth": 390,
+          "innerHeight": 844,
+          "scrollWidth": 390,
+          "bodyScrollWidth": 390,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 3678,
+          "maxScrollY": 2834,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot",
+              "href": "?",
+              "top": 34,
+              "height": 24,
+              "width": 90,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Dashboard",
+              "href": "?",
+              "top": 0,
+              "height": 0,
+              "width": 0,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 28,
+              "height": 36,
+              "width": 123,
+              "inFirstViewport": true
+            },
+            {
+              "text": "‹ Opportunities",
+              "href": "?",
+              "top": 103,
+              "height": 21,
+              "width": 93,
+              "inFirstViewport": true
+            },
+            {
+              "text": "separate verified replay →",
+              "href": "?walkthrough=1",
+              "top": 2056,
+              "height": 37,
+              "width": 263,
+              "inFirstViewport": false
+            },
+            {
+              "text": "View verified capability replay →",
+              "href": "?walkthrough=1",
+              "top": 3589,
+              "height": 22,
+              "width": 231,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot\nTender detail\nVerified replay",
+          "A B\nBidPilot",
+          "A Tender detail",
+          "A Verified replay",
+          "A ‹ Opportunities",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading"
+        ],
+        "screenshot": "screenshots/finale-preview-detail-390x844-r0.png"
+      },
+      {
+        "page": "replay",
+        "viewport": "1440x900",
+        "run": 0,
+        "url": "https://finale---bidpilot-demo-tbauoylpra-uc.a.run.app/?walkthrough=1",
+        "dom_loaded_s": 0.74,
+        "content_ready_s": 8.65,
+        "ready_selector": "text=Verified capability replay",
+        "metrics": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "scrollWidth": 1440,
+          "bodyScrollWidth": 1440,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 3791,
+          "maxScrollY": 2891,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "BidPilot",
+              "href": "?",
+              "top": 49,
+              "height": 26,
+              "width": 92,
+              "inFirstViewport": true
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION BidPilot\nVerified result\n\nVERIFIED CAPAB",
+          "A BidPilot",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "BUTTON Help for Proposal draft"
+        ],
+        "screenshot": "screenshots/finale-preview-replay-1440x900-r0.png"
+      },
+      {
+        "page": "replay",
+        "viewport": "1440x900",
+        "run": 1,
+        "url": "https://finale---bidpilot-demo-tbauoylpra-uc.a.run.app/?walkthrough=1",
+        "dom_loaded_s": 0.93,
+        "content_ready_s": 2.75,
+        "ready_selector": "text=Verified capability replay",
+        "metrics": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "scrollWidth": 1440,
+          "bodyScrollWidth": 1440,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 3791,
+          "maxScrollY": 2891,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "BidPilot",
+              "href": "?",
+              "top": 49,
+              "height": 26,
+              "width": 92,
+              "inFirstViewport": true
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION BidPilot\nVerified result\n\nVERIFIED CAPAB",
+          "A BidPilot",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "BUTTON Help for Proposal draft"
+        ],
+        "screenshot": "screenshots/finale-preview-replay-1440x900-r1.png"
+      },
+      {
+        "page": "replay",
+        "viewport": "768x900",
+        "run": 0,
+        "url": "https://finale---bidpilot-demo-tbauoylpra-uc.a.run.app/?walkthrough=1",
+        "dom_loaded_s": 1.57,
+        "content_ready_s": 3.38,
+        "ready_selector": "text=Verified capability replay",
+        "metrics": {
+          "innerWidth": 768,
+          "innerHeight": 900,
+          "scrollWidth": 768,
+          "bodyScrollWidth": 768,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 4306,
+          "maxScrollY": 3406,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "BidPilot",
+              "href": "?",
+              "top": 49,
+              "height": 26,
+              "width": 92,
+              "inFirstViewport": true
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION BidPilot\nVerified result\n\nVERIFIED CAPAB",
+          "A BidPilot",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "BUTTON Help for Proposal draft"
+        ],
+        "screenshot": "screenshots/finale-preview-replay-768x900-r0.png"
+      },
+      {
+        "page": "replay",
+        "viewport": "390x844",
+        "run": 0,
+        "url": "https://finale---bidpilot-demo-tbauoylpra-uc.a.run.app/?walkthrough=1",
+        "dom_loaded_s": 0.79,
+        "content_ready_s": 2.61,
+        "ready_selector": "text=Verified capability replay",
+        "metrics": {
+          "innerWidth": 390,
+          "innerHeight": 844,
+          "scrollWidth": 390,
+          "bodyScrollWidth": 390,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 6230,
+          "maxScrollY": 5386,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "BidPilot",
+              "href": "?",
+              "top": 45,
+              "height": 26,
+              "width": 92,
+              "inFirstViewport": true
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION BidPilot\nVerified result\n\nVERIFIED CAPAB",
+          "A BidPilot",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "BUTTON Help for Proposal draft"
+        ],
+        "screenshot": "screenshots/finale-preview-replay-390x844-r0.png"
+      }
+    ]
+  },
+  "production_readback_revision_00012_vvg": {
+    "base": "https://bidpilot-demo-tbauoylpra-uc.a.run.app",
+    "label": "production-readback",
+    "started": "2026-09-03T11:38:41+0900",
+    "pages": [
+      {
+        "page": "dashboard",
+        "viewport": "1440x900",
+        "run": 0,
+        "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app/",
+        "dom_loaded_s": 5.83,
+        "content_ready_s": 16.99,
+        "ready_selector": "text=Pursuit dashboard",
+        "metrics": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "scrollWidth": 1440,
+          "bodyScrollWidth": 1440,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 2090,
+          "maxScrollY": 1190,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot\nPursuit workspace",
+              "href": "?",
+              "top": 33,
+              "height": 30,
+              "width": 224,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Opportunities",
+              "href": "?",
+              "top": 29,
+              "height": 38,
+              "width": 127,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 29,
+              "height": 38,
+              "width": 132,
+              "inFirstViewport": true
+            },
+            {
+              "text": "verified PURSUE replay →",
+              "href": "?walkthrough=1",
+              "top": 560,
+              "height": 33,
+              "width": 190,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Review →",
+              "href": "?tender=R26BK01680611-000",
+              "top": 806,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01692732-000",
+              "top": 899,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691398-000",
+              "top": 983,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691317-000",
+              "top": 1058,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01689261-000",
+              "top": 1142,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01686970-000",
+              "top": 1226,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot\nPursuit workspace\nOpportuniti",
+          "A B\nBidPilot\nPursuit workspace",
+          "A Opportunities",
+          "A Verified replay",
+          "A Link to heading",
+          "A Tender intake",
+          "A Authenticated Bid Room",
+          "A Synthetic decision simulation"
+        ],
+        "screenshot": "screenshots/production-readback-dashboard-1440x900-r0.png"
+      },
+      {
+        "page": "dashboard",
+        "viewport": "1440x900",
+        "run": 1,
+        "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app/",
+        "dom_loaded_s": 0.92,
+        "content_ready_s": 2.75,
+        "ready_selector": "text=Pursuit dashboard",
+        "metrics": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "scrollWidth": 1440,
+          "bodyScrollWidth": 1440,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 2090,
+          "maxScrollY": 1190,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot\nPursuit workspace",
+              "href": "?",
+              "top": 33,
+              "height": 30,
+              "width": 224,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Opportunities",
+              "href": "?",
+              "top": 29,
+              "height": 38,
+              "width": 127,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 29,
+              "height": 38,
+              "width": 132,
+              "inFirstViewport": true
+            },
+            {
+              "text": "verified PURSUE replay →",
+              "href": "?walkthrough=1",
+              "top": 560,
+              "height": 33,
+              "width": 190,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Review →",
+              "href": "?tender=R26BK01680611-000",
+              "top": 806,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01692732-000",
+              "top": 899,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691398-000",
+              "top": 983,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691317-000",
+              "top": 1058,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01689261-000",
+              "top": 1142,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01686970-000",
+              "top": 1226,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot\nPursuit workspace\nOpportuniti",
+          "A B\nBidPilot\nPursuit workspace",
+          "A Opportunities",
+          "A Verified replay",
+          "A Link to heading",
+          "A Tender intake",
+          "A Authenticated Bid Room",
+          "A Synthetic decision simulation"
+        ],
+        "screenshot": "screenshots/production-readback-dashboard-1440x900-r1.png"
+      },
+      {
+        "page": "dashboard",
+        "viewport": "768x900",
+        "run": 0,
+        "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app/",
+        "dom_loaded_s": 1.25,
+        "content_ready_s": 3.31,
+        "ready_selector": "text=Pursuit dashboard",
+        "metrics": {
+          "innerWidth": 768,
+          "innerHeight": 900,
+          "scrollWidth": 768,
+          "bodyScrollWidth": 768,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 4084,
+          "maxScrollY": 3184,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot",
+              "href": "?",
+              "top": 33,
+              "height": 30,
+              "width": 99,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Opportunities",
+              "href": "?",
+              "top": 29,
+              "height": 38,
+              "width": 127,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 29,
+              "height": 38,
+              "width": 132,
+              "inFirstViewport": true
+            },
+            {
+              "text": "verified PURSUE replay →",
+              "href": "?walkthrough=1",
+              "top": 992,
+              "height": 14,
+              "width": 157,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Review →",
+              "href": "?tender=R26BK01680611-000",
+              "top": 1389,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01692732-000",
+              "top": 1691,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691398-000",
+              "top": 1993,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691317-000",
+              "top": 2296,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01689261-000",
+              "top": 2598,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01686970-000",
+              "top": 2900,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot\nOpportunities\nVerified replay",
+          "A B\nBidPilot",
+          "A Opportunities",
+          "A Verified replay",
+          "A Link to heading",
+          "A Tender intake",
+          "A Authenticated Bid Room",
+          "A Synthetic decision simulation"
+        ],
+        "screenshot": "screenshots/production-readback-dashboard-768x900-r0.png"
+      },
+      {
+        "page": "dashboard",
+        "viewport": "390x844",
+        "run": 0,
+        "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app/",
+        "dom_loaded_s": 1.26,
+        "content_ready_s": 3.06,
+        "ready_selector": "text=Pursuit dashboard",
+        "metrics": {
+          "innerWidth": 390,
+          "innerHeight": 844,
+          "scrollWidth": 390,
+          "bodyScrollWidth": 390,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 4485,
+          "maxScrollY": 3641,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot",
+              "href": "?",
+              "top": 33,
+              "height": 30,
+              "width": 99,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Opportunities",
+              "href": "?",
+              "top": 18,
+              "height": 61,
+              "width": 115,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 18,
+              "height": 61,
+              "width": 100,
+              "inFirstViewport": true
+            },
+            {
+              "text": "verified PURSUE replay →",
+              "href": "?walkthrough=1",
+              "top": 1134,
+              "height": 33,
+              "width": 123,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Review →",
+              "href": "?tender=R26BK01680611-000",
+              "top": 1614,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01692732-000",
+              "top": 1937,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691398-000",
+              "top": 2239,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01691317-000",
+              "top": 2542,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01689261-000",
+              "top": 2844,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Inspect →",
+              "href": "?tender=R26BK01686970-000",
+              "top": 3146,
+              "height": 44,
+              "width": 95,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot\nOpportunities\nVerified replay",
+          "A B\nBidPilot",
+          "A Opportunities",
+          "A Verified replay",
+          "A Link to heading",
+          "A Tender intake",
+          "A Authenticated Bid Room",
+          "A Synthetic decision simulation"
+        ],
+        "screenshot": "screenshots/production-readback-dashboard-390x844-r0.png"
+      },
+      {
+        "page": "detail",
+        "viewport": "1440x900",
+        "run": 0,
+        "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app/?tender=R26BK01680611-000",
+        "dom_loaded_s": 1.49,
+        "content_ready_s": 3.05,
+        "ready_selector": "text=Decision summary",
+        "metrics": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "scrollWidth": 1440,
+          "bodyScrollWidth": 1440,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 2351,
+          "maxScrollY": 1451,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot · pursuit workspace",
+              "href": "?",
+              "top": 34,
+              "height": 24,
+              "width": 236,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Dashboard",
+              "href": "?",
+              "top": 28,
+              "height": 36,
+              "width": 99,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 28,
+              "height": 36,
+              "width": 123,
+              "inFirstViewport": true
+            },
+            {
+              "text": "‹ Opportunities",
+              "href": "?",
+              "top": 107,
+              "height": 21,
+              "width": 93,
+              "inFirstViewport": true
+            },
+            {
+              "text": "separate verified replay →",
+              "href": "?walkthrough=1",
+              "top": 1247,
+              "height": 16,
+              "width": 187,
+              "inFirstViewport": false
+            },
+            {
+              "text": "View verified capability replay →",
+              "href": "?walkthrough=1",
+              "top": 2229,
+              "height": 22,
+              "width": 231,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot · pursuit workspace\nDashboard",
+          "A B\nBidPilot · pursuit workspace",
+          "A Dashboard",
+          "A Tender detail",
+          "A Verified replay",
+          "A ‹ Opportunities",
+          "A Link to heading",
+          "A Link to heading"
+        ],
+        "screenshot": "screenshots/production-readback-detail-1440x900-r0.png"
+      },
+      {
+        "page": "detail",
+        "viewport": "1440x900",
+        "run": 1,
+        "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app/?tender=R26BK01680611-000",
+        "dom_loaded_s": 1.65,
+        "content_ready_s": 3.21,
+        "ready_selector": "text=Decision summary",
+        "metrics": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "scrollWidth": 1440,
+          "bodyScrollWidth": 1440,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 2351,
+          "maxScrollY": 1451,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot · pursuit workspace",
+              "href": "?",
+              "top": 34,
+              "height": 24,
+              "width": 236,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Dashboard",
+              "href": "?",
+              "top": 28,
+              "height": 36,
+              "width": 99,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 28,
+              "height": 36,
+              "width": 123,
+              "inFirstViewport": true
+            },
+            {
+              "text": "‹ Opportunities",
+              "href": "?",
+              "top": 107,
+              "height": 21,
+              "width": 93,
+              "inFirstViewport": true
+            },
+            {
+              "text": "separate verified replay →",
+              "href": "?walkthrough=1",
+              "top": 1247,
+              "height": 16,
+              "width": 187,
+              "inFirstViewport": false
+            },
+            {
+              "text": "View verified capability replay →",
+              "href": "?walkthrough=1",
+              "top": 2229,
+              "height": 22,
+              "width": 231,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot · pursuit workspace\nDashboard",
+          "A B\nBidPilot · pursuit workspace",
+          "A Dashboard",
+          "A Tender detail",
+          "A Verified replay",
+          "A ‹ Opportunities",
+          "A Link to heading",
+          "A Link to heading"
+        ],
+        "screenshot": "screenshots/production-readback-detail-1440x900-r1.png"
+      },
+      {
+        "page": "detail",
+        "viewport": "768x900",
+        "run": 0,
+        "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app/?tender=R26BK01680611-000",
+        "dom_loaded_s": 1.38,
+        "content_ready_s": 3.22,
+        "ready_selector": "text=Decision summary",
+        "metrics": {
+          "innerWidth": 768,
+          "innerHeight": 900,
+          "scrollWidth": 768,
+          "bodyScrollWidth": 768,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 3172,
+          "maxScrollY": 2272,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot",
+              "href": "?",
+              "top": 34,
+              "height": 24,
+              "width": 90,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Dashboard",
+              "href": "?",
+              "top": 28,
+              "height": 36,
+              "width": 99,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 28,
+              "height": 36,
+              "width": 123,
+              "inFirstViewport": true
+            },
+            {
+              "text": "‹ Opportunities",
+              "href": "?",
+              "top": 103,
+              "height": 21,
+              "width": 93,
+              "inFirstViewport": true
+            },
+            {
+              "text": "separate verified replay →",
+              "href": "?walkthrough=1",
+              "top": 1892,
+              "height": 16,
+              "width": 187,
+              "inFirstViewport": false
+            },
+            {
+              "text": "View verified capability replay →",
+              "href": "?walkthrough=1",
+              "top": 3083,
+              "height": 22,
+              "width": 231,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot\nDashboard\nTender detail\nVerif",
+          "A B\nBidPilot",
+          "A Dashboard",
+          "A Tender detail",
+          "A Verified replay",
+          "A ‹ Opportunities",
+          "A Link to heading",
+          "A Link to heading"
+        ],
+        "screenshot": "screenshots/production-readback-detail-768x900-r0.png"
+      },
+      {
+        "page": "detail",
+        "viewport": "390x844",
+        "run": 0,
+        "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app/?tender=R26BK01680611-000",
+        "dom_loaded_s": 1.45,
+        "content_ready_s": 3.3,
+        "ready_selector": "text=Decision summary",
+        "metrics": {
+          "innerWidth": 390,
+          "innerHeight": 844,
+          "scrollWidth": 390,
+          "bodyScrollWidth": 390,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 3678,
+          "maxScrollY": 2834,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "B\nBidPilot",
+              "href": "?",
+              "top": 34,
+              "height": 24,
+              "width": 90,
+              "inFirstViewport": true
+            },
+            {
+              "text": "Dashboard",
+              "href": "?",
+              "top": 0,
+              "height": 0,
+              "width": 0,
+              "inFirstViewport": false
+            },
+            {
+              "text": "Verified replay",
+              "href": "?walkthrough=1",
+              "top": 28,
+              "height": 36,
+              "width": 123,
+              "inFirstViewport": true
+            },
+            {
+              "text": "‹ Opportunities",
+              "href": "?",
+              "top": 103,
+              "height": 21,
+              "width": 93,
+              "inFirstViewport": true
+            },
+            {
+              "text": "separate verified replay →",
+              "href": "?walkthrough=1",
+              "top": 2056,
+              "height": 37,
+              "width": 263,
+              "inFirstViewport": false
+            },
+            {
+              "text": "View verified capability replay →",
+              "href": "?walkthrough=1",
+              "top": 3589,
+              "height": 22,
+              "width": 231,
+              "inFirstViewport": false
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION B\nBidPilot\nTender detail\nVerified replay",
+          "A B\nBidPilot",
+          "A Tender detail",
+          "A Verified replay",
+          "A ‹ Opportunities",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading"
+        ],
+        "screenshot": "screenshots/production-readback-detail-390x844-r0.png"
+      },
+      {
+        "page": "replay",
+        "viewport": "1440x900",
+        "run": 0,
+        "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app/?walkthrough=1",
+        "dom_loaded_s": 1.64,
+        "content_ready_s": 9.3,
+        "ready_selector": "text=Verified capability replay",
+        "metrics": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "scrollWidth": 1440,
+          "bodyScrollWidth": 1440,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 3791,
+          "maxScrollY": 2891,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "BidPilot",
+              "href": "?",
+              "top": 49,
+              "height": 26,
+              "width": 92,
+              "inFirstViewport": true
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION BidPilot\nVerified result\n\nVERIFIED CAPAB",
+          "A BidPilot",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "BUTTON Help for Proposal draft"
+        ],
+        "screenshot": "screenshots/production-readback-replay-1440x900-r0.png"
+      },
+      {
+        "page": "replay",
+        "viewport": "1440x900",
+        "run": 1,
+        "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app/?walkthrough=1",
+        "dom_loaded_s": 1.41,
+        "content_ready_s": 3.22,
+        "ready_selector": "text=Verified capability replay",
+        "metrics": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "scrollWidth": 1440,
+          "bodyScrollWidth": 1440,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 3791,
+          "maxScrollY": 2891,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "BidPilot",
+              "href": "?",
+              "top": 49,
+              "height": 26,
+              "width": 92,
+              "inFirstViewport": true
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION BidPilot\nVerified result\n\nVERIFIED CAPAB",
+          "A BidPilot",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "BUTTON Help for Proposal draft"
+        ],
+        "screenshot": "screenshots/production-readback-replay-1440x900-r1.png"
+      },
+      {
+        "page": "replay",
+        "viewport": "768x900",
+        "run": 0,
+        "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app/?walkthrough=1",
+        "dom_loaded_s": 1.56,
+        "content_ready_s": 3.39,
+        "ready_selector": "text=Verified capability replay",
+        "metrics": {
+          "innerWidth": 768,
+          "innerHeight": 900,
+          "scrollWidth": 768,
+          "bodyScrollWidth": 768,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 4306,
+          "maxScrollY": 3406,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "BidPilot",
+              "href": "?",
+              "top": 49,
+              "height": 26,
+              "width": 92,
+              "inFirstViewport": true
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION BidPilot\nVerified result\n\nVERIFIED CAPAB",
+          "A BidPilot",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "BUTTON Help for Proposal draft"
+        ],
+        "screenshot": "screenshots/production-readback-replay-768x900-r0.png"
+      },
+      {
+        "page": "replay",
+        "viewport": "390x844",
+        "run": 0,
+        "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app/?walkthrough=1",
+        "dom_loaded_s": 0.87,
+        "content_ready_s": 2.94,
+        "ready_selector": "text=Verified capability replay",
+        "metrics": {
+          "innerWidth": 390,
+          "innerHeight": 844,
+          "scrollWidth": 390,
+          "bodyScrollWidth": 390,
+          "horizontalOverflow": false,
+          "pageScrollable": true,
+          "docScrollHeight": 6230,
+          "maxScrollY": 5386,
+          "nestedFullHeightScrollers": [],
+          "ctas": [
+            {
+              "text": "BidPilot",
+              "href": "?",
+              "top": 45,
+              "height": 26,
+              "width": 92,
+              "inFirstViewport": true
+            }
+          ],
+          "skeleton": false
+        },
+        "keyboard_focus_path": [
+          "SECTION BidPilot\nVerified result\n\nVERIFIED CAPAB",
+          "A BidPilot",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "A Link to heading",
+          "BUTTON Help for Proposal draft"
+        ],
+        "screenshot": "screenshots/production-readback-replay-390x844-r0.png"
       }
     ]
   }

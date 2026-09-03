@@ -1,5 +1,5 @@
 {
-  "status": "NOT DEPLOYED: DO NOT PRESENT AS THE CURRENT PUBLIC APP",
+  "status": "DEPLOYED AND VERIFIED",
   "generated_at_kst": "2026-09-03 11:03 KST",
   "branch": "fix/grand-finale-product-20260903",
   "head": "994f61697004baf2d18effcf2231565141cac3fe",
@@ -7,7 +7,7 @@
   "pushed": true,
   "worktree": "~/projects/personal/products/.worktrees/bidpilot-grand-finale-product-20260903",
   "canonical_checkout_touched": false,
-  "public_app_currently_serving": "origin/main bf7fd4d via Cloud Run revision bidpilot-demo-00010-fjt (unchanged by this session)",
+  "public_app_currently_serving": "c78c40c via Cloud Run revision bidpilot-demo-00012-vvg (image sha256:e870e7ed…, built from revision 00017-qen source, min-instances 1, 100% traffic); tag finale still points at 00017-qen, tag preview at 00010-fjt",
   "tests": {
     "command": "uv run pytest tests/ -q",
     "passed": 168,
@@ -52,12 +52,7 @@
     "no anonymous runner",
     "authenticated mode still fail-closed, no fixture fallback"
   ],
-  "approval_needed_from_sergio": [
-    "Cloud Run no-traffic revision build (external state)",
-    "traffic promotion",
-    "merge to main",
-    "optional --min-instances=1 for the finale window"
-  ],
+  "approval_needed_from_sergio": [],
   "cold_start": {
     "first_touch_after_18min_idle_dashboard_s": 17.36,
     "dom_loaded_s": 8.98,
@@ -71,5 +66,34 @@
       2.82
     ],
     "source": "cold-start.md"
+  },
+  "deployed_at_kst": "2026-09-03 11:40 KST",
+  "main": "c78c40c (fast-forwarded from bf7fd4d after production readback)",
+  "approved_and_executed": [
+    "no-traffic revision 00017-qen",
+    "traffic promotion",
+    "min-instances 1 (revision 00012-vvg)",
+    "main fast-forward"
+  ],
+  "production_readback": {
+    "dashboard_first_touch_s": 16.99,
+    "dashboard_warm_s": [
+      2.75,
+      3.31,
+      3.06
+    ],
+    "detail_s": [
+      3.05,
+      3.21,
+      3.22,
+      3.3
+    ],
+    "replay_first_open_s": 9.3,
+    "replay_warm_s": [
+      3.22,
+      3.39,
+      2.94
+    ],
+    "all_viewports_overflow": false
   }
 }
