@@ -459,3 +459,14 @@ def test_lean_detail_folds_history_and_source_evidence_under_the_decision() -> N
     assert fold_at < detail.index("Source evidence")
     assert detail.index("Decision summary") < fold_at
     assert detail.index("Owned work") > fold_at
+
+
+def test_lean_dashboard_tells_agents_how_to_mount_bidpilot() -> None:
+    markup = koat_dashboard(load_public_tender_catalog(), now=FINALE_CLOCK)
+
+    strip = markup.index('class="agent-access"')
+    assert markup.index('class="foot-links"') > strip > markup.index("Official tender catalogue")
+    assert "https://bidpilot-api-164282963747.us-central1.run.app/mcp" in markup
+    assert "https://bidpilot-api-164282963747.us-central1.run.app/openapi.json" in markup
+    assert "skills/bidpilot" in markup
+    assert "Mount BidPilot in your agent" in markup
