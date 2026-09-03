@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "bidpilot": {
-      "httpUrl": "https://BIDPILOT_API_HOST/mcp"
+      "httpUrl": "https://bidpilot-api-164282963747.us-central1.run.app/mcp"
     },
     "bidpilot-local": {
       "command": "uv",

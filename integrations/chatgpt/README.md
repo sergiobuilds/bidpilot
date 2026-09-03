@@ -1,16 +1,16 @@
 # BidPilot in ChatGPT
 
-Two mounts, both read-only and anonymous. Replace `BIDPILOT_API_HOST` with the
+Two mounts, both read-only and anonymous. Replace `bidpilot-api-164282963747.us-central1.run.app` with the
 hosted `bidpilot-api` host.
 
 ## 1 Custom GPT Action (OpenAPI import)
 
 1. ChatGPT → Explore GPTs → Create → Configure → Actions → Create new action.
-2. Choose "Import from URL" and paste `https://BIDPILOT_API_HOST/openapi.json`.
+2. Choose "Import from URL" and paste `https://bidpilot-api-164282963747.us-central1.run.app/openapi.json`.
 3. Authentication: None.
 4. Paste the instructions below into the GPT's Instructions.
 
-The manifest at `https://BIDPILOT_API_HOST/.well-known/ai-plugin.json` points at
+The manifest at `https://bidpilot-api-164282963747.us-central1.run.app/.well-known/ai-plugin.json` points at
 the same OpenAPI document.
 
 Endpoints imported: `GET /tenders`, `GET /tenders/{notice_number}`,
@@ -20,7 +20,7 @@ Endpoints imported: `GET /tenders`, `GET /tenders/{notice_number}`,
 ## 2 MCP connector
 
 In ChatGPT settings → Connectors → add a custom MCP connector with the URL
-`https://BIDPILOT_API_HOST/mcp` (Streamable HTTP, no authentication). Tools:
+`https://bidpilot-api-164282963747.us-central1.run.app/mcp` (Streamable HTTP, no authentication). Tools:
 `list_tenders`, `get_tender`, `decide`, `list_runs`, `replay`.
 
 ## Instructions to paste

@@ -2,7 +2,7 @@
   "mcpServers": {
     "bidpilot": {
       "type": "http",
-      "url": "https://BIDPILOT_API_HOST/mcp"
+      "url": "https://bidpilot-api-164282963747.us-central1.run.app/mcp"
     },
     "bidpilot-local": {
       "type": "stdio",

@@ -51,7 +51,7 @@ add the servers on the command line:
 
 ```bash
 # hosted, read-only
-cortex mcp add bidpilot https://BIDPILOT_API_HOST/mcp --transport http
+cortex mcp add bidpilot https://bidpilot-api-164282963747.us-central1.run.app/mcp --transport http
 
 # local stdio from a checkout
 cortex mcp add bidpilot-local uv -- run --project /path/to/bidpilot python -m bidpilot.mcp_server
