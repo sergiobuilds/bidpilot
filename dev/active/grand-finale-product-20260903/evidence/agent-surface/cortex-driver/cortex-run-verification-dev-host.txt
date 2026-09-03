@@ -1,0 +1,18 @@
+# cortex-run.py verification on dev host, 2026-09-03T13:37:53+09:00, Cortex Code v1.1.78, branch feat/cortex-driver-20260903 04b138f
+
+$ uv run python skills/bidpilot/scripts/cortex-run.py "Reply with exactly the single word OK." --connection bidpilot-reader --cwd "$PWD"
+OK
+exit=0 (13.3s wall)
+
+$ uv run python skills/bidpilot/scripts/cortex-run.py "Use the bidpilot skill: list the tenders and decide R26BK01680611-000 with no evidence. Answer in 4 lines." --connection bidpilot-reader --cwd "$PWD" --timeout 240
+공고 6건 중 R26BK01680611-000(K패스 수원시 청년 교통비 지원사업, 2.5억원, 마감 2026-09-03)만 source-reviewed이고 나머지 5건은 source-found(미리뷰) 상태이며, 4건은 이미 마감되었습니다.
+R26BK01680611-000에 대해 증빙 없이 판정한 결과는 REVIEW이며, 4개 적격 요건(SW사업자 등록, 직접생산확인증명, 중소기업 확인서, 대기업 배제 요건) 모두 EVIDENCE REQUIRED 상태입니다.
+제안서 게이트는 LOCKED이므로 제안 작성 단계로 넘어갈 수 없습니다.
+다음 단계로 4개 요건 각각에 대해 보유 여부를 알려주시면 PURSUE/NO-GO 판정을 진행할 수 있습니다.
+exit=0 (31s wall)
+
+Headless paths on the same account (server-side gate, unchanged):
+$ cortex exec "Reply OK" --connection bidpilot-reader
+Error: --print mode is not available for subscription/trial accounts.
+$ cortex -p "Reply OK" --connection bidpilot-reader
+Error: --print mode is not available for subscription/trial accounts.
