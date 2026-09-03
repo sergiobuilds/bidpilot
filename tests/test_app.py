@@ -967,3 +967,18 @@ def test_record_helpers_never_expose_a_serialised_row() -> None:
     assert ui.as_records('["a", "b"]') == ["a", "b"]
     assert ui.as_records(None) == []
     assert ui.humanise("historical-demo-replay") == "historical demo replay"
+
+
+def test_loading_states_say_what_snowflake_step_is_being_waited_on() -> None:
+    from bidpilot.ui import loading_markup
+
+    listing = loading_markup("listing")
+    detail = loading_markup("detail")
+
+    for markup in (listing, detail):
+        assert 'role="status"' in markup
+        assert "Snowflake" in markup
+        assert "BIDPILOT_READER" in markup
+    assert "Connecting to Snowflake" in listing
+    assert "cortex" not in listing.lower()
+    assert "Reading the selected run" in detail

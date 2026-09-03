@@ -2142,6 +2142,31 @@ def render_connection_error() -> None:
 # ---------------------------------------------------------------------------
 
 
+LOADING_STEPS = {
+    "listing": (
+        "Connecting to Snowflake",
+        (
+            f"Opening the {EXPECTED_READER_ROLE} session and listing completed pursuit runs. "
+            "Nothing is generated while you wait."
+        ),
+    ),
+    "detail": (
+        "Reading the selected run",
+        f"One Snowflake run, read through {EXPECTED_READER_ROLE}, supplies every downstream result.",
+    ),
+}
+
+
+def loading_markup(step: str) -> str:
+    """Name the Snowflake step a visitor is waiting on instead of a generic spinner."""
+    title, detail = LOADING_STEPS[step]
+    return (
+        '<div class="bp-loading" role="status"><span class="bp-loading__mark" aria-hidden="true"></span>'
+        f'<div><p class="bp-t-label1 bp-bold">{esc(title)}</p>'
+        f'<p class="bp-t-caption1 bp-note">{esc(detail)}</p></div></div>'
+    )
+
+
 @st.cache_data(show_spinner=False)
 def load_runs(connection_name: str) -> list[dict]:
     return SnowflakeBidRoomStore(connection_name).list_runs()
@@ -2168,11 +2193,7 @@ def render() -> None:
     runs: list[dict] = []
     listing_failed = False
     with loading.container():
-        write(
-            '<div class="bp-loading" role="status"><span class="bp-loading__mark" aria-hidden="true"></span>'
-            '<div><p class="bp-t-label1 bp-bold">Opening verified pursuit run</p>'
-            '<p class="bp-t-caption1 bp-note">Decision package and owned work are loading.</p></div></div>'
-        )
+        write(loading_markup("listing"))
         try:
             runs = load_runs(connection_name)
         except (SnowflakeBidRoomError, KeyError):
@@ -2225,11 +2246,7 @@ def render() -> None:
     detail_failed = False
     if selected_id:
         with loading.container():
-            write(
-                '<div class="bp-loading" role="status"><span class="bp-loading__mark" aria-hidden="true"></span>'
-                '<div><p class="bp-t-label1 bp-bold">Reading the selected run</p>'
-                '<p class="bp-t-caption1 bp-note">One run supplies every downstream result.</p></div></div>'
-            )
+            write(loading_markup("detail"))
             try:
                 result = load_run(connection_name, selected_id)
             except (SnowflakeBidRoomError, KeyError):
