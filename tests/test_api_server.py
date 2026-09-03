@@ -26,10 +26,11 @@ def test_healthz_reports_the_surface_without_a_snowflake_connection(
     client, monkeypatch
 ) -> None:
     monkeypatch.delenv("BIDPILOT_SNOWFLAKE_CONNECTION", raising=False)
-    response = client.get("/healthz")
-    assert response.status_code == 200
-    assert response.json()["status"] == "ok"
-    assert response.json()["snowflake_configured"] is False
+    for path in ("/healthz", "/health", "/"):
+        response = client.get(path)
+        assert response.status_code == 200, path
+        assert response.json()["status"] == "ok"
+        assert response.json()["snowflake_configured"] is False
 
 
 def test_tenders_endpoints_serve_the_catalogue(client) -> None:
@@ -149,7 +150,8 @@ def _rpc(
         "method": method,
         "params": params or {},
     }
-    return client.post("/mcp", json=body, headers=MCP_HEADERS)
+    # No redirect is tolerated: a 307 to /mcp/ becomes plain http behind a proxy.
+    return client.post("/mcp", json=body, headers=MCP_HEADERS, follow_redirects=False)
 
 
 def test_mcp_streamable_http_is_mounted_at_mcp(client) -> None:

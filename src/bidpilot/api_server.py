@@ -28,7 +28,7 @@ _STATUS = {
 # surface is anonymous and read-only; sessions are stateless so any instance
 # can answer any request.
 mcp_app = mcp.streamable_http_app(
-    streamable_http_path="/",
+    streamable_http_path="/mcp",
     json_response=True,
     stateless_http=True,
     transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
@@ -73,14 +73,31 @@ async def _core_error(_: Request, error: AgentCoreError) -> JSONResponse:
     )
 
 
-@app.get("/healthz", tags=["meta"])
-def healthz() -> dict[str, Any]:
+def _health() -> dict[str, Any]:
     return {
         "status": "ok",
         "version": VERSION,
         "snowflake_configured": configured_connection_name() is not None,
         "mcp": "/mcp",
+        "openapi": "/openapi.json",
     }
+
+
+# Google Front End answers /healthz itself with a 404 before Cloud Run sees it,
+# so the same payload is also served at / and /health.
+@app.get("/healthz", tags=["meta"])
+def healthz() -> dict[str, Any]:
+    return _health()
+
+
+@app.get("/health", tags=["meta"], include_in_schema=False)
+def health() -> dict[str, Any]:
+    return _health()
+
+
+@app.get("/", tags=["meta"], include_in_schema=False)
+def root() -> dict[str, Any]:
+    return _health()
 
 
 @app.get("/tenders", tags=["tenders"], operation_id="list_tenders")
@@ -135,4 +152,6 @@ def ai_plugin(request: Request) -> dict[str, Any]:
     }
 
 
-app.mount("/mcp", mcp_app)
+# Register the transport route at exactly /mcp: a Starlette mount would answer
+# /mcp with a 307 to /mcp/, which reverse proxies rewrite to plain http.
+app.router.routes.extend(mcp_app.routes)
