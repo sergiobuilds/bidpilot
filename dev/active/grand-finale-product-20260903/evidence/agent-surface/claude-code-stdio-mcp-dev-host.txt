@@ -1,0 +1,27 @@
+# Claude Code local stdio MCP mount (dev host, scratch dir, 2026-09-03)
+
+$ claude mcp add bidpilot -- uv run -q --project <worktree> python -m bidpilot.mcp_server
+$ claude mcp list
+bidpilot: uv run -q --project <worktrees>/bidpilot-coco-skill-20260903 python -m bidpilot.mcp_server - ✔ Connected
+
+$ echo "Use the bidpilot MCP tool list_tenders and summarise ... then call decide for R26BK01680611-000 with no evidence" | claude -p --dangerously-skip-permissions --output-format text
+
+Sergio, 두 도구 호출 결과를 보고드립니다.
+
+**list_tenders 요약 (5줄)**
+
+1. 카탈로그에는 공고 6건이 있고, 그중 마감 전인 open 상태는 수원시 K패스 청년 교통비 지원사업 서비스 개발 용역 1건뿐입니다.
+2. 그 수원시 공고는 오늘 2026-09-03 16:00 KST 마감이며, 계약금액 2.5억 원, 기술 90 대 가격 10 배점이고 증거 수준은 source-reviewed, 상태는 REVIEW입니다.
+3. 나머지 5건은 모두 closed 상태로, 8월 31일부터 9월 2일 사이에 마감된 역사적 공고입니다.
+4. closed 5건 중 4건은 한국생산기술연구원 발주(사출 부품 검사 모듈 시제품, 공공 IP 사업화 지원, 연구원창업 액셀러레이팅, 학연협력 공동학과 발전전략 연구)이고, 1건은 국립수산과학원 중앙내수면연구소의 양식장 관리 로봇 개발입니다.
+5. closed 5건은 증거 수준이 source-found, 상태 SOURCE FOUND이며 계약금액과 배점 정보가 null로 채워져 있지 않습니다.
+
+**decide 결과 (R26BK01680611-000, 증거 미제출)**
+
+| 항목 | 반환값 |
+|---|---|
+| decision | `REVIEW` |
+| evidence_gaps | `4` |
+| proposal_gate | `LOCKED` |
+
+반환된 reason은 "4 of 4 eligibility requirements still need supplier evidence."이며, 4개 요건(산업코드 1468 소프트웨어사업자 등록, 직접생산확인증명서 8111159801 또는 8111159901, 공공조달용 중소기업·소상공인 확인서, 20억 미만 사업 참여 제한 대상인 대기업·중견기업·상호출자제한기업 아님) 모두 EVIDENCE REQUIRED 상태입니다. provider는 LOCAL_PYTHON_POLICY, persisted는 false, deadline_state는 open입니다. 제안서 게이트가 잠겨 있으므로 이 결정으로는 제안서가 작성되지 않습니다.

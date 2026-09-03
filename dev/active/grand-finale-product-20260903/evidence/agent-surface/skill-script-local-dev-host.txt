@@ -1,0 +1,151 @@
+$ skills/bidpilot/scripts/bidpilot.sh list-tenders
+[
+  {
+    "notice_number": "R26BK01680611-000",
+    "title": "K패스 기반 수원시 사회초년생 청년 교통비 지원사업 서비스 개발 용역",
+    "issuer": "Suwon City, Gyeonggi-do",
+    "deadline": "2026-09-03T16:00:00+09:00",
+    "evidence_level": "source-reviewed",
+    "status": "REVIEW",
+    "official_url": "https://www.g2b.go.kr/pn/pnp/pnpe/UntyAtchFile/downloadFile.do?bidPbancNo=R26BK01680611&bidPbancOrd=000&fileSeq=2&fileType=&prcmBsneSeCd=03",
+    "contract_value_krw": 250000000,
+    "technical_weight": 90,
+    "price_weight": 10,
+    "deadline_state": "open"
+  },
+  {
+    "notice_number": "R26BK01692732-000",
+    "title": "자동차 사출 성형 부품 비전·중량 데이터 취득 및 검사 모듈 시제품 제작",
+    "issuer": "한국생산기술연구원",
+    "deadline": "2026-09-02T10:00:00+09:00",
+    "evidence_level": "source-found",
+    "status": "SOURCE FOUND",
+    "official_url": "https://www.g2b.go.kr/link/PNPE027_01/general/?bidPbancNo=R26BK01692732&bidPbancOrd=000",
+    "contract_value_krw": null,
+    "technical_weight": null,
+    "price_weight": null,
+    "deadline_state": "closed"
+  },
+  {
+    "notice_number": "R26BK01691398-000",
+    "title": "2026년 공공 IP 사업화 성장 지원사업 수행용역",
+    "issuer": "한국생산기술연구원",
+    "deadline": "2026-08-31T10:00:00+09:00",
+    "evidence_level": "source-found",
+    "status": "SOURCE FOUND",
+    "official_url": "https://www.g2b.go.kr/link/PNPE027_01/general/?bidPbancNo=R26BK01691398&bidPbancOrd=000",
+    "contract_value_krw": null,
+    "technical_weight": null,
+    "price_weight": null,
+    "deadline_state": "closed"
+  },
+  {
+    "notice_number": "R26BK01691317-000",
+    "title": "2026년 연구원창업 액셀러레이팅 수행 용역",
+    "issuer": "한국생산기술연구원",
+    "deadline": "2026-08-31T10:00:00+09:00",
+    "evidence_level": "source-found",
+    "status": "SOURCE FOUND",
+    "official_url": "https://www.g2b.go.kr/link/PNPE027_01/general/?bidPbancNo=R26BK01691317&bidPbancOrd=000",
+    "contract_value_krw": null,
+    "technical_weight": null,
+    "price_weight": null,
+    "deadline_state": "closed"
+  },
+  {
+    "notice_number": "R26BK01689261-000",
+    "title": "학연협력 공동학과 중장기 발전전략 및 성과관리체계 구축 연구",
+    "issuer": "한국생산기술연구원",
+    "deadline": "2026-08-31T10:00:00+09:00",
+    "evidence_level": "source-found",
+    "status": "SOURCE FOUND",
+    "official_url": "https://www.g2b.go.kr/link/PNPE027_01/general/?bidPbancNo=R26BK01689261&bidPbancOrd=000",
+    "contract_value_krw": null,
+    "technical_weight": null,
+    "price_weight": null,
+    "deadline_state": "closed"
+  },
+  {
+    "notice_number": "R26BK01686970-000",
+    "title": "양식장 관리 로봇 개발",
+    "issuer": "해양수산부 국립수산과학원 중앙내수면연구소",
+    "deadline": "2026-09-01T10:00:00+09:00",
+    "evidence_level": "source-found",
+    "status": "SOURCE FOUND",
+    "official_url": "https://www.g2b.go.kr/link/PNPE027_01/general/?bidPbancNo=R26BK01686970&bidPbancOrd=000",
+    "contract_value_krw": null,
+    "technical_weight": null,
+    "price_weight": null,
+    "deadline_state": "closed"
+  }
+]
+
+$ skills/bidpilot/scripts/bidpilot.sh decide R26BK01680611-000
+{
+  "notice_number": "R26BK01680611-000",
+  "decision": "REVIEW",
+  "reason": "4 of 4 eligibility requirements still need supplier evidence.",
+  "checks": [
+    {
+      "requirement": "Registered software business for computer-related services, industry code 1468",
+      "status": "EVIDENCE REQUIRED"
+    },
+    {
+      "requirement": "Direct-production certificate for package software development and introduction service 8111159801 or information-system development service 8111159901",
+      "status": "EVIDENCE REQUIRED"
+    },
+    {
+      "requirement": "Valid SME or small-business confirmation for public procurement",
+      "status": "EVIDENCE REQUIRED"
+    },
+    {
+      "requirement": "Not a large, mid-sized, or cross-shareholding-group software business excluded from sub-KRW-2B projects",
+      "status": "EVIDENCE REQUIRED"
+    }
+  ],
+  "evidence_gaps": 4,
+  "weights": {
+    "technical": 90,
+    "price": 10
+  },
+  "proposal_gate": "LOCKED",
+  "next_actions": [
+    "Supply evidence for: Registered software business for computer-related services, industry code 1468",
+    "Supply evidence for: Direct-production certificate for package software development and introduction service 8111159801 or information-system development service 8111159901",
+    "Supply evidence for: Valid SME or small-business confirmation for public procurement",
+    "Supply evidence for: Not a large, mid-sized, or cross-shareholding-group software business excluded from sub-KRW-2B projects"
+  ],
+  "provider": "LOCAL_PYTHON_POLICY",
+  "persisted": false,
+  "deadline_state": "open"
+}
+
+$ skills/bidpilot/scripts/bidpilot.sh get-tender R26BK01680611-000
+{
+  "notice_number": "R26BK01680611-000",
+  "title": "K패스 기반 수원시 사회초년생 청년 교통비 지원사업 서비스 개발 용역",
+  "issuer": "Suwon City, Gyeonggi-do",
+  "deadline": "2026-09-03T16:00:00+09:00",
+  "evidence_level": "source-reviewed",
+  "status": "REVIEW",
+  "official_url": "https://www.g2b.go.kr/pn/pnp/pnpe/UntyAtchFile/downloadFile.do?bidPbancNo=R26BK01680611&bidPbancOrd=000&fileSeq=2&fileType=&prcmBsneSeCd=03",
+  "contract_value_krw": 250000000,
+  "technical_weight": 90,
+  "price_weight": 10,
+  "deadline_state": "open",
+  "eligibility_requirements": [
+    "Registered software business for computer-related services, industry code 1468",
+    "Direct-production certificate for package software development and introduction service 8111159801 or information-system development service 8111159901",
+    "Valid SME or small-business confirmation for public procurement",
+    "Not a large, mid-sized, or cross-shareholding-group software business excluded from sub-KRW-2B projects"
+  ],
+  "source_url": "https://www.g2b.go.kr/pn/pnp/pnpe/UntyAtchFile/downloadFile.do?bidPbancNo=R26BK01680611&bidPbancOrd=000&fileSeq=2&fileType=&prcmBsneSeCd=03",
+  "source_sha256": "d196bed74cc66e9ce95331bdf0aef825f87b39ec1a85738d425b2dc4d48b476c",
+  "retrieved_at": "2026-08-24T01:30:42+09:00",
+  "delivery_term": "Contract start through 2026-12-31",
+  "supplier_boundary": "Synthetic demo supplier profile"
+}
+
+$ skills/bidpilot/scripts/bidpilot.sh list-runs   # no BIDPILOT_SNOWFLAKE_CONNECTION -> fail closed
+{"error": "snowflake_not_configured", "detail": "Set BIDPILOT_SNOWFLAKE_CONNECTION to a BIDPILOT_READER connection; no fixture fallback."}
+exit=1

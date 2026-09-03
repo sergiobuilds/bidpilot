@@ -59,7 +59,20 @@ Verified public captures are stored under `dev/active/final-forge/public-app-ver
 
 The replay records are synthetic contest fixtures. The included public G2B notice is a closed historical example used only to test intake and qualification; it is not presented as an open opportunity. `PEOPLE`, prior-proposal, and pricing evidence absent from the Snowflake run remain explicit tasks and are not invented in the proposal.
 
-## 5 Submission and project records
+## 5 Mount BidPilot in your agent
+
+BidPilot is a pursuit capability any agent can mount, not only a dashboard. Every surface is read-only and anonymous: it lists tenders, opens one notice, decides `PURSUE` / `REVIEW` / `NO-GO` from evidence the user supplies, and replays a completed run. None of them starts a Cortex run or writes to Snowflake.
+
+| Surface | How to mount | What you get |
+|---|---|---|
+| Cortex Code (CoCo CLI) | `cp -r skills/bidpilot ~/.snowflake/cortex/skills/bidpilot`; optional `cortex mcp add bidpilot <api>/mcp --transport http` — see [integrations/cortex-code](integrations/cortex-code/README.md) | `bidpilot` skill with hard rules and a JSON script; MCP tools |
+| Claude Code | copy [integrations/claude-code/.mcp.json](integrations/claude-code/.mcp.json) into the project, or `claude mcp add bidpilot -- uv run --project <checkout> python -m bidpilot.mcp_server` | `list_tenders`, `get_tender`, `decide`, `list_runs`, `replay` |
+| Cursor | [integrations/cursor/mcp.json](integrations/cursor/mcp.json) → `.cursor/mcp.json` | same MCP tools |
+| Gemini CLI | [integrations/gemini-cli/settings.json](integrations/gemini-cli/settings.json) → `~/.gemini/settings.json` | same MCP tools |
+| ChatGPT | Custom GPT Action importing `<api>/openapi.json`, or MCP connector `<api>/mcp` — see [integrations/chatgpt](integrations/chatgpt/README.md) | REST `GET /tenders`, `GET /tenders/{id}`, `POST /decide`, `GET /runs`, `GET /runs/{id}` |
+| Any shell or agent | `skills/bidpilot/scripts/bidpilot.sh list-tenders` (local core) or with `BIDPILOT_API_URL` set (hosted REST) | one JSON document per call |
+
+## 6 Submission and project records
 
 - [Submission package and final demo contract](docs/SUBMISSION-PACKAGE_2026-08-02_v2.md)
 - [Project map](docs/MASTER-MAP.md)
@@ -67,7 +80,7 @@ The replay records are synthetic contest fixtures. The included public G2B notic
 - [Current handoff](PASSDOWN.md)
 - [MIT License](LICENSE)
 
-## 6 Change history
+## 7 Change history
 
 - 2026-08-02: Applied runner lifecycle, least-privilege roles, bounded compute, a new Cortex Code run, responsive public deployment, criterion-grouped persisted drafting, and 48-test verification.
 - 2026-08-02: Rebuilt the authenticated UI through Design Forge and the Wanted Design System as a four-screen workflow, then verified 59 tests and no horizontal overflow at 1440, 768, and 390 CSS pixels.
