@@ -1,0 +1,27 @@
+Build a self-contained horizontal presentation for a ten-minute hackathon grand finale.
+
+Functional requirements:
+- Produce exactly ten 16:9 slides in one HTML file named index.html.
+- Support ArrowLeft, ArrowRight, PageUp, PageDown, Home, End, and Space navigation.
+- Support direct hash navigation from #1 through #10.
+- Show a small slide number and restrained progress indicator.
+- Fit each slide fully inside the viewport with no document scrolling.
+- Use large remote-readable typography. Body text must remain at least 24 CSS pixels at 1440 by 810.
+- Use one claim per slide.
+- Use the supplied current public-product screenshots as the only image evidence.
+- Keep all text in HTML, not baked into raster images.
+- Do not use em dash characters.
+- Do not use decorative illustrations, generated people, icons as decoration, gradients, glow, glass effects, card grids, or dashboard-style density.
+- Keep product screenshots large and sharply cropped.
+
+Slide content:
+1. Eyebrow: SNOWFLAKE COCO CLI HACKATHON 2026 · GRAND FINALE. Title: BidPilot. Subtitle: Win the score, not the prompt. Footer: Sergio Lee · Washington State CPA · sergiobuilds.
+2. Rubric label: 30% REAL-WORLD RELEVANCE. Title: The bid is often lost before writing begins. Supporting line: Eligibility · Score · Evidence · Ownership. Small line: Proposal teams commit resources before the buyer’s score and the supplier’s proof agree.
+3. Title: One accountable chain. Main line: public tender + supplier evidence → PURSUE · REVIEW · NO-GO → score-weighted Win Position → evidence-bound proposal → red-team → owned work → same-run Snowflake readback. Small line: A general LLM summarizes. BidPilot preserves the decision and execution contract.
+4. Rubric label: 30% REAL-WORLD RELEVANCE. Title: REVIEW is a trusted answer. Use assets/live/tender.png as the main visual. Evidence labels: Real public tender · Synthetic demo supplier · 4 evidence gaps · No run created.
+5. Rubric label: 30% SOLUTION COMPLETENESS. Title: Separate verified replay. Use assets/live/walkthrough.png as the main visual. Evidence labels: PURSUE · 40 points · 3 compared · 1 selected. Boundary line: Separate synthetic historical replay.
+6. Rubric label: 30% SOLUTION COMPLETENESS. Title: The score controls the work. Use assets/live/replay-03.png and assets/live/replay-04.png as paired visual evidence. Evidence labels: 4 weighted plans · 8 proposal sections · Red-team passed · 12 owned and review tasks.
+7. Rubric label: 40% TECHNICAL EXECUTION. Title: Snowflake is the operating memory. Main architecture line: Opportunity Graph → Snowpark policy → Cortex Code CLI → Streamlit reader. Supporting lines: Versioned tender + governed supplier evidence. Runner writes. Reader replays complete runs. Authenticated failures fail closed.
+8. Rubric label: 40% TECHNICAL EXECUTION. Title: One recorded run. Large numbers: 1 decision · 3 strategies · 4 plans · 8 sections · 12 tasks. Small line: cortex-final-20260802-a · Cortex session + Snowflake query provenance · same run_id.
+9. Title: Human approval stays in the loop. Main line: Source review → supplier evidence → pricing → final edit → legal submission. Supporting line: BidPilot prepares and governs the work. The first buyer is a small B2G proposal team. Commercial path: team subscription + usage-based runs.
+10. Title: Win the score, not the prompt. Supporting line: A defensible pursuit decision. A score-weighted win strategy. Execution-ready proposal work. Footer: Persisted and replayable in Snowflake.

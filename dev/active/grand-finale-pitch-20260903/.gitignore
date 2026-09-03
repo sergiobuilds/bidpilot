@@ -1,0 +1,6 @@
+timing/*.txt
+timing/*.wav
+rendered-pptx/
+design-forge-build/
+.verify-shot/
+assets/diagnostic/

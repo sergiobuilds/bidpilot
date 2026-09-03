@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BidPilot · Snowflake CoCo CLI Hackathon 2026 Grand Finale</title>
+<link rel="stylesheet" href="fonts/geist.css">
+<style>
+:root{
+  /* Linear surface ladder */
+  --canvas:#010102;
+  --s1:#0f1011;
+  --s2:#141516;
+  --s3:#18191a;
+  --hair:#23252a;
+  --hair-strong:#34343a;
+  --ink:#f7f8f8;
+  --ink-muted:#d0d6e0;
+  --ink-subtle:#8a8f98;
+  --ink-tertiary:#62666d;
+  --accent:#5e6ad2;
+  --accent-hi:#828fff;
+  --sans:"Geist","SF Pro Display",-apple-system,system-ui,sans-serif;
+  --mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--canvas)}
+body{
+  font-family:var(--sans);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+/* ---------- stage: fixed 1440x810 design canvas, scaled to fit ---------- */
+#viewport{position:fixed;inset:0;display:grid;place-items:center;overflow:hidden}
+#stage{
+  position:relative;
+  width:1440px;height:810px;
+  transform:scale(var(--k,1));
+  transform-origin:center center;
+  background:var(--canvas);
+}
+
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  padding:34px 72px 48px;
+  opacity:0;visibility:hidden;
+  transition:opacity .28s var(--ease),visibility .28s;
+}
+.slide.is-active{opacity:1;visibility:visible}
+
+/* ---------- chrome ---------- */
+.chrome-top{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:16px;border-bottom:1px solid var(--hair);
+}
+.mark{display:flex;align-items:center;gap:12px}
+.mark i{width:13px;height:13px;background:var(--accent);border-radius:3px;display:block}
+.mark span{font-size:20px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted)}
+.rubric{
+  display:flex;align-items:center;gap:12px;
+  font-size:20px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-subtle);
+}
+.rubric b{color:var(--ink);font-weight:600}
+.rubric u{width:7px;height:7px;border-radius:50%;background:var(--accent);text-decoration:none;display:block}
+
+.body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;padding:26px 0}
+
+.chrome-bot{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;
+  padding-top:14px;border-top:1px solid var(--hair);
+}
+.deckline{font-size:20px;color:var(--ink-tertiary);letter-spacing:.01em}
+.counter{font-family:var(--mono);font-size:20px;color:var(--ink-subtle);letter-spacing:.04em}
+.counter b{color:var(--ink);font-weight:500}
+
+#progress{position:absolute;left:72px;right:72px;bottom:20px;display:flex;gap:6px;z-index:5}
+#progress button{
+  flex:1;height:3px;border:0;padding:0;background:var(--hair);cursor:pointer;
+  transition:background .22s var(--ease),transform .22s var(--ease);transform-origin:center bottom;
+}
+#progress button:hover{background:var(--hair-strong);transform:scaleY(2)}
+#progress button.done{background:#3d4048}
+#progress button.now{background:var(--accent)}
+#progress button:focus-visible{outline:2px solid var(--accent-hi);outline-offset:3px}
+
+/* ---------- type ---------- */
+.eyebrow{font-size:22px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-subtle)}
+h1{font-size:76px;font-weight:600;line-height:1.03;letter-spacing:-.038em;max-width:20ch}
+h1.hero{font-size:172px;letter-spacing:-.05em;line-height:.94}
+h1.close{font-size:112px;letter-spacing:-.045em;max-width:14ch}
+h1.tight{font-size:62px;letter-spacing:-.032em}
+.lead{font-size:36px;font-weight:400;line-height:1.35;letter-spacing:-.012em;color:var(--ink-muted);max-width:34ch}
+.note{font-size:25px;line-height:1.5;color:var(--ink-subtle);max-width:74ch}
+.note b{color:var(--ink-muted);font-weight:500}
+.mono{font-family:var(--mono);font-size:24px;color:var(--ink-subtle);letter-spacing:.01em}
+.mono b{color:var(--accent-hi);font-weight:500}
+
+/* ---------- chain of tokens ---------- */
+.chain{display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.chain-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 12px}
+.chain-row:nth-child(2){padding-left:60px}
+.chain-row:nth-child(3){padding-left:120px}
+.chain span{
+  font-size:30px;line-height:1.2;padding:15px 22px;border-radius:8px;
+  background:var(--s1);border:1px solid var(--hair);color:var(--ink);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.045);
+}
+.chain span.key{color:#fff;border-color:var(--hair-strong);background:var(--s2)}
+.chain i{font-style:normal;font-size:26px;color:var(--ink-tertiary)}
+
+/* ---------- hairline column set ---------- */
+.cols{display:flex;border-top:1px solid var(--hair)}
+.cols>div{flex:1;padding:26px 30px 4px;border-right:1px solid var(--hair)}
+.cols>div:first-child{padding-left:0}
+.cols>div:last-child{border-right:0;padding-right:0}
+.cols .idx{font-family:var(--mono);font-size:22px;color:var(--accent);margin-bottom:14px}
+.cols .term{font-size:38px;font-weight:500;letter-spacing:-.02em}
+.cols .sub{font-size:24px;color:var(--ink-subtle);margin-top:10px;line-height:1.4}
+.cols .num{font-size:112px;font-weight:600;letter-spacing:-.04em;line-height:1}
+.cols .num em{font-style:normal;color:var(--ink-tertiary)}
+
+/* ---------- evidence labels ---------- */
+.labels{display:flex;flex-wrap:wrap;gap:0 0}
+.labels li{
+  list-style:none;font-size:25px;color:var(--ink-muted);
+  padding:0 26px;border-left:1px solid var(--hair);line-height:1.25;
+}
+.labels li:first-child{padding-left:0;border-left:0}
+.labels.three{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.labels.three li{line-height:1.4}
+.labels.vert{flex-direction:column;flex:0 0 auto;gap:14px 0;width:400px}
+.labels.vert li{border-left:1px solid var(--hair);padding:0 0 0 22px;font-size:26px}
+.labels li b{color:var(--ink);font-weight:500}
+
+.stack{list-style:none}
+.stack li{
+  font-size:26px;color:var(--ink-muted);padding:17px 0;border-bottom:1px solid var(--hair);
+  display:flex;align-items:baseline;gap:16px;
+}
+.stack li:first-child{border-top:1px solid var(--hair)}
+.stack li s{text-decoration:none;font-family:var(--mono);font-size:19px;color:var(--ink-tertiary);min-width:26px}
+.stack li b{color:var(--ink);font-weight:500}
+.close-list{max-width:780px}
+.close-list li{font-size:30px;padding:19px 0}
+
+/* ---------- screenshots ---------- */
+.shot{
+  position:relative;overflow:hidden;background:#fff;
+  border:1px solid var(--hair-strong);border-radius:16px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+  min-height:0;
+}
+.shot img{
+  position:absolute;left:0;top:0;
+  width:calc(var(--zoom) * 100%);
+  transform:translate(calc(var(--tx) * 1%),calc(var(--ty) * 1%));
+  transform-origin:0 0;display:block;
+}
+figure.fig{display:flex;flex-direction:column;gap:10px;flex:1 1 auto;min-height:0}
+figure.fig .shot{flex:1 1 auto;min-height:0}
+figcaption{
+  flex:0 0 auto;order:-1;
+  font-family:var(--mono);font-size:19px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-tertiary);
+}
+figcaption b{color:var(--ink-subtle);font-weight:400}
+
+/* ---------- slide specific ---------- */
+.split{display:flex;gap:52px;flex:1;min-height:0;align-items:stretch}
+.split .txt{flex:0 0 430px;display:flex;flex-direction:column;justify-content:center;gap:30px}
+.split .fig{flex:1;min-width:0;display:flex;flex-direction:column}
+
+.band{display:flex;flex-direction:column;gap:20px;flex:1;min-height:0}
+
+.rowtop{display:flex;align-items:flex-start;justify-content:space-between;gap:40px;flex:0 0 auto}
+
+.arch{display:flex;align-items:stretch;gap:0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.arch div{flex:1;padding:32px 28px 36px;border-right:1px solid var(--hair);display:flex;flex-direction:column;gap:14px}
+.arch div:first-child{padding-left:0}
+.arch div:last-child{border-right:0;padding-right:0}
+.arch .step{font-family:var(--mono);font-size:20px;color:var(--accent);letter-spacing:.08em}
+.arch .name{font-size:34px;font-weight:500;letter-spacing:-.02em;line-height:1.15}
+
+.hero-rule{width:132px;height:2px;background:var(--accent)}
+.vline{position:absolute;top:0;bottom:0;left:63.5%;width:1px;background:var(--hair)}
+
+.gap-l{gap:18px;display:flex;flex-direction:column}
+.gap-m{gap:30px;display:flex;flex-direction:column}
+.gap-s{gap:12px;display:flex;flex-direction:column}
+
+/* ---------- entrance choreography ---------- */
+.slide.is-active .r{animation:rise .52s var(--ease) both;animation-delay:calc(var(--d,0) * 70ms + 60ms)}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.slide.is-active .shot{animation:fade .6s var(--ease) both;animation-delay:180ms}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* ---------- nav affordance ---------- */
+#nav{position:fixed;right:20px;bottom:18px;display:flex;gap:8px;z-index:20;opacity:0;transition:opacity .25s var(--ease)}
+#viewport:hover #nav,#nav:focus-within{opacity:1}
+#nav button{
+  width:44px;height:40px;border-radius:8px;background:var(--s1);border:1px solid var(--hair);
+  color:var(--ink);font-size:18px;cursor:pointer;line-height:1;
+  transition:background .2s var(--ease),border-color .2s var(--ease),transform .2s var(--ease);
+}
+#nav button:hover{background:var(--s2);border-color:var(--hair-strong)}
+#nav button:active{transform:translateY(1px);background:var(--accent);border-color:var(--accent)}
+#nav button:focus-visible{outline:2px solid var(--accent-hi);outline-offset:2px}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001s!important;transition-duration:.001s!important}
+}
+
+/* ---------- small screens: flow layout, contained scroll ---------- */
+@media (max-width:900px){
+  #viewport{display:block}
+  #stage{
+    position:absolute;inset:0;width:100%;height:100%;
+    transform:none!important;
+  }
+  .slide{padding:18px 20px 44px}
+  .body{overflow-y:auto;overscroll-behavior:contain;padding:20px 0;justify-content:safe center;gap:22px;-webkit-overflow-scrolling:touch}
+  .mark span,.rubric{font-size:13px;letter-spacing:.08em}
+  .rubric{text-align:right;line-height:1.3}
+  .eyebrow{font-size:13px;letter-spacing:.14em}
+  h1{font-size:34px;max-width:none;letter-spacing:-.025em}
+  h1.hero{font-size:62px}
+  h1.close{font-size:40px;max-width:none}
+  h1.tight{font-size:30px}
+  .lead{font-size:20px;max-width:none}
+  .note{font-size:16px;max-width:none}
+  .mono{font-size:14px}
+  .chain{gap:8px;max-width:none}
+  .chain span{font-size:15px;padding:8px 11px;border-radius:6px}
+  .chain i{font-size:14px}
+  .cols{flex-direction:column;border-top:0}
+  .cols>div{border-right:0;border-top:1px solid var(--hair);padding:14px 0 12px}
+  .cols .term{font-size:24px}
+  .cols .sub{font-size:15px}
+  .cols .num{font-size:44px}
+  .cols .idx{font-size:14px;margin-bottom:6px}
+  .labels{flex-direction:column;gap:8px}
+  .labels li{font-size:16px;padding:0;border-left:0}
+  .stack li{font-size:17px;padding:11px 0;gap:10px}
+  .stack li s{font-size:13px}
+  .split{flex-direction:column;gap:20px}
+  .split .txt{flex:0 0 auto;gap:18px}
+  .split .fig{flex:0 0 auto;display:block;width:100%}
+  figure.fig{flex:0 0 auto;gap:7px}
+  .shot{flex:0 0 auto;width:100%;aspect-ratio:var(--mmar,var(--mar,1.5));overflow:auto hidden;overscroll-behavior-x:contain}
+  .shot img{width:760px;transform:translate(0,calc(var(--ty) * 1%))}
+  .labels.vert{width:auto}
+  .labels.vert li{border-left:0;padding:0;font-size:16px}
+  .band{gap:12px}
+  .arch{flex-direction:column;border-bottom:0}
+  .arch div{border-right:0;border-bottom:1px solid var(--hair);padding:12px 0;gap:6px}
+  .arch .name{font-size:20px}
+  .arch .step{font-size:13px}
+  .rowtop{flex-direction:column;align-items:flex-start;gap:16px}
+  .vline{display:none}
+  .chrome-bot{align-items:flex-end}
+  .deckline{font-size:12px;line-height:1.35}
+  .counter{font-size:12px;white-space:nowrap}
+  figcaption{font-size:12px;padding:6px 10px 5px}
+  #progress{left:20px;right:20px;bottom:14px}
+  #nav{opacity:1;right:12px;bottom:32px}
+  #nav button{width:38px;height:34px}
+  .gap-m{gap:18px}
+}
+</style>
+</head>
+<body>
+
+<div id="viewport">
+<div id="stage">
+
+  <!-- 1 -->
+  <section class="slide" id="s1" aria-label="Slide 1">
+    <div class="chrome-top">
+      <div class="mark"><i></i><span>BidPilot</span></div>
+      <div class="rubric">Ten minute finale</div>
+    </div>
+    <div class="body">
+      <div class="vline"></div>
+      <div class="gap-m">
+        <p class="eyebrow r" style="--d:0">Snowflake CoCo CLI Hackathon 2026 · Grand Finale</p>
+        <h1 class="hero r" style="--d:1">BidPilot</h1>
+        <div class="hero-rule r" style="--d:2"></div>
+        <p class="lead r" style="--d:3">Win the score, not the prompt.</p>
+      </div>
+    </div>
+    <div class="chrome-bot">
+      <p class="deckline">Sergio Lee · Washington State CPA · sergiobuilds</p>
+      <p class="counter"><b>01</b> / 10</p>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide" id="s2" aria-label="Slide 2">
+    <div class="chrome-top">
+      <div class="mark"><i></i><span>BidPilot</span></div>
+      <div class="rubric"><u></u><b>30%</b> Real-world relevance</div>
+    </div>
+    <div class="body gap-m">
+      <h1 class="r" style="--d:0">The bid is often lost before writing begins.</h1>
+      <div class="cols r" style="--d:1">
+        <div><p class="idx">01</p><p class="term">Eligibility</p><p class="sub">Can this supplier legally bid.</p></div>
+        <div><p class="idx">02</p><p class="term">Score</p><p class="sub">Where the official weight sits.</p></div>
+        <div><p class="idx">03</p><p class="term">Evidence</p><p class="sub">What the supplier can prove.</p></div>
+        <div><p class="idx">04</p><p class="term">Ownership</p><p class="sub">Who is accountable for the work.</p></div>
+      </div>
+      <p class="note r" style="--d:2">Proposal teams commit resources before the buyer’s score and the supplier’s proof agree.</p>
+    </div>
+    <div class="chrome-bot">
+      <p class="deckline">The problem</p>
+      <p class="counter"><b>02</b> / 10</p>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide" id="s3" aria-label="Slide 3">
+    <div class="chrome-top">
+      <div class="mark"><i></i><span>BidPilot</span></div>
+      <div class="rubric">The contract</div>
+    </div>
+    <div class="body gap-m">
+      <h1 class="r" style="--d:0">One accountable chain.</h1>
+      <div class="chain r" style="--d:1">
+        <div class="chain-row">
+          <span>public tender + supplier evidence</span><i>→</i>
+          <span class="key">PURSUE · REVIEW · NO-GO</span><i>→</i>
+        </div>
+        <div class="chain-row">
+          <span>score-weighted Win Position</span><i>→</i>
+          <span>evidence-bound proposal</span><i>→</i>
+          <span>red-team</span><i>→</i>
+        </div>
+        <div class="chain-row">
+          <span>owned work</span><i>→</i>
+          <span class="key">same-run Snowflake readback</span>
+        </div>
+      </div>
+      <p class="note r" style="--d:2">A general LLM summarizes. BidPilot preserves the decision and execution contract.</p>
+    </div>
+    <div class="chrome-bot">
+      <p class="deckline">What the product is</p>
+      <p class="counter"><b>03</b> / 10</p>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide" id="s4" aria-label="Slide 4">
+    <div class="chrome-top">
+      <div class="mark"><i></i><span>BidPilot</span></div>
+      <div class="rubric"><u></u><b>30%</b> Real-world relevance</div>
+    </div>
+    <div class="body">
+      <div class="split">
+        <div class="txt">
+          <h1 class="tight r" style="--d:0">REVIEW is a trusted answer.</h1>
+          <ul class="stack r" style="--d:1">
+            <li><s>01</s><span><b>Real</b> public tender</span></li>
+            <li><s>02</s><span><b>Synthetic</b> demo supplier</span></li>
+            <li><s>03</s><span><b>4</b> evidence gaps</span></li>
+            <li><s>04</s><span><b>No run</b> created</span></li>
+          </ul>
+        </div>
+        <div class="fig">
+          <figure class="fig r" style="--d:2">
+            <figcaption>Live product <b>·</b> tender detail</figcaption>
+            <div class="shot" style="--zoom:1.348;--tx:-13.2;--ty:-9.8;--mar:1.45;--mmar:1.3">
+              <img src="assets/live/tender.png" alt="BidPilot tender detail showing a real public tender in REVIEW state with Run ID not created">
+            </div>
+          </figure>
+        </div>
+      </div>
+    </div>
+    <div class="chrome-bot">
+      <p class="deckline">Live demonstration · real source</p>
+      <p class="counter"><b>04</b> / 10</p>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide" id="s5" aria-label="Slide 5">
+    <div class="chrome-top">
+      <div class="mark"><i></i><span>BidPilot</span></div>
+      <div class="rubric"><u></u><b>30%</b> Solution completeness</div>
+    </div>
+    <div class="body">
+      <div class="band">
+        <div class="rowtop r" style="--d:0">
+          <h1 class="tight">Separate verified replay.</h1>
+          <p class="mono">Separate synthetic historical replay</p>
+        </div>
+        <figure class="fig r" style="--d:1">
+          <figcaption>Live product <b>·</b> verified replay</figcaption>
+          <div class="shot" style="--zoom:1.06;--tx:-3.5;--ty:-13.1;--mar:2.9;--mmar:1.65">
+            <img src="assets/live/walkthrough.png" alt="BidPilot verified capability replay showing a PURSUE decision, a 40 point official weight and the selected Win Position">
+          </div>
+        </figure>
+        <ul class="labels r" style="--d:2">
+          <li><b>PURSUE</b></li>
+          <li><b>40</b> points</li>
+          <li><b>3</b> compared</li>
+          <li><b>1</b> selected</li>
+        </ul>
+      </div>
+    </div>
+    <div class="chrome-bot">
+      <p class="deckline">Live demonstration · verified replay</p>
+      <p class="counter"><b>05</b> / 10</p>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide" id="s6" aria-label="Slide 6">
+    <div class="chrome-top">
+      <div class="mark"><i></i><span>BidPilot</span></div>
+      <div class="rubric"><u></u><b>30%</b> Solution completeness</div>
+    </div>
+    <div class="body">
+      <div class="band">
+        <div class="rowtop r" style="--d:0">
+          <h1 class="tight" style="max-width:16ch;font-size:56px">The score controls the work.</h1>
+          <ul class="labels vert">
+            <li><b>4</b> weighted plans</li>
+            <li><b>8</b> proposal sections</li>
+            <li><b>Red-team</b> passed</li>
+            <li><b>12</b> owned and review tasks</li>
+          </ul>
+        </div>
+        <figure class="fig r" style="--d:1">
+          <figcaption>Replay <b>·</b> proposal and red-team</figcaption>
+          <div class="shot" style="--zoom:1.176;--tx:-7.6;--ty:-40.0;--mar:5.9;--mmar:2.2">
+            <img src="assets/live/replay-03.png" alt="Proposal and red-team result showing four response plans and eight proposal sections with the drafted technical approach">
+          </div>
+        </figure>
+        <figure class="fig r" style="--d:2">
+          <figcaption>Replay <b>·</b> owned work</figcaption>
+          <div class="shot" style="--zoom:1.176;--tx:-7.6;--ty:-22.2;--mar:5.9;--mmar:2.2">
+            <img src="assets/live/replay-04.png" alt="Owned work showing twelve recorded tasks with named owners">
+          </div>
+        </figure>
+      </div>
+    </div>
+    <div class="chrome-bot">
+      <p class="deckline">Live demonstration · execution readiness</p>
+      <p class="counter"><b>06</b> / 10</p>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide" id="s7" aria-label="Slide 7">
+    <div class="chrome-top">
+      <div class="mark"><i></i><span>BidPilot</span></div>
+      <div class="rubric"><u></u><b>40%</b> Technical execution</div>
+    </div>
+    <div class="body gap-m">
+      <h1 class="r" style="--d:0">Snowflake is the operating memory.</h1>
+      <div class="arch r" style="--d:1">
+        <div><p class="step">01 · STORE</p><p class="name">Opportunity Graph</p></div>
+        <div><p class="step">02 · GOVERN</p><p class="name">Snowpark policy</p></div>
+        <div><p class="step">03 · RUN</p><p class="name">Cortex Code CLI</p></div>
+        <div><p class="step">04 · READ</p><p class="name">Streamlit reader</p></div>
+      </div>
+      <ul class="labels three r" style="--d:2">
+        <li>Versioned tender + governed supplier evidence</li>
+        <li>Runner writes. Reader replays complete runs.</li>
+        <li>Authenticated failures fail closed.</li>
+      </ul>
+    </div>
+    <div class="chrome-bot">
+      <p class="deckline">Architecture</p>
+      <p class="counter"><b>07</b> / 10</p>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide" id="s8" aria-label="Slide 8">
+    <div class="chrome-top">
+      <div class="mark"><i></i><span>BidPilot</span></div>
+      <div class="rubric"><u></u><b>40%</b> Technical execution</div>
+    </div>
+    <div class="body gap-m">
+      <h1 class="r" style="--d:0">One recorded run.</h1>
+      <div class="cols r" style="--d:1">
+        <div><p class="num">1</p><p class="sub">decision</p></div>
+        <div><p class="num">3</p><p class="sub">strategies</p></div>
+        <div><p class="num">4</p><p class="sub">plans</p></div>
+        <div><p class="num">8</p><p class="sub">sections</p></div>
+        <div><p class="num">12</p><p class="sub">tasks</p></div>
+      </div>
+      <p class="mono r" style="--d:2"><b>cortex-final-20260802-a</b> · Cortex session + Snowflake query provenance · same run_id</p>
+    </div>
+    <div class="chrome-bot">
+      <p class="deckline">Provenance</p>
+      <p class="counter"><b>08</b> / 10</p>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide" id="s9" aria-label="Slide 9">
+    <div class="chrome-top">
+      <div class="mark"><i></i><span>BidPilot</span></div>
+      <div class="rubric">Safety and buyer</div>
+    </div>
+    <div class="body gap-m">
+      <h1 class="r" style="--d:0">Human approval stays in the loop.</h1>
+      <div class="chain r" style="--d:1">
+        <div class="chain-row">
+          <span>Source review</span><i>→</i>
+          <span>Supplier evidence</span><i>→</i>
+          <span>Pricing</span><i>→</i>
+          <span>Final edit</span><i>→</i>
+          <span class="key">Legal submission</span>
+        </div>
+      </div>
+      <div class="gap-s r" style="--d:2">
+        <p class="note">BidPilot prepares and governs the work. The first buyer is a small B2G proposal team.</p>
+        <p class="note"><b>Commercial path:</b> team subscription + usage-based runs.</p>
+      </div>
+    </div>
+    <div class="chrome-bot">
+      <p class="deckline">Human boundary</p>
+      <p class="counter"><b>09</b> / 10</p>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide" id="s10" aria-label="Slide 10">
+    <div class="chrome-top">
+      <div class="mark"><i></i><span>BidPilot</span></div>
+      <div class="rubric">Close</div>
+    </div>
+    <div class="body">
+      <div class="vline"></div>
+      <div class="gap-m">
+        <h1 class="close r" style="--d:0">Win the score, not the prompt.</h1>
+        <div class="hero-rule r" style="--d:1"></div>
+        <ul class="stack close-list r" style="--d:2">
+          <li><s>01</s><span>A defensible pursuit decision.</span></li>
+          <li><s>02</s><span>A score-weighted win strategy.</span></li>
+          <li><s>03</s><span>Execution-ready proposal work.</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="chrome-bot">
+      <p class="deckline">Persisted and replayable in Snowflake.</p>
+      <p class="counter"><b>10</b> / 10</p>
+    </div>
+  </section>
+
+  <div id="progress"></div>
+</div>
+</div>
+
+<div id="nav">
+  <button id="prev" aria-label="Previous slide">&#8592;</button>
+  <button id="next" aria-label="Next slide">&#8594;</button>
+</div>
+
+<script>
+(function(){
+  var stage = document.getElementById('stage');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var N = slides.length;
+  var prog = document.getElementById('progress');
+  var cur = 0;
+
+  for (var i=0;i<N;i++){
+    (function(i){
+      var b=document.createElement('button');
+      b.type='button';
+      b.setAttribute('aria-label','Go to slide '+(i+1));
+      b.addEventListener('click',function(){ go(i); });
+      prog.appendChild(b);
+    })(i);
+  }
+  var pills = prog.children;
+
+  function fit(){
+    if (window.matchMedia('(max-width:900px)').matches){ stage.style.removeProperty('--k'); return; }
+    var k = Math.min(window.innerWidth/1440, window.innerHeight/810);
+    stage.style.setProperty('--k', k);
+  }
+
+  function paint(){
+    for (var i=0;i<N;i++){
+      slides[i].classList.toggle('is-active', i===cur);
+      slides[i].setAttribute('aria-hidden', i===cur ? 'false':'true');
+      pills[i].className = i===cur ? 'now' : (i<cur ? 'done' : '');
+    }
+  }
+
+  function go(i, silent){
+    i = Math.max(0, Math.min(N-1, i));
+    if (i===cur && silent) { paint(); return; }
+    cur = i;
+    paint();
+    var h = '#'+(cur+1);
+    if (!silent && location.hash !== h){ history.replaceState(null,'',h); }
+  }
+
+  function fromHash(){
+    var n = parseInt((location.hash||'').replace('#',''),10);
+    return (n>=1 && n<=N) ? n-1 : 0;
+  }
+
+  document.addEventListener('keydown', function(e){
+    var k = e.key;
+    if (k==='ArrowRight'||k==='PageDown'||k===' '||k==='Spacebar'||k==='Enter'){ e.preventDefault(); go(cur+1); }
+    else if (k==='ArrowLeft'||k==='PageUp'||k==='Backspace'){ e.preventDefault(); go(cur-1); }
+    else if (k==='Home'){ e.preventDefault(); go(0); }
+    else if (k==='End'){ e.preventDefault(); go(N-1); }
+  });
+
+  document.getElementById('next').addEventListener('click', function(){ go(cur+1); });
+  document.getElementById('prev').addEventListener('click', function(){ go(cur-1); });
+  window.addEventListener('hashchange', function(){ go(fromHash(), true); });
+  window.addEventListener('resize', fit);
+
+  fit();
+  go(fromHash(), true);
+})();
+</script>
+</body>
+</html>

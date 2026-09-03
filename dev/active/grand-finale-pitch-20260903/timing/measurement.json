@@ -1,0 +1,69 @@
+{
+  "method": "FFmpeg flite voice slt; pitch 0.678x plus 14 seconds transition budget; demo 0.70x plus 12 seconds transition budget; Q&A individually calibrated to 23.5 seconds",
+  "pitch_word_count": 917,
+  "pitch_duration_seconds": 569.948,
+  "demo_word_count": 319,
+  "demo_duration_seconds": 194.652,
+  "qa": [
+    {
+      "question": "Why not use a general LLM?",
+      "duration_seconds": 23.51
+    },
+    {
+      "question": "Why is Snowflake necessary?",
+      "duration_seconds": 23.499
+    },
+    {
+      "question": "What exactly did Cortex Code CLI do?",
+      "duration_seconds": 23.475
+    },
+    {
+      "question": "Is the tender data real?",
+      "duration_seconds": 23.492
+    },
+    {
+      "question": "Is the supplier data real?",
+      "duration_seconds": 23.513
+    },
+    {
+      "question": "Why does the real tender show REVIEW?",
+      "duration_seconds": 23.495
+    },
+    {
+      "question": "Is this an automated legal bid submission tool?",
+      "duration_seconds": 23.491
+    },
+    {
+      "question": "How do you prevent hallucinated credentials or project results?",
+      "duration_seconds": 23.496
+    },
+    {
+      "question": "What happens when evidence is missing?",
+      "duration_seconds": 23.496
+    },
+    {
+      "question": "What is already built versus future work?",
+      "duration_seconds": 23.499
+    },
+    {
+      "question": "Who is the buyer and what is the business model?",
+      "duration_seconds": 23.498
+    },
+    {
+      "question": "How would this work with a company\u2019s private operating data?",
+      "duration_seconds": 23.496
+    },
+    {
+      "question": "How do reader and runner permissions differ?",
+      "duration_seconds": 23.492
+    },
+    {
+      "question": "Can judges reproduce or inspect the run?",
+      "duration_seconds": 23.513
+    },
+    {
+      "question": "What is the strongest measurable proof today?",
+      "duration_seconds": 23.494
+    }
+  ]
+}

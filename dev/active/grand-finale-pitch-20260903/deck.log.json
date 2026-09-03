@@ -1,0 +1,89 @@
+{
+  "release": "grand-finale-pitch-20260903",
+  "source_commit": "bf7fd4d56f95220677f86358d0004905b497872a",
+  "checks": [
+    {
+      "name": "authority",
+      "status": "PASS",
+      "evidence": "project-authority-route returned CANONICAL_DIRECTION with git-blob authority_map_content"
+    },
+    {
+      "name": "public_repository_identity",
+      "status": "PASS",
+      "evidence": "signed-out git ls-remote main equals bf7fd4d56f95220677f86358d0004905b497872a"
+    },
+    {
+      "name": "public_application",
+      "status": "PASS",
+      "evidence": "both finale routes returned HTTP 200 and rendered current product content"
+    },
+    {
+      "name": "html_navigation",
+      "status": "PASS",
+      "evidence": "10 direct hash renders succeeded; Design Forge CDP key test reached s2, s3, s4, s10, s1, and s7"
+    },
+    {
+      "name": "html_viewports",
+      "status": "PASS",
+      "evidence": "ds-shot reported overflow=false at 1440, 768, and 390 CSS pixels"
+    },
+    {
+      "name": "html_visual_review",
+      "status": "PASS",
+      "evidence": "10-slide contact sheet and individual evidence slides inspected; no clipping, overlap, broken font, or missing image"
+    },
+    {
+      "name": "pptx_integrity",
+      "status": "PASS",
+      "evidence": "Microsoft PowerPoint 2007+ package; unzip test has no errors; 10 slide XML parts; editable text extracted"
+    },
+    {
+      "name": "pptx_visual_review",
+      "status": "PASS",
+      "evidence": "LibreOffice reopened and rendered all 10 slides; contact sheet inspected"
+    },
+    {
+      "name": "pdf_integrity",
+      "status": "PASS",
+      "evidence": "LibreOffice PDF opened with 10 pages at 960.009 by 540 points; pdftotext retained slide text"
+    },
+    {
+      "name": "narration_timing",
+      "status": "PASS",
+      "evidence": "FFmpeg Flite render plus transition budget measured 569.948 seconds"
+    },
+    {
+      "name": "demo_timing",
+      "status": "PASS",
+      "evidence": "FFmpeg Flite render plus transition budget measured 194.652 seconds"
+    },
+    {
+      "name": "qa_timing",
+      "status": "PASS",
+      "evidence": "15 answer renders measured 23.475 through 23.513 seconds"
+    },
+    {
+      "name": "data_boundaries",
+      "status": "PASS",
+      "evidence": "deck, script, demo runbook, and Q&A separate the real public tender, synthetic supplier, and separate historical replay"
+    },
+    {
+      "name": "language_lint",
+      "status": "PASS",
+      "evidence": "no em dash, not-just construction, more-than construction, or revolutionize wording in finale text outputs"
+    }
+  ],
+  "markdown_self_review": [
+    {"rule": "4.1.1 hierarchy", "status": "PASS", "evidence": "numbered sections separate purpose, content, verification, and history"},
+    {"rule": "4.1.2 tables and lists", "status": "PASS", "evidence": "repeated fields use tables; procedures use ordered lists"},
+    {"rule": "4.1.3 one item one meaning", "status": "PASS", "evidence": "claims, timing, boundaries, and sources are separated"},
+    {"rule": "4.1.4 one sentence one meaning", "status": "PASS", "evidence": "dense parenthetical and dash constructions were avoided"},
+    {"rule": "4.1.5 opening line", "status": "PASS", "evidence": "each Markdown file begins with a one-line purpose"},
+    {"rule": "4.1.6 diagrams are auxiliary", "status": "PASS", "evidence": "the causal chain is preserved as text"},
+    {"rule": "4.1.7 restrained tone", "status": "PASS", "evidence": "unsupported superlatives and decorative language are absent"},
+    {"rule": "4.1.8 length", "status": "PASS", "evidence": "long material is divided into numbered sections"},
+    {"rule": "4.1.9 rewrite preservation", "status": "PASS", "evidence": "new work-layer documents do not replace existing project documents"},
+    {"rule": "4.1.10 numbering", "status": "PASS", "evidence": "headings use cumulative decimal numbering"},
+    {"rule": "4.1.11 indexing", "status": "PASS", "evidence": "each multi-section Markdown file includes Contents"}
+  ]
+}

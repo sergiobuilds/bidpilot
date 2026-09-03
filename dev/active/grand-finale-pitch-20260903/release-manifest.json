@@ -1,0 +1,27 @@
+{
+  "release_id": "grand-finale-pitch-20260903",
+  "source_commit_sha": "bf7fd4d56f95220677f86358d0004905b497872a",
+  "public_app_url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app",
+  "screenshot_capture_time": "2026-09-03T10:49:03.575749621+09:00",
+  "verified_run_id": "cortex-final-20260802-a",
+  "deck_sha256": "618067f4cefb7613208cad7bb4b91921dfaca2434d2da84c3242745d155016eb",
+  "pdf_sha256": "dfe88c4b2f4e116bbf3168b7bf87b6f579407926ee3e5912c80f9671207ec304",
+  "pptx_sha256": "2c5e82e0b15beed81023792921026eefa2e1fb263368f0d161dd5079540879c1",
+  "page_count": 10,
+  "measured_narration_duration_seconds": 569.948,
+  "measured_live_demo_duration_seconds": 194.652,
+  "qa_answer_duration_range_seconds": [23.475, 23.513],
+  "data_boundary_assertions": [
+    "The Suwon G2B notice is a real public tender source and is not represented as a currently open opportunity.",
+    "The supplier profile shown with the real tender is synthetic demo data.",
+    "The real-tender REVIEW and historical replay PURSUE are separate evidence paths.",
+    "No customer, award, revenue, market-share, win-rate, or time-saving result is claimed.",
+    "Human approval owns source review, supplier evidence, pricing, final editing, and legal submission.",
+    "The historical Snowflake and Cortex run is replayed and is not modified or recreated during the presentation."
+  ],
+  "unresolved_warnings": [
+    "The public app can cold-start while the Snowflake reader connects; prewarm both tabs before 15:15 KST.",
+    "The current public tender screen shows its source deadline. The spoken presentation must retain the approved historical-source wording and must not call it open.",
+    "laptop CDP ports 9222 and 9447 did not respond during this session, so final presenter-device visual sign-off remains a human preflight item."
+  ]
+}
