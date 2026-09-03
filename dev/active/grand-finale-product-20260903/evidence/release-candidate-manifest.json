@@ -1,0 +1,43 @@
+{
+  "status": "NOT DEPLOYED: DO NOT PRESENT AS THE CURRENT PUBLIC APP",
+  "candidate": {
+    "branch": "fix/grand-finale-product-20260903",
+    "commit": "994f61697004baf2d18effcf2231565141cac3fe",
+    "base_main": "bf7fd4d56f95220677f86358d0004905b497872a",
+    "local_image": {
+      "tag": "bidpilot-candidate:20260903",
+      "id": "fdd1e249cb2a",
+      "host": "dev-host",
+      "pushed_to_registry": false
+    }
+  },
+  "current_production": {
+    "service": "bidpilot-demo",
+    "region": "us-central1 (URL suffix -uc)",
+    "revision": "bidpilot-demo-00010-fjt",
+    "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app",
+    "note": "unchanged by this session; read from PASSDOWN.md, not from gcloud (gcloud is not installed on dev-host)"
+  },
+  "gates_before_any_deploy_step": [
+    "Sergio approves creating a no-traffic revision (external state change)",
+    "run from the host that holds gcloud auth (deploy-host); confirm the active project with: gcloud config get-value project",
+    "confirm service account, secret mount and BIDPILOT_SNOWFLAKE_CONNECTION env are inherited (deploy from source keeps them unless flags override)"
+  ],
+  "commands": {
+    "0_inspect_current": "gcloud run services describe bidpilot-demo --region us-central1 --format='value(status.latestReadyRevisionName,status.traffic)'",
+    "1_build_and_stage_no_traffic": "cd <checkout of fix/grand-finale-product-20260903 at 994f61697004baf2d18effcf2231565141cac3fe> && gcloud run deploy bidpilot-demo --region us-central1 --source . --no-traffic --tag finale --quiet",
+    "2_readback_tagged_preview": "curl -s -o /dev/null -w '%{http_code}\n' https://finale---bidpilot-demo-tbauoylpra-uc.a.run.app/ ; then load /, /?tender=R26BK01680611-000, /?walkthrough=1 signed-out and confirm Open/Closed tags, KST deadlines, REVIEW + 4 gaps, PURSUE replay counts",
+    "3_promote_after_sergio_approval": "gcloud run services update-traffic bidpilot-demo --region us-central1 --to-latest",
+    "3b_optional_keep_instance_warm_for_finale": "gcloud run services update bidpilot-demo --region us-central1 --min-instances 1   # separate approval; reverses with --min-instances 0 after the event",
+    "4_production_readback": "repeat step 2 against https://bidpilot-demo-tbauoylpra-uc.a.run.app and then flip the evidence headers to DEPLOYED AND VERIFIED",
+    "rollback": "gcloud run services update-traffic bidpilot-demo --region us-central1 --to-revisions bidpilot-demo-00010-fjt=100"
+  },
+  "forbidden_in_this_session": [
+    "traffic change",
+    "revision deletion",
+    "merge to main",
+    "portal update",
+    "Snowflake write",
+    "runner execution"
+  ]
+}

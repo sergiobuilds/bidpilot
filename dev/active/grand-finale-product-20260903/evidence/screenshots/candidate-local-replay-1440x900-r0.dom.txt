@@ -1,0 +1,14 @@
+BidPilot
+Verified result
+
+STAGE 1 OF 4
+
+Workspace is not configured
+
+No Snowflake connection is configured.
+
+BidPilot reads every screen from an authenticated Snowflake run and does not fall back to local fixtures. Set BIDPILOT_SNOWFLAKE_CONNECTION to a named Snowflake CLI connection that uses the BIDPILOT_READER role, then reload this page.
+
+For example: BIDPILOT_SNOWFLAKE_CONNECTION=bidpilot-reader streamlit run app.py
+
+Every status on these screens is read back from the recorded analysis. Nothing is generated at display time.

@@ -1,0 +1,103 @@
+B
+BidPilot
+Dashboard
+Tender detail
+Verified replay
+‹ Opportunities
+/
+R26BK01680611-000
+Official G2B · R26BK01680611-000
+K패스 기반 수원시 사회초년생 청년 교통비 지원사업 서비스 개발 용역
+Suwon City, Gyeonggi-do
+Retrieved 2026.08.24 · 01:30 KST
+REVIEW
+Deadline 2026.09.03 · 16:00 KST Open
+Value
+KRW 250M
+Technical
+90
+Price
+10
+Run ID
+Not created
+↻
+Processing history
+✓
+Source found
+2026.08.24 · 01:30 KST
+
+Official G2B listing captured
+
+✓
+Source reviewed
+
+Notice facts and score map verified
+
+✓
+Decision
+
+REVIEW — supplier evidence required
+
+✓
+Strategy
+
+Pending pursuit clearance
+
+✓
+Proposal
+
+Not started
+
+▣
+Source evidence
+Evidence level
+Source Reviewed
+Official URL
+Open G2B source ↗
+Supplier
+Synthetic demo supplier profile
+✓
+Decision summary
+Decision
+REVIEW
+Eligibility gaps
+4
+Run state
+Not created
+Supplier evidence required
+
+REVIEW is the correct outcome for this notice: the synthetic supplier profile has no evidence for 4 eligibility requirements, so no strategy or proposal is generated. The complete PURSUE chain is shown in the separate verified replay →
+
+◎
+Score-weighted Win Position
+Pending pursuit clearance
+
+Strategy starts only after a supported PURSUE decision.
+
+✎
+Proposal & red-team
+Not started
+
+No proposal is created while the decision remains REVIEW.
+
+☑
+Owned work
+01
+Registered software business for computer-related services, industry code 1468
+Operator review
+02
+Direct-production certificate for package software development and introduction service 8111159801 or information-system development service 8111159901
+Operator review
+03
+Valid SME or small-business confirmation for public procurement
+Operator review
+04
+Not a large, mid-sized, or cross-shareholding-group software business excluded from sub-KRW-2B projects
+Operator review
+◇
+Snowflake history
+No Snowflake run for this notice
+
+The historical replay below is a separate synthetic fixture.
+
+View verified capability replay →
