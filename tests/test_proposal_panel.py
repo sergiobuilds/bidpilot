@@ -94,3 +94,38 @@ def test_detail_with_full_evidence_drafts_a_proposal_and_enables_download(
     assert "Confirm delivery hours" in text
     assert len(app.download_button) == 1
     assert not app.download_button[0].disabled
+
+
+def test_detail_after_the_deadline_drafts_only_as_a_historical_exercise(
+    monkeypatch,
+) -> None:
+    from datetime import datetime
+
+    from bidpilot import refinement_app
+
+    seen: dict[str, object] = {}
+
+    def fake_draft(notice_number, supplier_evidence=None, **kwargs):
+        seen.update(kwargs)
+        draft = _fake_draft(notice_number, supplier_evidence, **kwargs)
+        return draft
+
+    monkeypatch.setattr(agent_core, "draft_proposal", fake_draft, raising=False)
+    monkeypatch.setattr(
+        refinement_app,
+        "current_clock",
+        lambda: datetime.fromisoformat("2026-09-03T16:30:00+09:00"),
+    )
+    app = AppTest.from_file(APP_PATH)
+    app.query_params["tender"] = NOTICE
+    app.run(timeout=60)
+    for box in app.checkbox:
+        box.check()
+    app.button(key="bp-draft-run").click()
+    app.run(timeout=60)
+
+    assert not app.exception
+    text = _text(app)
+    assert "historical exercise" in text.lower()
+    assert seen.get("historical_exercise") is True
+    assert "HISTORICAL EXERCISE" in text
