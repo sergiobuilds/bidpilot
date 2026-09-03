@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "bidpilot": {
+      "type": "http",
+      "url": "https://BIDPILOT_API_HOST/mcp"
+    },
+    "bidpilot-local": {
+      "type": "stdio",
+      "command": "uv",
+      "args": ["run", "--project", "/path/to/bidpilot", "python", "-m", "bidpilot.mcp_server"]
+    }
+  }
+}
