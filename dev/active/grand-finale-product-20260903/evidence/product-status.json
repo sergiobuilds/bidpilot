@@ -2,15 +2,15 @@
   "status": "DEPLOYED AND VERIFIED",
   "generated_at_kst": "2026-09-03 11:03 KST",
   "branch": "fix/grand-finale-product-20260903",
-  "head": "f72a056",
+  "head": "2a97fb5",
   "base": "bf7fd4d56f95220677f86358d0004905b497872a (origin/main)",
   "pushed": true,
   "worktree": "~/projects/personal/products/.worktrees/bidpilot-grand-finale-product-20260903",
   "canonical_checkout_touched": false,
-  "public_app_currently_serving": "f72a056 via Cloud Run revision bidpilot-demo-00020-rat (100% traffic, min-instances 1); tags preview→00010-fjt, finale→00017-qen, finale2→00020-rat",
+  "public_app_currently_serving": "2a97fb5 via Cloud Run revision bidpilot-demo-00022-deg (100% traffic, min-instances 1); previous verified builds 00020-rat, 00012-vvg, 00010-fjt",
   "tests": {
     "command": "uv run pytest tests/ -q",
-    "passed": 204,
+    "passed": 221,
     "failed": 0
   },
   "static_checks": {
@@ -49,6 +49,10 @@
     {
       "commit": "545cb6d..b7e6ca3",
       "what": "agent surface: agent_core, remote MCP/REST bidpilot-api, Cortex Code skill, agent mounts"
+    },
+    {
+      "commit": "2a97fb5",
+      "what": "live decision-and-draft panel on the tender detail; agent access strip; draft_proposal across MCP/REST/skill"
     }
   ],
   "invariants_preserved": [
@@ -74,8 +78,8 @@
     ],
     "source": "cold-start.md"
   },
-  "deployed_at_kst": "2026-09-03 12:46 KST",
-  "main": "f72a056 (fast-forward, includes agent surface and lean dashboard)",
+  "deployed_at_kst": "2026-09-03 13:38 KST",
+  "main": "2a97fb5",
   "approved_and_executed": [
     "no-traffic revision 00017-qen",
     "traffic promotion",
@@ -107,7 +111,7 @@
     "api_url": "https://bidpilot-api-164282963747.us-central1.run.app",
     "mcp_url": "https://bidpilot-api-164282963747.us-central1.run.app/mcp",
     "openapi": "https://bidpilot-api-164282963747.us-central1.run.app/openapi.json",
-    "cloud_run_service": "bidpilot-api (revision bidpilot-api-00002-bdf)",
+    "cloud_run_service": "bidpilot-api (revision bidpilot-api-00003-l4q, commit d4ff190)",
     "cortex_code_skill": "skills/bidpilot (installed and auto-loaded on deploy host Cortex Code v1.1.78)",
     "mounts": "integrations/{claude-code,cursor,cortex-code,gemini-cli,chatgpt}",
     "verified": [
@@ -117,11 +121,32 @@
       "Claude Code HTTP mount: list_tenders/decide/replay",
       "Claude Code stdio mount",
       "Cortex Code skill interactive REVIEW/4",
-      "cortex mcp add http registered"
+      "cortex mcp add http registered",
+      "REST POST /proposal 200 with 14 sections (full evidence), 423 proposal_locked without evidence",
+      "MCP tools/call draft_proposal PURSUE 14 sections",
+      "live proposal panel on the public tender detail: evidence → PURSUE → draft → Markdown download"
     ],
     "not_verified": [
       "cortex exec non-interactive (blocked on subscription accounts)",
       "ChatGPT Custom GPT import (needs a ChatGPT account session)"
+    ]
+  },
+  "proposal_draft": {
+    "function": "agent_core.draft_proposal",
+    "gate": "PURSUE only (all eligibility requirements evidenced); closed notice only as HISTORICAL EXERCISE",
+    "supplier": "synthetic supplier-northstar, disclosed",
+    "sections_real_notice": 14,
+    "score_map": "Technical 90 / Price 10 from the source",
+    "assumptions": [
+      "delivery_hours=800 constant",
+      "tags from title words + public-sector"
+    ],
+    "surfaces": [
+      "tender detail panel",
+      "MCP draft_proposal",
+      "REST POST /proposal",
+      "skill draft-proposal",
+      "CLI shim"
     ]
   }
 }

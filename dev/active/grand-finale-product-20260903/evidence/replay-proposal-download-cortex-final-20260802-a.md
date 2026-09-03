@@ -1,4 +1,4 @@
-## Technical approach
+DEPLOYED AND VERIFIED — production readback passed 2026-09-03 13:38 KST on Cloud Run revision bidpilot-demo-00022-deg (lean dashboard + live proposal draft, 100% traffic, min-instances 1); agent API bidpilot-api-00003-l4q live with POST /proposal; main = 2a97fb5
 
 Northstar applies a structured data-quality remediation methodology proven in the City Open Data Reliability Program, combining automated defect detection with API change-control gates to prevent regression.
 

@@ -14,9 +14,9 @@
   "current_production": {
     "service": "bidpilot-demo",
     "region": "us-central1",
-    "revision": "bidpilot-demo-00020-rat",
+    "revision": "bidpilot-demo-00022-deg",
     "url": "https://bidpilot-demo-tbauoylpra-uc.a.run.app",
-    "commit": "f72a056"
+    "commit": "2a97fb5"
   },
   "gates_before_any_deploy_step": [
     "Sergio approves creating a no-traffic revision (external state change)",
@@ -44,12 +44,13 @@
     "no_traffic_revision": "bidpilot-demo-00017-qen (tag finale)",
     "promotion": "update-traffic --to-latest",
     "min_instances": "services update --min-instances 1 → revision bidpilot-demo-00012-vvg, same image, 100% traffic",
-    "rollback_now": "gcloud run services update-traffic bidpilot-demo --region us-central1 --to-revisions bidpilot-demo-00012-vvg=100  # previous verified build; 00010-fjt for the 24 Aug build",
+    "rollback_now": "gcloud run services update-traffic bidpilot-demo --region us-central1 --to-revisions bidpilot-demo-00020-rat=100  # lean dashboard without the live draft panel",
     "after_event": "gcloud run services update bidpilot-demo --region us-central1 --min-instances 0"
   },
   "agent_api": {
     "service": "bidpilot-api",
     "url": "https://bidpilot-api-164282963747.us-central1.run.app",
-    "rollback": "gcloud run services delete bidpilot-api --region us-central1 (independent of the demo app)"
+    "rollback": "gcloud run services delete bidpilot-api --region us-central1 (independent of the demo app)",
+    "revision": "bidpilot-api-00003-l4q"
   }
 }

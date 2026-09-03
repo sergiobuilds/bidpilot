@@ -1,4 +1,4 @@
-DEPLOYED AND VERIFIED — production readback passed 2026-09-03 12:46 KST on Cloud Run revision bidpilot-demo-00020-rat (lean dashboard, 100% traffic, min-instances 1); agent API bidpilot-api live; main = f72a056
+DEPLOYED AND VERIFIED — production readback passed 2026-09-03 13:38 KST on Cloud Run revision bidpilot-demo-00022-deg (lean dashboard + live proposal draft, 100% traffic, min-instances 1); agent API bidpilot-api-00003-l4q live with POST /proposal; main = 2a97fb5
 
 # Verified claims (what the PPT may state, with the evidence that backs each line)
 
@@ -37,3 +37,12 @@ Do not claim: a live PURSUE on the real notice, currently biddable tenders, any 
 | Cursor, Gemini CLI and ChatGPT (Custom GPT Actions via OpenAPI, MCP connector) mount files exist | `integrations/` — ChatGPT import itself was not exercised |
 
 Do not claim: `cortex exec` non-interactive runs (blocked on subscription accounts), a ChatGPT session that was actually connected, or any write path through the agent surface.
+
+## Added 2026-09-03 13:50 KST — the proposal draft actually comes out (all live)
+
+| Claim | Evidence |
+|---|---|
+| On the public tender detail, ticking evidence for the 4 eligibility requirements turns the decision to PURSUE and drafts a proposal in place: 14 sections (Executive Summary … Technical 90 points, Price 10 points … Delivery Action), red-team result, owned work, Markdown download `R26BK01680611-000-proposal-draft.md` (4989 chars) | `screenshots/production-final-detail-proposal-pursue-1440x900.png`, `live-proposal-draft-R26BK01680611-000.md`, `browser-results.json` production_live_proposal_flow |
+| Without evidence the same button stops at REVIEW with 4 gaps and drafts nothing; the supplier is always the disclosed synthetic profile; after 16:00 KST the draft is labelled HISTORICAL EXERCISE | `tests/test_proposal_panel.py`, `agent-surface/proposal/` |
+| The same draft is available to agents: MCP tool `draft_proposal`, REST `POST /proposal` (423 when locked), skill `draft-proposal`, on `bidpilot-api-00003-l4q` | `agent-surface/proposal/proposal.md` and the Cloud Run responses beside it |
+| 221 tests pass | `test-results.txt` |
