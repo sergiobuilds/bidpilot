@@ -8,7 +8,7 @@ This ledger fixes the authoritative facts, global evidence, product boundaries, 
 
 | Field | Verified value |
 |---|---|
-| Current `origin/main` | `9e7f2e3fee0faae40a3378cfbdd3fbb794fd61c5` |
+| Current `origin/main` | `a6d70356b898186587755b2562386069a5b5839a` |
 | Public-app source | `1955d4b` · Cloud Run revision `bidpilot-demo-00024-fim` |
 | Public repository | `https://github.com/sergiobuilds/bidpilot` |
 | Public application | `https://bidpilot-demo-tbauoylpra-uc.a.run.app` |
@@ -88,3 +88,4 @@ The global claim is structural: public notice, eligibility rules, scored evaluat
 - 2026-09-03 v4: Restated the deck as a fifteen-slide dark show. No claim was added or widened; the quick case on slide 1 is a framing case, and the real-tender and historical-replay boundaries of section 5 continue to govern slides 2, 9 and 10.
 - 2026-09-03 v5: Froze the release against current `origin/main` after the final fetch.
 - 2026-09-03 v6: Synchronized the source identity and embedded product captures to deployed revision `bidpilot-demo-00024-fim` after its production readback reached `origin/main`.
+- 2026-09-03 v7: Advanced the source identity after the approved keep-warm decision and handoff wording reached `origin/main`; product claims and captures are unchanged.
