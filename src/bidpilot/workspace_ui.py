@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 from bidpilot.ui_components import (
     PRODUCT_STATES,
@@ -55,12 +55,40 @@ WORKSPACES = (
 WORKSPACE_BY_KEY = {workspace.key: workspace for workspace in WORKSPACES}
 
 
-def _catalog_date(value: object) -> str:
+KST = timezone(timedelta(hours=9))
+
+
+def catalog_date(value: object) -> str:
+    """Format a stored ISO timestamp for display, naming KST when it is aware."""
     try:
         parsed = datetime.fromisoformat(str(value))
     except ValueError:
         return str(value or "—")
-    return parsed.strftime("%Y.%m.%d · %H:%M")
+    if parsed.tzinfo is None:
+        return parsed.strftime("%Y.%m.%d · %H:%M")
+    return parsed.astimezone(KST).strftime("%Y.%m.%d · %H:%M KST")
+
+
+_catalog_date = catalog_date
+
+
+def deadline_state(value: object, now: datetime) -> str | None:
+    """Return "open" or "closed" against an aware clock, or None when unknown."""
+    try:
+        parsed = datetime.fromisoformat(str(value))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None or now.tzinfo is None:
+        return None
+    return "open" if parsed > now else "closed"
+
+
+def _due_tag(value: object, now: datetime) -> str:
+    state = deadline_state(value, now)
+    if state is None:
+        return ""
+    label = "Open" if state == "open" else "Closed"
+    return f' <span class="due-tag due-{state}">{label}</span>'
 
 
 def _catalog_value(value: object) -> str:
@@ -75,11 +103,22 @@ def _catalog_weights(row: Mapping[str, object]) -> str:
     return "—" if technical is None or price is None else f"T {technical} · P {price}"
 
 
-def koat_dashboard(rows: Sequence[Mapping[str, object]]) -> str:
+def koat_dashboard(rows: Sequence[Mapping[str, object]], *, now: datetime) -> str:
     """Render the verified-source catalogue with the literal KOAT dashboard grammar."""
     reviewed = [row for row in rows if row.get("evidence_level") == "source-reviewed"]
     found = [row for row in rows if row.get("evidence_level") == "source-found"]
     review_count = sum(row.get("status") == "REVIEW" for row in rows)
+    open_rows = [
+        row for row in rows if deadline_state(row.get("deadline"), now) == "open"
+    ]
+    closed_count = sum(
+        deadline_state(row.get("deadline"), now) == "closed" for row in rows
+    )
+    if open_rows:
+        next_close = min(str(row.get("deadline")) for row in open_rows)
+        deadline_context = f"{closed_count} closed · next {_catalog_date(next_close)}"
+    else:
+        deadline_context = "All deadlines passed · historical public sources"
     recent = "".join(
         '<div class="ritem"><span class="rmark">✓</span><div class="rbody">'
         f'<div class="rtop"><span class="rcompany">{esc(row.get("notice_number"))}</span>'
@@ -94,7 +133,8 @@ def koat_dashboard(rows: Sequence[Mapping[str, object]]) -> str:
         f"<strong>{esc(row.get('title'))}</strong><small>{esc(row.get('notice_number'))}</small></td>"
         f'<td data-label="Issuer">{esc(row.get("issuer"))}</td>'
         f'<td data-label="Value" class="num">{esc(_catalog_value(row.get("contract_value_krw")))}</td>'
-        f'<td data-label="Deadline" class="num">{esc(_catalog_date(row.get("deadline")))}</td>'
+        f'<td data-label="Deadline" class="num">{esc(_catalog_date(row.get("deadline")))}'
+        f"{_due_tag(row.get('deadline'), now)}</td>"
         f'<td data-label="Weights" class="num">{esc(_catalog_weights(row))}</td>'
         f'<td data-label="Status"><span class="state-tag state-{esc(str(row.get("evidence_level")))}">'
         f"{esc(row.get('status'))}</span></td>"
@@ -142,15 +182,17 @@ def koat_dashboard(rows: Sequence[Mapping[str, object]]) -> str:
         '<div class="kpi"><i class="tick"></i><span class="kpi-lab">PURSUE</span>'
         '<div class="kpi-val"><strong class="kpi-num">0</strong><span class="kpi-unit">notices</span></div>'
         '<p class="kpi-ctx">No cleared opportunity</p></div>'
-        f'<div class="kpi"><i class="tick"></i><span class="kpi-lab">Due soon</span>'
-        f'<div class="kpi-val"><strong class="kpi-num">{len(rows)}</strong><span class="kpi-unit">notices</span></div>'
-        '<p class="kpi-ctx">After 24 Aug 2026</p></div></section>'
+        f'<div class="kpi"><i class="tick"></i><span class="kpi-lab">Open deadlines</span>'
+        f'<div class="kpi-val"><strong class="kpi-num">{len(open_rows)}</strong>'
+        f'<span class="kpi-unit">{"notice" if len(open_rows) == 1 else "notices"}</span></div>'
+        f'<p class="kpi-ctx">{esc(deadline_context)}</p></div></section>'
         '<section class="tender-section"><div class="shead"><h2 class="t-headline1">Official tender catalogue</h2>'
         f'<span class="badge">{len(rows)} rows</span></div><div class="table-wrap"><table class="tbl tender-table">'
         "<thead><tr><th>Tender</th><th>Issuer</th><th>Value</th><th>Deadline</th><th>Weights</th><th>Status</th><th>Action</th></tr></thead>"
         f"<tbody>{body_rows}</tbody></table></div>"
         '<p class="note">Source found means the official listing URL and deadline were captured. '
-        "Source reviewed means the notice facts and score map passed the committed source contract.</p></section>"
+        "Source reviewed means the notice facts and score map passed the committed source contract. "
+        f"Deadline states are computed against {esc(_catalog_date(now.isoformat()))}.</p></section>"
         '<section class="grid"><div class="panel"><div class="shead"><h2 class="t-headline1">Pursuit funnel</h2>'
         '<span class="meta">source → work</span></div><div class="funnel">'
         + "".join(
@@ -176,6 +218,7 @@ def koat_dashboard(rows: Sequence[Mapping[str, object]]) -> str:
 def koat_tender_detail(
     row: Mapping[str, object],
     *,
+    now: datetime,
     reviewed_view: Mapping[str, object] | None = None,
 ) -> str:
     """Render a selected public notice with the literal KOAT detail grammar."""
@@ -231,7 +274,8 @@ def koat_tender_detail(
         f'<div class="id-sub"><span>{esc(row.get("issuer"))}</span>'
         f"<span>Retrieved {esc(_catalog_date(row.get('retrieved_at')))}</span></div></div>"
         f'<div class="id-right"><span class="statechip {"sc-orange" if reviewed else "sc-grey"}"><i class="sd"></i>{status}</span>'
-        f'<span class="id-due">Deadline <b>{esc(_catalog_date(row.get("deadline")))}</b></span></div></div>'
+        f'<span class="id-due">Deadline <b>{esc(_catalog_date(row.get("deadline")))}</b>'
+        f"{_due_tag(row.get('deadline'), now)}</span></div></div>"
         '<div class="id-contract">'
         f'<div class="id-cell"><span class="k">Value</span><strong class="v big">{esc(_catalog_value(row.get("contract_value_krw")))}</strong></div>'
         f'<div class="id-cell"><span class="k">Technical</span><strong class="v big">{esc(row.get("technical_weight") if reviewed else "—")}</strong></div>'
@@ -629,7 +673,7 @@ html,body,.stApp,[data-testid="stAppViewContainer"],section.stMain,[data-testid=
 .bp-koat .causal{margin-top:24px;border:1px solid var(--line-neutral);border-radius:var(--radius-16);background:var(--blue-99);overflow:hidden}.bp-koat .causal-flow{display:grid;grid-template-columns:1.45fr .8fr 1.25fr 1fr .8fr 1.3fr}.bp-koat .causal-flow span{position:relative;min-width:0;min-height:70px;padding:14px 16px;display:flex;flex-direction:column;justify-content:center;gap:4px;border-right:1px solid var(--line-neutral);font-size:.8125rem;font-weight:600;line-height:1.3;overflow-wrap:anywhere}.bp-koat .causal-flow span:last-child{border-right:0}.bp-koat .causal-flow b{font-size:.6875rem;color:var(--primary);letter-spacing:.04em}.bp-koat .tool-links{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;padding:8px 12px;border-top:1px solid var(--line-neutral);background:#fff}.bp-koat .tool-links-lab{margin-right:auto;color:var(--label-alt);font-size:.75rem;font-weight:600}.bp-koat .tool-links a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:var(--radius-8);color:var(--primary-strong);font-size:.75rem;font-weight:700}.bp-koat .tool-links a:hover{background:var(--blue-95)}
 .bp-koat .kpi-band{margin-top:20px;border-top:1px solid var(--line-solid);border-bottom:1px solid var(--line-solid);display:grid;grid-template-columns:repeat(4,1fr)}.bp-koat .kpi{position:relative;padding:18px 22px 17px;border-right:1px solid var(--line-alt)}.bp-koat .kpi:last-child{border-right:0}.bp-koat .kpi-lab{color:var(--label-alt);font-weight:600;font-size:.875rem}.bp-koat .kpi-val{display:flex;align-items:baseline;gap:6px;margin-top:9px}.bp-koat .kpi-num{font-size:2.25rem;line-height:1;font-weight:700}.bp-koat .kpi-unit{color:var(--label-alt);font-weight:600;font-size:.9375rem}.bp-koat .kpi-ctx{margin-top:7px;color:var(--label-alt);font-size:.75rem}.bp-koat .kpi.focal .kpi-num{color:var(--primary)}.bp-koat .kpi .tick{position:absolute;left:22px;top:0;width:26px;height:2px;background:var(--line-solid)}.bp-koat .kpi.focal .tick{background:var(--primary)}
 .bp-koat .grid{margin-top:38px;display:grid;grid-template-columns:1.55fr 1fr;gap:34px;align-items:start}.bp-koat .panel{min-width:0}.bp-koat .shead{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}.bp-koat .shead .meta{color:var(--label-alt);font-size:.8125rem}.bp-koat .badge{display:inline-flex;height:22px;padding:0 9px;align-items:center;border-radius:var(--radius-pill);background:var(--blue-95);color:var(--primary-strong);font-size:.75rem;font-weight:700}.bp-koat .frow{display:grid;grid-template-columns:110px 1fr;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line-alt)}.bp-koat .fstep{display:flex;flex-direction:column}.bp-koat .fstep .nm{font-weight:600;font-size:.9375rem}.bp-koat .fstep .rt{font-size:.6875rem;color:var(--label-assist)}.bp-koat .ftrack{position:relative;height:34px;border-radius:var(--radius-8);background:var(--fill-alt);overflow:hidden}.bp-koat .fbar{position:absolute;inset:0 auto 0 0;height:100%;border-radius:var(--radius-8);background:linear-gradient(90deg,var(--blue-50),var(--blue-45))}.bp-koat .fcount{position:absolute;top:50%;transform:translateY(-50%);left:14px;color:#fff;font-weight:700;font-size:.9375rem}.bp-koat .fcount.outside{color:var(--label-neutral)}.bp-koat .ritem{display:flex;gap:13px;padding:13px 10px;border-bottom:1px solid var(--line-alt);align-items:flex-start}.bp-koat .rmark{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--blue-95);color:var(--primary)}.bp-koat .rbody{min-width:0;flex:1}.bp-koat .rtop{display:flex;gap:8px;flex-wrap:wrap}.bp-koat .rcompany{font-weight:600;font-size:.9375rem}.bp-koat .rtype{font-size:.6875rem;font-weight:700;padding:1px 7px;border-radius:var(--radius-pill);background:var(--fill-normal)}.bp-koat .rdetail{color:var(--label-alt);font-size:.8125rem;margin-top:3px;line-height:1.3}.bp-koat .rts{color:var(--label-assist);font-size:.6875rem;white-space:nowrap}
-.bp-koat .tender-section{margin-top:32px}.bp-koat .table-wrap{overflow:hidden;border-top:1px solid var(--line-solid)}.bp-koat .tbl{width:100%;border-collapse:collapse}.bp-koat .tbl th{text-align:left;font-weight:600;font-size:.75rem;color:var(--label-alt);padding:12px 10px;border-bottom:1px solid var(--line-solid);white-space:nowrap}.bp-koat .tbl td{padding:15px 10px;border-bottom:1px solid var(--line-alt);font-size:.8125rem;vertical-align:middle}.bp-koat .tbl tr:hover{background:var(--fill-alt)}.bp-koat .tender-cell{min-width:260px}.bp-koat .tender-cell strong,.bp-koat .tender-cell small{display:block}.bp-koat .tender-cell strong{font-size:.875rem;line-height:1.3rem}.bp-koat .tender-cell small{margin-top:3px;color:var(--label-alt)}.bp-koat .state-tag{display:inline-flex;height:24px;align-items:center;padding:0 9px;border-radius:var(--radius-pill);font-size:.6875rem;font-weight:700;white-space:nowrap}.bp-koat .state-source-reviewed{background:var(--orange-95);color:var(--orange-39)}.bp-koat .state-source-found{background:var(--fill-strong);color:var(--label-neutral)}.bp-koat .row-action{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 14px;border-radius:var(--radius-10);border:1px solid var(--line-normal);color:var(--primary-strong);font-weight:700;white-space:nowrap}.bp-koat .note{margin-top:18px;padding-top:16px;border-top:1px solid var(--line-alt);color:var(--label-assist);font-size:.75rem;line-height:1.55}
+.bp-koat .tender-section{margin-top:32px}.bp-koat .table-wrap{overflow:hidden;border-top:1px solid var(--line-solid)}.bp-koat .tbl{width:100%;border-collapse:collapse}.bp-koat .tbl th{text-align:left;font-weight:600;font-size:.75rem;color:var(--label-alt);padding:12px 10px;border-bottom:1px solid var(--line-solid);white-space:nowrap}.bp-koat .tbl td{padding:15px 10px;border-bottom:1px solid var(--line-alt);font-size:.8125rem;vertical-align:middle}.bp-koat .tbl tr:hover{background:var(--fill-alt)}.bp-koat .tender-cell{min-width:260px}.bp-koat .tender-cell strong,.bp-koat .tender-cell small{display:block}.bp-koat .tender-cell strong{font-size:.875rem;line-height:1.3rem}.bp-koat .tender-cell small{margin-top:3px;color:var(--label-alt)}.bp-koat .state-tag{display:inline-flex;height:24px;align-items:center;padding:0 9px;border-radius:var(--radius-pill);font-size:.6875rem;font-weight:700;white-space:nowrap}.bp-koat .state-source-reviewed{background:var(--orange-95);color:var(--orange-39)}.bp-koat .state-source-found{background:var(--fill-strong);color:var(--label-neutral)}.bp-koat .due-tag{display:inline-flex;height:20px;align-items:center;margin-left:6px;padding:0 7px;border-radius:var(--radius-pill);font-size:.6875rem;font-weight:700;white-space:nowrap;vertical-align:middle}.bp-koat .due-open{background:var(--green-95);color:var(--green-40)}.bp-koat .due-closed{background:var(--fill-strong);color:var(--label-neutral)}.bp-koat .row-action{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 14px;border-radius:var(--radius-10);border:1px solid var(--line-normal);color:var(--primary-strong);font-weight:700;white-space:nowrap}.bp-koat .note{margin-top:18px;padding-top:16px;border-top:1px solid var(--line-alt);color:var(--label-assist);font-size:.75rem;line-height:1.55}
 .bp-koat.detail{--maxw:1080px}.bp-koat .topbar{position:sticky;top:0;z-index:40;border-bottom:1px solid var(--line-neutral);background:rgba(255,255,255,.72);backdrop-filter:saturate(180%) blur(32px)}.bp-koat .topbar::before{content:"";position:absolute;left:0;top:0;height:2px;width:100%;background:linear-gradient(90deg,var(--blue-50),var(--blue-45) 45%,transparent 92%)}.bp-koat .topbar-inner{max-width:1080px;margin:0 auto;padding:0 32px;height:60px;display:flex;align-items:center}.bp-koat .topbar .brand{font-size:.9375rem;font-weight:600}.bp-koat .topbar .mark{width:24px;height:24px;border-radius:7px;background:linear-gradient(145deg,var(--blue-50),var(--blue-40));display:grid;place-items:center;color:#fff}.bp-koat .detail-nav{display:flex;margin-left:auto;gap:4px}.bp-koat .detail-nav a{padding:7px 13px;border-radius:var(--radius-8);font-size:.875rem;color:var(--label-neutral)}.bp-koat .detail-nav a.current{color:var(--primary);background:var(--blue-95)}.bp-koat .detail-wrap{max-width:1080px;margin:0 auto;padding:30px 32px 64px}.bp-koat .crumb{display:flex;align-items:center;gap:7px;font-size:.8125rem;color:var(--label-alt);margin-bottom:18px}.bp-koat .idhead{position:relative;border:1px solid var(--line-neutral);border-radius:var(--radius-20);overflow:hidden;background:#fff;box-shadow:var(--shadow-sm)}.bp-koat .idhead::before{content:"";position:absolute;inset:0;background:radial-gradient(130% 120% at 0% 0%,var(--blue-95) 0%,rgba(234,242,254,0) 46%);opacity:.7}.bp-koat .idhead-top{position:relative;display:flex;gap:20px 28px;justify-content:space-between;align-items:flex-start;padding:26px 28px 22px}.bp-koat .id-left{min-width:0;display:flex;flex-direction:column;gap:11px}.bp-koat .id-eyebrow{display:flex;align-items:center;gap:7px;font-size:.75rem;font-weight:600;color:var(--primary-strong)}.bp-koat .id-eyebrow .pip{width:6px;height:6px;border-radius:50%;background:var(--primary)}.bp-koat .id-name h1{margin:0;font-size:1.875rem;line-height:2.375rem;letter-spacing:-.025em}.bp-koat .id-sub{display:flex;flex-wrap:wrap;gap:7px 16px;font-size:.875rem;color:var(--label-alt)}.bp-koat .id-right{display:flex;flex-direction:column;align-items:flex-end;gap:11px}.bp-koat .statechip{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;border-radius:var(--radius-pill);font-size:.875rem;font-weight:700}.bp-koat .statechip .sd{width:8px;height:8px;border-radius:50%}.bp-koat .sc-orange{background:var(--orange-95);color:var(--orange-39)}.bp-koat .sc-orange .sd{background:var(--orange-50)}.bp-koat .sc-grey{background:var(--fill-strong);color:var(--label-neutral)}.bp-koat .sc-grey .sd{background:var(--cn-50)}.bp-koat .id-due{font-size:.8125rem;color:var(--label-alt)}.bp-koat .id-contract{position:relative;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line-alt)}.bp-koat .id-cell{padding:15px 28px 17px;border-right:1px solid var(--line-alt)}.bp-koat .id-cell:last-child{border-right:0}.bp-koat .id-cell .k{display:block;font-size:.75rem;color:var(--label-alt);margin-bottom:5px}.bp-koat .id-cell .v{font-size:.9375rem}.bp-koat .id-cell .big{font-size:1.0625rem}.bp-koat .sec{margin-top:34px}.bp-koat .sec-head{display:flex;align-items:center;gap:11px;margin-bottom:16px}.bp-koat .sec-ic{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--blue-95);color:var(--primary)}.bp-koat .sec-title{font-size:1.125rem;font-weight:600}.bp-koat .pair{display:grid;grid-template-columns:1fr 1fr;gap:28px}.bp-koat.detail .panel{border:1px solid var(--line-neutral);border-radius:var(--radius-16);background:#fff;box-shadow:var(--shadow-xs);overflow:hidden}.bp-koat .panel-pad{padding:20px 22px}.bp-koat .timeline{list-style:none;margin:0;padding:4px 2px}.bp-koat .tl{display:grid;grid-template-columns:30px 1fr;gap:14px;padding-bottom:18px}.bp-koat .tl-rail{position:relative;display:flex;justify-content:center}.bp-koat .tl-rail::before{content:"";position:absolute;top:26px;bottom:-18px;width:2px;background:var(--line-solid)}.bp-koat .tl:last-child .tl-rail::before{display:none}.bp-koat .tl-node{z-index:1;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1.5px solid var(--line-solid);color:var(--label-assist);font-style:normal}.bp-koat .tl-top{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}.bp-koat .tl-lab{font-size:.9375rem}.bp-koat .tl-ts{font-size:.75rem;color:var(--label-assist)}.bp-koat .tl-detail{font-size:.8125rem;color:var(--label-alt);margin-top:3px}.bp-koat .evidence-panel>div{display:flex;justify-content:space-between;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line-alt);font-size:.875rem}.bp-koat .evidence-panel>div:last-child{border-bottom:0}.bp-koat .evidence-panel span{color:var(--label-alt)}.bp-koat .evidence-panel a{color:var(--primary);font-weight:600}.bp-koat .an{display:grid;grid-template-columns:repeat(3,1fr)}.bp-koat .an-cell{padding:20px 22px;border-right:1px solid var(--line-alt)}.bp-koat .an-cell:last-child{border-right:0}.bp-koat .an-k{display:block;font-size:.8125rem;color:var(--label-alt);margin-bottom:9px}.bp-koat .an-v{font-size:1.875rem;line-height:1;font-weight:700}.bp-koat .an-v.flag{color:var(--orange-39)}.bp-koat .an-foot{padding:16px 22px;border-top:1px solid var(--line-alt);background:var(--bg-alt)}.bp-koat .flagbadge{display:inline-flex;align-items:center;height:30px;padding:0 13px;border-radius:var(--radius-pill);background:var(--orange-95);color:var(--orange-39);font-size:.8125rem;font-weight:700}.bp-koat .state-panel{padding:24px 22px}.bp-koat .state-panel p{margin-top:6px;color:var(--label-alt);font-size:.875rem}.bp-koat .work-list{list-style:none;margin:0;padding:0}.bp-koat .work-item{display:grid;grid-template-columns:28px minmax(0,1fr) 120px;gap:12px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line-alt)}.bp-koat .work-no{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:var(--blue-95);color:var(--primary);font-size:.75rem}.bp-koat .work-item small{color:var(--label-alt)}.bp-koat .work-empty{padding:24px 20px;color:var(--label-alt)}.bp-koat .replay-panel{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:20px 22px}.bp-koat .replay-panel p{margin-top:5px;color:var(--label-alt);font-size:.8125rem}.bp-koat .replay-panel a{color:var(--primary);font-size:.875rem;font-weight:700}
 @media(max-width:992px){.bp-koat .grid{grid-template-columns:1fr}.bp-koat .pair{grid-template-columns:1fr}}
 @media(max-width:768px){.bp-koat .nav-in,.bp-koat .topbar-inner{padding:0 18px;gap:14px}.bp-koat .brand-sub,.bp-koat .brand .sub{display:none}.bp-koat .wrap,.bp-koat .detail-wrap{padding:26px 18px 44px}.bp-koat .causal-flow{grid-template-columns:1fr 1fr}.bp-koat .causal-flow span{border-bottom:1px solid var(--line-neutral)}.bp-koat .causal-flow span:nth-child(2n){border-right:0}.bp-koat .tool-links{align-items:stretch;flex-direction:column}.bp-koat .tool-links::before{margin:2px 0 0}.bp-koat .tool-links a{width:100%}.bp-koat .kpi-band{grid-template-columns:repeat(2,1fr)}.bp-koat .kpi:nth-child(2n){border-right:0}.bp-koat .table-wrap{overflow:visible}.bp-koat .tender-table thead{display:none}.bp-koat .tender-table,.bp-koat .tender-table tbody,.bp-koat .tender-table tr,.bp-koat .tender-table td{display:block;width:100%}.bp-koat .tender-table tr{padding:12px 0;border-bottom:1px solid var(--line-neutral)}.bp-koat .tender-table td{display:flex;justify-content:space-between;gap:16px;border:0;padding:6px 0;text-align:right}.bp-koat .tender-table td::before{content:attr(data-label);color:var(--label-alt);font-weight:500}.bp-koat .tender-table .tender-cell{display:block;text-align:left}.bp-koat .tender-table .tender-cell::before{display:none}.bp-koat .idhead-top{padding:22px 20px 18px;flex-wrap:wrap}.bp-koat .id-name h1{font-size:1.5rem;line-height:2rem}.bp-koat .id-right{align-items:flex-start;width:100%}.bp-koat .id-contract{grid-template-columns:1fr 1fr}.bp-koat .id-cell{border-bottom:1px solid var(--line-alt)}.bp-koat .id-cell:nth-child(2n){border-right:0}.bp-koat .an{grid-template-columns:1fr}.bp-koat .an-cell{border-right:0;border-bottom:1px solid var(--line-alt)}.bp-koat .work-item{grid-template-columns:28px minmax(0,1fr)}.bp-koat .work-item small{grid-column:2}.bp-koat .replay-panel{display:block}.bp-koat .replay-panel a{display:inline-block;margin-top:14px}}

@@ -8,6 +8,8 @@ persisted-run actions by accident.
 
 from __future__ import annotations
 
+from datetime import datetime
+
 import pytest
 
 from bidpilot.tender_catalog import load_public_tender_catalog
@@ -28,6 +30,8 @@ from bidpilot.workspace_ui import (
     workspace_navigation,
     workspace_route_navigation,
 )
+
+FINALE_CLOCK = datetime.fromisoformat("2026-09-03T15:40:00+09:00")
 
 
 def test_workspace_navigation_preserves_the_required_three_workspace_boundary() -> None:
@@ -305,7 +309,7 @@ def test_selected_real_tender_stops_before_an_unrecorded_run() -> None:
 def test_literal_koat_dashboard_renders_kpis_funnel_recent_and_six_source_rows() -> (
     None
 ):
-    markup = koat_dashboard(load_public_tender_catalog())
+    markup = koat_dashboard(load_public_tender_catalog(), now=FINALE_CLOCK)
 
     for css_class in (
         "nav-in",
@@ -316,7 +320,7 @@ def test_literal_koat_dashboard_renders_kpis_funnel_recent_and_six_source_rows()
         "tbl tender-table",
     ):
         assert css_class in markup
-    for label in ("Public sources", "Needs review", "PURSUE", "Due soon"):
+    for label in ("Public sources", "Needs review", "PURSUE", "Open deadlines"):
         assert label in markup
     assert markup.count("<tr>") == 7
     assert markup.count('state-source-found">SOURCE FOUND</span>') == 5
@@ -327,7 +331,7 @@ def test_literal_koat_dashboard_renders_kpis_funnel_recent_and_six_source_rows()
 def test_literal_koat_dashboard_puts_real_opportunities_before_supporting_analytics() -> (
     None
 ):
-    markup = koat_dashboard(load_public_tender_catalog())
+    markup = koat_dashboard(load_public_tender_catalog(), now=FINALE_CLOCK)
 
     causal_labels = (
         "Public tender + supplier evidence",
@@ -359,8 +363,8 @@ def test_literal_koat_detail_keeps_public_tender_and_historical_replay_separate(
         "eligibility_requirements": ("Requirement A", "Requirement B"),
     }
 
-    detail = koat_tender_detail(reviewed, reviewed_view=reviewed_view)
-    discovered = koat_tender_detail(found)
+    detail = koat_tender_detail(reviewed, now=FINALE_CLOCK, reviewed_view=reviewed_view)
+    discovered = koat_tender_detail(found, now=FINALE_CLOCK)
 
     for css_class in (
         "topbar-inner",
@@ -385,3 +389,40 @@ def test_literal_koat_css_locks_source_container_widths_and_breakpoints() -> Non
     assert "max-width:1080px" in css
     assert "@media(max-width:768px)" in css
     assert "grid-template-columns:repeat(4,1fr)" in css
+
+
+def test_dashboard_never_lists_a_passed_deadline_as_due_soon() -> None:
+    rows = load_public_tender_catalog()
+
+    markup = koat_dashboard(rows, now=FINALE_CLOCK)
+
+    assert "Due soon" not in markup
+    assert "After 24 Aug 2026" not in markup
+    assert markup.count('class="due-tag due-closed">Closed<') == 5
+    assert markup.count('class="due-tag due-open">Open<') == 1
+    assert "Open deadlines" in markup
+    assert '<strong class="kpi-num">1</strong><span class="kpi-unit">notice' in markup
+    assert "2026.09.03 · 15:40 KST" in markup
+
+    later = datetime.fromisoformat("2026-09-10T00:00:00+00:00")
+    markup = koat_dashboard(rows, now=later)
+
+    assert markup.count('class="due-tag due-closed">Closed<') == 6
+    assert "due-open" not in markup
+    assert "All deadlines passed" in markup
+    assert "historical public sources" in markup.lower()
+
+
+def test_dashboard_and_detail_name_the_deadline_timezone() -> None:
+    rows = load_public_tender_catalog()
+
+    dashboard = koat_dashboard(rows, now=FINALE_CLOCK)
+    reviewed = koat_tender_detail(rows[0], now=FINALE_CLOCK, reviewed_view=None)
+    closed = koat_tender_detail(rows[1], now=FINALE_CLOCK)
+
+    assert "2026.09.03 · 16:00 KST" in dashboard
+    assert "2026.09.03 · 16:00 KST" in reviewed
+    assert 'class="due-tag due-open">Open<' in reviewed
+    assert "2026.09.02 · 10:00 KST" in closed
+    assert 'class="due-tag due-closed">Closed<' in closed
+    assert "REVIEW" in reviewed

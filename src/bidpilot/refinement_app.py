@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -12,6 +13,8 @@ from bidpilot import ui
 from bidpilot.g2b_source import G2BSourceError, load_public_source
 from bidpilot.tender_catalog import load_public_tender_catalog
 from bidpilot.workspace_ui import (
+    catalog_date,
+    deadline_state,
     koat_css,
     koat_dashboard,
     koat_tender_detail,
@@ -43,6 +46,22 @@ def resolve_walkthrough(value: object) -> bool:
     if isinstance(value, (list, tuple)):
         value = value[0] if value else None
     return str(value or "").strip().lower() in {"1", "true", "yes"}
+
+
+def current_clock() -> datetime:
+    """Return the aware wall clock every public deadline state is judged against."""
+    return datetime.now(UTC)
+
+
+def official_status(deadline: object, now: datetime) -> str:
+    """Describe a notice as open or closed from its deadline, never from a fixed word."""
+    state = deadline_state(deadline, now)
+    when = catalog_date(deadline)
+    if state == "open":
+        return f"Official G2B notice · open until {when}"
+    if state == "closed":
+        return f"Official G2B notice · closed {when}"
+    return f"Official G2B notice · deadline {when}"
 
 
 def _read_json(name: str) -> dict[str, Any]:
@@ -129,7 +148,7 @@ def _render_tender_intake() -> None:
     render_markup(
         tender_intake_first_viewport(
             source_title=view["title"],
-            official_status="Official G2B notice · open",
+            official_status=official_status(view["proposal_deadline"], current_clock()),
             digest=f"{view['source_sha256'][:12]}…{view['source_sha256'][-8:]}",
             extraction_state="Notice PDF extracted · operator review required",
             evaluation_total=view["evaluation_total"],
@@ -170,6 +189,7 @@ def _render_synthetic_simulation() -> None:
 
 def render() -> None:
     """Render the KOAT-grammar public catalogue, detail, or separate replay."""
+    now = current_clock()
     tender = str(st.query_params.get("tender") or "").strip()
     if tender:
         try:
@@ -190,7 +210,7 @@ def render() -> None:
             if row["evidence_level"] == "source-reviewed"
             else None
         )
-        render_markup(koat_tender_detail(row, reviewed_view=reviewed_view))
+        render_markup(koat_tender_detail(row, now=now, reviewed_view=reviewed_view))
         return
 
     if resolve_walkthrough(st.query_params.get("walkthrough")):
@@ -221,4 +241,4 @@ def render() -> None:
         return
 
     render_markup(koat_css())
-    render_markup(koat_dashboard(catalogue))
+    render_markup(koat_dashboard(catalogue, now=now))

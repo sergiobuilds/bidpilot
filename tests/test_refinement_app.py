@@ -166,3 +166,50 @@ def test_curated_tender_view_carries_the_decision_package_facts() -> None:
     assert view["technical_weight"] == "90"
     assert view["price_weight"] == "10"
     assert view["eligibility_count"] == "4"
+
+
+def test_public_dashboard_and_detail_receive_an_aware_clock(monkeypatch) -> None:
+    from datetime import datetime
+
+    seen: list[object] = []
+    monkeypatch.setattr(
+        refinement_app,
+        "load_public_tender_catalog",
+        lambda: [{"notice_number": "N-1", "evidence_level": "source-found"}],
+    )
+    monkeypatch.setattr(refinement_app, "render_markup", lambda markup: None)
+    monkeypatch.setattr(
+        refinement_app,
+        "koat_dashboard",
+        lambda rows, *, now: seen.append(now) or "",
+    )
+    monkeypatch.setattr(
+        refinement_app,
+        "koat_tender_detail",
+        lambda row, *, now, reviewed_view=None: seen.append(now) or "",
+    )
+
+    monkeypatch.setattr(refinement_app, "st", SimpleNamespace(query_params={}))
+    refinement_app.render()
+    monkeypatch.setattr(
+        refinement_app, "st", SimpleNamespace(query_params={"tender": "N-1"})
+    )
+    refinement_app.render()
+
+    assert len(seen) == 2
+    assert all(isinstance(item, datetime) and item.tzinfo is not None for item in seen)
+
+
+def test_official_notice_status_follows_the_deadline_not_a_fixed_word() -> None:
+    from datetime import datetime
+
+    deadline = "2026-09-03T16:00:00+09:00"
+    before = datetime.fromisoformat("2026-09-03T15:40:00+09:00")
+    after = datetime.fromisoformat("2026-09-03T07:01:00+00:00")
+
+    assert refinement_app.official_status(deadline, before) == (
+        "Official G2B notice · open until 2026.09.03 · 16:00 KST"
+    )
+    assert refinement_app.official_status(deadline, after) == (
+        "Official G2B notice · closed 2026.09.03 · 16:00 KST"
+    )
