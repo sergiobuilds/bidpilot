@@ -7,7 +7,7 @@
   "pushed": true,
   "worktree": "~/projects/personal/products/.worktrees/bidpilot-grand-finale-product-20260903",
   "canonical_checkout_touched": false,
-  "public_app_currently_serving": "2a97fb5 via Cloud Run revision bidpilot-demo-00022-deg (100% traffic, min-instances 1); previous verified builds 00020-rat, 00012-vvg, 00010-fjt",
+  "public_app_currently_serving": "1955d4b (= main) via Cloud Run revision bidpilot-demo-00024-fim (100% traffic, min-instances 1)",
   "tests": {
     "command": "uv run pytest tests/ -q",
     "passed": 231,
@@ -78,7 +78,7 @@
     ],
     "source": "cold-start.md"
   },
-  "deployed_at_kst": "2026-09-03 13:38 KST",
+  "deployed_at_kst": "2026-09-03 13:58 KST",
   "main": "66999d5",
   "approved_and_executed": [
     "no-traffic revision 00017-qen",
@@ -111,7 +111,7 @@
     "api_url": "https://bidpilot-api-164282963747.us-central1.run.app",
     "mcp_url": "https://bidpilot-api-164282963747.us-central1.run.app/mcp",
     "openapi": "https://bidpilot-api-164282963747.us-central1.run.app/openapi.json",
-    "cloud_run_service": "bidpilot-api (revision bidpilot-api-00004-4qd, min-instances 1, code d4ff190)",
+    "cloud_run_service": "bidpilot-api (revision bidpilot-api-00005-suv = main 1955d4b, min-instances 1)",
     "cortex_code_skill": "skills/bidpilot (installed and auto-loaded on deploy host Cortex Code v1.1.78)",
     "mounts": "integrations/{claude-code,cursor,cortex-code,gemini-cli,chatgpt}",
     "verified": [
@@ -149,5 +149,6 @@
       "skill draft-proposal",
       "CLI shim"
     ]
-  }
+  },
+  "final_readback_kst": "2026-09-03 13:58 KST: demo dashboard/detail/replay at 1440/768/390 OK; live draft PURSUE 14 sections + download; API /proposal PURSUE 14 sections, /runs/cortex-final-20260802-a PURSUE 3/4/8/12"
 }

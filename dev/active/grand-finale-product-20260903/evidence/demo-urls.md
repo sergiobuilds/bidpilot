@@ -1,4 +1,4 @@
-DEPLOYED AND VERIFIED — production readback passed 2026-09-03 13:38 KST on Cloud Run revision bidpilot-demo-00022-deg (lean dashboard + live proposal draft, 100% traffic, min-instances 1); agent API bidpilot-api-00003-l4q live with POST /proposal; main = 66999d5
+DEPLOYED AND VERIFIED — production readback passed 2026-09-03 13:58 KST; bidpilot-demo-00024-fim and bidpilot-api-00005-suv both built from main 1955d4b, 100% traffic, min-instances 1
 
 # Demo URLs
 
