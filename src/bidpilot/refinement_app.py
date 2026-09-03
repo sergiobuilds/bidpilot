@@ -11,6 +11,7 @@ import streamlit as st
 
 from bidpilot import ui
 from bidpilot.g2b_source import G2BSourceError, load_public_source
+from bidpilot.proposal_panel import render_proposal_panel
 from bidpilot.tender_catalog import load_public_tender_catalog
 from bidpilot.workspace_ui import (
     catalog_date,
@@ -211,6 +212,8 @@ def render() -> None:
             else None
         )
         render_markup(koat_tender_detail(row, now=now, reviewed_view=reviewed_view))
+        if reviewed_view is not None:
+            render_proposal_panel(row, now=now)
         return
 
     if resolve_walkthrough(st.query_params.get("walkthrough")):
