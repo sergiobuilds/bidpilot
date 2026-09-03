@@ -1,0 +1,1 @@
+{"error": "notice_closed", "detail": {"decision": "PURSUE", "proposal_gate": "LOCKED", "deadline": "2026-09-03T16:00:00+09:00", "deadline_state": "closed", "next_actions": ["No submission is possible; pass historical_exercise=true to draft a clearly labelled historical exercise."]}}
