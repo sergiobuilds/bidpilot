@@ -19,6 +19,9 @@ VERSION = "0.1.0"
 _STATUS = {
     "tender_not_found": 404,
     "run_not_found": 404,
+    "supplier_not_found": 404,
+    "proposal_locked": 423,
+    "notice_closed": 423,
     "snowflake_not_configured": 503,
     "snowflake_error": 502,
 }
@@ -46,9 +49,10 @@ app = FastAPI(
     title="BidPilot pursuit API",
     version=VERSION,
     description=(
-        "Evidence-first B2G pursuit decisions over the public G2B catalogue, plus "
-        "read-only replay of completed Cortex analyses. Anonymous and read-only; "
-        "the same policy the BidPilot app applies."
+        "Evidence-first B2G pursuit decisions over the public G2B catalogue, "
+        "proposal drafting behind the PURSUE gate (POST /proposal, synthetic demo "
+        "supplier, nothing persisted), plus read-only replay of completed Cortex "
+        "analyses. Anonymous and read-only; the same policy the BidPilot app applies."
     ),
     lifespan=lifespan,
 )
@@ -63,6 +67,18 @@ class DecideRequest(BaseModel):
             "index as a string or the exact requirement text; values true/false."
         ),
         examples=[{"0": True, "1": True}],
+    )
+
+
+class ProposalRequest(DecideRequest):
+    supplier_id: str = Field(
+        default=agent_core.DEFAULT_SUPPLIER_ID,
+        description="A synthetic fixture supplier profile id; never a real company.",
+    )
+    position_index: int = Field(default=0, ge=0, description="Win Position to bind.")
+    historical_exercise: bool = Field(
+        default=False,
+        description="Allow drafting for a closed notice as a labelled historical exercise.",
     )
 
 
@@ -118,6 +134,28 @@ def decide(request: DecideRequest) -> dict[str, Any]:
     return agent_core.decide(request.notice_number, request.supplier_evidence)
 
 
+@app.post(
+    "/proposal",
+    tags=["proposal"],
+    operation_id="draft_proposal",
+    responses={
+        423: {
+            "description": "proposal_locked (REVIEW/NO-GO with gaps) or notice_closed"
+        },
+        404: {"description": "tender_not_found or supplier_not_found"},
+    },
+)
+def draft_proposal(request: ProposalRequest) -> dict[str, Any]:
+    """Draft a proposal only when the pursuit decision is PURSUE; 423 with the decision payload otherwise. The supplier is a synthetic demo profile and nothing is persisted."""
+    return agent_core.draft_proposal(
+        request.notice_number,
+        request.supplier_evidence,
+        supplier_id=request.supplier_id,
+        position_index=request.position_index,
+        historical_exercise=request.historical_exercise,
+    )
+
+
 @app.get("/runs", tags=["runs"], operation_id="list_runs")
 def list_runs() -> list[dict[str, Any]]:
     """List completed Cortex analyses via BIDPILOT_READER; 503 when not configured."""
@@ -140,7 +178,9 @@ def ai_plugin(request: Request) -> dict[str, Any]:
         "description_for_human": "Evidence-first B2G tender pursuit decisions.",
         "description_for_model": (
             "Read the public tender catalogue, apply the evidence-first pursuit policy "
-            "with evidence the user supplies (never invent it), and replay completed "
+            "with evidence the user supplies (never invent it), draft a proposal with "
+            "POST /proposal only when the decision is PURSUE (synthetic demo supplier; "
+            "423 proposal_locked lists the gaps otherwise), and replay completed "
             "Cortex analyses. REVIEW or NO-GO means no proposal is drafted."
         ),
         "auth": {"type": "none"},

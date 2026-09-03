@@ -1,4 +1,4 @@
-"""MCP server over the agent core: five read-only tools, stdio or Streamable HTTP.
+"""MCP server over the agent core: six read-only tools, stdio or Streamable HTTP.
 
 Run ``python -m bidpilot.mcp_server`` for a stdio server (local agents such as
 Claude Code, Cursor, or Cortex Code).  The HTTP transport is mounted at ``/mcp``
@@ -9,6 +9,7 @@ Cortex run.
 from __future__ import annotations
 
 import functools
+import json
 from typing import Any
 
 from mcp.server.mcpserver import MCPServer
@@ -23,8 +24,11 @@ INSTRUCTIONS = (
     "BidPilot is an evidence-first B2G pursuit capability. Use list_tenders and "
     "get_tender to read the public catalogue, decide to apply the pursuit policy "
     "with supplier evidence you actually hold (never invent evidence), and "
-    "list_runs/replay to read completed Cortex analyses. A REVIEW or NO-GO "
-    "decision means no proposal is drafted; closed notices are historical."
+    "list_runs/replay to read completed Cortex analyses. draft_proposal writes a "
+    "proposal draft only when decide would return PURSUE, from a synthetic demo "
+    "supplier profile; a REVIEW or NO-GO decision means no proposal is drafted "
+    "and the tool reports the gaps instead. Closed notices are historical and "
+    "draft only as a labelled historical exercise."
 )
 
 READ_ONLY = ToolAnnotations(
@@ -47,8 +51,11 @@ def _tool(function):
         try:
             return function(*args, **kwargs)
         except AgentCoreError as error:
-            detail = f" — {error.detail}" if error.detail else ""
-            raise ToolError(f"{error.code}{detail}") from error
+            detail = error.detail
+            if isinstance(detail, dict):
+                detail = json.dumps(detail, ensure_ascii=False)
+            suffix = f" — {detail}" if detail else ""
+            raise ToolError(f"{error.code}{suffix}") from error
 
     return wrapper
 
@@ -88,6 +95,25 @@ def list_runs() -> list[dict[str, Any]]:
 def replay(run_id: str) -> dict[str, Any]:
     """Replay one completed analysis: decision, selected strategy, rubric plan, proposal sections, tasks, and Cortex provenance."""
     return agent_core.replay(run_id)
+
+
+@server.tool(annotations=READ_ONLY)
+@_tool
+def draft_proposal(
+    notice_number: str,
+    supplier_evidence: dict[str, bool] | None = None,
+    supplier_id: str = agent_core.DEFAULT_SUPPLIER_ID,
+    position_index: int = 0,
+    historical_exercise: bool = False,
+) -> dict[str, Any]:
+    """Draft a proposal for a catalogue notice or a fixture tender id, only when decide would return PURSUE. Returns score_map, win_positions, sections, markdown, red_team findings and tasks from a synthetic demo supplier (never a real company). Errors: proposal_locked (REVIEW/NO-GO, with gaps and next_actions), notice_closed (pass historical_exercise=true only after asking the user). Persists nothing."""
+    return agent_core.draft_proposal(
+        notice_number,
+        supplier_evidence,
+        supplier_id=supplier_id,
+        position_index=position_index,
+        historical_exercise=historical_exercise,
+    )
 
 
 def main() -> None:

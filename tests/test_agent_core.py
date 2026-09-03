@@ -244,3 +244,192 @@ def test_cli_fails_closed_with_a_json_error() -> None:
     failed = _cli("list-runs")
     assert failed.returncode == 1
     assert json.loads(failed.stdout)["error"] == "snowflake_not_configured"
+
+
+FULL_EVIDENCE = {"0": True, "1": True, "2": True, "3": True}
+FIXTURE_TENDER = "G2B-REPLAY-DATA-QUALITY"
+
+
+def test_draft_proposal_for_the_reviewed_notice_when_every_requirement_is_evidenced() -> (
+    None
+):
+    draft = agent_core.draft_proposal(REVIEWED, FULL_EVIDENCE, now=BEFORE_DEADLINE)
+
+    assert draft["notice_number"] == REVIEWED
+    assert draft["decision"] == "PURSUE"
+    assert draft["proposal_gate"] == "OPEN"
+    assert draft["deadline_state"] == "open"
+    assert draft["supplier"] == {
+        "id": "supplier-northstar",
+        "name": "Northstar Systems",
+        "synthetic": True,
+    }
+    assert draft["score_map"] == [
+        {"name": "Technical", "weight": 90},
+        {"name": "Price", "weight": 10},
+    ]
+    assert len(draft["win_positions"]) == 2
+    assert draft["selected_position"]["title"] == draft["win_positions"][0]["title"]
+    assert draft["selected_position"]["index"] == 0
+    criteria = [
+        section["criterion"] for section in draft["sections"] if section["criterion"]
+    ]
+    assert criteria == ["Technical", "Price"]
+    assert all(
+        {"criterion", "heading", "markdown"} <= set(section)
+        for section in draft["sections"]
+    )
+    assert draft["markdown"].startswith("# K패스")
+    assert isinstance(draft["red_team"], list)
+    assert all({"title", "owner"} <= set(task) for task in draft["tasks"])
+    assert draft["gap_closure_plan"] == []
+    assert draft["provider"] == "LOCAL_PYTHON_POLICY"
+    assert draft["persisted"] is False
+    assert draft["disclosure"] == (
+        "Synthetic demo supplier profile; nothing here is a real company claim."
+    )
+    assert any("delivery_hours" in item for item in draft["assumptions"])
+    # Source facts, never embellished: the tender the writer saw quotes the notice.
+    tender = draft["tender"]
+    assert tender["id"] == REVIEWED
+    assert tender["evaluation_criteria"] == [
+        {"name": "Technical", "weight": 90},
+        {"name": "Price", "weight": 10},
+    ]
+    assert len(tender["eligibility_requirements"]) == 4
+    assert tender["title"] in tender["buyer_objective"]
+    assert "Contract start through 2026-12-31" in tender["promised_outcome"]
+
+
+def test_draft_proposal_locks_on_review_and_no_go_with_the_decision_payload() -> None:
+    with pytest.raises(AgentCoreError) as review:
+        agent_core.draft_proposal(REVIEWED, None, now=BEFORE_DEADLINE)
+    assert review.value.code == "proposal_locked"
+    detail = review.value.detail
+    assert detail["decision"] == "REVIEW"
+    assert len(detail["gaps"]) == 4
+    assert detail["next_actions"]
+    assert review.value.to_dict()["detail"]["proposal_gate"] == "LOCKED"
+
+    with pytest.raises(AgentCoreError) as no_go:
+        agent_core.draft_proposal(
+            REVIEWED, {**FULL_EVIDENCE, "2": False}, now=BEFORE_DEADLINE
+        )
+    assert no_go.value.code == "proposal_locked"
+    assert no_go.value.detail["decision"] == "NO-GO"
+    assert no_go.value.detail["gaps"] == [
+        "Valid SME or small-business confirmation for public procurement"
+    ]
+
+
+def test_draft_proposal_never_adds_credentials_without_true_evidence() -> None:
+    with pytest.raises(AgentCoreError) as locked:
+        agent_core.draft_proposal(
+            REVIEWED, {"0": True, "1": True, "2": True}, now=BEFORE_DEADLINE
+        )
+    assert locked.value.detail["decision"] == "REVIEW"
+    assert locked.value.detail["gaps"] == [
+        "Not a large, mid-sized, or cross-shareholding-group software business excluded from sub-KRW-2B projects"
+    ]
+
+
+def test_draft_proposal_refuses_a_closed_notice_unless_it_is_a_historical_exercise() -> (
+    None
+):
+    with pytest.raises(AgentCoreError) as closed:
+        agent_core.draft_proposal(REVIEWED, FULL_EVIDENCE, now=AFTER_DEADLINE)
+    assert closed.value.code == "notice_closed"
+    assert closed.value.detail["deadline"] == "2026-09-03T16:00:00+09:00"
+
+    draft = agent_core.draft_proposal(
+        REVIEWED, FULL_EVIDENCE, historical_exercise=True, now=AFTER_DEADLINE
+    )
+    assert draft["proposal_gate"] == "HISTORICAL EXERCISE"
+    assert draft["deadline_state"] == "closed"
+    banner = draft["markdown"].splitlines()[0]
+    assert "historical exercise" in banner.lower()
+    assert "2026-09-03 16:00 KST" in banner
+
+
+def test_draft_proposal_uses_fixture_tenders_directly() -> None:
+    draft = agent_core.draft_proposal(FIXTURE_TENDER)
+
+    assert draft["decision"] == "PURSUE"
+    assert draft["proposal_gate"] == "OPEN"
+    assert draft["deadline_state"] == "open"
+    assert [row["name"] for row in draft["score_map"]] == [
+        "Technical approach",
+        "Comparable delivery",
+        "Delivery team",
+        "Price",
+    ]
+    criteria = [
+        section["criterion"] for section in draft["sections"] if section["criterion"]
+    ]
+    assert criteria == [
+        "Technical approach",
+        "Comparable delivery",
+        "Delivery team",
+        "Price",
+    ]
+    assert draft["supplier"]["synthetic"] is True
+
+    second = agent_core.draft_proposal(FIXTURE_TENDER, position_index=1)
+    assert second["selected_position"]["title"] == "Operational continuity"
+    assert second["selected_position"]["index"] == 1
+
+
+def test_draft_proposal_locks_when_the_synthetic_supplier_cannot_qualify() -> None:
+    with pytest.raises(AgentCoreError) as locked:
+        agent_core.draft_proposal(FIXTURE_TENDER, supplier_id="supplier-atlas")
+    assert locked.value.code == "proposal_locked"
+    assert locked.value.detail["decision"] == "NO-GO"
+    assert "Information-system maintenance certificate" in locked.value.detail["gaps"]
+    assert locked.value.detail["gap_closure_plan"]
+
+
+def test_draft_proposal_rejects_unknown_supplier_position_and_tender() -> None:
+    with pytest.raises(AgentCoreError) as supplier:
+        agent_core.draft_proposal(FIXTURE_TENDER, supplier_id="acme-real-corp")
+    assert supplier.value.code == "supplier_not_found"
+    with pytest.raises(AgentCoreError) as position:
+        agent_core.draft_proposal(FIXTURE_TENDER, position_index=5)
+    assert position.value.code == "invalid_position"
+    with pytest.raises(AgentCoreError) as tender:
+        agent_core.draft_proposal("NOPE-000")
+    assert tender.value.code == "tender_not_found"
+
+
+def test_cli_draft_proposal_prints_the_draft_or_a_json_error() -> None:
+    drafted = _cli("draft-proposal", FIXTURE_TENDER, "--position", "1")
+    assert drafted.returncode == 0, drafted.stderr
+    payload = json.loads(drafted.stdout)
+    assert payload["decision"] == "PURSUE"
+    assert payload["selected_position"]["index"] == 1
+
+    locked = _cli("draft-proposal", REVIEWED)
+    assert locked.returncode == 1
+    error = json.loads(locked.stdout)
+    assert error["error"] == "proposal_locked"
+    assert error["detail"]["decision"] == "REVIEW"
+
+    closed = _cli(
+        "draft-proposal",
+        REVIEWED,
+        "--evidence",
+        json.dumps(FULL_EVIDENCE),
+        "--now",
+        "2026-09-03T08:00:00+00:00",
+    )
+    assert json.loads(closed.stdout)["error"] == "notice_closed"
+    historical = _cli(
+        "draft-proposal",
+        REVIEWED,
+        "--evidence",
+        json.dumps(FULL_EVIDENCE),
+        "--now",
+        "2026-09-03T08:00:00+00:00",
+        "--historical",
+    )
+    assert historical.returncode == 0, historical.stderr
+    assert json.loads(historical.stdout)["proposal_gate"] == "HISTORICAL EXERCISE"
