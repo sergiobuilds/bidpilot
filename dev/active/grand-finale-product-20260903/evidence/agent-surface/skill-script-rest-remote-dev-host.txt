@@ -1,0 +1,14 @@
+# skill script against deployed bidpilot-api, 2026-09-03 12:33:02 KST
+$ bidpilot.sh list-tenders | jq -c '.[]|{notice_number,deadline_state,status}'
+{"notice_number":"R26BK01680611-000","deadline_state":"open","status":"REVIEW"}
+{"notice_number":"R26BK01692732-000","deadline_state":"closed","status":"SOURCE FOUND"}
+{"notice_number":"R26BK01691398-000","deadline_state":"closed","status":"SOURCE FOUND"}
+{"notice_number":"R26BK01691317-000","deadline_state":"closed","status":"SOURCE FOUND"}
+{"notice_number":"R26BK01689261-000","deadline_state":"closed","status":"SOURCE FOUND"}
+{"notice_number":"R26BK01686970-000","deadline_state":"closed","status":"SOURCE FOUND"}
+
+$ bidpilot.sh decide R26BK01680611-000
+{"decision":"REVIEW","evidence_gaps":4,"proposal_gate":"LOCKED","deadline_state":"open","provider":"LOCAL_PYTHON_POLICY"}
+
+$ bidpilot.sh replay cortex-final-20260802-a
+{"run_id":"cortex-final-20260802-a","decision":"PURSUE","strategy_count":3,"plan_count":4,"section_count":8,"task_count":12}

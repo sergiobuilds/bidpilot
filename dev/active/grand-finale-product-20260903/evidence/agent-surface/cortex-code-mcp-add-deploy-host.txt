@@ -1,0 +1,8 @@
+# Cortex Code v1.1.78 (deploy-host) registering the deployed remote MCP, 2026-09-03 12:44 KST
+$ cortex mcp add bidpilot https://bidpilot-api-164282963747.us-central1.run.app/mcp --transport http
+MCP server 'bidpilot' added. (http)
+$ cat ~/.snowflake/cortex/mcp.json
+{ "mcpServers": { "bidpilot": { "type": "http", "url": "https://bidpilot-api-164282963747.us-central1.run.app/mcp" } } }
+$ cortex skill list | grep bidpilot
+    - bidpilot: ~/.snowflake/cortex/skills/bidpilot
+Note: `cortex exec`/`--print` is blocked on subscription/trial accounts, so tool calls through Cortex Code were exercised interactively earlier (cortex-code-interactive-deploy-host.txt); this file records the MCP registration only.

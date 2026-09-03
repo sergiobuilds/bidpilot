@@ -1,0 +1,11 @@
+# Claude Code (dev-host) mounting the deployed remote MCP over Streamable HTTP, 2026-09-03 12:44 KST
+$ claude mcp add --transport http bidpilot-remote https://bidpilot-api-164282963747.us-central1.run.app/mcp
+$ claude mcp list
+bidpilot-remote: https://bidpilot-api-164282963747.us-central1.run.app/mcp (HTTP) - ✔ Connected
+$ claude -p "Using only the bidpilot-remote MCP server tools: call list_tenders, then decide for R26BK01680611-000 with no evidence, then replay cortex-final-20260802-a. Report in 5 lines ..."
+1. 호출한 도구는 list_tenders, decide, replay 세 가지이며 모두 bidpilot-remote 서버만 사용했습니다.
+2. list_tenders는 공고 6건을 반환했고, R26BK01680611-000(수원시 K패스 청년 교통비 지원 서비스 개발 용역)만 open 상태이며 나머지 5건은 closed입니다.
+3. R26BK01680611-000을 증거 없이 decide한 결과는 REVIEW이고, evidence gap은 4건(4개 자격 요건 전부 증거 필요), proposal gate는 LOCKED입니다.
+4. replay 결과 run_id cortex-final-20260802-a의 결정은 PURSUE이고, 선택 전략은 "Proven Data Quality Operations"입니다.
+5. 해당 run의 개수는 strategy 3, plan 4, section 8, task 12이며, provider는 CORTEX_CODE_CLI, policy version은 2026-08-02.v1입니다.
+(scratch registration removed afterwards)
