@@ -1,0 +1,40 @@
+╭─ Cortex Code v1.1.78 ───────────────────────────────┬────────────────────────────────────────╮
+│                                                     │                                        │
+│                                                     │  Agent Connection:     bidpilot        │
+│     ░░░░░░                                          │  SQL Connection:       bidpilot-reader │
+│    ░ ░░░░░░░░                            ░░░░░░     │  Warehouse:            BIDPILOT_WH     │
+│   ░░░░░░░░░░░░░                         ░░░░░░░░░   │  Model:                auto            │
+│   *        *                   *      ░░░░░░░       │  SQL mode:             [READ-ONLY]     │
+│        ▄ ▄              *                    *      │                                        │
+│                                            *        │  Check out what's new with /changelog  │
+│                      *                              │                                        │
+├─────         ───────────────────────────────────────┴────────────────────────────────────────┤
+│     ~/projects/personal/products/.worktrees/bidpilot-cortex-driver-20260903     │
+╰──────────────────────────────────────────────────────────────────────────────────────────────╯
+
+ › Loaded 2 instruction files (ctrl+o to expand)
+
+ › SQL is read-only. The built-in SQL tool is restricted to SELECT, SHOW,
+   DESCRIBE, and EXPLAIN statements.
+
+   Caveat: Read-only mode applies to the built-in SQL tool in the session.
+   Other commands through bash, Python, curl, MCP tools, or REST APIs might
+   still be able to execute modifiable SQL as that doesn't go through the
+   SQL connection established here.
+
+> Reply with exactly the single word OK.
+
+* OK
+
+╭── * Session Summary ──────────────────────────────────────────╮
+│                                                               │
+│ ◆ Implementing Simple Single Word OK Response Task            │
+│                                                               │
+│ ◆ Duration 10s                                                │
+│                                                               │
+│ ◆ Resume Session                                              │
+│    cortex --resume 4c9c39da-421a-4aff-afcb-d164c149e1eb       │
+│    cortex --resume last                                       │
+│                                                               │
+╰───────────────────────────────────────────────────────────────╯
+u

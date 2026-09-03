@@ -1,0 +1,8 @@
+{
+  "prompt": "Reply with exactly the single word OK.",
+  "connection": "bidpilot-reader",
+  "cwd": "~/projects/personal/products/.worktrees/bidpilot-cortex-driver-20260903",
+  "exit_code": 0,
+  "message": "",
+  "answer": "OK"
+}
