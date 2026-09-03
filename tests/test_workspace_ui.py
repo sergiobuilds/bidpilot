@@ -336,7 +336,7 @@ def test_lean_koat_dashboard_reads_replay_button_then_table_then_footer_links() 
     markup = koat_dashboard(load_public_tender_catalog(), now=FINALE_CLOCK)
 
     cta_at = markup.index('class="primary-cta" href="?walkthrough=1"')
-    table_at = markup.index("Official tender catalogue")
+    table_at = markup.index('<section class="tender-section">')
     first_row_action = markup.index('class="row-action"')
     footer_at = markup.index('class="foot-links"')
     assert cta_at < table_at < first_row_action < footer_at
@@ -444,7 +444,7 @@ def test_dashboard_offers_exactly_one_primary_replay_button() -> None:
     markup = koat_dashboard(load_public_tender_catalog(), now=FINALE_CLOCK)
 
     assert markup.count('class="primary-cta"') == 1
-    assert markup.count('href="?walkthrough=1"') == 2  # top nav + primary button
+    assert markup.count('href="?walkthrough=1"') == 2  # top nav + table button
 
 
 def test_lean_detail_folds_history_and_source_evidence_under_the_decision() -> None:
@@ -466,8 +466,14 @@ def test_lean_dashboard_tells_agents_how_to_mount_bidpilot() -> None:
     markup = koat_dashboard(load_public_tender_catalog(), now=FINALE_CLOCK)
 
     strip = markup.index('class="agent-access"')
-    assert markup.index('class="foot-links"') > strip > markup.index("Official tender catalogue")
+    assert (
+        markup.index('class="foot-links"')
+        > strip
+        > markup.index("Official tender catalogue")
+    )
     assert "https://bidpilot-api-164282963747.us-central1.run.app/mcp" in markup
-    assert "https://bidpilot-api-164282963747.us-central1.run.app/openapi.json" in markup
+    assert (
+        "https://bidpilot-api-164282963747.us-central1.run.app/openapi.json" in markup
+    )
     assert "skills/bidpilot" in markup
     assert "Mount BidPilot in your agent" in markup

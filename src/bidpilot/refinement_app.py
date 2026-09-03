@@ -11,6 +11,7 @@ import streamlit as st
 
 from bidpilot import ui
 from bidpilot.g2b_source import G2BSourceError, load_public_source
+from bidpilot.landing_ui import landing_css, landing_page
 from bidpilot.proposal_panel import render_proposal_panel
 from bidpilot.tender_catalog import load_public_tender_catalog
 from bidpilot.workspace_ui import (
@@ -236,12 +237,22 @@ def render() -> None:
             ui.render()
         return
 
+    view_value = st.query_params.get("view")
+    if isinstance(view_value, (list, tuple)):
+        view_value = view_value[0] if view_value else None
+    wants_workspace = str(view_value or "").strip() == "opportunities"
+
     try:
         catalogue = load_public_tender_catalog()
     except (G2BSourceError, OSError, ValueError, KeyError, TypeError):
-        render_markup(koat_css())
+        render_markup(koat_css() if wants_workspace else landing_css())
         st.error("The public tender record is temporarily unavailable.")
         return
 
-    render_markup(koat_css())
-    render_markup(koat_dashboard(catalogue, now=now))
+    if wants_workspace:
+        render_markup(koat_css())
+        render_markup(koat_dashboard(catalogue, now=now))
+        return
+
+    render_markup(landing_css())
+    render_markup(landing_page(catalogue, now=now))

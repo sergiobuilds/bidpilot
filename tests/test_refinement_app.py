@@ -189,7 +189,9 @@ def test_public_dashboard_and_detail_receive_an_aware_clock(monkeypatch) -> None
         lambda row, *, now, reviewed_view=None: seen.append(now) or "",
     )
 
-    monkeypatch.setattr(refinement_app, "st", SimpleNamespace(query_params={}))
+    monkeypatch.setattr(
+        refinement_app, "st", SimpleNamespace(query_params={"view": "opportunities"})
+    )
     refinement_app.render()
     monkeypatch.setattr(
         refinement_app, "st", SimpleNamespace(query_params={"tender": "N-1"})

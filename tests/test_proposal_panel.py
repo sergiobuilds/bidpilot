@@ -90,7 +90,7 @@ def test_detail_with_full_evidence_drafts_a_proposal_and_enables_download(
     assert "PURSUE" in text
     assert "Proven Data Quality Operations" in text
     assert "Body T." in text and "Body P." in text
-    assert "Synthetic demo supplier profile" in text
+    assert any("Synthetic demo supplier profile" in w.value for w in app.warning)
     assert "Confirm delivery hours" in text
     assert len(app.download_button) == 1
     assert not app.download_button[0].disabled
