@@ -30,12 +30,18 @@ from the checkout) or, when `BIDPILOT_API_URL` is exported, against the hosted
 REST service. Set `BIDPILOT_REPO=/path/to/bidpilot` if the skill was copied out
 of the repository and no API URL is used.
 
-Try it non-interactively:
+Try it interactively (`cortex` in the checkout, then type the prompt):
 
-```bash
-cortex exec --no-history --allowed "Read,Bash(*/bidpilot.sh *)" \
-  "Use the bidpilot skill: list tenders and decide R26BK01680611-000 without evidence."
 ```
+Use the bidpilot skill, read-only. List tenders, then decide R26BK01680611-000
+with no supplier evidence. Report decision, evidence gaps, proposal gate, open or closed.
+```
+
+Expected: `SKILL bidpilot` loads, the two scripts run, and the answer is
+`REVIEW`, 4 evidence gaps, `proposal_gate: LOCKED`, with the four
+`EVIDENCE REQUIRED` checks. `cortex exec` (headless print mode) needs an
+account tier that allows it; on subscription/trial accounts it exits with
+`--print mode is not available`.
 
 ## 2 Mount the MCP server (optional)
 

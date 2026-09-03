@@ -1,0 +1,14 @@
+$ cortex exec --no-history --no-mcp --max-turns 12 --format json --allowed "Read,Glob,Grep,Bash" -w <clone> "Use the bidpilot skill (read-only). List the tenders, then decide R26BK01680611-000 ..."
+
+Update available!
+Current: 1.1.52+200734.789ffffc1c9e
+Latest:  1.1.78+212007.10798d3101f7
+
+Downloading and installing update...
+(To disable auto-update, set "autoUpdate": false in settings.json or use --no-auto-update)
+
+✓ Updated successfully!
+Launching updated version...
+
+History redaction mode is enabled. Session history will not be persisted.
+Error: --print mode is not available for subscription/trial accounts.
