@@ -1,0 +1,175 @@
+BidPilot
+Verified result
+
+VERIFIED CAPABILITY REPLAY · SEPARATE SYNTHETIC FIXTURE
+
+Public data quality and API continuity service
+
+Northstar Systems
+historical demo replay
+2 August 2026
+
+Same-run replay
+
+Decision
+
+PURSUE
+On recorded policy version 2026-08-02.v1, every recorded eligibility requirement was met, and the delivery window fits the recorded supplier capacity — so the recorded policy returned PURSUE. Everything in the later stages follows from this answer.
+
+Highest official weight
+
+40 points
+Technical approach · 2 cited · 0 open gaps
+
+Win Position
+
+Proven Data Quality Operations
+3 compared · 1 selected
+
+Owned action
+
+Record source SHA256 and retrieval timestamp for opportunity data
+System
+Run IDcortex-final-20260802-a
+Weight covered100 / 100
+01
+Decision rationale
+
+3 of 3 passed · recorded policy inputs in plain language.
+
+Eligibility
+Every eligibility requirement in the recorded policy set was met.
+Passed
+Delivery capacity
+No capacity gap between the required delivery window and the recorded supplier profile.
+0 hours
+Comparable delivery
+The policy only returns PURSUE once enough comparable delivery records match the tender scope, so this threshold was met by the recorded run.
+Passed
+Buyer objective
+Improve public-data reliability while keeping citizen-facing APIs stable.
+Recorded
+Scope
+Data quality remediation and API operations
+Recorded
+02
+Score-weighted Win Position
+
+Official score map · Weights are fixed by the tender and total 100.
+
+SELECTED POSITION SELECTED
+
+Proven Data Quality Operations
+
+Northstar demonstrated sustained data-defect reduction and API change control in the City Open Data Reliability Program, directly matching this opportunity scope of data quality remediation and API continuity.
+
+Comparative record Zero-Interruption API Continuity Track Record · Comparative record Capacity Surplus with Immediate Mobilization
+
+The submitted analysis is immutable.
+
+Covered score weight
+100 / 100
+40
+
+Technical approach
+
+Covered · project-open-data, credential:Information-system maintenance certificate
+
+Northstar applies a structured data-quality remediation methodology proven in the City Open Data Reliability Program, combining automated defect detection with API change-control gates to prevent regression.
+
+Technical Lead
+
+30
+
+Comparable delivery
+
+Covered · project-open-data, project-api
+
+The City Open Data Reliability Program and Citizen API Service Transition together demonstrate delivery of data-quality and API-continuity outcomes at comparable scale in public-sector contexts.
+
+Delivery Manager
+
+20
+
+Delivery team
+
+Covered · availability:900h, project-open-data, project-api
+
+Northstar provides a dedicated team with 900 available hours, exceeding the 720-hour requirement, drawn from staff who executed the City Open Data and Citizen API programs.
+
+Resource Manager
+
+10
+
+Price
+
+Covered · availability:900h
+
+Pricing is anchored to the 720-hour delivery envelope with no subcontracting margin, enabled by the capacity surplus that eliminates overtime premiums.
+
+Commercial Lead
+
+03
+Proposal & red-team result
+
+4 response plans · 8 proposal sections
+
+Proposal draft
+
+Review passed
+
+All score-bearing sections retain their recorded evidence.
+
+Download proposal draft
+
+04
+Owned work
+
+12 recorded tasks
+
+Validate that claimed hours do not exceed verified availability window
+Resource Manager
+Complete
+Confirm all cited credentials match active records in supplier profile
+Compliance Lead
+Complete
+Verify no fabricated project references or outcomes in proposal sections
+QA Specialist
+Complete
+Ensure proposal sections do not promise deliverables beyond stated opportunity scope
+Delivery Manager
+Complete
+Confirm delivery hours fit within availability window and assign team
+Resource Manager
+Complete
+Verify supplier eligibility against all stated requirements
+Compliance Lead
+Complete
+Assemble pricing model within delivery-hour envelope
+Commercial Lead
+Complete
+Draft all proposal sections against rubric response plans
+Technical Lead
+Complete
+Evaluate win strategies and select primary positioning
+Bid Director
+Complete
+Bind policy version 2026-08-02.v1 to all decision outputs
+System
+Complete
+Capture run ID lineage linking all derived artifacts to source rows
+System
+Complete
+Record source SHA256 and retrieval timestamp for opportunity data
+System
+Complete
+05
+Snowflake proof
+
+Technical provenance stays last.
+
+keyboard_arrow_right
+
+Snowflake proof
+
+Every status on these screens is read back from the recorded analysis. Nothing is generated at display time.

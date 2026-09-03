@@ -1,4 +1,4 @@
-DEPLOYED AND VERIFIED — production readback passed 2026-09-03 11:40 KST on Cloud Run revision bidpilot-demo-00012-vvg (100% traffic, min-instances 1); main = c78c40c
+DEPLOYED AND VERIFIED — production readback passed 2026-09-03 12:46 KST on Cloud Run revision bidpilot-demo-00020-rat (lean dashboard, 100% traffic, min-instances 1); agent API bidpilot-api live; main = f72a056
 
 # Cold start versus warm load (live public app, main build, 2026-09-03 KST)
 

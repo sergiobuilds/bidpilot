@@ -1,4 +1,4 @@
-DEPLOYED AND VERIFIED — production readback passed 2026-09-03 11:40 KST on Cloud Run revision bidpilot-demo-00012-vvg (100% traffic, min-instances 1); main = c78c40c
+DEPLOYED AND VERIFIED — production readback passed 2026-09-03 12:46 KST on Cloud Run revision bidpilot-demo-00020-rat (lean dashboard, 100% traffic, min-instances 1); agent API bidpilot-api live; main = f72a056
 
 # Verified claims (what the PPT may state, with the evidence that backs each line)
 
@@ -23,3 +23,17 @@ Verified on 2026-09-03 KST on dev host against branch `fix/grand-finale-product-
 | Container image builds from the candidate branch and serves the dashboard 3.4 s after `docker run` (HTTP 200 at 1.6 s) | `release-candidate-manifest.json` | candidate |
 
 Do not claim: a live PURSUE on the real notice, currently biddable tenders, any customer, price, credential or past performance that is not in the fixture, or a new Cortex run.
+
+## Added 2026-09-03 after 12:00 KST (all live)
+
+| Claim | Evidence |
+|---|---|
+| Dashboard is now two KPIs (Needs review, Open deadlines), the tender table and one `Open verified PURSUE replay` button; funnel, recent activity and causal strip are gone; evaluator workspaces are footer links | `screenshots/production-lean-dashboard-*.png`, `browser-results.json` production_readback_lean_revision_00020_rat |
+| Tender detail folds processing history and source evidence under the decision summary | `screenshots/production-lean-detail-1440x900-r0.dom.txt` |
+| 204 tests pass | `test-results.txt` header + commit f72a056 |
+| The same judgement engine is exposed as a remote MCP server and REST/OpenAPI at `https://bidpilot-api-164282963747.us-central1.run.app` (`/mcp`, `/tenders`, `/decide`, `/runs/{id}`, `/openapi.json`, `/.well-known/ai-plugin.json`), reader-only, no anonymous runner | `agent-surface/cloud-run/*.json`, `agent-surface/skill-script-rest-remote-dev-host.txt` |
+| Claude Code mounts the remote MCP over HTTP and calls list_tenders, decide (REVIEW, 4 gaps) and replay (PURSUE 3/4/8/12) | `agent-surface/remote-mcp-claude-code-dev-host.txt` |
+| A Cortex Code skill `bidpilot` is installed on a real Cortex Code CLI (v1.1.78), auto-loads on a tender prompt and answers REVIEW / 4 gaps / proposal LOCKED; the remote MCP is registered with `cortex mcp add` | `agent-surface/cortex-code-interactive-deploy-host.txt`, `agent-surface/cortex-code-mcp-add-deploy-host.txt` |
+| Cursor, Gemini CLI and ChatGPT (Custom GPT Actions via OpenAPI, MCP connector) mount files exist | `integrations/` — ChatGPT import itself was not exercised |
+
+Do not claim: `cortex exec` non-interactive runs (blocked on subscription accounts), a ChatGPT session that was actually connected, or any write path through the agent surface.
