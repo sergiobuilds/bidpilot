@@ -381,6 +381,7 @@ def test_literal_koat_css_locks_source_container_widths_and_breakpoints() -> Non
     assert "max-width:1200px" in css
     assert "max-width:1080px" in css
     assert "@media(max-width:768px)" in css
+    assert '[data-testid="stElementContainer"]:not(:has(.bp-koat))' in css
     assert "grid-template-columns:repeat(4,1fr)" in css
 
 
