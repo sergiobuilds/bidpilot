@@ -19,7 +19,6 @@ def test_landing_opens_cinematic_hero_then_story_bands_then_footer_cta() -> None
         markup.index('class="nav"'),
         markup.index('class="cine"'),
         markup.index("Decide the bid"),
-        markup.index('class="pipe"'),
         markup.index('id="problem"'),
         markup.index('id="how"'),
         markup.index('id="proof"'),
@@ -28,7 +27,7 @@ def test_landing_opens_cinematic_hero_then_story_bands_then_footer_cta() -> None
         markup.index("<footer"),
     ]
     assert order == sorted(order)
-    assert markup.count('class="pnode"') == 6
+    assert 'class="pipe"' not in markup
     assert "cortex-final-20260802-a" in markup
     for count in (
         "3 strategies",

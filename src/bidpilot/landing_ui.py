@@ -75,7 +75,6 @@ def landing_page(rows: Sequence[Mapping[str, object]], *, now: datetime) -> str:
         '<p class="lead reveal">Evidence first. Then the bid.</p>'
         '<div class="cine-cta reveal"><a class="btn btn-lg btn-primary" href="?view=opportunities">Open the workspace</a>'
         f'<a class="btn btn-lg btn-outline" href="?tender={notice}">See the live decision</a></div>'
-        + _pipeline()
         + '</div><div class="scrollcue"><div class="mouse"></div>Scroll</div></header>'
         # story
         '<div class="sheet">'
