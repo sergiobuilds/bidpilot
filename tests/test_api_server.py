@@ -110,7 +110,7 @@ def test_no_route_reaches_the_runner_or_writes(client) -> None:
     assert not any("run" in path and "runs" not in path for path in paths)
 
 
-def test_mcp_server_exposes_the_five_read_only_tools() -> None:
+def test_mcp_server_exposes_the_six_read_only_tools() -> None:
     import asyncio
 
     tools = asyncio.run(mcp_server.server.list_tools())
@@ -120,6 +120,7 @@ def test_mcp_server_exposes_the_five_read_only_tools() -> None:
         "decide",
         "list_runs",
         "replay",
+        "draft_proposal",
     }
     assert all(tool.annotations and tool.annotations.read_only_hint for tool in tools)
 
@@ -180,3 +181,94 @@ def test_mcp_streamable_http_is_mounted_at_mcp(client) -> None:
     assert payload.get("isError") is not True
     rows = payload["structuredContent"]["result"]
     assert rows[0]["notice_number"] == REVIEWED
+
+
+FULL_EVIDENCE = {"0": True, "1": True, "2": True, "3": True}
+
+
+def test_proposal_endpoint_drafts_only_behind_the_pursue_gate(client) -> None:
+    drafted = client.post(
+        "/proposal",
+        json={"notice_number": REVIEWED, "supplier_evidence": FULL_EVIDENCE},
+    )
+    if drafted.status_code == 200:
+        payload = drafted.json()
+        assert payload["decision"] == "PURSUE"
+        assert payload["proposal_gate"] == "OPEN"
+        assert payload["sections"] and payload["markdown"].startswith("# ")
+        assert payload["supplier"]["synthetic"] is True
+    else:
+        # After the real deadline the notice is closed: the gate refuses.
+        assert drafted.status_code == 423
+        assert drafted.json()["error"] == "notice_closed"
+
+    locked = client.post("/proposal", json={"notice_number": REVIEWED})
+    assert locked.status_code == 423
+    body = locked.json()
+    assert body["error"] == "proposal_locked"
+    assert body["detail"]["decision"] == "REVIEW"
+    assert len(body["detail"]["gaps"]) == 4
+
+    fixture = client.post(
+        "/proposal",
+        json={"notice_number": "G2B-REPLAY-DATA-QUALITY", "position_index": 1},
+    )
+    assert fixture.status_code == 200, fixture.text
+    assert fixture.json()["selected_position"]["title"] == "Operational continuity"
+
+    unknown = client.post(
+        "/proposal",
+        json={"notice_number": "G2B-REPLAY-DATA-QUALITY", "supplier_id": "real-co"},
+    )
+    assert unknown.status_code == 404
+    assert unknown.json()["error"] == "supplier_not_found"
+
+
+def test_openapi_and_manifest_advertise_proposal_drafting(client) -> None:
+    schema = client.get("/openapi.json").json()
+    assert "/proposal" in schema["paths"]
+    assert schema["paths"]["/proposal"]["post"]["operationId"] == "draft_proposal"
+    assert "proposal" in schema["info"]["description"].lower()
+    manifest = client.get("/.well-known/ai-plugin.json").json()
+    assert "draft" in manifest["description_for_model"].lower()
+
+
+def test_mcp_draft_proposal_tool_returns_sections_and_locks_as_a_tool_error(
+    client,
+) -> None:
+    called = _rpc(
+        client,
+        "tools/call",
+        {
+            "name": "draft_proposal",
+            "arguments": {"notice_number": "G2B-REPLAY-DATA-QUALITY"},
+        },
+        request_id=11,
+    )
+    assert called.status_code == 200, called.text
+    result = called.json()["result"]
+    assert not result.get("isError")
+    payload = result.get("structuredContent") or json.loads(
+        result["content"][0]["text"]
+    )
+    assert payload["decision"] == "PURSUE"
+    assert [s["criterion"] for s in payload["sections"] if s["criterion"]] == [
+        "Technical approach",
+        "Comparable delivery",
+        "Delivery team",
+        "Price",
+    ]
+
+    locked = _rpc(
+        client,
+        "tools/call",
+        {"name": "draft_proposal", "arguments": {"notice_number": REVIEWED}},
+        request_id=12,
+    )
+    result = locked.json()["result"]
+    assert result["isError"] is True
+    assert "proposal_locked" in result["content"][0]["text"]
+    assert (
+        "EVIDENCE REQUIRED" in result["content"][0]["text"]
+        or "gaps" in result["content"][0]["text"]
+    )
