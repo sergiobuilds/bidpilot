@@ -340,9 +340,11 @@ def test_literal_koat_dashboard_puts_real_opportunities_before_supporting_analyt
     assert [markup.index(label) for label in causal_labels] == sorted(
         markup.index(label) for label in causal_labels
     )
-    css = koat_css()
-    assert ".tender-section{order:4" in css
-    assert ".grid{order:5" in css
+    table_at = markup.index("Official tender catalogue")
+    first_row_action = markup.index('class="row-action"')
+    funnel_at = markup.index("Pursuit funnel")
+    recent_at = markup.index("Recent activity")
+    assert table_at < first_row_action < funnel_at < recent_at
     assert 'href="?workspace=tender-intake"' in markup
     assert 'href="?workspace=synthetic-simulation"' in markup
 
