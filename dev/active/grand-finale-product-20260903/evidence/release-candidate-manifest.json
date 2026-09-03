@@ -28,7 +28,7 @@
     "1_build_and_stage_no_traffic": "cd <checkout of fix/grand-finale-product-20260903 at 994f61697004baf2d18effcf2231565141cac3fe> && gcloud run deploy bidpilot-demo --region us-central1 --source . --no-traffic --tag finale --quiet",
     "2_readback_tagged_preview": "curl -s -o /dev/null -w '%{http_code}\n' https://finale---bidpilot-demo-tbauoylpra-uc.a.run.app/ ; then load /, /?tender=R26BK01680611-000, /?walkthrough=1 signed-out and confirm Open/Closed tags, KST deadlines, REVIEW + 4 gaps, PURSUE replay counts",
     "3_promote_after_sergio_approval": "gcloud run services update-traffic bidpilot-demo --region us-central1 --to-latest",
-    "3b_optional_keep_instance_warm_for_finale": "gcloud run services update bidpilot-demo --region us-central1 --min-instances 1   # separate approval; reverses with --min-instances 0 after the event",
+    "3b_optional_keep_instance_warm_for_finale": "gcloud run services update bidpilot-demo --region us-central1 --min-instances 1   # applied; kept on permanently by Sergio's decision",
     "4_production_readback": "repeat step 2 against https://bidpilot-demo-tbauoylpra-uc.a.run.app and then flip the evidence headers to DEPLOYED AND VERIFIED",
     "rollback": "gcloud run services update-traffic bidpilot-demo --region us-central1 --to-revisions bidpilot-demo-00010-fjt=100"
   },
