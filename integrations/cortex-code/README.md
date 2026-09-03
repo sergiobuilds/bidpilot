@@ -43,6 +43,25 @@ Expected: `SKILL bidpilot` loads, the two scripts run, and the answer is
 account tier that allows it; on subscription/trial accounts it exits with
 `--print mode is not available`.
 
+## 1.1 Run one prompt without the TUI (subscription accounts)
+
+`cortex exec` / `cortex -p` are refused on subscription/trial accounts. The
+skill ships a pseudo-terminal driver that runs the interactive TUI for one
+prompt and prints the final answer:
+
+```bash
+uv run python skills/bidpilot/scripts/cortex-run.py \
+  "Use the bidpilot skill: list the tenders and decide R26BK01680611-000 with no evidence. Answer in 4 lines." \
+  --connection bidpilot-reader --cwd "$PWD" --timeout 240 --transcript-dir /tmp/cortex-runs
+```
+
+It pre-marks the directory as trusted, answers the first-run dialogs and the
+tool-permission menus (read-only allowlist, file writes denied), waits for the
+answer, sends `/exit`, and exits `0` with the answer on stdout (`2` timeout,
+`3` no answer, `4` environment). Transcripts land in `--transcript-dir`. The
+session always starts with `--sql-read-only`. Details and measured limits:
+`skills/bidpilot/README.md`.
+
 ## 2 Mount the MCP server (optional)
 
 Cortex Code reads `~/.snowflake/cortex/mcp.json` with `mcpServers` entries of

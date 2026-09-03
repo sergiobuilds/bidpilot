@@ -1,0 +1,59 @@
+╭─ Cortex Code v1.1.78 ───────────────────────────────┬────────────────────────────────────────╮
+│                                                     │                                        │
+│                                                     │  Agent Connection:     bidpilot        │
+│     ░░░░░░                                          │  SQL Connection:       bidpilot-reader │
+│    ░ ░░░░░░░░                            ░░░░░░     │  Warehouse:            BIDPILOT_WH     │
+│   ░░░░░░░░░░░░░                         ░░░░░░░░░   │  Model:                auto            │
+│   *        *                   *      ░░░░░░░       │  SQL mode:             [READ-ONLY]     │
+│        ▄ ▄              *                    *      │                                        │
+│                                            *        │  Check out what's new with /changelog  │
+│                      *                              │                                        │
+├─────         ───────────────────────────────────────┴────────────────────────────────────────┤
+│     ~/projects/personal/products/.worktrees/bidpilot-cortex-driver-20260903     │
+╰──────────────────────────────────────────────────────────────────────────────────────────────╯
+
+ › Loaded 2 instruction files (ctrl+o to expand)
+
+ › SQL is read-only. The built-in SQL tool is restricted to SELECT, SHOW,
+   DESCRIBE, and EXPLAIN statements.
+
+   Caveat: Read-only mode applies to the built-in SQL tool in the session.
+   Other commands through bash, Python, curl, MCP tools, or REST APIs might
+   still be able to execute modifiable SQL as that doesn't go through the
+   SQL connection established here.
+
+> Use the bidpilot skill: list the tenders and decide R26BK01680611-000 with no evidence. Answer in 4 lines.
+
+✓  SKILL  bidpilot
+  Evidence-aware B2G pursuit decisions over public tenders. Use when the user a...
+
+×  BASH  (List BidPilot tenders)
+  ├─ ~/projects/personal/products/.worktrees/bidpilot-cortex-driver-20260903/scripts/bidpilot.sh list-tenders
+  └─ ... (1 more line)
+
+✓  GLOB  **/bidpilot.sh → 3 files
+
+✓  BASH  (List BidPilot tenders)
+  ├─ ~/projects/personal/products/.worktrees/bidpilot-cortex-driver-20260903/skills/bidpilot/scripts/bidpilot.sh list-tenders
+  └─ ... (80 more lines)
+
+✓  BASH  (Decide tender without evidence)
+  ├─ ~/projects/personal/products/.worktrees/bidpilot-cortex-driver-20260903/skills/bidpilot/scripts/bidpilot.sh decide R26BK01680611-000
+  └─ ... (38 more lines)
+
+* 입찰 목록: 6건 중 R26BK01680611-000(수원시 청년 교통비 지원사업, 마감 2026-09-03, open)만 source-reviewed이고 결정 가능합니다. 나머지 5건은 source-found(마감 종료)입니다.
+  결정: R26BK01680611-000은 증빙 없이 REVIEW입니다. 4개 적격 요건(SW사업자등록, 직접생산확인증명, 중소기업확인서, 대기업 제외 요건) 모두 EVIDENCE REQUIRED 상태입니다.
+  제안서 게이트: LOCKED — 증빙이 제출되어 PURSUE로 전환되기 전까지 제안서 작성은 불가합니다.
+  다음 조치: 4개 요건 각각에 대해 보유 여부를 알려주시면 재판정하겠습니다.
+╭── * Session Summary ──────────────────────────────────────────╮
+│                                                               │
+│ ◆ Listing Tenders and Deciding Bid Without Evidence           │
+│                                                               │
+│ ◆ Duration 37s                                                │
+│                                                               │
+│ ◆ Resume Session                                              │
+│    cortex --resume a1f34c0e-2989-4723-90eb-7a9228fc0499       │
+│    cortex --resume last                                       │
+│                                                               │
+╰───────────────────────────────────────────────────────────────╯
+u
