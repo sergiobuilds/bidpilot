@@ -44,14 +44,13 @@
     "no_traffic_revision": "bidpilot-demo-00017-qen (tag finale)",
     "promotion": "update-traffic --to-latest",
     "min_instances": "services update --min-instances 1 → revision bidpilot-demo-00012-vvg, same image, 100% traffic",
-    "rollback_now": "gcloud run services update-traffic bidpilot-demo --region us-central1 --to-revisions bidpilot-demo-00022-deg=100",
-    "after_event": "gcloud run services update bidpilot-demo --region us-central1 --min-instances 0"
+    "rollback_now": "gcloud run services update-traffic bidpilot-demo --region us-central1 --to-revisions bidpilot-demo-00022-deg=100"
   },
   "agent_api": {
     "service": "bidpilot-api",
     "url": "https://bidpilot-api-164282963747.us-central1.run.app",
     "revision": "bidpilot-api-00005-suv",
-    "commit": "1955d4b",
-    "after_event": "gcloud run services update bidpilot-api --region us-central1 --min-instances 0"
-  }
+    "commit": "1955d4b"
+  },
+  "min_instances_policy": "Keep min-instances 1 on both services permanently (Sergio, 2026-09-03 14:10 KST). Do not scale to zero."
 }
