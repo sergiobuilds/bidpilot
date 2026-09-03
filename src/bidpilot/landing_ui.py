@@ -56,7 +56,6 @@ def landing_page(rows: Sequence[Mapping[str, object]], *, now: datetime) -> str:
     due = catalog_date(row.get("deadline")) if row else ""
     state = deadline_state(row.get("deadline"), now) if row else None
     due_word = "closes" if state == "open" else "closed"
-    open_count = sum(deadline_state(r.get("deadline"), now) == "open" for r in rows)
 
     return (
         '<div id="bp-land" class="bp-land">'
