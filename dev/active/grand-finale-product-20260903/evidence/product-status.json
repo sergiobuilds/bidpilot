@@ -2,7 +2,7 @@
   "status": "DEPLOYED AND VERIFIED",
   "generated_at_kst": "2026-09-03 11:03 KST",
   "branch": "fix/grand-finale-product-20260903",
-  "head": "2a97fb5",
+  "head": "66999d5",
   "base": "bf7fd4d56f95220677f86358d0004905b497872a (origin/main)",
   "pushed": true,
   "worktree": "~/projects/personal/products/.worktrees/bidpilot-grand-finale-product-20260903",
@@ -10,7 +10,7 @@
   "public_app_currently_serving": "2a97fb5 via Cloud Run revision bidpilot-demo-00022-deg (100% traffic, min-instances 1); previous verified builds 00020-rat, 00012-vvg, 00010-fjt",
   "tests": {
     "command": "uv run pytest tests/ -q",
-    "passed": 221,
+    "passed": 231,
     "failed": 0
   },
   "static_checks": {
@@ -79,7 +79,7 @@
     "source": "cold-start.md"
   },
   "deployed_at_kst": "2026-09-03 13:38 KST",
-  "main": "2a97fb5",
+  "main": "66999d5",
   "approved_and_executed": [
     "no-traffic revision 00017-qen",
     "traffic promotion",
@@ -111,7 +111,7 @@
     "api_url": "https://bidpilot-api-164282963747.us-central1.run.app",
     "mcp_url": "https://bidpilot-api-164282963747.us-central1.run.app/mcp",
     "openapi": "https://bidpilot-api-164282963747.us-central1.run.app/openapi.json",
-    "cloud_run_service": "bidpilot-api (revision bidpilot-api-00003-l4q, commit d4ff190)",
+    "cloud_run_service": "bidpilot-api (revision bidpilot-api-00004-4qd, min-instances 1, code d4ff190)",
     "cortex_code_skill": "skills/bidpilot (installed and auto-loaded on deploy host Cortex Code v1.1.78)",
     "mounts": "integrations/{claude-code,cursor,cortex-code,gemini-cli,chatgpt}",
     "verified": [
@@ -124,10 +124,11 @@
       "cortex mcp add http registered",
       "REST POST /proposal 200 with 14 sections (full evidence), 423 proposal_locked without evidence",
       "MCP tools/call draft_proposal PURSUE 14 sections",
-      "live proposal panel on the public tender detail: evidence → PURSUE → draft → Markdown download"
+      "live proposal panel on the public tender detail: evidence → PURSUE → draft → Markdown download",
+      "Cortex Code interactive driver skills/bidpilot/scripts/cortex-run.py runs one prompt through the TUI in a pty: 'OK' in 13 s; bidpilot skill decide → REVIEW/4 gaps/LOCKED in 31–40 s (evidence agent-surface/cortex-driver/)"
     ],
     "not_verified": [
-      "cortex exec non-interactive (blocked on subscription accounts)",
+      "cortex exec / -p stay blocked server-side (SYSTEM$GET_CORTEX_CODE_CLI_SUBSCRIPTION exists:true → print mode refused); the pty driver is the workaround",
       "ChatGPT Custom GPT import (needs a ChatGPT account session)"
     ]
   },

@@ -1,4 +1,4 @@
-DEPLOYED AND VERIFIED — production readback passed 2026-09-03 13:38 KST on Cloud Run revision bidpilot-demo-00022-deg (lean dashboard + live proposal draft, 100% traffic, min-instances 1); agent API bidpilot-api-00003-l4q live with POST /proposal; main = 2a97fb5
+DEPLOYED AND VERIFIED — production readback passed 2026-09-03 13:38 KST on Cloud Run revision bidpilot-demo-00022-deg (lean dashboard + live proposal draft, 100% traffic, min-instances 1); agent API bidpilot-api-00003-l4q live with POST /proposal; main = 66999d5
 
 # Verified claims (what the PPT may state, with the evidence that backs each line)
 
@@ -46,3 +46,4 @@ Do not claim: `cortex exec` non-interactive runs (blocked on subscription accoun
 | Without evidence the same button stops at REVIEW with 4 gaps and drafts nothing; the supplier is always the disclosed synthetic profile; after 16:00 KST the draft is labelled HISTORICAL EXERCISE | `tests/test_proposal_panel.py`, `agent-surface/proposal/` |
 | The same draft is available to agents: MCP tool `draft_proposal`, REST `POST /proposal` (423 when locked), skill `draft-proposal`, on `bidpilot-api-00003-l4q` | `agent-surface/proposal/proposal.md` and the Cloud Run responses beside it |
 | 221 tests pass | `test-results.txt` |
+| Cortex Code cannot run non-interactively on this account (`cortex exec`, `-p`, `stream-json` all refused because the account holds a CoCo CLI subscription); a pty driver `skills/bidpilot/scripts/cortex-run.py` runs one prompt through the real interactive TUI and returned the bidpilot skill's REVIEW / 4 gaps answer | `agent-surface/cortex-driver/cortex-run-bidpilot-decide-dev-host.txt`, `cortex-run-verification-dev-host.txt` |
