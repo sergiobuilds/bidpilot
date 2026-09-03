@@ -1,16 +1,19 @@
 {
-  "method": "FFmpeg flite voice slt; full script rendered at a calibrated slow stage pace with 14 seconds of documented transitions; live demo rendered at the same scripted sequence with its navigation budget; Q&A rendered individually to the 20-to-30-second contract",
-  "pitch_speed": 0.672353,
-  "pitch_word_count": 896,
-  "pitch_duration_seconds": 569.988,
-  "demo_word_count": 224,
-  "demo_speed": 0.7,
-  "demo_navigation_budget_seconds": 58.342,
-  "demo_duration_seconds": 190.007,
+  "method": "FFmpeg flite voice slt; spoken script rendered at a calibrated slow stage pace; measured embedded demo-video duration and 14 seconds of documented stage transitions added separately; demo segment uses the same speech pace plus its video and transition budget; Q&A rendered individually to the 20-to-30-second contract",
+  "pitch_speed": 0.80259,
+  "pitch_word_count": 968,
+  "pitch_spoken_duration_seconds": 495.991,
+  "demo_video_duration_seconds": 60.0,
+  "pitch_transition_budget_seconds": 14.0,
+  "pitch_duration_seconds": 569.991,
+  "demo_word_count": 227,
+  "demo_spoken_duration_seconds": 115.91,
+  "demo_transition_budget_seconds": 14.09,
+  "demo_duration_seconds": 190.0,
   "qa": [
     {
       "question": "Why are you the right founder for this problem?",
-      "duration_seconds": 23.503
+      "duration_seconds": 23.488
     },
     {
       "question": "Is this problem global?",

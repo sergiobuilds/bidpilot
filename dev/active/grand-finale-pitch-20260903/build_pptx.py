@@ -10,8 +10,9 @@ RENDERED = ROOT / "rendered"
 
 SLIDES = [
     (
-        "Quick Case · KRW 250M · Would You Bid?",
-        "Technical 90 | Price 10 | PURSUE or NO-GO",
+        "BidPilot · AI Pursuit Decision Support for Public Tenders",
+        "Public tender plus company evidence | PURSUE, REVIEW or NO-GO | "
+        "KRW 250M | Technical 90 | Price 10 | Would you bid?",
     ),
     (
         "The Missing Answer · REVIEW",
@@ -19,9 +20,11 @@ SLIDES = [
         "Synthetic demo supplier profile",
     ),
     (
-        "Sergio Lee · USCPA · Government-Support Programs",
-        "Washington State CPA | Government grants and public programs | "
-        "Repeated enterprise friction | BidPilot",
+        "Sergio Lee · CPA · Builder · CFO",
+        "Washington State CPA | Government-support program specialist | "
+        "Five-time hackathon winner including OpenAI Hackathon second prize | "
+        "Maintainer of the 5.6K-star Ouroboros open-source Agent OS | "
+        "CFO of Daedal Games, an AI game-harness technology company | BidPilot",
     ),
     (
         "Accounting-Firm + Enterprise Friction · 6 Breakpoints",

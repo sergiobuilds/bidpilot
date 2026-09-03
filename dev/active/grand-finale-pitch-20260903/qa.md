@@ -8,7 +8,7 @@ This table provides evidence-first English answers for the three-minute judge Q&
 
 | Question | 20–30 second answer |
 |---|---|
-| Why are you the right founder for this problem? | I am a Washington State CPA specializing in government grants, public-program accounting, and government-support applications. Working through an accounting firm exposed the repeated gap between public requirements, company evidence, scoring strategy, and ownership. BidPilot converts that professional discipline into a pursuit workflow. |
+| Why are you the right founder for this problem? | I am a Washington State CPA and government-support specialist, a five-time hackathon winner including second prize at an OpenAI hackathon, maintainer of the 5.6K-star Ouroboros Agent OS, and CFO of Daedal Games. Those roles combine evidence discipline, agent engineering, and business ownership, which is exactly the operating problem BidPilot solves. |
 | Is this problem global? | The legal details vary, but the operating structure repeats. Korea G2B, US SAM.gov, and EU TED all publish government opportunities with qualification and submission boundaries. OECD procurement represented 12.9 percent of GDP in 2021, while TED publishes over three thousand notices each weekday. |
 | Why not use a general LLM? | A general LLM can summarize a notice and draft prose. BidPilot adds source verification, governed company context, a controlled pursuit decision, official-weight strategy, owned evidence gaps, and a durable run record. The product value is the accountable decision and execution chain. |
 | Why is Snowflake necessary? | Snowflake joins versioned public requirements with controlled private supplier evidence, executes Snowpark policy beside that data, and persists every artifact under one run identity. It also separates runner and reader permissions. Without that shared state, the workflow returns to disconnected files and chat sessions. |
@@ -37,3 +37,4 @@ All eighteen answers were rendered individually. Measured durations range from 2
 
 - 2026-09-03 v1: Rebuilt the answers around founder authority, global recurrence, Snowflake necessity, CoCo CLI execution, and the dual evidence boundary.
 - 2026-09-03 v2: Recorded the final 20-to-30-second answer timing verification.
+- 2026-09-03 v3: Updated the founder-fit answer with Sergio's current professional, hackathon, open-source, and CFO roles.

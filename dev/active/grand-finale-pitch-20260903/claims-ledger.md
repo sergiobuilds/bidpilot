@@ -24,7 +24,10 @@ This ledger fixes the authoritative facts, global evidence, product boundaries, 
 | Washington State CPA | Sergio-provided biography | `Washington State CPA` or `USCPA` |
 | Government grants and public-program accounting | Sergio-provided biography | `Government grants and public-program accounting specialist` |
 | Government-support application work | Sergio-provided professional experience | `Government-support application specialist` |
-| Three AI hackathon wins | Sergio-provided biography | `Three-time AI hackathon winner` |
+| Five hackathon wins | Sergio-provided biography | `Five-time hackathon winner` |
+| OpenAI Hackathon second prize | Sergio-provided biography | `OpenAI Hackathon · 2nd Prize` |
+| Ouroboros maintainer and 5.6K stars | Sergio-provided biography and public GitHub repository | `Maintainer of the 5.6K-star Ouroboros open-source Agent OS` |
+| Daedal Games CFO | Sergio-provided biography | `CFO of Daedal Games, an AI game-harness technology company` |
 | Accounting-firm friction | Founder observation | Present as repeated professional observation, not measured market research. |
 
 The founder experience explains the product discipline. It does not classify BidPilot as an audit, accounting-opinion, or grant-settlement product.
@@ -89,3 +92,4 @@ The global claim is structural: public notice, eligibility rules, scored evaluat
 - 2026-09-03 v5: Froze the release against current `origin/main` after the final fetch.
 - 2026-09-03 v6: Synchronized the source identity and embedded product captures to deployed revision `bidpilot-demo-00024-fim` after its production readback reached `origin/main`.
 - 2026-09-03 v7: Advanced the source identity after the approved keep-warm decision and handoff wording reached `origin/main`; product claims and captures are unchanged.
+- 2026-09-03 v8: Added the current founder authority supplied by Sergio and verified the public 5.6K-star Ouroboros metric.

@@ -168,20 +168,23 @@ svg text{font-family:var(--font);}
   .shot:hover{transform:none}
 }
 
-/* ══ slide 1 · quick case ══════════════════════════════════ */
-.case-eyebrow{position:absolute;left:112px;top:150px;}
-.case-sum{position:absolute;left:112px;top:186px;font-size:84px;line-height:92px;font-weight:600;
-  letter-spacing:-.035em;color:var(--ink);font-variant-numeric:tabular-nums;}
-.case-rule{position:absolute;left:112px;top:306px;width:456px;height:1px;background:var(--line);}
-.case-crit{position:absolute;left:112px;top:340px;display:flex;gap:64px;}
-.case-crit .c span{display:block;font-size:16px;font-weight:600;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--ink-4);margin-bottom:8px;}
-.case-crit .c b{font-size:52px;line-height:56px;font-weight:600;letter-spacing:-.03em;color:var(--ink-2);
-  font-variant-numeric:tabular-nums;}
-.case-ask{position:absolute;left:112px;top:474px;font-size:56px;line-height:64px;font-weight:600;
+/* ══ slide 1 · product and quick case ══════════════════════ */
+.product-name{position:absolute;left:112px;top:96px;font-size:86px;line-height:92px;font-weight:700;
+  letter-spacing:-.045em;color:var(--ink);}
+.product-definition{position:absolute;left:112px;top:202px;width:610px;font-size:38px;line-height:46px;
+  font-weight:500;letter-spacing:-.022em;color:var(--ink-2);}
+.product-path{position:absolute;left:112px;top:304px;width:610px;font-family:var(--mono);font-size:16px;
+  line-height:24px;letter-spacing:.035em;color:var(--blue-strong);}
+.case-rule{position:absolute;left:112px;top:352px;width:490px;height:1px;background:var(--line);}
+.case-evidence{position:absolute;left:112px;top:380px;display:flex;gap:26px;align-items:center;
+  font-size:19px;line-height:24px;font-weight:600;letter-spacing:.035em;color:var(--ink-3);}
+.case-evidence i{width:4px;height:4px;border-radius:50%;background:var(--caution);}
+.case-ask{position:absolute;left:112px;top:436px;font-size:56px;line-height:64px;font-weight:600;
   letter-spacing:-.028em;color:var(--ink);}
 .case-ask em{font-style:normal;color:var(--blue-strong);}
-.choices{position:absolute;left:112px;bottom:150px;display:flex;gap:14px;}
+.product-value{position:absolute;left:112px;top:524px;width:560px;font-size:20px;line-height:31px;
+  font-weight:500;color:var(--ink-4);letter-spacing:.006em;}
+.choices{position:absolute;left:112px;bottom:108px;display:flex;gap:14px;}
 .choice{border:1px solid var(--line);border-radius:1000px;padding:9px 22px;
   font-size:17px;font-weight:600;letter-spacing:.1em;color:var(--ink-4);}
 
@@ -230,20 +233,21 @@ svg text{font-family:var(--font);}
 <button class="nav next" type="button" aria-label="Next slide"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
 <div id="canvas" tabindex="-1">
 
-<!-- ══════════════════ 1 · QUICK CASE ══════════════════ -->
+<!-- ══════════════════ 1 · PRODUCT + QUICK CASE ══════════════════ -->
 <section class="slide" id="s1" data-pn="left" aria-label="Slide 1">
-  <div class="rabbit-wrap" style="left:560px;top:155px;width:880px;height:587px;">
-    <img src="assets/illustrations/rabbit-dilemma-v1.png" width="880" style="left:0;top:0;"
+  <div class="rabbit-wrap" style="left:650px;top:190px;width:790px;height:552px;">
+    <img src="assets/illustrations/rabbit-dilemma-v1.png" width="828" style="left:0;top:0;"
          alt="A pursuit lead reads a public tender in one hand and holds an empty evidence folder in the other, with a clock on the desk.">
   </div>
-  <div class="case-eyebrow eyebrow">Quick case</div>
-  <div class="case-sum">KRW 250M</div>
+  <div class="product-name">BidPilot</div>
+  <div class="product-definition">AI pursuit decision support<br>for public tenders</div>
+  <div class="product-path">PUBLIC TENDER + COMPANY EVIDENCE → PURSUE · REVIEW · NO-GO</div>
   <div class="case-rule"></div>
-  <div class="case-crit">
-    <div class="c"><span>Technical</span><b>90</b></div>
-    <div class="c"><span>Price</span><b>10</b></div>
+  <div class="case-evidence">
+    <span>KRW 250M</span><i></i><span>TECHNICAL 90</span><i></i><span>PRICE 10</span>
   </div>
   <div class="case-ask">Would you bid?</div>
+  <div class="product-value">Know whether to bid. Know what will score.<br>Know who owns the gaps.</div>
   <div class="choices"><div class="choice">PURSUE?</div><div class="choice">NO-GO?</div></div>
 </section>
 
@@ -267,37 +271,43 @@ svg text{font-family:var(--font);}
 </section>
 
 <section class="slide" id="s3" aria-label="Slide 3">
-  <div class="hd"><div class="rule"></div><h1>Sergio Lee · USCPA · Government-Support Programs</h1></div>
+  <div class="hd"><div class="rule"></div><h1>Sergio Lee · CPA · Builder · CFO</h1></div>
   <svg width="1440" height="600" viewBox="0 0 1440 600" style="position:absolute;left:30px;top:186px" role="img"
-       aria-label="A vertical provenance line derives the product from the founder's credential: Washington State CPA, then government grants and public programs application support, then repeated enterprise friction, terminating in the BidPilot mark.">
-    <title>Credential to product derivation</title>
-    <line class="ln" x1="560" y1="20" x2="560" y2="470"/>
-    <line x1="560" y1="20" x2="560" y2="150" stroke="var(--blue)" stroke-width="2"/>
+       aria-label="Three founder credentials flow into one professional discipline and then BidPilot: five hackathon wins including an OpenAI hackathon second prize, maintenance of the 5.6K-star Ouroboros open-source Agent OS, and the CFO role at Daedal Games, an AI game-harness technology company.">
+    <title>Founder authority and product discipline</title>
 
-    <circle cx="560" cy="40" r="13" fill="var(--fill-0)" stroke="var(--blue)" stroke-width="3"/>
-    <circle cx="560" cy="40" r="4.5" fill="var(--blue)"/>
-    <text class="t-lg" x="614" y="34">Washington State CPA</text>
-    <text class="t-q" x="614" y="66">Licensed accounting judgment</text>
+    <path d="M210 80 C 360 80 420 150 550 150 C 660 150 690 130 760 130" fill="none" stroke="var(--line)" stroke-width="2"/>
+    <path d="M210 252 C 360 252 430 250 550 250 C 660 250 700 250 760 250" fill="none" stroke="var(--line)" stroke-width="2"/>
+    <path d="M210 424 C 360 424 420 350 550 350 C 660 350 690 370 760 370" fill="none" stroke="var(--line)" stroke-width="2"/>
 
-    <circle cx="560" cy="215" r="11" fill="var(--fill-0)" stroke="var(--g70)" stroke-width="2.5"/>
-    <text class="t-lg" x="614" y="209">Government grants · public programs</text>
-    <text class="t-q" x="614" y="241">Application support, year after year</text>
+    <text class="t-b" x="100" y="92" font-size="58">5×</text>
+    <text class="t-s" x="210" y="70">Hackathon winner</text>
+    <text class="t-q" x="210" y="104">OpenAI Hackathon · 2nd Prize</text>
 
-    <circle cx="560" cy="370" r="11" fill="var(--fill-0)" stroke="var(--caution)" stroke-width="2.5"/>
-    <text class="t-lg" x="614" y="364">Repeated enterprise friction</text>
-    <text class="t-q" x="614" y="396">The same six breakpoints, every pursuit</text>
+    <text class="t-b" x="100" y="264" font-size="50">5.6K★</text>
+    <text class="t-s" x="270" y="242">Ouroboros maintainer</text>
+    <text class="t-q" x="270" y="276">Open-source Agent OS</text>
 
-    <line x1="560" y1="415" x2="560" y2="466" stroke="var(--blue)" stroke-width="2"/>
-    <rect x="536" y="470" width="48" height="48" rx="14" fill="var(--blue)"/>
-    <path d="M560 484 L572 494 L560 504 L548 494 Z" fill="var(--fill-0)"/>
-    <text class="t-b" x="614" y="502" font-size="28">BidPilot</text>
+    <text class="t-b" x="100" y="436" font-size="48">CFO</text>
+    <text class="t-s" x="210" y="414">Daedal Games</text>
+    <text class="t-q" x="210" y="448">AI game-harness technology</text>
 
-    <line class="ln" x1="470" y1="128" x2="560" y2="128"/>
-    <circle cx="560" cy="128" r="3.5" fill="var(--g70)"/>
-    <text class="t-g" x="446" y="121" text-anchor="end">Three-time AI hackathon winner</text>
-    <line class="ln" x1="470" y1="292" x2="560" y2="292"/>
-    <circle cx="560" cy="292" r="3.5" fill="var(--g70)"/>
-    <text class="t-g" x="446" y="285" text-anchor="end">sergiobuilds</text>
+    <line x1="760" y1="60" x2="760" y2="456" stroke="var(--blue)" stroke-width="2"/>
+    <circle cx="760" cy="130" r="11" fill="var(--fill-0)" stroke="var(--blue)" stroke-width="3"/>
+    <circle cx="760" cy="250" r="11" fill="var(--fill-0)" stroke="var(--g70)" stroke-width="2.5"/>
+    <circle cx="760" cy="370" r="11" fill="var(--fill-0)" stroke="var(--caution)" stroke-width="2.5"/>
+
+    <text class="t-lg" x="814" y="124">Washington State CPA</text>
+    <text class="t-q" x="814" y="156">Evidence and decision discipline</text>
+    <text class="t-lg" x="814" y="244">Government-support programs</text>
+    <text class="t-q" x="814" y="276">Grant and public-tender applications</text>
+    <text class="t-lg" x="814" y="364">Repeated enterprise friction</text>
+    <text class="t-q" x="814" y="396">Verification · context · strategy · owner</text>
+
+    <line x1="760" y1="456" x2="760" y2="490" stroke="var(--blue)" stroke-width="2"/>
+    <rect x="736" y="490" width="48" height="48" rx="14" fill="var(--blue)"/>
+    <path d="M760 504 L772 514 L760 524 L748 514 Z" fill="var(--fill-0)"/>
+    <text class="t-b" x="814" y="522" font-size="28">BidPilot</text>
   </svg>
 </section>
 <section class="slide" id="s4" aria-label="Slide 4">

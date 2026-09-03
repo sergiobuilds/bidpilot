@@ -15,7 +15,7 @@ This checklist fixes the room, files, live tabs, timing, and fallback state for 
 - [ ] Open the Verified Replay tab and wait for the content to render.
 - [ ] Open `deck.pdf` locally.
 - [ ] Open `deck.pptx` locally.
-- [ ] Open `assets/BidPilot-Top16-Refinement-Demo.mp4` locally.
+- [ ] Open `assets/BidPilot-Grand-Finale-Demo-60s.mp4` locally and verify English audio and subtitles.
 - [ ] Prepare presenter view or a separate copy of `pitch-script.md`.
 
 ## 2 15:15–15:30
@@ -32,8 +32,9 @@ This checklist fixes the room, files, live tabs, timing, and fallback state for 
 ## 3 Live slot
 
 - [ ] Start the presentation at 15:40 KST.
-- [ ] Begin the live demo from slide 10 at approximately 3:40.
-- [ ] End the live demo by 6:50.
+- [ ] Advance to slide 10 at approximately 3:40 and confirm that the embedded 60-second demo starts automatically.
+- [ ] Do not speak over the embedded video.
+- [ ] End the video and proof explanation by 6:50.
 - [ ] Return to slide 11 immediately after the Snowflake proof.
 - [ ] Observe the ten-minute stop signal.
 - [ ] Keep the final twenty seconds for the product sentence and “Win the score, not the prompt.”
@@ -41,8 +42,8 @@ This checklist fixes the room, files, live tabs, timing, and fallback state for 
 
 ## 4 Fallback order
 
-1. If one live tab fails, use the corresponding backup slide.
-2. If the walkthrough fails, use the local Top 16 video.
+1. If the embedded media fails, play the local 60-second MP4.
+2. If the local MP4 fails, remain on slide 10 and use the static evidence path.
 3. If the internet fails, complete slides 10 through 13 without the browser.
 4. If PowerPoint fails, use the local PDF.
 5. If presenter view fails, read from the separate script window or printed script.
@@ -52,3 +53,5 @@ This checklist fixes the room, files, live tabs, timing, and fallback state for 
 - 2026-09-03 v1: Prepared the finale room, technology, timing, and fallback checklist.
 - 2026-09-03 v2: Updated the live-demo transition and fallback range for the twelve-slide rebuild.
 - 2026-09-03 v3: Updated timing and fallback references for the fifteen-slide dark show.
+- 2026-09-03 v4: Added the narrated 60-second embedded demo video and its local playback fallback.
+- 2026-09-03 v5: Matched the checklist to automatic playback of the final 60.000-second public-app recording.

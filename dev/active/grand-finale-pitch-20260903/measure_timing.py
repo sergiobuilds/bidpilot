@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 TIMING = ROOT / "timing"
 TIMING.mkdir(exist_ok=True)
+DEMO_VIDEO = ROOT / "assets" / "BidPilot-Grand-Finale-Demo-60s.mp4"
 
 
 def clean(text: str) -> str:
@@ -41,6 +42,14 @@ def render(name: str, spoken: str, speed: float = 1.0, pause_seconds: float = 0.
     return float(probe.strip())
 
 
+def media_duration(path: Path) -> float:
+    probe = subprocess.check_output([
+        "ffprobe", "-v", "error", "-show_entries", "format=duration",
+        "-of", "default=noprint_wrappers=1:nokey=1", str(path)
+    ], text=True)
+    return float(probe.strip())
+
+
 pitch_md = (ROOT / "pitch-script.md").read_text(encoding="utf-8")
 body = pitch_md.split("## 2 Timed script", 1)[1].split("## 3 Measurement", 1)[0]
 spoken_lines = [
@@ -57,14 +66,18 @@ demo_parts = [
 demo_spoken = clean(" ".join(demo_parts))
 
 # Flite's default voice is fast. Calibrate one voice to the deliberately slow
-# 9:30 stage rehearsal target. Appended silence accounts for documented clicks.
+# 9:30 stage rehearsal target. The embedded narrated video and documented
+# slide/video transitions are measured as non-speech stage time.
+demo_video_duration = media_duration(DEMO_VIDEO)
+transition_budget = 14.0
 pitch_raw = render("pitch-rehearsal", pitch_spoken, speed=1.0)
-pitch_speed = pitch_raw / (570.0 - 14.0)
-pitch_duration = render("pitch-rehearsal", pitch_spoken, speed=pitch_speed, pause_seconds=14)
+pitch_speed = pitch_raw / (570.0 - transition_budget - demo_video_duration)
+pitch_spoken_duration = render("pitch-rehearsal", pitch_spoken, speed=pitch_speed)
+pitch_duration = pitch_spoken_duration + transition_budget + demo_video_duration
 demo_raw = render("demo-rehearsal", demo_spoken, speed=1.0)
-demo_speed = 0.70
-demo_pause = 190.0 - (demo_raw / demo_speed)
-demo_duration = render("demo-rehearsal", demo_spoken, speed=demo_speed, pause_seconds=demo_pause)
+demo_spoken_duration = render("demo-rehearsal", demo_spoken, speed=pitch_speed)
+demo_transition_budget = max(0.0, 190.0 - demo_video_duration - demo_spoken_duration)
+demo_duration = demo_spoken_duration + demo_video_duration + demo_transition_budget
 
 qa_md = (ROOT / "qa.md").read_text(encoding="utf-8")
 qa_durations = []
@@ -82,13 +95,16 @@ for line in qa_md.splitlines():
     qa_durations.append({"question": question, "duration_seconds": round(duration, 3)})
 
 result = {
-    "method": "FFmpeg flite voice slt; full script rendered at a calibrated slow stage pace with 14 seconds of documented transitions; live demo rendered at the same scripted sequence with its navigation budget; Q&A rendered individually to the 20-to-30-second contract",
+    "method": "FFmpeg flite voice slt; spoken script rendered at a calibrated slow stage pace; measured embedded demo-video duration and 14 seconds of documented stage transitions added separately; demo segment uses the same speech pace plus its video and transition budget; Q&A rendered individually to the 20-to-30-second contract",
     "pitch_speed": round(pitch_speed, 6),
     "pitch_word_count": len(pitch_spoken.split()),
+    "pitch_spoken_duration_seconds": round(pitch_spoken_duration, 3),
+    "demo_video_duration_seconds": round(demo_video_duration, 3),
+    "pitch_transition_budget_seconds": round(transition_budget, 3),
     "pitch_duration_seconds": round(pitch_duration, 3),
     "demo_word_count": len(demo_spoken.split()),
-    "demo_speed": round(demo_speed, 6),
-    "demo_navigation_budget_seconds": round(demo_pause, 3),
+    "demo_spoken_duration_seconds": round(demo_spoken_duration, 3),
+    "demo_transition_budget_seconds": round(demo_transition_budget, 3),
     "demo_duration_seconds": round(demo_duration, 3),
     "qa": qa_durations,
 }

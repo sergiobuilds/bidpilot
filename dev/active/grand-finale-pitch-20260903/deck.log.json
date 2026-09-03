@@ -1,6 +1,6 @@
 {
   "release": "grand-finale-pitch-20260903-wds-dark",
-  "source_commit": "a6d70356b898186587755b2562386069a5b5839a",
+  "source_commit": "20409e56e0881094bd8a653783d9434b704096ce",
   "design_system": "wanted-design-system",
   "checks": [
     {
@@ -21,7 +21,7 @@
     {
       "name": "public_application_sync",
       "status": "PASS",
-      "evidence": "product screenshots were synchronized from the 13:58 KST production readback of deployed revision bidpilot-demo-00024-fim"
+      "evidence": "the final 60-second video was recorded directly after the frontend session ended from deployed revision bidpilot-demo-00027-beb; later undeployed landing-only commits were excluded"
     },
     {
       "name": "html_navigation",
@@ -41,12 +41,12 @@
     {
       "name": "pptx_integrity",
       "status": "PASS",
-      "evidence": "the package contains fifteen slide XML parts, unzip reports no errors, and every slide contains editable core text"
+      "evidence": "the package contains fifteen slide XML parts, unzip reports no errors, every slide contains editable core text, and slide 10 contains an embedded 5,829,717-byte MP4 relationship"
     },
     {
       "name": "pptx_visual_review",
       "status": "PASS",
-      "evidence": "LibreOffice reopened the PPTX, exported a fifteen-page PDF, and the fifteen-slide rendered contact sheet matches the HTML visual source"
+      "evidence": "Microsoft PowerPoint on the ASUS laptop reopened the fifteen-slide PPTX, found the named slide-10 media object, and exported fifteen 1440 by 810 PNGs without clipping"
     },
     {
       "name": "pdf_integrity",
@@ -56,12 +56,12 @@
     {
       "name": "narration_timing",
       "status": "PASS",
-      "evidence": "FFmpeg Flite slow-stage render plus fourteen seconds of documented transitions measured 569.988 seconds"
+      "evidence": "FFmpeg Flite slow-stage render plus the measured 60-second embedded video and fourteen seconds of documented transitions measured 569.991 seconds"
     },
     {
       "name": "demo_timing",
       "status": "PASS",
-      "evidence": "FFmpeg Flite render plus 58.342 seconds of navigation time measured 190.007 seconds"
+      "evidence": "the 60-second embedded video plus same-pace proof narration and 14.090 seconds of transition time measured 190.000 seconds"
     },
     {
       "name": "qa_timing",
