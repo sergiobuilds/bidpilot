@@ -7,127 +7,289 @@
 <style>
 @font-face{
   font-family:"Wanted Sans Variable";
-  font-style:normal;
-  font-display:swap;
-  font-weight:400 1000;
+  font-style:normal; font-display:swap; font-weight:400 1000;
   src:url("fonts/WantedSansVariable-latin.woff2") format("woff2-variations");
+}
+@font-face{
+  font-family:"Geist Mono"; font-style:normal; font-display:swap; font-weight:400;
+  src:url("fonts/GeistMono-400-latin.woff2") format("woff2");
+}
+@font-face{
+  font-family:"Geist Mono"; font-style:normal; font-display:swap; font-weight:500;
+  src:url("fonts/GeistMono-500-latin.woff2") format("woff2");
 }
 
 :root{
-  --blue:#0066FF; --blue-strong:#005EEB; --blue-heavy:#0054D1;
-  --blue-90:#C9DEFE; --blue-95:#EAF2FE; --blue-99:#F7FBFF;
-  --ink:#171719; --ink-2:rgba(46,47,51,.88); --ink-3:rgba(55,56,60,.61); --ink-4:rgba(55,56,60,.28);
-  --line:rgba(112,115,124,.22); --line-soft:rgba(112,115,124,.12); --line-solid:#E1E2E4;
-  --g30:#46474C; --g50:#70737C; --g70:#989BA2; --g90:#C2C4C8; --g95:#DBDCDF; --g98:#F4F4F5; --g99:#F7F7F8;
-  --caution:#FF9200; --caution-fg:#D17600; --caution-95:#FEF4E6;
+  /* ── stage ─────────────────────────────────────────────── */
+  --stage:#090B10;
+  --surface:#11161E;
+  --fill-0:#090B10;
+
+  /* ── WDS primary, dark-mode tuned ──────────────────────── */
+  --blue:#2F7CFF; --blue-strong:#5B99FF; --blue-heavy:#8FBAFF;
+  --blue-90:#22406E; --blue-95:rgba(47,124,255,.15); --blue-99:rgba(47,124,255,.07);
+
+  /* ── label hierarchy on dark ───────────────────────────── */
+  --ink:#F5F7FA; --ink-2:#D6DCE6; --ink-3:#99A2B1; --ink-4:#6C7585;
+
+  /* ── structure ─────────────────────────────────────────── */
+  --line:#283141; --line-soft:#1C232F; --line-solid:#283141;
+
+  /* ── cool-neutral ramp, inverted for the dark stage ────── */
+  --g30:#C7CCD6; --g50:#7E8798; --g70:#6A7385;
+  --g90:#39424F; --g95:#2B3341; --g98:#1F2632; --g99:#11161E;
+
+  /* ── semantics: orange = unresolved, green = passed ────── */
+  --caution:#FF9D2E; --caution-fg:#FF9D2E; --caution-95:rgba(255,157,46,.12);
+  --positive:#1ED45A;
+
   --ease:cubic-bezier(.4,0,.2,1);
-  --font:"Wanted Sans Variable","Wanted Sans","Pretendard JP Variable",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  --font:"Wanted Sans Variable","Wanted Sans","Pretendard JP Variable",sans-serif;
+  --mono:"Geist Mono","Wanted Sans Variable",monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;background:var(--g99);}
-body{font-family:var(--font);color:var(--ink);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;}
+html,body{height:100%;overflow:hidden;background:#05070A;}
+body{font-family:var(--font);color:var(--ink);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;}
 
-#stage{position:fixed;inset:0;overflow:hidden;}
-#canvas{width:1440px;height:810px;position:absolute;left:50%;top:50%;margin:-405px 0 0 -720px;
-  background:#fff;transform-origin:center center;
-  box-shadow:0 6px 10px -4px rgba(23,23,23,.08),0 16px 24px -6px rgba(23,23,23,.08);}
+#stage{position:fixed;inset:0;overflow:hidden;background:
+  radial-gradient(120% 90% at 50% 0%, #0D1119 0%, #05070A 70%);}
+#canvas{width:1440px;height:810px;position:absolute;left:50%;top:50%;
+  margin:-405px 0 0 -720px;transform-origin:center center;overflow:hidden;
+  background:
+    radial-gradient(90% 120% at 8% 0%, #10161F 0%, rgba(16,22,31,0) 62%),
+    linear-gradient(180deg,#0A0D13 0%, #090B10 46%, #080A0F 100%);
+  box-shadow:0 24px 80px -20px rgba(0,0,0,.8);}
 #canvas:focus-visible{outline:2px solid var(--blue);outline-offset:3px;}
 
-#canvas::before,#canvas::after{content:"";position:absolute;pointer-events:none;}
+/* fine grain: texture, not decoration */
+#grain{position:absolute;inset:0;pointer-events:none;z-index:40;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");}
+
+/* crop marks */
+#canvas::before,#canvas::after{content:"";position:absolute;pointer-events:none;z-index:30;}
 #canvas::before{left:40px;top:40px;width:26px;height:26px;border-left:1px solid var(--line);border-top:1px solid var(--line);}
 #canvas::after{right:40px;bottom:40px;width:26px;height:26px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
 
-.slide{position:absolute;inset:0;opacity:0;visibility:hidden;transform:translateY(6px);
-  transition:opacity .24s var(--ease),transform .28s var(--ease),visibility 0s linear .28s;}
-.slide.on{opacity:1;visibility:visible;transform:none;transition:opacity .26s var(--ease),transform .3s var(--ease),visibility 0s;}
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;
+  transition:opacity .22s var(--ease),visibility 0s linear .22s;}
+.slide.on{opacity:1;visibility:visible;transition:opacity .26s var(--ease),visibility 0s;}
 
-.hd{position:absolute;left:88px;top:70px;}
-.hd .rule{width:44px;height:3px;background:var(--blue);margin-bottom:18px;}
-h1{font-size:34px;line-height:44px;font-weight:600;letter-spacing:-.024em;color:var(--ink);}
+/* one orchestrated staggered reveal per slide */
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.slide.on>*{animation:rise .46s var(--ease) both;}
+.slide.on>*:nth-child(1){animation-delay:.02s}
+.slide.on>*:nth-child(2){animation-delay:.10s}
+.slide.on>*:nth-child(3){animation-delay:.17s}
+.slide.on>*:nth-child(4){animation-delay:.23s}
+.slide.on>*:nth-child(5){animation-delay:.28s}
+.slide.on>*:nth-child(6){animation-delay:.32s}
+.slide.on>*:nth-child(n+7){animation-delay:.36s}
+
+/* ── headers ─────────────────────────────────────────────── */
+.hd{position:absolute;left:96px;top:74px;right:96px;}
+.hd .rule{width:44px;height:3px;background:var(--blue);margin-bottom:20px;}
+h1{font-size:39px;line-height:48px;font-weight:600;letter-spacing:-.024em;color:var(--ink);}
+.hd.tight h1{font-size:35px;line-height:44px;}
 .kicker{margin-top:14px;font-size:24px;line-height:32px;font-weight:500;color:var(--ink-3);letter-spacing:-.004em;}
-.hd.tight h1{font-size:31px;line-height:40px;}
 
-.pageno{position:absolute;right:88px;bottom:56px;font-size:17px;line-height:20px;font-weight:500;
-  color:var(--ink-4);letter-spacing:.04em;font-variant-numeric:tabular-nums;}
+.eyebrow{font-size:15px;line-height:18px;font-weight:600;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--ink-4);}
+
+.pageno{position:absolute;right:96px;bottom:56px;font-family:var(--mono);
+  font-size:15px;line-height:20px;font-weight:500;color:var(--ink-4);letter-spacing:.06em;z-index:20;}
+.slide[data-pn="left"].on ~ .pageno{left:96px;right:auto;}
 .pageno i{display:inline-block;width:22px;height:1px;background:var(--line);vertical-align:middle;margin-right:10px;}
 
-.note{position:absolute;font-size:17px;line-height:24px;color:var(--ink-4);letter-spacing:.01em;}
+.note{position:absolute;font-size:18px;line-height:25px;color:var(--ink-4);letter-spacing:.01em;}
 .smallline{position:absolute;font-size:24px;line-height:32px;color:var(--ink-3);font-weight:500;}
 .smallline b{color:var(--ink-2);font-weight:600;}
+.mono{font-family:var(--mono);letter-spacing:.02em;}
 
+/* ── svg type ────────────────────────────────────────────── */
 svg{display:block}
 svg text{font-family:var(--font);}
 .t{font-size:24px;font-weight:500;fill:var(--ink-2);letter-spacing:-.002em;}
 .t-s{font-size:24px;font-weight:600;fill:var(--ink);letter-spacing:-.006em;}
 .t-q{font-size:24px;font-weight:500;fill:var(--ink-3);}
-.t-b{font-size:24px;font-weight:600;fill:var(--blue);letter-spacing:-.004em;}
+.t-b{font-size:24px;font-weight:600;fill:var(--blue-strong);letter-spacing:-.004em;}
 .t-c{font-size:24px;font-weight:600;fill:var(--caution-fg);letter-spacing:-.004em;}
 .t-g{font-size:24px;font-weight:500;fill:var(--g50);}
 .t-n{font-size:28px;font-weight:600;fill:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
-.t-nb{font-size:34px;font-weight:600;fill:var(--blue);font-variant-numeric:tabular-nums;letter-spacing:-.018em;}
-.t-src{font-size:17px;font-weight:400;fill:var(--ink-4);letter-spacing:.01em;}
+.t-nb{font-size:34px;font-weight:600;fill:var(--blue-strong);font-variant-numeric:tabular-nums;letter-spacing:-.018em;}
+.t-src{font-size:18px;font-weight:400;fill:var(--ink-4);letter-spacing:.01em;}
 .t-lg{font-size:30px;font-weight:600;fill:var(--ink);letter-spacing:-.014em;}
+.t-ok{font-size:20px;font-weight:600;fill:var(--positive);letter-spacing:-.002em;}
 
 .ln{stroke:var(--line);stroke-width:1;fill:none}
 .dash{stroke-dasharray:2 6;stroke-linecap:round}
-.path-g{stroke:var(--g90);stroke-width:2;fill:none;stroke-linecap:round}
+.path-g{stroke:var(--g70);stroke-width:2;fill:none;stroke-linecap:round}
 .path-b{stroke:var(--blue);stroke-width:3;fill:none;stroke-linecap:round}
 .path-c{stroke:var(--caution);stroke-width:3;fill:none;stroke-linecap:round}
 
+/* ── tables ──────────────────────────────────────────────── */
 .tbl{position:absolute;border-top:1px solid var(--line);}
 .tbl .r{display:grid;align-items:center;border-bottom:1px solid var(--line-soft);}
 .tbl .r.h{border-bottom:1px solid var(--line);}
-.tbl .r>div{padding:15px 20px 15px 0;font-size:24px;line-height:30px;color:var(--ink-2);font-weight:500;letter-spacing:-.002em;}
-.tbl .r.h>div{font-size:22px;color:var(--ink-3);font-weight:500;letter-spacing:.01em;padding-top:10px;padding-bottom:10px;}
+.tbl .r>div{padding:15px 20px 15px 0;font-size:23px;line-height:30px;color:var(--ink-3);font-weight:500;letter-spacing:-.002em;}
+.tbl .r.h>div{font-size:20px;color:var(--ink-4);font-weight:500;letter-spacing:.02em;padding-top:10px;padding-bottom:10px;}
 .tbl .r>div.k{color:var(--ink);font-weight:600;}
-.tbl .r>div.b{color:var(--blue);font-weight:600;}
+.tbl .r>div.b{color:var(--blue-strong);font-weight:600;}
 .tbl .r:last-child{border-bottom:0}
 .tbl.dense .r>div{padding:12px 20px 12px 0;}
 
-.shot{position:absolute;overflow:hidden;border:1px solid var(--line);border-radius:8px;background:#fff;
-  box-shadow:0 1px 2px -1px rgba(23,23,23,.10);
+/* ── product screenshots: small authenticity evidence ────── */
+.shot{position:absolute;overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fff;
+  box-shadow:0 10px 24px -12px rgba(0,0,0,.9);
   transition:box-shadow .24s var(--ease),border-color .24s var(--ease),transform .24s var(--ease);}
-.shot:hover{border-color:var(--blue-90);transform:translateY(-2px);
-  box-shadow:0 4px 6px -2px rgba(23,23,23,.07),0 10px 15px -3px rgba(23,23,23,.07);}
+.shot:hover{border-color:var(--blue-90);transform:translateY(-3px);
+  box-shadow:0 18px 34px -14px rgba(0,0,0,.95);}
 .shot img{position:absolute;display:block;}
-.shot .cap{position:absolute;left:0;right:0;bottom:0;background:rgba(255,255,255,.88);backdrop-filter:blur(8px);
-  border-top:1px solid var(--line-soft);font-size:17px;line-height:20px;padding:6px 10px;color:var(--ink-3);letter-spacing:.01em;}
+.shot .cap{position:absolute;left:0;right:0;bottom:0;background:rgba(9,11,16,.9);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-top:1px solid rgba(255,255,255,.1);font-size:16px;line-height:20px;padding:6px 10px;
+  color:#C6CDD8;letter-spacing:.01em;}
+
+/* ── navigation affordance ───────────────────────────────── */
+.nav{position:fixed;top:50%;transform:translateY(-50%);width:56px;height:56px;border-radius:1000px;
+  border:1px solid var(--line);background:rgba(17,22,30,.5);color:var(--ink-3);
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+  display:grid;place-items:center;cursor:pointer;opacity:0;z-index:60;
+  transition:opacity .22s var(--ease),border-color .22s var(--ease),color .22s var(--ease),transform .22s var(--ease);}
+#stage:hover .nav{opacity:.55}
+.nav:hover{opacity:1;border-color:var(--blue);color:var(--blue-strong);}
+.nav:active{transform:translateY(-50%) scale(.94)}
+.nav:focus-visible{opacity:1;outline:2px solid var(--blue);outline-offset:3px;}
+.nav.prev{left:22px} .nav.next{right:22px}
+.nav svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
 
 @media (prefers-reduced-motion:reduce){
-  .slide,.slide.on,.shot{transition:none}
+  .slide,.slide.on,.slide.on>*,.shot,.nav{transition:none;animation:none}
   .shot:hover{transform:none}
 }
+
+/* ══ slide 1 · quick case ══════════════════════════════════ */
+.case-eyebrow{position:absolute;left:112px;top:150px;}
+.case-sum{position:absolute;left:112px;top:186px;font-size:84px;line-height:92px;font-weight:600;
+  letter-spacing:-.035em;color:var(--ink);font-variant-numeric:tabular-nums;}
+.case-rule{position:absolute;left:112px;top:306px;width:456px;height:1px;background:var(--line);}
+.case-crit{position:absolute;left:112px;top:340px;display:flex;gap:64px;}
+.case-crit .c span{display:block;font-size:16px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-4);margin-bottom:8px;}
+.case-crit .c b{font-size:52px;line-height:56px;font-weight:600;letter-spacing:-.03em;color:var(--ink-2);
+  font-variant-numeric:tabular-nums;}
+.case-ask{position:absolute;left:112px;top:474px;font-size:56px;line-height:64px;font-weight:600;
+  letter-spacing:-.028em;color:var(--ink);}
+.case-ask em{font-style:normal;color:var(--blue-strong);}
+.choices{position:absolute;left:112px;bottom:150px;display:flex;gap:14px;}
+.choice{border:1px solid var(--line);border-radius:1000px;padding:9px 22px;
+  font-size:17px;font-weight:600;letter-spacing:.1em;color:var(--ink-4);}
+
+.rabbit-wrap{position:absolute;overflow:hidden;}
+.rabbit-wrap.feather::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,#090B10 0,rgba(9,11,16,.72) 46px,rgba(9,11,16,0) 132px);}
+.rabbit-wrap img{position:absolute;display:block;}
+
+/* ══ slide 2 · the missing answer ══════════════════════════ */
+.reveal-word{position:absolute;left:112px;top:196px;font-size:118px;line-height:118px;font-weight:700;
+  letter-spacing:-.045em;color:var(--caution);}
+.reveal-copy{position:absolute;left:112px;top:342px;width:470px;font-size:29px;line-height:40px;
+  font-weight:500;letter-spacing:-.012em;color:var(--ink-2);}
+.boundary{position:absolute;left:112px;top:452px;width:480px;padding-top:18px;
+  border-top:1px solid var(--line);font-size:18px;line-height:26px;color:var(--ink-4);letter-spacing:.01em;}
+.tabs{position:absolute;left:600px;top:410px;display:flex;flex-direction:column;gap:20px;}
+.tab{display:flex;align-items:center;gap:12px;width:206px;height:44px;padding:0 15px;
+  border:1px solid rgba(255,157,46,.42);border-radius:10px;background:rgba(255,157,46,.07);}
+.tab i{width:7px;height:7px;border-radius:1000px;background:var(--caution);flex:none;}
+.tab u{flex:1;height:1px;background:rgba(255,157,46,.3);text-decoration:none;}
+.tab b{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--caution);letter-spacing:.06em;}
+
+/* ══ slide 7 · fluency is not evidence ═════════════════════ */
+.breath{position:absolute;left:360px;right:360px;top:364px;text-align:center;
+  font-size:64px;line-height:76px;font-weight:600;letter-spacing:-.034em;color:var(--ink);}
+.breath-sub{position:absolute;left:300px;right:300px;top:494px;text-align:center;
+  font-size:23px;line-height:32px;font-weight:400;letter-spacing:.005em;color:var(--ink-4);}
+.quotemark{position:absolute;left:186px;top:282px;font-size:186px;line-height:160px;font-weight:700;
+  color:#FFFFFF;letter-spacing:-.06em;
+  text-shadow:0 0 46px rgba(255,255,255,.42),0 0 110px rgba(255,255,255,.16);}
+.seal{position:absolute;right:186px;top:322px;width:148px;height:148px;}
+
+/* ══ slide 15 · close ══════════════════════════════════════ */
+#s15{background:radial-gradient(70% 90% at 50% 42%, #0C1119 0%, #06080C 74%);}
+.close-line{position:absolute;left:0;right:0;top:318px;text-align:center;
+  font-size:82px;line-height:94px;font-weight:600;letter-spacing:-.036em;color:var(--ink);}
+.close-underline{position:absolute;left:50%;top:452px;width:132px;height:4px;margin-left:-66px;
+  background:var(--blue);border-radius:2px;}
+.close-foot{position:absolute;left:0;right:0;bottom:96px;text-align:center;
+  font-size:19px;line-height:26px;color:var(--ink-4);letter-spacing:.09em;}
 </style>
 </head>
 <body>
 <div id="stage">
+<button class="nav prev" type="button" aria-label="Previous slide"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+<button class="nav next" type="button" aria-label="Next slide"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
 <div id="canvas" tabindex="-1">
 
-<!-- ══════════════════ 1 ══════════════════ -->
-<section class="slide" id="s1" aria-label="Slide 1">
+<!-- ══════════════════ 1 · QUICK CASE ══════════════════ -->
+<section class="slide" id="s1" data-pn="left" aria-label="Slide 1">
+  <div class="rabbit-wrap" style="left:560px;top:155px;width:880px;height:587px;">
+    <img src="assets/illustrations/rabbit-dilemma-v1.png" width="880" style="left:0;top:0;"
+         alt="A pursuit lead reads a public tender in one hand and holds an empty evidence folder in the other, with a clock on the desk.">
+  </div>
+  <div class="case-eyebrow eyebrow">Quick case</div>
+  <div class="case-sum">KRW 250M</div>
+  <div class="case-rule"></div>
+  <div class="case-crit">
+    <div class="c"><span>Technical</span><b>90</b></div>
+    <div class="c"><span>Price</span><b>10</b></div>
+  </div>
+  <div class="case-ask">Would you bid?</div>
+  <div class="choices"><div class="choice">PURSUE?</div><div class="choice">NO-GO?</div></div>
+</section>
+
+<!-- ══════════════════ 2 · THE MISSING ANSWER ══════════════════ -->
+<section class="slide" id="s2" data-pn="left" aria-label="Slide 2">
+  <div class="rabbit-wrap feather" style="left:880px;top:0;width:560px;height:810px;">
+    <img src="assets/illustrations/rabbit-dilemma-v1.png" width="1613" style="left:-987px;top:-126px;"
+         alt="The same pursuit lead, closer: a worried expression above an empty ring binder that holds no evidence.">
+  </div>
+  <div class="eyebrow" style="position:absolute;left:112px;top:150px;">The missing answer</div>
+  <div class="reveal-word">REVIEW</div>
+  <div class="reveal-copy">Four supplier requirements remain unsupported.</div>
+  <div class="boundary">Real public tender · Synthetic demo supplier profile</div>
+  <div class="tabs">
+    <div class="tab"><i></i><u></u><b>01</b></div>
+    <div class="tab"><i></i><u></u><b>02</b></div>
+    <div class="tab"><i></i><u></u><b>03</b></div>
+    <div class="tab"><i></i><u></u><b>04</b></div>
+  </div>
+  <div class="choices" style="bottom:132px;"><div class="choice">PURSUE?</div><div class="choice">NO-GO?</div></div>
+</section>
+
+<section class="slide" id="s3" aria-label="Slide 3">
   <div class="hd"><div class="rule"></div><h1>Sergio Lee · USCPA · Government-Support Programs</h1></div>
-  <svg width="1440" height="600" viewBox="0 0 1440 600" style="position:absolute;left:0;top:186px" role="img"
+  <svg width="1440" height="600" viewBox="0 0 1440 600" style="position:absolute;left:30px;top:186px" role="img"
        aria-label="A vertical provenance line derives the product from the founder's credential: Washington State CPA, then government grants and public programs application support, then repeated enterprise friction, terminating in the BidPilot mark.">
     <title>Credential to product derivation</title>
     <line class="ln" x1="560" y1="20" x2="560" y2="470"/>
     <line x1="560" y1="20" x2="560" y2="150" stroke="var(--blue)" stroke-width="2"/>
 
-    <circle cx="560" cy="40" r="13" fill="#fff" stroke="var(--blue)" stroke-width="3"/>
+    <circle cx="560" cy="40" r="13" fill="var(--fill-0)" stroke="var(--blue)" stroke-width="3"/>
     <circle cx="560" cy="40" r="4.5" fill="var(--blue)"/>
     <text class="t-lg" x="614" y="34">Washington State CPA</text>
     <text class="t-q" x="614" y="66">Licensed accounting judgment</text>
 
-    <circle cx="560" cy="215" r="11" fill="#fff" stroke="var(--g70)" stroke-width="2.5"/>
+    <circle cx="560" cy="215" r="11" fill="var(--fill-0)" stroke="var(--g70)" stroke-width="2.5"/>
     <text class="t-lg" x="614" y="209">Government grants · public programs</text>
     <text class="t-q" x="614" y="241">Application support, year after year</text>
 
-    <circle cx="560" cy="370" r="11" fill="#fff" stroke="var(--caution)" stroke-width="2.5"/>
+    <circle cx="560" cy="370" r="11" fill="var(--fill-0)" stroke="var(--caution)" stroke-width="2.5"/>
     <text class="t-lg" x="614" y="364">Repeated enterprise friction</text>
     <text class="t-q" x="614" y="396">The same six breakpoints, every pursuit</text>
 
     <line x1="560" y1="415" x2="560" y2="466" stroke="var(--blue)" stroke-width="2"/>
     <rect x="536" y="470" width="48" height="48" rx="14" fill="var(--blue)"/>
-    <path d="M560 484 L572 494 L560 504 L548 494 Z" fill="#fff"/>
+    <path d="M560 484 L572 494 L560 504 L548 494 Z" fill="var(--fill-0)"/>
     <text class="t-b" x="614" y="502" font-size="28">BidPilot</text>
 
     <line class="ln" x1="470" y1="128" x2="560" y2="128"/>
@@ -138,9 +300,7 @@ svg text{font-family:var(--font);}
     <text class="t-g" x="446" y="285" text-anchor="end">sergiobuilds</text>
   </svg>
 </section>
-
-<!-- ══════════════════ 2 ══════════════════ -->
-<section class="slide" id="s2" aria-label="Slide 2">
+<section class="slide" id="s4" aria-label="Slide 4">
   <div class="hd"><div class="rule"></div><h1>Accounting-Firm + Enterprise Friction · 6 Breakpoints</h1>
     <div class="kicker">2 perspectives · 6 breakpoints · 1 deadline</div></div>
   <svg width="1440" height="270" viewBox="0 0 1440 270" style="position:absolute;left:0;top:196px" role="img"
@@ -200,9 +360,7 @@ svg text{font-family:var(--font);}
     <div class="r" style="grid-template-columns:250px 1fr 1fr"><div class="k">Ownership</div><div>One partner carries the file</div><div>No named owner per task</div></div>
   </div>
 </section>
-
-<!-- ══════════════════ 3 ══════════════════ -->
-<section class="slide" id="s3" aria-label="Slide 3">
+<section class="slide" id="s5" aria-label="Slide 5">
   <div class="hd"><div class="rule"></div><h1>Global Public-Sector Pursuit · Shared Operating Pattern</h1></div>
   <svg width="1440" height="560" viewBox="0 0 1440 560" style="position:absolute;left:0;top:180px" role="img"
        aria-label="A ring anchors three public procurement systems, Korea G2B, US SAM.gov and EU TED, and five shared structural markers read off the ring: public notice, eligibility rules, scored evaluation, private supplier evidence and a fixed submission boundary. A blue arc measures 12.9 percent of GDP and a radial tick fan measures over three thousand notices each weekday.">
@@ -233,9 +391,9 @@ svg text{font-family:var(--font);}
     <text class="t-q" x="872" y="373">Fixed submission boundary</text>
 
     <!-- three anchored regions -->
-    <circle cx="510.7" cy="119.8" r="9" fill="#fff" stroke="var(--ink)" stroke-width="2.5"/>
-    <circle cx="717.5" cy="389.3" r="9" fill="#fff" stroke="var(--ink)" stroke-width="2.5"/>
-    <circle cx="556.3" cy="407.6" r="9" fill="#fff" stroke="var(--ink)" stroke-width="2.5"/>
+    <circle cx="510.7" cy="119.8" r="9" fill="var(--fill-0)" stroke="var(--ink)" stroke-width="2.5"/>
+    <circle cx="717.5" cy="389.3" r="9" fill="var(--fill-0)" stroke="var(--ink)" stroke-width="2.5"/>
+    <circle cx="556.3" cy="407.6" r="9" fill="var(--fill-0)" stroke="var(--ink)" stroke-width="2.5"/>
     <text class="t-s" x="486" y="106" text-anchor="end">EU TED</text>
     <text class="t-s" x="748" y="418">US SAM.gov</text>
     <text class="t-s" x="530" y="452" text-anchor="end">Korea G2B</text>
@@ -268,9 +426,7 @@ svg text{font-family:var(--font);}
   </svg>
   <div class="note" style="left:88px;bottom:54px;">OECD Public Procurement · TED About · SAM.gov Contract Opportunities</div>
 </section>
-
-<!-- ══════════════════ 4 ══════════════════ -->
-<section class="slide" id="s4" aria-label="Slide 4">
+<section class="slide" id="s6" aria-label="Slide 6">
   <div class="hd"><div class="rule"></div><h1>Verification · Context · Strategy</h1></div>
   <svg width="1440" height="600" viewBox="0 0 1440 600" style="position:absolute;left:0;top:200px" role="img"
        aria-label="Three input streams, verification, context and strategy, converge on one decision aperture. A complete set of streams opens the aperture to a defensible pursuit decision; an incomplete set stops at review. Outputs are pursue, review and no-go.">
@@ -310,78 +466,93 @@ svg text{font-family:var(--font);}
   </svg>
 </section>
 
-<!-- ══════════════════ 5 ══════════════════ -->
-<section class="slide" id="s5" aria-label="Slide 5">
-  <div class="hd"><div class="rule"></div><h1>BidPilot · Decision-to-Execution Workspace</h1></div>
-  <svg width="1440" height="420" viewBox="0 0 1440 420" style="position:absolute;left:0;top:176px" role="img"
-       aria-label="One continuous blue path: a public tender document merges with supplier evidence nodes, passes a decision gate, thickens according to the official score profile, turns to one selected win position, expands into an evidence-bound proposal, crosses a red-team inspection line, reaches named owners, and loops back as a same-run Snowflake readback.">
-    <title>One accountable causal chain from tender to owned execution</title>
-    <rect x="92" y="106" width="60" height="80" rx="4" fill="#fff" stroke="var(--g50)" stroke-width="2"/>
-    <g stroke="var(--g70)" stroke-width="2" stroke-linecap="round">
-      <line x1="107" y1="128" x2="137" y2="128"/><line x1="107" y1="145" x2="137" y2="145"/><line x1="107" y1="162" x2="125" y2="162"/>
-    </g>
-    <text class="t" x="92" y="86">Public tender</text>
-    <g fill="var(--blue)"><circle cx="100" cy="238" r="6"/><circle cx="128" cy="258" r="6"/><circle cx="156" cy="236" r="6"/></g>
-    <path class="path-b" d="M100 238 C 148 220 168 208 196 194" stroke-width="2"/>
-    <path class="path-b" d="M128 258 C 168 232 178 210 202 198" stroke-width="2"/>
-    <path class="path-b" d="M156 236 C 180 220 190 206 206 200" stroke-width="2"/>
-    <text class="t-src" x="176" y="262">Supplier evidence</text>
-
-    <path class="path-b" d="M152 146 C 202 146 212 184 248 192" stroke-width="5"/>
-    <path d="M290 144 L322 192 L290 240" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
-    <path d="M258 144 L258 240" stroke="var(--ink)" stroke-width="3"/>
-    <path class="path-b" d="M248 192 L300 192" stroke-width="5"/>
-    <text class="t" x="252" y="302">Decision gate</text>
-
-    <path class="path-b" d="M330 192 L392 192" stroke-width="14"/>
-    <path class="path-b" d="M392 192 L444 192" stroke-width="10"/>
-    <path class="path-b" d="M444 192 L488 192" stroke-width="7"/>
-    <path class="path-b" d="M488 192 L522 192" stroke-width="4"/>
-    <text class="t" x="330" y="140">Score profile</text>
-    <text class="t-src" x="330" y="164">40 / 30 / 20 / 10</text>
-
-    <path class="path-b" d="M522 192 C 570 192 578 248 622 248" stroke-width="6"/>
-    <circle cx="646" cy="248" r="14" fill="var(--blue)"/>
-    <text class="t-s" x="592" y="310">Win Position</text>
-
-    <g stroke="var(--blue)" stroke-width="3" fill="none" stroke-linecap="round">
-      <path d="M660 248 C 700 248 706 118 744 118"/><path d="M660 248 C 702 248 708 154 748 154"/>
-      <path d="M660 248 C 704 248 710 192 752 192"/><path d="M660 248 C 706 248 712 228 756 228"/>
-      <path d="M660 248 C 706 248 712 262 756 262"/><path d="M660 248 C 704 248 710 296 752 296"/>
-      <path d="M660 248 C 702 248 708 332 748 332"/><path d="M660 248 C 700 248 706 366 744 366"/>
-    </g>
-    <text class="t" x="596" y="86">Evidence-bound proposal</text>
-
-    <line x1="808" y1="86" x2="808" y2="382" stroke="var(--ink)" stroke-width="2" stroke-dasharray="6 6"/>
-    <g stroke="var(--ink)" stroke-width="2" stroke-linecap="round">
-      <path d="M800 110 L816 126 M816 110 L800 126"/><path d="M800 310 L816 326 M816 310 L800 326"/>
-    </g>
-    <text class="t" x="808" y="406" text-anchor="middle">Red-team inspection</text>
-    <g stroke="var(--blue)" stroke-width="3" fill="none" stroke-linecap="round">
-      <path d="M808 118 C 856 118 884 186 928 186"/><path d="M808 154 C 858 154 886 200 928 200"/>
-      <path d="M808 192 C 860 192 888 210 928 210"/><path d="M808 228 C 862 228 890 220 928 220"/>
-      <path d="M808 262 C 862 262 890 234 928 234"/><path d="M808 296 C 860 296 888 246 928 246"/>
-      <path d="M808 332 C 858 332 886 260 928 260"/><path d="M808 366 C 856 366 884 272 928 272"/>
-    </g>
-    <g fill="#fff" stroke="var(--blue)" stroke-width="3">
-      <circle cx="952" cy="186" r="11"/><circle cx="952" cy="229" r="11"/><circle cx="952" cy="272" r="11"/>
-    </g>
-    <text class="t-s" x="984" y="222">Named owners</text>
-
-    <path class="path-b" d="M974 288 C 1080 400 400 410 176 340 C 140 328 126 300 122 268" stroke-width="2" stroke-dasharray="3 7"/>
-    <path d="M122 268 l -6 12 l 12 0 z" fill="var(--blue)" transform="rotate(180 122 268)"/>
-    <text class="t-b" x="1010" y="330">Same-run Snowflake readback</text>
+<!-- ══════════════════ 7 · FLUENCY IS NOT EVIDENCE ══════════════════ -->
+<section class="slide" id="s7" aria-label="Slide 7">
+  <div class="quotemark" aria-hidden="true">&ldquo;</div>
+  <svg class="seal" viewBox="0 0 148 148" role="img" aria-label="An empty evidence seal: an open ring with nothing recorded inside.">
+    <circle cx="74" cy="74" r="72" fill="none" stroke="#38445C" stroke-width="1.2"/>
+    <circle cx="74" cy="74" r="54" fill="none" stroke="#7C879B" stroke-width="1.6" stroke-dasharray="3 10" stroke-linecap="round"/>
+    <circle cx="74" cy="74" r="27" fill="none" stroke="#38445C" stroke-width="1.2"/>
   </svg>
-
-  <div class="tbl" style="left:88px;width:1120px;top:606px;">
-    <div class="r h" style="grid-template-columns:260px 1fr 1fr"><div>System</div><div>Input to output</div><div>State</div></div>
-    <div class="r" style="grid-template-columns:260px 1fr 1fr"><div class="k">General LLM</div><div>Prompt to prose</div><div>Session context</div></div>
-    <div class="r" style="grid-template-columns:260px 1fr 1fr"><div class="k b">BidPilot</div><div class="b">Evidence to owned execution</div><div class="b">Replayable run</div></div>
-  </div>
+  <div class="breath">Fluency is not evidence.</div>
+  <div class="breath-sub">A proposal can sound excellent and still be indefensible.</div>
 </section>
 
-<!-- ══════════════════ 6 ══════════════════ -->
-<section class="slide" id="s6" aria-label="Slide 6">
+<!-- ══════════════════ 8 · PRODUCT SPINE ══════════════════ -->
+<section class="slide" id="s8" aria-label="Slide 8">
+  <div class="hd"><div class="rule"></div><h1>Should we bid? &rarr; Who owns what next?</h1>
+    <div class="kicker">One accountable run, from public notice to a named owner</div></div>
+  <svg width="1440" height="400" viewBox="0 0 1440 400" style="position:absolute;left:0;top:300px" role="img"
+       aria-label="A single horizontal spine carries five symbols in order: a tender document, a narrow decision gate, a compass marking the selected win position, scored proposal pages, and a named owner. One thin baseline underneath records that every stage shares one run identifier, persisted and replayable in Snowflake.">
+    <title>One horizontal product spine from tender to named owner</title>
+
+    <!-- spine segments -->
+    <g stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" opacity=".8">
+      <line x1="262" y1="130" x2="398" y2="130"/><line x1="522" y1="130" x2="658" y2="130"/>
+      <line x1="782" y1="130" x2="918" y2="130"/><line x1="1042" y1="130" x2="1178" y2="130"/>
+    </g>
+
+    <!-- 1 · tender document -->
+    <g transform="translate(200,130) scale(1.14)">
+      <path d="M-26 -42 L12 -42 L26 -28 L26 42 L-26 42 Z" fill="none" stroke="var(--ink-2)" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M12 -42 L12 -28 L26 -28" fill="none" stroke="var(--ink-2)" stroke-width="1.6" stroke-linejoin="round"/>
+      <g stroke="var(--g70)" stroke-width="1.4" stroke-linecap="round">
+        <line x1="-14" y1="-8" x2="14" y2="-8"/><line x1="-14" y1="6" x2="14" y2="6"/><line x1="-14" y1="20" x2="2" y2="20"/></g>
+    </g>
+
+    <!-- 2 · narrow decision gate -->
+    <g transform="translate(460,130) scale(1.14)">
+      <line x1="-13" y1="-46" x2="-13" y2="46" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>
+      <line x1="13" y1="-46" x2="13" y2="46" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>
+      <line x1="-36" y1="0" x2="-15" y2="0" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="15" y1="0" x2="36" y2="0" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round"/>
+      <circle r="4.5" fill="var(--blue)"/>
+    </g>
+
+    <!-- 3 · win position compass -->
+    <g transform="translate(720,130) scale(1.14)">
+      <circle r="45" fill="none" stroke="var(--line)" stroke-width="1"/>
+      <circle r="33" fill="none" stroke="var(--g70)" stroke-width="1.2"/>
+      <g stroke="var(--g70)" stroke-width="1.2" stroke-linecap="round">
+        <line x1="0" y1="-45" x2="0" y2="-38"/><line x1="0" y1="45" x2="0" y2="38"/>
+        <line x1="-45" y1="0" x2="-38" y2="0"/><line x1="45" y1="0" x2="38" y2="0"/></g>
+      <path d="M-17 17 L21 -21" stroke="var(--blue)" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M21 -21 L11 -19 L13 -9 Z" fill="var(--blue)"/>
+      <circle r="3.6" fill="var(--blue)"/>
+    </g>
+
+    <!-- 4 · scored proposal pages -->
+    <g transform="translate(980,130) scale(1.14)">
+      <rect x="-16" y="-44" width="52" height="72" rx="3" fill="none" stroke="var(--g70)" stroke-width="1.2"/>
+      <rect x="-24" y="-38" width="52" height="72" rx="3" fill="var(--fill-0)" stroke="var(--g50)" stroke-width="1.3"/>
+      <rect x="-32" y="-32" width="52" height="72" rx="3" fill="var(--fill-0)" stroke="var(--ink-2)" stroke-width="1.6"/>
+      <g stroke="var(--blue)" stroke-width="3" stroke-linecap="round">
+        <line x1="-22" y1="-16" x2="0" y2="-16"/><line x1="-22" y1="-3" x2="-6" y2="-3"/>
+        <line x1="-22" y1="10" x2="-11" y2="10"/><line x1="-22" y1="23" x2="-16" y2="23"/></g>
+    </g>
+
+    <!-- 5 · named owner -->
+    <g transform="translate(1240,130) scale(1.14)">
+      <circle cy="-26" r="13" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+      <path d="M-23 8 C -23 -8 23 -8 23 8" fill="none" stroke="var(--ink)" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="-27" y1="26" x2="27" y2="26" stroke="var(--blue)" stroke-width="3" stroke-linecap="round"/>
+      <line x1="-27" y1="38" x2="-6" y2="38" stroke="var(--g70)" stroke-width="1.4" stroke-linecap="round"/>
+    </g>
+
+    <!-- labels -->
+    <g class="t-q" text-anchor="middle" style="font-size:23px">
+      <text x="200" y="226">Tender</text><text x="460" y="226">Decision</text>
+      <text x="720" y="226">Win Position</text><text x="980" y="226">Proposal</text>
+      <text x="1240" y="226">Owner</text>
+    </g>
+
+    <!-- single thin baseline -->
+    <line x1="200" y1="296" x2="1240" y2="296" stroke="var(--line)" stroke-width="1"/>
+    <text class="t-src" x="720" y="330" text-anchor="middle" style="letter-spacing:.06em">same run_id &nbsp;·&nbsp; persisted &nbsp;·&nbsp; replayable in Snowflake</text>
+  </svg>
+</section>
+
+<section class="slide" id="s9" aria-label="Slide 9">
   <div class="hd"><div class="rule"></div><h1>Public Tender + Supplier Evidence · Controlled Decision</h1></div>
   <svg width="1440" height="560" viewBox="0 0 1440 560" style="position:absolute;left:0;top:196px" role="img"
        aria-label="A real source-reviewed public tender and a synthetic demo supplier profile enter one policy gate with three exits, pursue, review and no-go. Two separate evidence paths continue on the right: the real source proves the decision boundary and a separate historical replay proves full capability.">
@@ -395,7 +566,7 @@ svg text{font-family:var(--font);}
     <text class="t-src" x="88" y="444">Generated fixture · clearly separated</text>
     <path d="M96 372 C 300 372 380 300 470 268" fill="none" stroke="var(--g70)" stroke-width="4"
           stroke-linecap="round" stroke-dasharray="10 8"/>
-    <g fill="#fff" stroke="var(--g70)" stroke-width="2.5">
+    <g fill="var(--fill-0)" stroke="var(--g70)" stroke-width="2.5">
       <circle cx="200" cy="370" r="6"/><circle cx="290" cy="358" r="6"/><circle cx="374" cy="326" r="6"/></g>
 
     <g transform="translate(556,246)">
@@ -415,21 +586,19 @@ svg text{font-family:var(--font);}
     <line x1="904" y1="60" x2="904" y2="470" stroke="var(--line)" stroke-width="1"/>
     <text class="t-src" x="900" y="44" text-anchor="middle">Separated</text>
 
-    <path class="path-b" d="M866 152 L1074 152" stroke-width="4" stroke-dasharray="10 8"/>
-    <circle cx="1092" cy="152" r="10" fill="#fff" stroke="var(--blue)" stroke-width="3"/>
-    <text class="t-s" x="1122" y="146">Separate historical replay</text>
-    <text class="t-src" x="1122" y="174">Full capability proof</text>
+    <path class="path-b" d="M866 152 L1006 152" stroke-width="4" stroke-dasharray="10 8"/>
+    <circle cx="1024" cy="152" r="10" fill="var(--fill-0)" stroke="var(--blue)" stroke-width="3"/>
+    <text class="t-s" x="1054" y="146">Separate historical replay</text>
+    <text class="t-src" x="1054" y="174">Full capability proof</text>
 
-    <path class="path-c" d="M866 268 L1074 268" stroke-width="4"/>
-    <circle cx="1092" cy="268" r="10" fill="#fff" stroke="var(--caution)" stroke-width="3"/>
-    <text class="t-s" x="1122" y="262">Real source</text>
-    <text class="t-src" x="1122" y="290">Decision-boundary proof</text>
+    <path class="path-c" d="M866 268 L1006 268" stroke-width="4"/>
+    <circle cx="1024" cy="268" r="10" fill="var(--fill-0)" stroke="var(--caution)" stroke-width="3"/>
+    <text class="t-s" x="1054" y="262">Real source</text>
+    <text class="t-src" x="1054" y="290">Decision-boundary proof</text>
   </svg>
   <div class="smallline" style="left:88px;bottom:56px;">No silent fixture fallback</div>
 </section>
-
-<!-- ══════════════════ 7 ══════════════════ -->
-<section class="slide" id="s7" aria-label="Slide 7">
+<section class="slide" id="s10" aria-label="Slide 10">
   <div class="hd"><div class="rule"></div><h1>Two Evidence Paths · REVIEW / PURSUE</h1></div>
   <svg width="1440" height="810" viewBox="0 0 1440 810" style="position:absolute;left:0;top:0" role="img"
        aria-label="A diagonal break splits the canvas. The upper-left path follows the real Suwon G2B source and ends at review with four evidence gaps and no run. The lower-right path follows a separate synthetic historical replay and ends at pursue with three strategies compared and one selected.">
@@ -441,12 +610,13 @@ svg text{font-family:var(--font);}
     <text class="t-s" x="120" y="246">Real Suwon G2B source</text>
     <path class="path-c" d="M120 286 C 280 286 340 322 452 332" stroke-width="4"/>
     <g fill="var(--caution)"><circle cx="240" cy="288" r="5"/><circle cx="330" cy="304" r="5"/><circle cx="404" cy="322" r="5"/></g>
-    <circle cx="482" cy="336" r="15" fill="#fff" stroke="var(--caution)" stroke-width="4"/>
+    <circle cx="482" cy="336" r="15" fill="var(--fill-0)" stroke="var(--caution)" stroke-width="4"/>
     <text class="t-c" x="516" y="330" font-size="30">REVIEW</text>
     <text class="t-src" x="518" y="356">Supplier evidence required</text>
     <text class="t-n" x="120" y="412">Technical 90 · Price 10</text>
     <text class="t-q" x="120" y="448">4 evidence gaps · Run 0</text>
 
+    <g transform="translate(-60,0)">
     <text class="t-s" x="940" y="474">Separate synthetic replay</text>
     <path class="path-b" d="M940 530 C 1040 530 1080 524 1148 520" stroke-width="4" stroke-dasharray="12 8"/>
     <g fill="var(--blue)"><circle cx="1000" cy="528" r="5"/><circle cx="1064" cy="525" r="5"/><circle cx="1116" cy="522" r="5"/></g>
@@ -455,21 +625,20 @@ svg text{font-family:var(--font);}
     <text class="t-src" x="1214" y="538">Recorded policy satisfied</text>
     <text class="t-n" x="940" y="586">40 / 30 / 20 / 10</text>
     <text class="t-q" x="940" y="622">3 compared · 1 selected</text>
+    </g>
   </svg>
 
-  <div class="shot" style="left:680px;top:140px;width:330px;height:176px;">
-    <img src="assets/live/tender.png" alt="BidPilot tender detail for the real Suwon G2B notice, showing the REVIEW state and four supplier evidence gaps." style="width:432px;left:-60px;top:-214px;">
+  <div class="shot" style="left:684px;top:162px;width:330px;height:176px;">
+    <img src="assets/live/tender.png" alt="BidPilot tender detail for the real Suwon G2B notice, showing the REVIEW state and four supplier evidence gaps." style="width:432px;left:-60px;top:-105px;">
     <div class="cap">Real source · REVIEW</div>
   </div>
-  <div class="shot" style="left:560px;top:558px;width:330px;height:176px;">
+  <div class="shot" style="left:512px;top:558px;width:330px;height:176px;">
     <img src="assets/live/walkthrough.png" alt="BidPilot verified capability replay result showing PURSUE, 40 points and a selected win position." style="width:374px;left:-29px;top:-24px;">
     <div class="cap">Separate replay · PURSUE</div>
   </div>
 </section>
-
-<!-- ══════════════════ 8 ══════════════════ -->
-<section class="slide" id="s8" aria-label="Slide 8">
-  <div class="hd"><div class="rule"></div><h1>Score-to-Work · 40 / 30 / 20 / 10</h1></div>
+<section class="slide" id="s11" aria-label="Slide 11">
+  <div class="hd"><div class="rule"></div><h1>40 Points · Changes the Plan</h1></div>
   <svg width="1440" height="620" viewBox="0 0 1440 620" style="position:absolute;left:0;top:180px" role="img"
        aria-label="A vertical hundred-point score spine divided into forty, thirty, twenty and ten. The forty-point segment emits a blue flow through a selected win position, an evidence node, a proposal section, a red-team inspection mark and one owner endpoint. The remaining segments stay grey and feed smaller branches.">
     <title>Official weight controlling strategy, proposal, review and ownership</title>
@@ -477,7 +646,7 @@ svg text{font-family:var(--font);}
     <rect x="150" y="256" width="46" height="162" fill="var(--g90)"/>
     <rect x="150" y="418" width="46" height="108" fill="var(--g95)"/>
     <rect x="150" y="526" width="46" height="54" fill="var(--g98)" stroke="var(--line)" stroke-width="1"/>
-    <g stroke="#fff" stroke-width="2"><line x1="150" y1="256" x2="196" y2="256"/><line x1="150" y1="418" x2="196" y2="418"/></g>
+    <g stroke="var(--fill-0)" stroke-width="2"><line x1="150" y1="256" x2="196" y2="256"/><line x1="150" y1="418" x2="196" y2="418"/></g>
     <text class="t-nb" x="128" y="158" text-anchor="end">40</text>
     <text class="t-n" x="128" y="345" text-anchor="end" fill="var(--ink-3)">30</text>
     <text class="t-n" x="128" y="480" text-anchor="end" fill="var(--ink-3)">20</text>
@@ -488,10 +657,10 @@ svg text{font-family:var(--font);}
     <circle cx="398" cy="132" r="16" fill="var(--blue)"/>
     <text class="t-s" x="366" y="88">Selected Win Position</text>
     <path class="path-b" d="M414 132 C 470 132 486 150 540 150" stroke-width="6"/>
-    <circle cx="556" cy="150" r="14" fill="#fff" stroke="var(--blue)" stroke-width="3"/>
+    <circle cx="556" cy="150" r="14" fill="var(--fill-0)" stroke="var(--blue)" stroke-width="3"/>
     <text class="t-q" x="524" y="204">Evidence</text>
     <path class="path-b" d="M572 150 C 626 150 640 168 692 168" stroke-width="6"/>
-    <rect x="692" y="134" width="88" height="68" rx="6" fill="#fff" stroke="var(--blue)" stroke-width="2.5"/>
+    <rect x="692" y="134" width="88" height="68" rx="6" fill="var(--fill-0)" stroke="var(--blue)" stroke-width="2.5"/>
     <g stroke="var(--blue)" stroke-width="2" stroke-linecap="round" opacity=".55">
       <line x1="708" y1="154" x2="764" y2="154"/><line x1="708" y1="170" x2="764" y2="170"/><line x1="708" y1="186" x2="742" y2="186"/></g>
     <text class="t-q" x="666" y="118">Proposal section</text>
@@ -500,7 +669,7 @@ svg text{font-family:var(--font);}
     <path d="M896 154 L912 170 M912 154 L896 170" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
     <text class="t-q" x="922" y="108">Red-team</text>
     <path class="path-b" d="M920 168 C 984 168 996 160 1048 160" stroke-width="6"/>
-    <circle cx="1070" cy="160" r="14" fill="#fff" stroke="var(--blue)" stroke-width="3.5"/>
+    <circle cx="1070" cy="160" r="14" fill="var(--fill-0)" stroke="var(--blue)" stroke-width="3.5"/>
     <text class="t-s" x="1098" y="154">Owner</text>
     <text class="t-src" x="1100" y="180">Named, accountable</text>
 
@@ -518,18 +687,16 @@ svg text{font-family:var(--font);}
     <text class="t-src" x="480" y="392">Smaller branches, same run</text>
   </svg>
 
-  <div class="shot" style="left:704px;top:456px;width:128px;height:264px;">
-    <img src="assets/live/replay-03.png" alt="Proposal section draft bound to recorded evidence in the verified replay." style="width:648px;left:-50px;top:-840px;">
+  <div class="shot" style="left:740px;top:486px;width:104px;height:214px;">
+    <img src="assets/live/replay-03.png" alt="Proposal section draft bound to recorded evidence in the verified replay." style="width:526px;left:-41px;top:-682px;">
   </div>
-  <div class="shot" style="left:860px;top:456px;width:128px;height:264px;">
-    <img src="assets/live/replay-04.png" alt="Owned task list with a named owner on each recorded task." style="width:605px;left:-399px;top:-1080px;">
+  <div class="shot" style="left:868px;top:486px;width:104px;height:214px;">
+    <img src="assets/live/replay-04.png" alt="Owned task list with a named owner on each recorded task." style="width:491px;left:-324px;top:-877px;">
   </div>
-  <div class="note" style="left:1012px;top:534px;width:250px;">Verified replay · proposal section bound to evidence, and its named owner</div>
+  <div class="note" style="left:1000px;top:552px;width:250px;">Verified replay · proposal section bound to evidence, and its named owner</div>
 </section>
-
-<!-- ══════════════════ 9 ══════════════════ -->
-<section class="slide" id="s9" aria-label="Slide 9">
-  <div class="hd tight"><div class="rule"></div><h1>Snowflake · Governed Context · Same-Run Memory</h1></div>
+<section class="slide" id="s12" aria-label="Slide 12">
+  <div class="hd tight"><div class="rule"></div><h1>Snowflake · Memory That Survives the Meeting</h1></div>
   <svg width="1440" height="400" viewBox="0 0 1440 400" style="position:absolute;left:0;top:162px" role="img"
        aria-label="An opportunity graph orbits one run identifier. The left orbit carries tender version, criteria and requirements. The lower orbit carries credentials, people, availability and delivery history. The centre executes Snowpark policy and the right orbit carries strategy, plans, sections and tasks, with a readback arc returning the same run to the Streamlit reader.">
     <title>Opportunity graph around one run identifier</title>
@@ -546,7 +713,7 @@ svg text{font-family:var(--font);}
         <path d="M48 16 C 120 24 180 42 280 62"/><path d="M42 -32 C 100 -52 150 -70 190 -78"/></g>
       <circle r="62" fill="var(--blue-95)" stroke="var(--blue)" stroke-width="2"/>
       <text class="t-b" y="-6" text-anchor="middle" font-size="22">run_id</text>
-      <text y="24" text-anchor="middle" fill="var(--blue-strong)" font-size="15" font-weight="500">Snowpark policy</text>
+      <text y="22" text-anchor="middle" fill="var(--blue-strong)" font-size="14" font-weight="500">Snowpark policy</text>
       <path d="M330 -14 C 330 -128 -330 -128 -330 -14" fill="none" stroke="var(--blue)" stroke-width="2" stroke-dasharray="3 7"/>
       <path d="M-330 -6 l -6 -14 l 12 0 z" fill="var(--blue)"/>
     </g>
@@ -572,10 +739,8 @@ svg text{font-family:var(--font);}
   </div>
   <div class="smallline" style="right:88px;top:600px;width:300px;text-align:right;">Authenticated read failure<br><b>fail closed</b></div>
 </section>
-
-<!-- ══════════════════ 10 ══════════════════ -->
-<section class="slide" id="s10" aria-label="Slide 10">
-  <div class="hd tight"><div class="rule"></div><h1>CoCo CLI · Evidence-to-Action Execution</h1></div>
+<section class="slide" id="s13" aria-label="Slide 13">
+  <div class="hd tight"><div class="rule"></div><h1>CoCo CLI · Work That Survives the Prompt</h1></div>
   <svg width="1440" height="380" viewBox="0 0 1440 380" style="position:absolute;left:0;top:160px" role="img"
        aria-label="One execution trajectory changes state six times. Query begins as data points, compare becomes three directional hypotheses, select leaves one blue path, write expands into plans and sections, challenge adds inspection marks, and persist anchors the artifacts to the run spine.">
     <title>One artifact changing geometry across six execution states</title>
@@ -588,7 +753,7 @@ svg text{font-family:var(--font);}
       <path d="M254 160 C 304 160 324 96 376 92"/><path d="M254 160 C 304 160 324 160 376 160"/>
       <path d="M254 160 C 304 160 324 224 376 228"/>
     </g>
-    <g fill="#fff" stroke="var(--g70)" stroke-width="2.5">
+    <g fill="var(--fill-0)" stroke="var(--g70)" stroke-width="2.5">
       <circle cx="390" cy="92" r="8"/><circle cx="390" cy="228" r="8"/></g>
     <circle cx="390" cy="160" r="12" fill="var(--blue)"/>
     <path class="path-b" d="M402 160 C 450 160 470 160 524 160" stroke-width="6"/>
@@ -601,6 +766,9 @@ svg text{font-family:var(--font);}
       <path d="M610 184 L684 172"/><path d="M610 184 L684 196"/><path d="M610 228 L684 216"/><path d="M610 228 L684 244"/>
     </g>
     <line x1="740" y1="46" x2="740" y2="276" stroke="var(--ink)" stroke-width="2" stroke-dasharray="6 6"/>
+    <circle cx="740" cy="22" r="6.5" fill="none" stroke="var(--positive)" stroke-width="1.8"/>
+    <path d="M736.4 22 L739.2 24.8 L743.8 19.2" fill="none" stroke="var(--positive)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <text class="t-ok" x="756" y="29">Red-team passed · persisted</text>
     <g stroke="var(--ink)" stroke-width="2" stroke-linecap="round">
       <path d="M732 96 L748 112 M748 96 L732 112"/><path d="M732 196 L748 212 M748 196 L732 212"/></g>
     <g stroke="var(--blue)" stroke-width="2" fill="none" opacity=".7">
@@ -627,19 +795,20 @@ svg text{font-family:var(--font);}
     <text class="t-b" x="948" y="158">to one run spine</text>
     <text class="t-src" x="948" y="192">Authenticated CLI session · repository</text>
     <text class="t-src" x="948" y="214">workspace · no LLM API key</text>
+    <line class="ln" x1="948" y1="248" x2="1296" y2="248"/>
+    <text class="t-n" x="948" y="288" font-size="25">3 strategies · 4 plans</text>
+    <text class="t-n" x="948" y="322" font-size="25">8 sections · 12 tasks</text>
   </svg>
 
   <div class="tbl" style="left:88px;width:1080px;top:544px;">
     <div class="r h" style="grid-template-columns:190px 1fr"><div>Stage</div><div>Recorded event</div></div>
     <div class="r" style="grid-template-columns:190px 1fr"><div class="k">Query</div><div>Read governed records under least privilege</div></div>
-    <div class="r" style="grid-template-columns:190px 1fr"><div class="k">Create</div><div>3 strategies · 4 plans · 8 sections</div></div>
-    <div class="r" style="grid-template-columns:190px 1fr"><div class="k">Persist</div><div>12 tasks · session · query provenance</div></div>
+    <div class="r" style="grid-template-columns:190px 1fr"><div class="k">Create</div><div>Compare, select and write under the recorded weights</div></div>
+    <div class="r" style="grid-template-columns:190px 1fr"><div class="k">Persist</div><div>Cortex session and Snowflake query provenance</div></div>
   </div>
 </section>
-
-<!-- ══════════════════ 11 ══════════════════ -->
-<section class="slide" id="s11" aria-label="Slide 11">
-  <div class="hd tight"><div class="rule"></div><h1>Verified Run · 1 / 3 / 4 / 8 / 12 · Human Approval</h1></div>
+<section class="slide" id="s14" aria-label="Slide 14">
+  <div class="hd tight"><div class="rule"></div><h1>Verified Run · 1 &rarr; 3 &rarr; 4 &rarr; 8 &rarr; 12</h1></div>
   <svg width="1440" height="480" viewBox="0 0 1440 480" style="position:absolute;left:0;top:172px" role="img"
        aria-label="A branching tree begins with one decision, expands to three strategy branches, selects one, produces four weighted plans, eight section leaves and twelve task endpoints. Rejected alternatives stay grey. All branches terminate at an internal work ready boundary, and a human approval gate stands between that boundary and legal submission.">
     <title>Branching tree from one decision to twelve owned tasks</title>
@@ -648,8 +817,8 @@ svg text{font-family:var(--font);}
     <path class="path-g" d="M126 235 C 190 235 210 122 268 118" stroke-width="3"/>
     <path class="path-b" d="M126 235 C 200 235 220 235 268 235" stroke-width="5"/>
     <path class="path-g" d="M126 235 C 190 235 210 352 268 356" stroke-width="3"/>
-    <circle cx="282" cy="118" r="10" fill="#fff" stroke="var(--g90)" stroke-width="3"/>
-    <circle cx="282" cy="356" r="10" fill="#fff" stroke="var(--g90)" stroke-width="3"/>
+    <circle cx="282" cy="118" r="10" fill="var(--fill-0)" stroke="var(--g90)" stroke-width="3"/>
+    <circle cx="282" cy="356" r="10" fill="var(--fill-0)" stroke="var(--g90)" stroke-width="3"/>
     <circle cx="282" cy="235" r="13" fill="var(--blue)"/>
     <text class="t-g" x="256" y="82">3 strategies</text>
     <text class="t-src" x="300" y="124">rejected</text>
@@ -692,7 +861,7 @@ svg text{font-family:var(--font);}
     <text class="t-s" x="904" y="212">Internal work ready</text>
     <text class="t-src" x="904" y="238">Machine execution complete</text>
     <g transform="translate(1216,238)">
-      <path d="M -34 -80 L 34 -62 L 34 62 L -34 80 Z" fill="#fff" stroke="var(--ink)" stroke-width="2.5"/>
+      <path d="M -34 -80 L 34 -62 L 34 62 L -34 80 Z" fill="var(--fill-0)" stroke="var(--ink)" stroke-width="2.5"/>
       <path d="M -14 -4 L -3 8 L 16 -14" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
       <text class="t-s" x="0" y="-100" text-anchor="middle">Human approval</text>
     </g>
@@ -705,43 +874,15 @@ svg text{font-family:var(--font);}
   <div class="note" style="left:88px;bottom:52px;">cortex-final-20260802-a · Cortex session + Snowflake query provenance</div>
 </section>
 
-<!-- ══════════════════ 12 ══════════════════ -->
-<section class="slide" id="s12" aria-label="Slide 12">
-  <div class="hd"><div class="rule"></div><h1>Win the Score, Not the Prompt</h1></div>
-  <svg width="1440" height="500" viewBox="0 0 1440 500" style="position:absolute;left:0;top:198px" role="img"
-       aria-label="A hundred-point circular score instrument built from proportional forty, thirty, twenty and ten arcs. All four arcs converge on one selected blue centre point labelled win position, and three thin rays lead to a defensible decision, a weighted strategy and owned execution.">
-    <title>100-point score instrument converging on one win position</title>
-    <circle cx="400" cy="250" r="180" fill="none" stroke="var(--line-soft)" stroke-width="1"/>
-    <path d="M 233.1 182.6 A 180 180 0 0 1 571.2 194.4" fill="none" stroke="var(--blue)" stroke-width="14"/>
-    <path d="M 574.7 206.5 A 180 180 0 0 1 400.0 430.0" fill="none" stroke="var(--g90)" stroke-width="14"/>
-    <path d="M 387.4 429.6 A 180 180 0 0 1 228.8 305.6" fill="none" stroke="var(--g95)" stroke-width="14"/>
-    <path d="M 225.3 293.5 A 180 180 0 0 1 228.8 194.4" fill="none" stroke="var(--g98)" stroke-width="14"/>
-    <g class="ln">
-      <path d="M406.3 70.1 L400 250"/><path d="M541.8 360.8 L400 250"/>
-      <path d="M289.2 391.8 L400 250"/><path d="M220.1 243.7 L400 250"/>
-    </g>
-    <circle cx="400" cy="250" r="54" fill="#fff" stroke="var(--line)" stroke-width="1"/>
-    <circle cx="400" cy="250" r="15" fill="var(--blue)"/>
-    <text class="t-b" x="400" y="332" text-anchor="middle" font-size="26">Win Position</text>
-    <text class="t-nb" x="407" y="46" text-anchor="middle">40</text>
-    <text class="t-n" x="588" y="392" fill="var(--ink-3)">30</text>
-    <text class="t-n" x="252" y="430" text-anchor="end" fill="var(--ink-3)">20</text>
-    <text class="t-n" x="170" y="252" text-anchor="end" fill="var(--ink-3)">10</text>
-
-    <g stroke="var(--blue)" stroke-width="2" fill="none">
-      <path d="M414 242 C 640 150 800 122 936 118"/>
-      <path d="M418 250 C 660 250 820 250 936 250"/>
-      <path d="M414 258 C 640 350 800 378 936 382"/>
-    </g>
-    <g fill="var(--blue)"><circle cx="948" cy="118" r="6"/><circle cx="948" cy="250" r="6"/><circle cx="948" cy="382" r="6"/></g>
-    <text class="t-lg" x="976" y="126">Defensible decision</text>
-    <text class="t-lg" x="976" y="258">Weighted strategy</text>
-    <text class="t-lg" x="976" y="390">Owned execution</text>
-  </svg>
-  <div class="smallline" style="left:88px;bottom:56px;font-size:26px;">Public tender + company context · <b>persisted and replayable in Snowflake</b></div>
+<!-- ══════════════════ 15 · CLOSE ══════════════════ -->
+<section class="slide" id="s15" aria-label="Slide 15">
+  <div class="close-line">Win the score, not the prompt.</div>
+  <div class="close-underline"></div>
+  <div class="close-foot">Defensible decision &nbsp;·&nbsp; Weighted strategy &nbsp;·&nbsp; Owned execution</div>
 </section>
 
-<div class="pageno" id="pageno"><i></i><span>01</span> / 12</div>
+<div id="grain" aria-hidden="true"></div>
+<div class="pageno" id="pageno"><i></i><span>01</span> / 15</div>
 </div>
 </div>
 
@@ -750,15 +891,23 @@ svg text{font-family:var(--font);}
   var canvas=document.getElementById('canvas');
   var slides=[].slice.call(document.querySelectorAll('.slide'));
   var pageno=document.querySelector('#pageno span');
+  var total=document.getElementById('pageno');
   var cur=0;
+  var rotated=false;
   function fit(){
-    var s=Math.min(window.innerWidth/1440, window.innerHeight/810);
-    canvas.style.transform='scale('+s+')';
+    var w=window.innerWidth, h=window.innerHeight;
+    /* a fixed-aspect stage: on a portrait handset, turn the slide to fill the screen */
+    rotated = (h > w) && (w < 640);
+    var s = rotated ? Math.min(h/1440, w/810) : Math.min(w/1440, h/810);
+    canvas.style.transform = (rotated ? 'rotate(90deg) ' : '') + 'scale('+s+')';
   }
   function show(i,push){
     i=Math.max(0,Math.min(slides.length-1,i));
     if(slides[cur]) slides[cur].classList.remove('on');
-    cur=i; slides[cur].classList.add('on');
+    cur=i;
+    /* retrigger the staggered reveal */
+    void slides[cur].offsetWidth;
+    slides[cur].classList.add('on');
     pageno.textContent=String(i+1).padStart(2,'0');
     if(push!==false){ history.replaceState(null,'','#'+(i+1)); }
   }
@@ -770,17 +919,21 @@ svg text{font-family:var(--font);}
   window.addEventListener('hashchange',fromHash);
   document.addEventListener('keydown',function(e){
     var k=e.key;
-    if(k==='ArrowRight'||k==='PageDown'||k===' '||k==='Spacebar'){e.preventDefault();show(cur+1);}
-    else if(k==='ArrowLeft'||k==='PageUp'){e.preventDefault();show(cur-1);}
+    if(k==='ArrowRight'||k==='ArrowDown'||k==='PageDown'||k===' '||k==='Spacebar'){e.preventDefault();show(cur+1);}
+    else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'){e.preventDefault();show(cur-1);}
     else if(k==='Home'){e.preventDefault();show(0);}
     else if(k==='End'){e.preventDefault();show(slides.length-1);}
   });
-  var tx=0;
-  document.addEventListener('touchstart',function(e){tx=e.changedTouches[0].clientX;},{passive:true});
+  document.querySelector('.nav.prev').addEventListener('click',function(){show(cur-1);});
+  document.querySelector('.nav.next').addEventListener('click',function(){show(cur+1);});
+  var tx=0,ty=0;
+  document.addEventListener('touchstart',function(e){tx=e.changedTouches[0].clientX;ty=e.changedTouches[0].clientY;},{passive:true});
   document.addEventListener('touchend',function(e){
-    var d=e.changedTouches[0].clientX-tx;
-    if(Math.abs(d)>40) show(cur+(d<0?1:-1));
+    var dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+    var d = rotated ? -dy : dx, o = rotated ? dx : dy;
+    if(Math.abs(d)>40&&Math.abs(d)>Math.abs(o)) show(cur+(d<0?1:-1));
   },{passive:true});
+  total.lastChild.nodeValue=' / '+String(slides.length);
   fit(); fromHash();
 })();
 </script>

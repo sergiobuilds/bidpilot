@@ -1,0 +1,142 @@
+Build an incremental 15-slide English presentation for the Snowflake CoCo CLI Hackathon 2026 Grand Finale.
+
+AUTHORITY AND REUSE
+- Work inside the current grand-finale-pitch-20260903 directory.
+- Read the current deck.html, storyboard.md, claims-ledger.md, pitch-script.md and assets before building.
+- This is an incremental show edit. Do not discard or reinvent the existing deck.
+- Preserve the information architecture, quantitative evidence and SVG geometry of the existing analytical visuals from current slides 2, 3, 4, 6, 7, 8, 9, 10 and 11. Reuse them with dark-theme palette and spacing adjustments.
+- Replace only the visually broken current slide 5 diagram. Simplify only the current closing slide 12.
+- Use only current deployed-product screenshots in assets/live. Do not invent product UI.
+- Use assets/illustrations/rabbit-dilemma-v1.png as the same recurring rabbit on slides 1 and 2. It has real alpha transparency.
+
+SURFACE
+- One self-contained deck.html with 15 fixed 1440 by 810 slides.
+- Keyboard arrows, Page Up, Page Down, Home, End, Space, touch swipe and direct #1 through #15 navigation.
+- Local font and local image references only. No external runtime dependency.
+- Each slide must fit a remote 16:9 screen with no scroll, overflow or clipping.
+
+DESIGN SYSTEM AND THEME
+- wanted-design-system only.
+- Dark keynote-like stage, refined and soft. Absolutely no neo-brutalism.
+- Background #090B10, secondary surface #11161E, primary text #F5F7FA, secondary text #99A2B1, structural line #283141, WDS blue #2F7CFF, REVIEW orange #FF9D2E.
+- Use blue only for selected or verified execution. Use orange only for REVIEW or unresolved evidence. Use green only for the persisted red-team pass.
+- No neon, glow, glass cards, loud gradients, thick borders, drop-shadow stacks, sticker labels, dashboard card grids, three-column KPI boxes, futuristic AI imagery or generic AI decoration.
+- Graph lines should be thin, precise and quiet. Large numbers and labels should dominate only when they carry evidence.
+- The rabbit illustration should feel much cuter than corporate iconography, but it remains a case-study character rather than a mascot. Do not add other animals.
+
+SHOW RHYTHM
+- Alternate case, explanation, evidence and breathing slides.
+- Keep approximately 80 percent of the existing analytical graphs. Do not respond to the request for variety by removing graphs indiscriminately.
+- The rabbit appears only on slides 1 and 2.
+- Slide 7 and slide 15 are sparse wording slides.
+- Product screenshots are small authenticity evidence, never the main composition.
+
+SLIDE 1 · QUICK CASE · WOULD YOU BID?
+- New slide.
+- Large copy on the left: QUICK CASE, KRW 250M, TECHNICAL 90, PRICE 10, Would you bid?
+- Small unresolved choices at bottom left: PURSUE? / NO-GO?
+- Put the cute worried rabbit and desk on the right 52 percent. The rabbit holds a public tender and an empty evidence folder. The clock remains visible.
+- Do not reveal REVIEW yet.
+- The scene must feel warm, charming and instantly understandable on the dark stage.
+
+SLIDE 2 · THE MISSING ANSWER · REVIEW
+- New reveal slide.
+- Reuse the exact same rabbit asset, cropped closer and shifted right.
+- Put a large orange REVIEW word on the left.
+- Add exactly four small orange evidence tabs as clean WDS shapes aligned beside the empty folder. Do not modify the raster image.
+- Copy: Four supplier requirements remain unsupported.
+- Boundary line: Real public tender · Synthetic demo supplier profile.
+- PURSUE and NO-GO stay small and muted.
+
+SLIDE 3 · SERGIO LEE · USCPA · GOVERNMENT-SUPPORT PROGRAMS
+- Preserve current slide 1 credential-to-product provenance line.
+- Preserve Washington State CPA, government grants and public programs, repeated enterprise friction, BidPilot, sergiobuilds and three-time AI hackathon winner.
+- Convert only palette and spacing for dark theme.
+
+SLIDE 4 · ACCOUNTING-FIRM + ENTERPRISE FRICTION · 6 BREAKPOINTS
+- Preserve current slide 2 dual-lane fault map and its three-row comparison table.
+- Preserve Opportunity, Eligibility, Evidence, Score, Strategy, Ownership and fixed deadline.
+- Dark-theme adaptation only. Orange fault nodes, blue deadline.
+
+SLIDE 5 · GLOBAL PUBLIC-SECTOR PURSUIT · SHARED OPERATING PATTERN
+- Preserve current slide 3 procurement ring.
+- Preserve Korea G2B, US SAM.gov, EU TED, OECD 12.9% of GDP and TED 3,000+ notices per weekday.
+- Preserve the structural claim: public notice, eligibility rules, scored evaluation, private supplier evidence, fixed submission boundary.
+
+SLIDE 6 · VERIFICATION · CONTEXT · STRATEGY
+- Preserve current slide 4 three-stream convergence and decision aperture.
+- Preserve source, eligibility, evidence; credentials, people, availability, delivery history; weights, position, owner; PURSUE, REVIEW, NO-GO.
+
+SLIDE 7 · FLUENCY IS NOT EVIDENCE.
+- New sparse breathing slide.
+- The only large copy is FLUENCY IS NOT EVIDENCE.
+- One elegant glowing-white speech mark on the left and one empty evidence seal on the right, connected by no line.
+- A small supporting line: A proposal can sound excellent and still be indefensible.
+- No graph, animal, table, numbers or cards.
+
+SLIDE 8 · SHOULD WE BID? → WHO OWNS WHAT NEXT?
+- Replace current slide 5 completely because its fan-out lines and comparison table are visually broken.
+- Use one clean horizontal product spine with five unboxed symbols: tender document, narrow decision gate, compass-like Win Position, scored proposal pages, named owner.
+- Labels: Tender, Decision, Win Position, Proposal, Owner.
+- A single thin baseline underneath reads: same run_id · persisted · replayable in Snowflake.
+- No branches, neural-network look, looping spaghetti line, bottom comparison table or rounded process cards.
+
+SLIDE 9 · PUBLIC TENDER + SUPPLIER EVIDENCE · CONTROLLED DECISION
+- Preserve current slide 6 policy-gate diagram.
+- Preserve real public tender, synthetic demo supplier profile, PURSUE, REVIEW, NO-GO, separate historical replay and no silent fixture fallback.
+
+SLIDE 10 · TWO EVIDENCE PATHS · REVIEW / PURSUE
+- Preserve current slide 7 diagonal split and current deployed-product screenshot insets.
+- Preserve real Suwon G2B source, technical 90, price 10, four evidence gaps, run 0.
+- Preserve separate synthetic replay, 40/30/20/10, three compared, one selected.
+- This is the live-demo launch and backup slide.
+
+SLIDE 11 · 40 POINTS · CHANGES THE PLAN
+- Preserve current slide 8 proportional 40/30/20/10 score spine and selected blue path.
+- Preserve four weighted plans, selected Win Position, evidence, eight proposal sections, red-team, named owner and twelve tasks.
+- Reduce the screenshot insets further if they compete with the score spine.
+
+SLIDE 12 · SNOWFLAKE · MEMORY THAT SURVIVES THE MEETING
+- Preserve current slide 9 Opportunity Graph orbit around run_id.
+- Preserve tender requirements, criteria, credentials, people, availability, delivery history, strategy, plans, sections and tasks.
+- Preserve the three-row table: Governed join, Least privilege, Durable state.
+- Preserve authenticated read failure · fail closed.
+
+SLIDE 13 · COCO CLI · WORK THAT SURVIVES THE PROMPT
+- Preserve current slide 10 execution trajectory: Query, Compare, Select, Write, Challenge, Persist.
+- Preserve the event table and Cortex session plus Snowflake query provenance.
+- Show the actual output counts at the persist endpoint without equal KPI cards: 3 strategies · 4 plans · 8 sections · 12 tasks.
+
+SLIDE 14 · VERIFIED RUN · 1 → 3 → 4 → 8 → 12
+- Preserve current slide 11 branching artifact tree and human approval gate.
+- Preserve one decision, three strategies, four plans, eight sections and twelve tasks.
+- Preserve small B2G proposal teams as buyer and team workspace plus usage-based runs as commercial path.
+- Human approval must remain before legal submission.
+
+SLIDE 15 · WIN THE SCORE, NOT THE PROMPT.
+- Simplify current slide 12.
+- Remove the circular score graph.
+- Deep dark field, one large centered memory line, one short WDS-blue underline.
+- Small footer only: Defensible decision · Weighted strategy · Owned execution.
+- No animal, graph, table, number or decorative image.
+
+RUBRIC PROOF
+- Real-World Relevance 30% must be proven by slides 1 through 6 and the real public tender on slide 10.
+- Technical Execution 40% must be proven by slides 8 through 14, especially Snowflake, CoCo CLI, least privilege, fail closed and provenance.
+- Solution Completeness 30% must be proven by slides 8 through 15, especially REVIEW/PURSUE, score control, proposal, red-team, tasks and human approval.
+- Do not print rubric labels repeatedly. Put evidence next to each claim.
+
+CONTENT BOUNDARIES
+- Real Suwon G2B notice: real public source, not presented as currently biddable.
+- Supplier profile: explicitly synthetic demo data.
+- Real-tender REVIEW and historical replay PURSUE are separate evidence paths.
+- Historical replay run: cortex-final-20260802-a.
+- Never claim customers, awards, revenue, win rate, market share or time savings.
+- BidPilot does not perform legal submission. Human approval owns evidence, pricing, final edit and submission.
+
+CORRECTION LOOP
+- Complete at least three visual correction rounds.
+- Inspect every slide at 1440 by 810, then test the deck at 1440, 768 and 390 browser widths.
+- Confirm no overflow, clipping, missing local image, broken alpha, unreadably small type or competing visual hierarchy.
+- Specifically inspect slides 1, 2, 8, 10, 11, 12, 13 and 15 individually.
+- Confirm the rabbit is visually identical on slides 1 and 2 and is much cuter than a corporate icon while remaining professional.

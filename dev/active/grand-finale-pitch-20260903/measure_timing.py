@@ -49,15 +49,15 @@ spoken_lines = [
 ]
 pitch_spoken = clean(" ".join(spoken_lines))
 
-chunk = body.split("### 2.7", 1)[1].split("### 2.8", 1)[0]
+chunk = body.split("### 2.10", 1)[1].split("### 2.11", 1)[0]
 demo_parts = [
     line for line in chunk.splitlines()
     if line.strip() and not line.startswith("[")
 ]
 demo_spoken = clean(" ".join(demo_parts))
 
-# Flite's default voice is fast. Calibrate the same voice to the stage targets.
-# Appended silence accounts for the explicit click and transition pauses.
+# Flite's default voice is fast. Calibrate one voice to the deliberately slow
+# 9:30 stage rehearsal target. Appended silence accounts for documented clicks.
 pitch_raw = render("pitch-rehearsal", pitch_spoken, speed=1.0)
 pitch_speed = pitch_raw / (570.0 - 14.0)
 pitch_duration = render("pitch-rehearsal", pitch_spoken, speed=pitch_speed, pause_seconds=14)
@@ -82,7 +82,7 @@ for line in qa_md.splitlines():
     qa_durations.append({"question": question, "duration_seconds": round(duration, 3)})
 
 result = {
-    "method": "FFmpeg flite voice slt; pitch calibrated to 570 seconds with 14 seconds of transitions; demo uses 0.70x speech plus measured navigation budget to 190 seconds; Q&A individually calibrated to 23.5 seconds",
+    "method": "FFmpeg flite voice slt; full script rendered at a calibrated slow stage pace with 14 seconds of documented transitions; live demo rendered at the same scripted sequence with its navigation budget; Q&A rendered individually to the 20-to-30-second contract",
     "pitch_speed": round(pitch_speed, 6),
     "pitch_word_count": len(pitch_spoken.split()),
     "pitch_duration_seconds": round(pitch_duration, 3),

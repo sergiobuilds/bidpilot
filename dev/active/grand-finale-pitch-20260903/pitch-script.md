@@ -1,48 +1,60 @@
 # BidPilot Grand Finale Pitch Script
 
-This is the English presentation script for the rebuilt twelve-slide deck and live demonstration.
+This is the English presentation script for the fifteen-slide Grand Finale deck and live demonstration.
 
 **Contents**: 1 Delivery contract · 2 Timed script · 3 Measurement · 4 Change history
 
 ## 1 Delivery contract
 
-1. Deliver slides 1 through 6 in 3 minutes 20 seconds.
-2. Keep the slide 7 live demonstration at or below 3 minutes 15 seconds.
-3. Deliver slides 8 through 12 in 2 minutes 55 seconds.
-4. Reserve the final twenty seconds for the product sentence and memory line.
-5. Use the backup slide immediately if a live screen waits longer than five seconds.
+1. Deliver slides 1 through 9 in 3 minutes 40 seconds.
+2. Keep the slide 10 live demonstration at or below 3 minutes 15 seconds.
+3. Deliver slides 11 through 15 in 2 minutes 40 seconds.
+4. Reserve the final twenty seconds for the conclusion and memory line.
+5. Use the corresponding backup slide when a live screen waits longer than five seconds.
 
 ## 2 Timed script
 
-### 2.1 Slide 1 · 0:00–0:30
+### 2.1 Slide 1 · 0:00–0:25
 
-Good afternoon. I’m Sergio Lee, a Washington State CPA specializing in government grants, public-program accounting, and government-support applications. Working with companies through an accounting firm showed me where public-sector pursuits become difficult: eligibility must be verified, company evidence arrives from many owners, and every important claim has to survive review. That field discipline became BidPilot.
+Quick case. You find a public tender worth two hundred fifty million Korean won. Technical quality carries ninety points. Price carries ten. Would you bid? Pursue, or no-go? Most teams feel pressure to decide immediately. But the score is not the missing answer.
 
-### 2.2 Slide 2 · 0:30–1:10
+### 2.2 Slide 2 · 0:25–0:50
 
-The friction appears on both sides. The accounting firm must interpret the notice, request evidence, reconcile gaps, and work against a fixed deadline. The company must find the opportunity, prove eligibility, locate credentials and people, understand the score, choose a position, and assign unresolved work. These are six connected decisions, but they usually live in different files, systems, and meetings. Writing begins while the decision chain is still broken.
+The missing answer is REVIEW. Four supplier requirements remain unsupported. The tender is a real public G2B notice. The supplier profile is explicitly synthetic demo data. BidPilot refuses to approve the pursuit until the company can support its eligibility and delivery claims.
 
-### 2.3 Slide 3 · 1:10–1:45
+### 2.3 Slide 3 · 0:50–1:20
 
-This pattern extends beyond one country. OECD public procurement represented 12.9 percent of GDP across OECD countries in 2021. The European Union’s TED service publishes over three thousand procurement notices each weekday. Korea’s G2B, the United States’ SAM.gov, and EU TED use different legal frameworks, but the operating pattern repeats: public notice, eligibility rules, scored evaluation, private supplier evidence, and a fixed submission boundary.
+I’m Sergio Lee, a Washington State CPA specializing in government grants, public-program accounting, and government-support applications. Working through an accounting firm exposed the same breakpoints in every pursuit: verify eligibility before committing resources, separate source facts from assumptions, bind score-bearing claims to evidence, and assign every unresolved gap to an owner. That discipline became BidPilot.
 
-### 2.4 Slide 4 · 1:45–2:20
+### 2.4 Slide 4 · 1:20–1:55
 
-A defensible pursuit decision requires three inputs. Verification establishes what the notice actually says and what the supplier can prove. Context connects credentials, people, availability, and delivery history. Strategy converts the buyer’s official weights into a competitive position and owned work. If any stream is incomplete, the correct result may be REVIEW or NO-GO. Fluent writing cannot repair a missing eligibility fact or an unsupported project result.
+The accounting firm repeatedly interprets notices, requests documents, reconciles gaps, and works against a fixed deadline. The company must find the opportunity, prove eligibility, locate credentials and people, understand the score, choose a position, and assign unresolved work. These six decisions usually live across email, files, and meetings. Writing begins while the decision chain is still broken.
 
-### 2.5 Slide 5 · 2:20–2:55
+### 2.5 Slide 5 · 1:55–2:25
 
-BidPilot is a pursuit decision and execution workspace for B2G proposal teams. One accountable path connects the public tender and supplier evidence to a controlled decision, a score-weighted Win Position, an evidence-bound proposal, red-team review, owned work, and same-run Snowflake readback. A general LLM turns a prompt into prose. BidPilot turns governed evidence into a decision and an executable bid plan.
+This pattern is global. OECD public procurement represented 12.9 percent of GDP across OECD countries in 2021. The European Union’s TED service publishes over three thousand notices each weekday. Korea G2B, US SAM.gov, and EU TED have different legal rules, but they share an operating pattern: public notice, eligibility rules, scored evaluation, private supplier evidence, and a fixed submission boundary.
 
-### 2.6 Slide 6 · 2:55–3:20
+### 2.6 Slide 6 · 2:25–2:50
 
-The demo uses two separate evidence paths. The first is a real public tender paired with an explicitly synthetic supplier profile. It proves the source and decision boundary. The second is a separate synthetic historical replay. It proves the full capability and recorded Snowflake execution. I will not create or change a run during this presentation.
+A defensible decision needs three things. Verification establishes what the notice says and what the supplier can prove. Context connects credentials, people, availability, and delivery history. Strategy converts official weights into a competitive position and owned work. If any stream is incomplete, the correct result may be REVIEW or NO-GO.
 
-### 2.7 Slide 7 and live demo · 3:20–6:35
+### 2.7 Slide 7 · 2:50–3:00
+
+Fluency is not evidence. A proposal can sound excellent and still be indefensible.
+
+### 2.8 Slide 8 · 3:00–3:25
+
+BidPilot connects one accountable path: tender, decision, Win Position, proposal, and owner. The same run identity persists every stage in Snowflake. A general LLM returns prose. BidPilot turns governed evidence into a pursuit decision, a score-weighted strategy, and executable proposal work.
+
+### 2.9 Slide 9 · 3:25–3:40
+
+The demo keeps two evidence paths separate. The real public tender proves source handling and the decision boundary. A separate synthetic historical replay proves the full workflow and Snowflake execution. I will not create or change a run today.
+
+### 2.10 Slide 10 and live demo · 3:40–6:50
 
 [Open the preloaded real-tender tab. Pause 2 seconds.]
 
-This is a real public G2B tender source from Suwon City. We use it as a source case and do not represent it as a currently open opportunity. The published evaluation is technical ninety and price ten. The notice facts are source-reviewed, while the supplier profile is labeled synthetic demo data.
+This is a real public G2B tender source from Suwon City. We use it strictly as a fixed demonstration case, not as a live bid recommendation. The published evaluation is technical ninety and price ten. The notice facts are source-reviewed, while the supplier profile is labeled synthetic demo data.
 
 BidPilot identifies four unresolved supplier evidence requirements. The result is REVIEW, and the run count is zero. Strategy and proposal work remain closed. This is a successful control outcome. Missing eligibility or delivery evidence stays visible instead of becoming a confident proposal claim.
 
@@ -58,29 +70,29 @@ That position controls four weighted response plans and eight proposal sections.
 
 [Scroll through owned work and Snowflake proof. Pause 2 seconds.]
 
-Twelve tasks assign delivery, review, and provenance work. The same screen returns the historical run `cortex-final-20260802-a` through the least-privilege reader with Cortex session and Snowflake query provenance. No new execution occurred during this demo.
+Twelve tasks assign delivery, review, and provenance work. The same screen returns historical run `cortex-final-20260802-a` through the least-privilege reader with Cortex session and Snowflake query provenance. No new execution occurred during this demo.
 
-[Return to slide 8. Pause 2 seconds.]
+[Return to slide 11. Pause 2 seconds.]
 
-### 2.8 Slide 8 · 6:35–7:10
+### 2.11 Slide 11 · 6:50–7:20
 
-The mechanism is visible in this score spine. Forty percent of the buyer’s evaluation receives the strongest strategic and writing emphasis. That weight controls the selected position, the supporting evidence, the proposal section, the red-team check, and the owner. The remaining criteria still receive coverage, but they do not consume equal attention. Four plans become eight sections and twelve owned or review tasks.
+The mechanism is the score spine. Forty points receive the strongest strategic and writing emphasis. That weight controls the selected Win Position, supporting evidence, proposal section, red-team check, and owner. The other criteria remain covered, but they do not receive equal attention. Four plans become eight sections and twelve owned or review tasks.
 
-### 2.9 Slide 9 · 7:10–7:50
+### 2.12 Slide 12 · 7:20–8:00
 
-Snowflake is necessary because the product needs governed enterprise context and durable organizational memory. The Opportunity Graph joins versioned tender requirements with controlled credentials, people, availability, and delivery history. Snowpark executes the pursuit policy beside that data. The runner writes approved execution artifacts. The reader reloads only complete results. Every decision, strategy, plan, section, task, session, and query reference remains attached to one run identity. An authenticated read failure fails closed.
+Why Snowflake? The product needs governed enterprise context and durable organizational memory. The Opportunity Graph joins versioned tender requirements with controlled credentials, people, availability, and delivery history. Snowpark executes policy beside that data. The runner writes approved execution artifacts. The reader reloads only complete results. Every decision, strategy, plan, section, task, session, and query reference stays attached to one run identity. An authenticated read failure fails closed.
 
-### 2.10 Slide 10 · 7:50–8:30
+### 2.13 Slide 13 · 8:00–8:40
 
-CoCo CLI is necessary because the work is an execution sequence, not a single model response. In the recorded session, Cortex Code queried governed Snowflake records, compared three positions, selected one, wrote four plans and eight proposal sections, challenged the score-bearing claims, created twelve tasks, and persisted session and query provenance. It operated through an authenticated CLI session inside the repository workspace. No LLM API key was required.
+Why CoCo CLI? The work is an execution sequence, not one model response. In the recorded session, Cortex Code queried governed Snowflake records, compared three positions, selected one, wrote four plans and eight proposal sections, challenged score-bearing claims, created twelve tasks, and persisted session and query provenance. It operated through an authenticated CLI session inside the repository workspace, with no LLM API key.
 
-### 2.11 Slide 11 · 8:30–9:05
+### 2.14 Slide 14 · 8:40–9:10
 
-The historical run provides measurable completeness: one decision, three strategies, four weighted plans, eight proposal sections, and twelve tasks. The machine path stops at internal work ready. A person still reviews the source, confirms supplier evidence, owns pricing, approves the final edit, and performs the legal submission. The first buyer is a small B2G proposal team. The commercial path is a team workspace with usage-based agent runs.
+The verified run contains one decision, three strategies, four weighted plans, eight proposal sections, and twelve tasks. The machine path stops at internal work ready. A person still reviews the source, confirms supplier evidence, owns pricing, approves the final edit, and performs the legal submission. The first buyer is a small B2G proposal team, served through a team workspace with usage-based runs.
 
-### 2.12 Slide 12 · 9:05–9:30
+### 2.15 Slide 15 · 9:10–9:30
 
-BidPilot applies professional evidence discipline to a globally recurring pursuit problem. It combines verification, enterprise context, and score strategy in one replayable Snowflake run. The result is a defensible decision, a weighted win strategy, and owned execution work.
+BidPilot brings verification, company context, and score strategy into one replayable Snowflake run. Teams get a defensible decision, a weighted win strategy, and owned execution work.
 
 [Pause.]
 
@@ -88,9 +100,10 @@ Win the score, not the prompt.
 
 ## 3 Measurement
 
-FFmpeg Flite rendered all spoken lines and added fourteen seconds for the documented screen transitions. The measured presentation duration is 569.978 seconds, or 9 minutes 29.978 seconds. The live-demo segment is separately measured at 189.988 seconds, or 3 minutes 9.988 seconds.
+FFmpeg Flite rendered all spoken lines at the calibrated slow stage pace and added fourteen seconds for documented transitions. The measured presentation duration is 569.988 seconds, or 9 minutes 29.988 seconds. The live-demo segment is separately measured at 190.007 seconds, or 3 minutes 10.007 seconds.
 
 ## 4 Change history
 
 - 2026-09-03 v1: Rebuilt the script around founder authority, global public-sector evidence, verification, context, strategy, Snowflake necessity, CoCo CLI execution, and central visual explanations.
-- 2026-09-03 v2: Recorded the final rendered narration and live-demo measurements.
+- 2026-09-03 v2: Recorded the first rendered narration and live-demo measurements.
+- 2026-09-03 v3: Expanded the script to the fifteen-slide dark show, adding the audience quiz, REVIEW reveal, breathing beat, product spine, and simplified close while preserving the verified evidence chain.

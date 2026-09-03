@@ -14,7 +14,7 @@ This table provides evidence-first English answers for the three-minute judge Q&
 | Why is Snowflake necessary? | Snowflake joins versioned public requirements with controlled private supplier evidence, executes Snowpark policy beside that data, and persists every artifact under one run identity. It also separates runner and reader permissions. Without that shared state, the workflow returns to disconnected files and chat sessions. |
 | Why is CoCo CLI necessary? | Cortex Code CLI turns governed context into an inspectable execution sequence. It queried the Snowflake records, compared strategies, wrote plans and proposal sections, challenged claims, created tasks, and persisted session and query provenance. That is different from receiving one unrecorded model response. |
 | What exactly did Cortex Code CLI create? | The recorded session created three Win Positions with one selected, four weighted response plans, eight proposal sections, and twelve tasks. It stored those artifacts with its Cortex session and Snowflake query references under the same historical run ID. |
-| Is the tender data real? | The Suwon notice is a real public G2B source. We use it to prove source handling and the decision boundary, and we do not present it as a currently open opportunity. Its `REVIEW` result is separate from the full historical replay. |
+| Is the tender data real? | The Suwon notice is a real public G2B source. We use it to prove source handling and the decision boundary, not as a live bid recommendation. Its `REVIEW` result is separate from the full historical replay. |
 | Is the supplier data real? | No. The public demo labels the supplier profile as synthetic demo data. The project does not use customer records or confidential company information, and it does not claim customer outcomes, award results, revenue, or win-rate improvements. |
 | Why does the real tender show REVIEW? | Four supplier evidence requirements remain unresolved. BidPilot therefore keeps the run, strategy, and proposal closed. That is a reliability result. The system preserves missing evidence as an explicit decision boundary instead of converting it into confident language. |
 | Is this an automated legal bid submission tool? | No. BidPilot prepares a governed pursuit decision and internal execution package. A person still reviews the source, confirms supplier evidence, owns pricing, approves the final edit, and performs the legal submission through the authorized procurement channel. |
@@ -31,7 +31,7 @@ This table provides evidence-first English answers for the three-minute judge Q&
 
 Answer the first sentence directly, give one proof, and stop. Prioritize founder fit, Snowflake necessity, CoCo CLI necessity, data boundaries, and the strongest measurable proof.
 
-All eighteen answers were rendered individually. Measured durations range from 23.469 to 23.517 seconds.
+All eighteen answers were rendered individually. Measured durations range from 23.485 to 23.517 seconds.
 
 ## 3 Change history
 

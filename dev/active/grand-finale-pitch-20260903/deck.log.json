@@ -1,6 +1,6 @@
 {
-  "release": "grand-finale-pitch-20260903-wds",
-  "source_commit": "f72a0565c6d804b26b77f00febbecbdd6908c5a2",
+  "release": "grand-finale-pitch-20260903-wds-dark",
+  "source_commit": "9e7f2e3fee0faae40a3378cfbdd3fbb794fd61c5",
   "design_system": "wanted-design-system",
   "checks": [
     {
@@ -11,22 +11,22 @@
     {
       "name": "design_forge",
       "status": "PASS",
-      "evidence": "build-with-ds used the wanted-design-system pack and completed three visual correction rounds"
+      "evidence": "build-with-ds used the wanted-design-system pack and completed three rendered correction rounds"
     },
     {
-      "name": "visual_structure",
+      "name": "visual_direction",
       "status": "PASS",
-      "evidence": "twelve slides use distinct central diagrams, graphs, tables, or geometric instruments; equal KPI cards and three-column number tiles are absent"
+      "evidence": "fifteen-slide dark keynote stage uses one cute rabbit case across slides 1 and 2, sparse wording on slides 7 and 15, and nine preserved analytical visuals"
     },
     {
       "name": "public_application_sync",
       "status": "PASS",
-      "evidence": "slide screenshots match production-readback captures from deployed revision bidpilot-demo-00012-vvg"
+      "evidence": "product screenshots were synchronized from the 13:58 KST production readback of deployed revision bidpilot-demo-00024-fim"
     },
     {
       "name": "html_navigation",
       "status": "PASS",
-      "evidence": "twelve direct hash renders produced twelve distinct 1440 by 810 PNG slides"
+      "evidence": "fifteen hash-addressable sections produced fifteen distinct 1440 by 810 PNG slides"
     },
     {
       "name": "html_viewports",
@@ -36,37 +36,37 @@
     {
       "name": "html_visual_review",
       "status": "PASS",
-      "evidence": "the twelve-slide contact sheet and all evidence-heavy slides were inspected with no clipping, overlap, broken font, or missing image"
+      "evidence": "contact sheet plus slides 1, 2, 4, 5, 8, and 10 through 15 were inspected with no clipping, overlap, broken font, missing image, or pasted illustration edge"
     },
     {
       "name": "pptx_integrity",
       "status": "PASS",
-      "evidence": "the package contains twelve slide XML parts, unzip reports no errors, and each slide contains editable core text"
+      "evidence": "the package contains fifteen slide XML parts, unzip reports no errors, and every slide contains editable core text"
     },
     {
       "name": "pptx_visual_review",
       "status": "PASS",
-      "evidence": "LibreOffice reopened the PPTX, rendered all twelve slides, and the rendered contact sheet matches the HTML visual source"
+      "evidence": "LibreOffice reopened the PPTX, exported a fifteen-page PDF, and the fifteen-slide rendered contact sheet matches the HTML visual source"
     },
     {
       "name": "pdf_integrity",
       "status": "PASS",
-      "evidence": "the PDF opens with twelve 16:9 pages at 960.009 by 540 points and retains extractable core text"
+      "evidence": "the PDF opens with fifteen 16:9 pages at 960.009 by 540 points and retains extractable core text"
     },
     {
       "name": "narration_timing",
       "status": "PASS",
-      "evidence": "FFmpeg Flite render plus fourteen seconds of documented transitions measured 569.978 seconds"
+      "evidence": "FFmpeg Flite slow-stage render plus fourteen seconds of documented transitions measured 569.988 seconds"
     },
     {
       "name": "demo_timing",
       "status": "PASS",
-      "evidence": "FFmpeg Flite render plus 58.566 seconds of navigation time measured 189.988 seconds"
+      "evidence": "FFmpeg Flite render plus 58.342 seconds of navigation time measured 190.007 seconds"
     },
     {
       "name": "qa_timing",
       "status": "PASS",
-      "evidence": "eighteen answer renders measured 23.469 through 23.517 seconds"
+      "evidence": "eighteen answer renders measured 23.485 through 23.517 seconds"
     },
     {
       "name": "data_boundaries",
@@ -76,12 +76,12 @@
     {
       "name": "language_lint",
       "status": "PASS",
-      "evidence": "no em dash, not-just construction, more-than construction, or revolutionize wording appears in the finale outputs"
+      "evidence": "no em dash, not-just construction, more-than construction, or revolutionize wording appears in the release-facing outputs"
     },
     {
       "name": "vivobook_package",
       "status": "PASS",
-      "evidence": "device hashes match; PowerPoint opened twelve slides with one editable text layer each and exported twelve clean 1440 by 810 PNGs; Chrome rendered local HTML slides 1 and 12 at 1440 by 810"
+      "evidence": "ASUS laptop PowerPoint opened fifteen slides with editable text on all fifteen and exported fifteen clean 1440 by 810 PNGs; device Chrome rendered settled local HTML slides 1 and 15 at 1440 by 810"
     }
   ],
   "markdown_self_review": [

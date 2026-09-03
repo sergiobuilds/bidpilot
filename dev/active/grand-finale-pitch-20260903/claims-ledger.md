@@ -8,8 +8,8 @@ This ledger fixes the authoritative facts, global evidence, product boundaries, 
 
 | Field | Verified value |
 |---|---|
-| Current `origin/main` | `f72a0565c6d804b26b77f00febbecbdd6908c5a2` |
-| Public-app source | `c78c40c` · Cloud Run revision `bidpilot-demo-00012-vvg` |
+| Current `origin/main` | `9e7f2e3fee0faae40a3378cfbdd3fbb794fd61c5` |
+| Public-app source | `1955d4b` · Cloud Run revision `bidpilot-demo-00024-fim` |
 | Public repository | `https://github.com/sergiobuilds/bidpilot` |
 | Public application | `https://bidpilot-demo-tbauoylpra-uc.a.run.app` |
 | Real-tender route | `/?tender=R26BK01680611-000` |
@@ -56,7 +56,7 @@ The global claim is structural: public notice, eligibility rules, scored evaluat
 
 | Evidence path | Data status | Required presentation boundary |
 |---|---|---|
-| Suwon G2B notice `R26BK01680611-000` | Real public source | Source and decision-boundary proof; not represented as a currently open opportunity |
+| Suwon G2B notice `R26BK01680611-000` | Real public source | Source and decision-boundary proof; not represented as a live bid recommendation |
 | Supplier profile on the real-tender screen | Synthetic demo data | Labeled on the slide, in narration, and in Q&A |
 | Real-tender result | `REVIEW`, four evidence gaps, no run | Reliability proof |
 | Verified replay | Separate synthetic historical fixture | Full product and Snowflake execution proof |
@@ -85,3 +85,6 @@ The global claim is structural: public notice, eligibility rules, scored evaluat
 - 2026-09-03 v1: Added founder authority, accounting-firm friction, official OECD, TED, and SAM.gov evidence, Snowflake necessity, CoCo CLI necessity, and data-boundary controls.
 - 2026-09-03 v2: Synchronized the source identity and screenshots to the deployed finale product after production readback.
 - 2026-09-03 v3: Advanced the repository source identity after the reader-only agent surface and simplified dashboard reached `origin/main`; the public-app source remains separately identified.
+- 2026-09-03 v4: Restated the deck as a fifteen-slide dark show. No claim was added or widened; the quick case on slide 1 is a framing case, and the real-tender and historical-replay boundaries of section 5 continue to govern slides 2, 9 and 10.
+- 2026-09-03 v5: Froze the release against current `origin/main` after the final fetch.
+- 2026-09-03 v6: Synchronized the source identity and embedded product captures to deployed revision `bidpilot-demo-00024-fim` after its production readback reached `origin/main`.

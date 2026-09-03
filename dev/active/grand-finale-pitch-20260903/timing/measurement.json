@@ -1,12 +1,12 @@
 {
-  "method": "FFmpeg flite voice slt; pitch calibrated to 570 seconds with 14 seconds of transitions; demo uses 0.70x speech plus measured navigation budget to 190 seconds; Q&A individually calibrated to 23.5 seconds",
-  "pitch_speed": 0.669925,
-  "pitch_word_count": 909,
-  "pitch_duration_seconds": 569.978,
-  "demo_word_count": 227,
+  "method": "FFmpeg flite voice slt; full script rendered at a calibrated slow stage pace with 14 seconds of documented transitions; live demo rendered at the same scripted sequence with its navigation budget; Q&A rendered individually to the 20-to-30-second contract",
+  "pitch_speed": 0.672353,
+  "pitch_word_count": 896,
+  "pitch_duration_seconds": 569.988,
+  "demo_word_count": 224,
   "demo_speed": 0.7,
-  "demo_navigation_budget_seconds": 58.566,
-  "demo_duration_seconds": 189.988,
+  "demo_navigation_budget_seconds": 58.342,
+  "demo_duration_seconds": 190.007,
   "qa": [
     {
       "question": "Why are you the right founder for this problem?",
@@ -34,7 +34,7 @@
     },
     {
       "question": "Is the tender data real?",
-      "duration_seconds": 23.469
+      "duration_seconds": 23.493
     },
     {
       "question": "Is the supplier data real?",

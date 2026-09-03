@@ -3,6 +3,7 @@ timing/*.wav
 rendered-pptx/
 design-forge-build/
 design-forge-wds-build/
+design-forge-show-build/
 .verify-shot/
 assets/diagnostic/
 shot-*.png

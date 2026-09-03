@@ -1,6 +1,6 @@
 # BidPilot Grand Finale Storyboard
 
-This storyboard fixes the twelve-slide evidence sequence, central visual, on-screen labels, narration role, and timing.
+This storyboard fixes the fifteen-slide evidence sequence, central visual, on-screen labels, narration role, and timing.
 
 **Contents**: 1 Narrative contract · 2 Slide plan · 3 Visual grammar · 4 Demonstration insertion · 5 Change history
 
@@ -16,20 +16,23 @@ This storyboard fixes the twelve-slide evidence sequence, central visual, on-scr
 
 ## 2 Slide plan
 
-| Slide | Time | Slide text | Central visual | Quantitative evidence | Narration role |
-|---:|---:|---|---|---|---|
-| 1 | 0:00–0:30 | `Sergio Lee · USCPA · Government-Support Programs` | Credential-to-product provenance line | 3-time AI hackathon winner | Establish authority and the field origin of BidPilot. |
-| 2 | 0:30–1:10 | `Accounting-Firm + Enterprise Friction · 6 Breakpoints` | Two-lane fault map ending at one deadline | 2 perspectives · 6 breakpoints · 1 deadline | Connect accounting-firm burden to enterprise burden. |
-| 3 | 1:10–1:45 | `Global Public-Sector Pursuit · Shared Operating Pattern` | Procurement ring joining Korea, US, and EU structures | OECD 12.9% of GDP · TED 3,000+ notices per weekday | Establish global repetition with official evidence. |
-| 4 | 1:45–2:20 | `Verification · Context · Strategy` | Three streams converging on one decision aperture | 3 requirements · 3 outcomes | Define the minimum system required for a defensible decision. |
-| 5 | 2:20–2:55 | `BidPilot · Decision-to-Execution Workspace` | One continuous causal path that changes form | 1 accountable run | Distinguish evidence-to-execution from prompt-to-prose. |
-| 6 | 2:55–3:20 | `Public Tender + Supplier Evidence · Controlled Decision` | Two input streams entering a three-outcome policy gate | PURSUE · REVIEW · NO-GO | Lock the data boundary before the demo. |
-| 7 | 3:20–6:35 | `Two Evidence Paths · REVIEW / PURSUE` | Diagonal split between real source and historical replay | Real 90/10 · 4 gaps · run 0; replay 40/30/20/10 · 3 compared · 1 selected | Launch and back up the live demonstration. |
-| 8 | 6:35–7:10 | `Score-to-Work · 40 / 30 / 20 / 10` | Proportional score spine feeding strategy, evidence, proposal, review, and owner | 4 plans · 8 sections · 12 tasks | Explain the causal mechanism the judges just saw. |
-| 9 | 7:10–7:50 | `Snowflake · Governed Context · Same-Run Memory` | Opportunity Graph orbit around one run identity | Runner writes · reader replays · same run ID | Prove why Snowflake is structurally necessary. |
-| 10 | 7:50–8:30 | `CoCo CLI · Evidence-to-Action Execution` | One artifact changing through six execution states | Query · compare · select · write · challenge · persist | Prove what Cortex Code CLI actually created. |
-| 11 | 8:30–9:05 | `Verified Run · 1 / 3 / 4 / 8 / 12 · Human Approval` | Branching artifact tree ending at a human approval gate | 1 decision · 3 strategies · 4 plans · 8 sections · 12 tasks | Prove completeness, buyer value, and the legal boundary. |
-| 12 | 9:05–9:30 | `Win the Score, Not the Prompt` | Proportional 100-point circular score instrument | 40 + 30 + 20 + 10 = 100 | Close with one visual and one memory line. |
+| Slide | Slide text | Central visual | Quantitative evidence | Narration role |
+|---:|---|---|---|---|
+| 1 | `Quick case · KRW 250M · Would you bid?` | Pursuit lead at the desk with a public tender and an empty evidence folder | Technical 90 · Price 10 | Open on the decision the audience must make before any product appears. |
+| 2 | `REVIEW` | The same character, cropped close on the empty folder, with four evidence tabs beside it | 4 unsupported supplier requirements | Reveal the missing answer and set the real-tender / synthetic-supplier boundary. |
+| 3 | `Sergio Lee · USCPA · Government-Support Programs` | Credential-to-product provenance line | 3-time AI hackathon winner | Establish authority and the field origin of BidPilot. |
+| 4 | `Accounting-Firm + Enterprise Friction · 6 Breakpoints` | Two-lane fault map ending at one deadline | 2 perspectives · 6 breakpoints · 1 deadline | Connect accounting-firm burden to enterprise burden. |
+| 5 | `Global Public-Sector Pursuit · Shared Operating Pattern` | Procurement ring joining Korea, US and EU structures | OECD 12.9% of GDP · TED 3,000+ notices per weekday | Establish global repetition with official evidence. |
+| 6 | `Verification · Context · Strategy` | Three streams converging on one decision aperture | 3 requirements · 3 outcomes | Define the minimum system for a defensible decision. |
+| 7 | `Fluency is not evidence.` | A glowing speech mark and an empty evidence seal, unconnected | none | Breathing slide. Name the failure mode of prose-only systems. |
+| 8 | `Should we bid? → Who owns what next?` | One horizontal product spine: tender, decision, win position, proposal, owner | 1 accountable run | Distinguish evidence-to-execution from prompt-to-prose. |
+| 9 | `Public Tender + Supplier Evidence · Controlled Decision` | Two input streams entering a three-outcome policy gate | PURSUE · REVIEW · NO-GO | Lock the data boundary before the demo. |
+| 10 | `Two Evidence Paths · REVIEW / PURSUE` | Diagonal split between real source and historical replay | Real 90/10 · 4 gaps · run 0; replay 40/30/20/10 · 3 compared · 1 selected | Launch and back up the live demonstration. |
+| 11 | `40 Points · Changes the Plan` | Proportional score spine feeding strategy, evidence, proposal, review and owner | 4 plans · 8 sections · 12 tasks | Explain the causal mechanism the judges just saw. |
+| 12 | `Snowflake · Memory That Survives the Meeting` | Opportunity Graph orbit around one run identity | Governed join · least privilege · durable state | Prove why Snowflake is structurally necessary. |
+| 13 | `CoCo CLI · Work That Survives the Prompt` | One artifact changing through six execution states | 3 strategies · 4 plans · 8 sections · 12 tasks | Prove what Cortex Code CLI actually created. |
+| 14 | `Verified Run · 1 → 3 → 4 → 8 → 12` | Branching artifact tree ending at a human approval gate | 1 decision · 3 strategies · 4 plans · 8 sections · 12 tasks | Prove completeness, buyer value and the legal boundary. |
+| 15 | `Win the score, not the prompt.` | Deep dark field, one memory line, one blue underline | none | Close on one sentence. |
 
 ## 3 Visual grammar
 
@@ -47,15 +50,17 @@ This storyboard fixes the twelve-slide evidence sequence, central visual, on-scr
 | Named endpoint | Owned work |
 | Continuous run spine | Same-run Snowflake persistence |
 
-3.1 Slides 2 through 12 must allocate more visible area to the central visual than to text.
+3.1 Explanation and evidence slides (3 through 6 and 8 through 14) must allocate more visible area to the central visual than to text. Slides 1, 2, 7 and 15 are case, reveal, breathing and closing slides and are governed by composition rather than diagram area.
 
 3.2 Equal KPI cards, three-column number tiles, generic dashboard grids, and rounded-rectangle process chains are prohibited.
 
-3.3 Product screenshots are authenticity evidence on slides 7 and 8. They are not the primary composition.
+3.3 Product screenshots are authenticity evidence on slides 10 and 11. They are not the primary composition.
+
+3.4 The illustrated character appears on slides 1 and 2 only, as a case study subject rather than a mascot. Orange marks unresolved evidence, blue marks selected or verified execution, and green appears once, on the persisted red-team pass.
 
 ## 4 Demonstration insertion
 
-Slide 7 remains visible until both browser tabs are ready. The live demo uses the real-tender tab first and the separate verified replay second. The presenter returns to slide 8.
+Slide 10 remains visible until both browser tabs are ready. The live demo uses the real-tender tab first and the separate verified replay second. The presenter returns to slide 11.
 
 | Segment | Ceiling | Evidence |
 |---|---:|---|
@@ -66,3 +71,4 @@ Slide 7 remains visible until both browser tabs are ready. The live demo uses th
 ## 5 Change history
 
 - 2026-09-03 v1: Rebuilt the storyboard around founder authority, enterprise friction, global evidence, central diagrams, Snowflake necessity, and CoCo CLI execution.
+- 2026-09-03 v2: Expanded to fifteen slides on a dark keynote stage. Added the quick-case open, the REVIEW reveal, a breathing slide, and a replacement product spine; simplified the close. Slide numbering shifted by two from v1 for the preserved analytical visuals.

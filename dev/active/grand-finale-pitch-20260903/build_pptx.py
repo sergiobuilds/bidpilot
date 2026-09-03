@@ -10,6 +10,15 @@ RENDERED = ROOT / "rendered"
 
 SLIDES = [
     (
+        "Quick Case · KRW 250M · Would You Bid?",
+        "Technical 90 | Price 10 | PURSUE or NO-GO",
+    ),
+    (
+        "The Missing Answer · REVIEW",
+        "Four unsupported supplier requirements | Real public tender | "
+        "Synthetic demo supplier profile",
+    ),
+    (
         "Sergio Lee · USCPA · Government-Support Programs",
         "Washington State CPA | Government grants and public programs | "
         "Repeated enterprise friction | BidPilot",
@@ -30,10 +39,13 @@ SLIDES = [
         "delivery history | Weights, position and owner | PURSUE, REVIEW or NO-GO",
     ),
     (
-        "BidPilot · Decision-to-Execution Workspace",
-        "Public tender and supplier evidence | Decision gate | Score profile | "
-        "Win Position | Evidence-bound proposal | Red-team inspection | "
-        "Named owners | Same-run Snowflake readback",
+        "Fluency Is Not Evidence",
+        "A proposal can sound excellent and still be indefensible",
+    ),
+    (
+        "Should We Bid? · Who Owns What Next?",
+        "Tender | Decision | Win Position | Proposal | Owner | "
+        "Same run ID persisted and replayable in Snowflake",
     ),
     (
         "Public Tender + Supplier Evidence · Controlled Decision",
@@ -46,27 +58,27 @@ SLIDES = [
         "Separate synthetic replay: PURSUE, 40/30/20/10, three compared and one selected",
     ),
     (
-        "Score-to-Work · 40 / 30 / 20 / 10",
+        "40 Points · Changes the Plan",
         "Four weighted plans | Selected Win Position | Evidence | Eight proposal "
         "sections | Red-team | Twelve named tasks",
     ),
     (
-        "Snowflake · Governed Context · Same-Run Memory",
+        "Snowflake · Memory That Survives the Meeting",
         "Governed join | Least privilege | Durable state | Opportunity Graph | "
         "Snowpark policy | Streamlit reader | Same-run readback | Fail closed",
     ),
     (
-        "CoCo CLI · Evidence-to-Action Execution",
+        "CoCo CLI · Work That Survives the Prompt",
         "Query | Compare | Select | Write | Challenge | Persist | "
         "Cortex session and Snowflake query provenance",
     ),
     (
-        "Verified Run · 1 / 3 / 4 / 8 / 12 · Human Approval",
+        "Verified Run · 1 → 3 → 4 → 8 → 12",
         "One decision | Three strategies | Four weighted plans | Eight sections | "
         "Twelve tasks | Internal work ready | Human approval | Legal submission",
     ),
     (
-        "Win the Score, Not the Prompt",
+        "Win the score, not the prompt.",
         "Defensible decision | Weighted strategy | Owned execution | "
         "Persisted and replayable in Snowflake",
     ),
@@ -97,7 +109,7 @@ def build() -> None:
     prs.slide_height = Inches(7.5)
     blank = prs.slide_layouts[6]
     prs.core_properties.title = "BidPilot · Snowflake CoCo CLI Hackathon 2026 Grand Finale"
-    prs.core_properties.subject = "Twelve-slide English finale deck"
+    prs.core_properties.subject = "Fifteen-slide English finale deck"
     prs.core_properties.author = "Sergio Lee"
 
     for number, (title, body) in enumerate(SLIDES, start=1):
