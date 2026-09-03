@@ -38,6 +38,8 @@ def test_landing_opens_cinematic_hero_then_story_bands_then_footer_cta() -> None
     ):
         assert count in markup
     assert "R26BK01680611-000" in markup
+    assert "hackathon" not in markup.lower()
+    assert markup.count("<p") <= 12
     assert "REVIEW" in markup and "16:00 KST" in markup
 
 

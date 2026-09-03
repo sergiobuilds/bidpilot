@@ -42,7 +42,7 @@ def _pipeline() -> str:
             parts.append('<div class="plink"><i class="spark"></i></div>')
         parts.append(
             '<div class="pnode"><div class="ring"></div>'
-            f'<div class="lab">{esc(label)}</div><div class="sub">{esc(sub)}</div></div>'
+            f'<div class="lab">{esc(label)}</div></div>'
         )
     return '<div class="pipe">' + "".join(parts) + "</div>"
 
@@ -70,48 +70,29 @@ def landing_page(rows: Sequence[Mapping[str, object]], *, now: datetime) -> str:
         # hero
         '<header class="cine" id="top"><div class="glow g1"></div><div class="glow g2"></div>'
         '<div class="wrap cine-inner">'
-        '<div class="kick reveal">BidPilot · evidence-first B2G pursuit agent on Snowflake</div>'
         '<h1 class="reveal"><span class="ln">Decide the bid</span>'
         '<span class="ln">before anyone</span><span class="ln"><span class="shine">writes it.</span></span></h1>'
-        "<p class=\"lead reveal\">BidPilot reads a public tender's own score sheet, checks it against the supplier's "
-        "evidence, and only then lets a proposal exist.</p>"
+        '<p class="lead reveal">Evidence first. Then the bid.</p>'
         '<div class="cine-cta reveal"><a class="btn btn-lg btn-primary" href="?view=opportunities">Open the workspace</a>'
         f'<a class="btn btn-lg btn-outline" href="?tender={notice}">See the live decision</a></div>'
-        '<p class="note reveal">No sign-in. Real public notice, synthetic supplier, one recorded Snowflake run.</p>'
         + _pipeline()
         + '</div><div class="scrollcue"><div class="mouse"></div>Scroll</div></header>'
         # story
         '<div class="sheet">'
         '<section class="band" id="problem"><div class="wrap">'
-        '<div class="sec-kick">Problem</div>'
-        '<h2 class="sec-h">Proposal tools start after the decision.<br>'
-        "<b>The decision is where bids are lost.</b></h2>"
-        '<p class="sec-sub">A public tender publishes its own scoring: technical 90, price 10, and a list of '
-        "eligibility requirements. Teams still decide by instinct, write first, and discover the missing "
-        "certificate at submission. Every hour spent on an unqualified bid is a real loss.</p>"
-        '<div class="chips"><span class="chip">Eligibility checked too late</span>'
-        '<span class="chip">Claims without evidence</span><span class="chip">No record of why we bid</span></div>'
+        '<h2 class="sec-h">Bids are lost before they are written.</h2>'
         "</div></section>"
         '<section class="band alt" id="how"><div class="wrap">'
-        '<div class="sec-kick">How it works</div>'
-        '<h2 class="sec-h">The score sheet decides. Evidence unlocks. Snowflake remembers.</h2>'
+        '<h2 class="sec-h">Read. Gate. Record.</h2>'
         '<div class="cards">'
-        '<div class="card"><div class="ic">1</div><div class="step">Step 1 · Read</div>'
-        "<h3>The tender's own weights</h3><p>The official notice is captured with its hash, deadline in KST and "
-        "evaluation weights. Nothing is summarised; the source facts are the input.</p></div>"
-        '<div class="card"><div class="ic">2</div><div class="step">Step 2 · Gate</div>'
-        "<h3>PURSUE, REVIEW or NO-GO</h3><p>Each eligibility requirement must be evidenced by the supplier "
-        "record. One gap means REVIEW; one failure means NO-GO. No proposal exists before PURSUE.</p></div>"
-        '<div class="card"><div class="ic">3</div><div class="step">Step 3 · Draft and record</div>'
-        "<h3>Win Position to owned work</h3><p>Weighted plans, cited sections, a red-team pass and gap-closing "
-        "tasks are written under one Snowflake run id that any agent can read back.</p></div>"
+        '<div class="card"><h3>Read</h3><p>The tender\'s own weights.</p></div>'
+        '<div class="card"><h3>Gate</h3><p>No evidence, no proposal.</p></div>'
+        '<div class="card"><h3>Record</h3><p>One Snowflake run id.</p></div>'
         "</div></div></section>"
         # proof (dark)
         '<section class="dark" id="proof"><div class="wrap"><div class="split">'
-        '<div><div class="sec-kick">Proof, not promise</div>'
-        '<p class="quote">One run id holds the <span class="accent">whole chain.</span></p>'
-        f'<p class="dsub">Cortex Code wrote run <code>{RUN_ID}</code> through the runner role; the public app '
-        "reads it back through a least-privilege reader. Nothing on screen is generated at display time.</p>"
+        '<div><p class="quote">One run id. <span class="accent">The whole chain.</span></p>'
+        f'<p class="dsub"><code>{RUN_ID}</code></p>'
         '<div class="chips"><span class="chip on">1 decision</span><span class="chip on">3 strategies</span>'
         '<span class="chip on">4 weighted plans</span><span class="chip on">8 proposal sections</span>'
         '<span class="chip on">12 owned tasks</span></div>'
@@ -127,31 +108,18 @@ def landing_page(rows: Sequence[Mapping[str, object]], *, now: datetime) -> str:
         "</div></div></section>"
         # agents
         '<section class="band alt" id="agents"><div class="wrap">'
-        '<div class="sec-kick">Not a dashboard</div>'
-        '<h2 class="sec-h">Mount BidPilot in the agent your bid team already uses.</h2>'
-        '<p class="sec-sub">The same judgement engine and Snowflake record are exposed as tools. Read-only, '
-        "no anonymous runner. The workspace on this site is one window onto it.</p>"
+        '<h2 class="sec-h">Not a dashboard.</h2>'
         '<div class="chips">'
         f'<a class="chip on" href="{REPO_URL}/tree/main/skills/bidpilot" target="_blank" rel="noreferrer">Cortex Code skill</a>'
         f'<a class="chip on" href="{API_URL}/mcp" target="_blank" rel="noreferrer">Remote MCP</a>'
-        f'<a class="chip on" href="{API_URL}/openapi.json" target="_blank" rel="noreferrer">OpenAPI · ChatGPT Actions</a>'
+        f'<a class="chip on" href="{API_URL}/openapi.json" target="_blank" rel="noreferrer">OpenAPI</a>'
         f'<a class="chip" href="{REPO_URL}/tree/main/integrations" target="_blank" rel="noreferrer">Claude Code · Cursor · Gemini</a>'
         "</div></div></section>"
-        # workspace band
-        '<section class="band" id="workspace"><div class="wrap">'
-        '<div class="sec-kick">Workspace</div>'
-        f'<h2 class="sec-h">{len(rows)} official notices, {open_count} still open, one reviewed to the score sheet.</h2>'
-        '<p class="sec-sub">Deadlines are judged against the clock, not a label. Closed notices stay as '
-        "historical public sources; the reviewed notice can be decided and drafted live.</p>"
-        '<div class="cine-cta"><a class="btn btn-lg btn-primary" href="?view=opportunities">Open the workspace</a></div>'
-        "</div></section>"
         # foot cta
         '<section class="footcta band alt"><div class="wrap">'
-        '<div class="sec-kick">BidPilot</div>'
         '<h2>Decide the bid <span class="accent">before anyone writes it.</span></h2>'
         '<div class="cine-cta"><a class="btn btn-lg btn-primary" href="?view=opportunities">Open the workspace</a>'
         '<a class="btn btn-lg btn-outline light" href="?walkthrough=1">Completed run</a></div>'
-        '<p class="note">Snowflake CoCo CLI Hackathon 2026 · Grand Finale</p>'
         "</div></section>"
         '<footer><div class="wrap frow"><a class="brand" href="?"><span class="mk">B</span><b>BidPilot</b></a>'
         f'<div class="sp"></div><span class="muted">Evidence-first B2G pursuit · <a href="{REPO_URL}">source</a></span></div></footer>'
