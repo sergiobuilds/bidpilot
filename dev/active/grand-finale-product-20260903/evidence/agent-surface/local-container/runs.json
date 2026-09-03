@@ -1,0 +1,1 @@
+{"error":"snowflake_not_configured","detail":"Set BIDPILOT_SNOWFLAKE_CONNECTION to a BIDPILOT_READER connection; no fixture fallback."}
