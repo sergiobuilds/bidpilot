@@ -70,4 +70,4 @@ if [ ! -f "$REPO_ROOT/pyproject.toml" ]; then
   exit 1
 fi
 
-exec uv run --project "$REPO_ROOT" python -m bidpilot.agent_core "$command" "$@"
+exec uv run -q --project "$REPO_ROOT" python -m bidpilot.agent_core "$command" "$@"

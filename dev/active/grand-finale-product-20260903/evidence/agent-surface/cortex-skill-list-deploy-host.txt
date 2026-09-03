@@ -1,0 +1,22 @@
+$ ssh <deploy-host> cortex skill list   # after cp -r skills/bidpilot ~/.snowflake/cortex/skills/
+Cortex Code v1.1.52
+Persisted skill directories:
+  (none)
+
+Remote skills:
+  (none)
+
+Stage skills:
+  (none)
+
+Discovered skills:
+
+  [GLOBAL]
+    - bidpilot: ~/.snowflake/cortex/skills/bidpilot
+
+    - access-troubleshooter: ~/.local/share/cortex/1.1.52+200734.789ffffc1c9e/bundled_skills/access-troubleshooter
+    - ai-data-share: ~/.local/share/cortex/1.1.52+200734.789ffffc1c9e/bundled_skills/ai-data-share
+    - ai-functions-pipeline-builder: ~/.local/share/cortex/1.1.52+200734.789ffffc1c9e/bundled_skills/ai-functions-pipeline-builder
+    - ai-readiness-score: ~/.local/share/cortex/1.1.52+200734.789ffffc1c9e/bundled_skills/ai-readiness-score
+    - alert: ~/.local/share/cortex/1.1.52+200734.789ffffc1c9e/bundled_skills/alert
+    - attach-ai-products-to-share: ~/.local/share/cortex/1.1.52+200734.789ffffc1c9e/bundled_skills/attach-ai-products-to-share
