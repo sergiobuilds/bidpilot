@@ -1,0 +1,237 @@
+{
+  "notice_number": "G2B-REPLAY-ANALYTICS",
+  "decision": "PURSUE",
+  "proposal_gate": "OPEN",
+  "deadline_state": "open",
+  "deadline": null,
+  "supplier": {
+    "id": "supplier-northstar",
+    "name": "Northstar Systems",
+    "synthetic": true
+  },
+  "score_map": [
+    {
+      "name": "Comparable delivery",
+      "weight": 45
+    },
+    {
+      "name": "Team capability",
+      "weight": 25
+    },
+    {
+      "name": "Operating handoff",
+      "weight": 20
+    },
+    {
+      "name": "Price",
+      "weight": 10
+    }
+  ],
+  "win_positions": [
+    {
+      "title": "Comparable delivery",
+      "statement": "Win comparable delivery with Regional Analytics Governance Rollout, Citizen API Service Transition: Northstar Systems will deliver a governed analytics service with a practical operating handoff.",
+      "target_criteria": [
+        "Comparable delivery",
+        "Team capability"
+      ],
+      "proof_cards": [
+        {
+          "label": "Regional Analytics Governance Rollout",
+          "kind": "Past project",
+          "detail": "Handed governed dashboards to policy teams with an operating playbook."
+        },
+        {
+          "label": "Citizen API Service Transition",
+          "kind": "Past project",
+          "detail": "Transferred API support without a public-service interruption."
+        },
+        {
+          "label": "SME confirmation",
+          "kind": "Credential",
+          "detail": "Available in the selected supplier profile"
+        }
+      ],
+      "weakness": null,
+      "mitigation": null,
+      "summary": "Win comparable delivery with Regional Analytics Governance Rollout, Citizen API Service Transition: Northstar Systems will deliver a governed analytics service with a practical operating handoff.",
+      "index": 0
+    },
+    {
+      "title": "Operational continuity",
+      "statement": "Win operational continuity with Citizen API Service Transition, Regional Analytics Governance Rollout: Northstar Systems will deliver a governed analytics service with a practical operating handoff.",
+      "target_criteria": [
+        "Team capability",
+        "Operating handoff"
+      ],
+      "proof_cards": [
+        {
+          "label": "Citizen API Service Transition",
+          "kind": "Past project",
+          "detail": "Transferred API support without a public-service interruption."
+        },
+        {
+          "label": "Regional Analytics Governance Rollout",
+          "kind": "Past project",
+          "detail": "Handed governed dashboards to policy teams with an operating playbook."
+        },
+        {
+          "label": "SME confirmation",
+          "kind": "Credential",
+          "detail": "Available in the selected supplier profile"
+        }
+      ],
+      "weakness": null,
+      "mitigation": null,
+      "summary": "Win operational continuity with Citizen API Service Transition, Regional Analytics Governance Rollout: Northstar Systems will deliver a governed analytics service with a practical operating handoff.",
+      "index": 1
+    }
+  ],
+  "selected_position": {
+    "title": "Operational continuity",
+    "statement": "Win operational continuity with Citizen API Service Transition, Regional Analytics Governance Rollout: Northstar Systems will deliver a governed analytics service with a practical operating handoff.",
+    "target_criteria": [
+      "Team capability",
+      "Operating handoff"
+    ],
+    "proof_cards": [
+      {
+        "label": "Citizen API Service Transition",
+        "kind": "Past project",
+        "detail": "Transferred API support without a public-service interruption."
+      },
+      {
+        "label": "Regional Analytics Governance Rollout",
+        "kind": "Past project",
+        "detail": "Handed governed dashboards to policy teams with an operating playbook."
+      },
+      {
+        "label": "SME confirmation",
+        "kind": "Credential",
+        "detail": "Available in the selected supplier profile"
+      }
+    ],
+    "weakness": null,
+    "mitigation": null,
+    "summary": "Win operational continuity with Citizen API Service Transition, Regional Analytics Governance Rollout: Northstar Systems will deliver a governed analytics service with a practical operating handoff.",
+    "index": 1
+  },
+  "sections": [
+    {
+      "criterion": null,
+      "heading": "Executive Summary",
+      "markdown": "## Executive Summary\n\nNorthstar Systems will pursue the buyer objective through the selected Win Position: Win operational continuity with Citizen API Service Transition, Regional Analytics Governance Rollout: Northstar Systems will deliver a governed analytics service with a practical operating handoff. The response prioritizes the highest-weighted criteria and assigns each claim to an accountable proposal owner."
+    },
+    {
+      "criterion": null,
+      "heading": "Understanding of the Requirement",
+      "markdown": "## Understanding of the Requirement\n\nThe buyer needs give policy teams governed analytics they can operate after handoff. The proposed response must address the weighted evaluation matrix while remaining deliverable within 520 planned hours."
+    },
+    {
+      "criterion": null,
+      "heading": "Win Position",
+      "markdown": "## Win Position\n\nWin operational continuity with Citizen API Service Transition, Regional Analytics Governance Rollout: Northstar Systems will deliver a governed analytics service with a practical operating handoff."
+    },
+    {
+      "criterion": null,
+      "heading": "Buyer Objective",
+      "markdown": "## Buyer Objective\n\nGive policy teams governed analytics they can operate after handoff."
+    },
+    {
+      "criterion": null,
+      "heading": "Selected Delivery Assets",
+      "markdown": "## Selected Delivery Assets\n\n- **Citizen API Service Transition** — Transferred API support without a public-service interruption.\n- **Regional Analytics Governance Rollout** — Handed governed dashboards to policy teams with an operating playbook.\n- **SME confirmation** — Available in the selected supplier profile"
+    },
+    {
+      "criterion": "Comparable delivery",
+      "heading": "Comparable delivery (45 points)",
+      "markdown": "## Comparable delivery (45 points)\n\nResponse priority: lead response at 45% of the evaluation.\n\nOperational continuity: Northstar Systems will address comparable delivery through a phased transition, service checkpoints, and an explicit rollback owner, backed by 2 comparable delivery record(s). This 45-point response targets a governed analytics service with a practical operating handoff.\n\nDelivery assets: Regional Analytics Governance Rollout, Citizen API Service Transition.\n\nApproach: baseline the live service, rehearse the transition, and release through rollback-safe checkpoints.\n\nValidation: agree measurable acceptance checks with the buyer and record the result in the Bid Room.\n\nBuyer outcome: A governed analytics service with a practical operating handoff.\n\nScoring emphasis: include two acceptance checkpoints and a buyer-facing outcome summary.\n\nProposal owner: Operations lead."
+    },
+    {
+      "criterion": "Team capability",
+      "heading": "Team capability (25 points)",
+      "markdown": "## Team capability (25 points)\n\nResponse priority: supporting response at 25% of the evaluation.\n\nOperational continuity: Northstar Systems will address team capability through a phased transition, service checkpoints, and an explicit rollback owner, backed by the named Public data delivery lead. This 25-point response targets a governed analytics service with a practical operating handoff.\n\nDelivery assets: Mina Lee, Jun Park.\n\nApproach: name the service owner, transition dependency, and rollback checkpoint for this response.\n\nProposal owner: Bid manager."
+    },
+    {
+      "criterion": "Operating handoff",
+      "heading": "Operating handoff (20 points)",
+      "markdown": "## Operating handoff (20 points)\n\nResponse priority: supporting response at 20% of the evaluation.\n\nOperational continuity: Northstar Systems will address operating handoff through a phased transition, service checkpoints, and an explicit rollback owner, backed by Handed governed dashboards to policy teams with an operating playbook.. This 20-point response targets a governed analytics service with a practical operating handoff.\n\nDelivery assets: Regional Analytics Governance Rollout, Citizen API Service Transition.\n\nApproach: name the service owner, transition dependency, and rollback checkpoint for this response.\n\nProposal owner: Bid manager."
+    },
+    {
+      "criterion": "Price",
+      "heading": "Price (10 points)",
+      "markdown": "## Price (10 points)\n\nResponse priority: supporting response at 10% of the evaluation.\n\nOperational continuity: Northstar Systems will address price through a phased transition, service checkpoints, and an explicit rollback owner, backed by a delivery envelope backed by 900 available hours. This 10-point response targets a governed analytics service with a practical operating handoff.\n\nDelivery assets: 900 available hours.\n\nApproach: confirm the required input and reconcile it with the final submission before approval.\n\nProposal owner: Bid manager."
+    },
+    {
+      "criterion": null,
+      "heading": "Technical Approach",
+      "markdown": "## Technical Approach\n\nThe delivery method applies the selected Win Position to a governed analytics service with a practical operating handoff and keeps each technical claim linked to an accountable owner."
+    },
+    {
+      "criterion": null,
+      "heading": "Implementation Plan",
+      "markdown": "## Implementation Plan\n\n1. Map service dependencies, transition windows, and named rollback owners.\n2. Rehearse the highest-risk handoff while existing public interfaces remain available.\n3. Release through buyer-approved checkpoints and transfer the operating playbook."
+    },
+    {
+      "criterion": null,
+      "heading": "Team and Governance",
+      "markdown": "## Team and Governance\n\nThe proposal owners named in the blueprint coordinate the response. Delivery evidence is anchored in Citizen API Service Transition, Regional Analytics Governance Rollout, SME confirmation and the selected supplier profile has 900 available hours."
+    },
+    {
+      "criterion": null,
+      "heading": "Risk and Mitigation",
+      "markdown": "## Risk and Mitigation\n\nThe current pursuit policy found no blocking eligibility or capacity gap.\n\nMitigation: Keep criterion owners and delivery assets traceable through the saved Bid Room run."
+    },
+    {
+      "criterion": null,
+      "heading": "Commercial Response",
+      "markdown": "## Commercial Response\n\nThe commercial response will be completed against the Price criterion and reconciled with the planned 520 delivery hours before submission."
+    },
+    {
+      "criterion": null,
+      "heading": "Delivery Action",
+      "markdown": "## Delivery Action\n\nA governed analytics service with a practical operating handoff is delivered within the planned effort of 520 hours."
+    }
+  ],
+  "markdown": "# Municipal analytics governance service\n\n## Executive Summary\n\nNorthstar Systems will pursue the buyer objective through the selected Win Position: Win operational continuity with Citizen API Service Transition, Regional Analytics Governance Rollout: Northstar Systems will deliver a governed analytics service with a practical operating handoff. The response prioritizes the highest-weighted criteria and assigns each claim to an accountable proposal owner.\n\n## Understanding of the Requirement\n\nThe buyer needs give policy teams governed analytics they can operate after handoff. The proposed response must address the weighted evaluation matrix while remaining deliverable within 520 planned hours.\n\n## Win Position\n\nWin operational continuity with Citizen API Service Transition, Regional Analytics Governance Rollout: Northstar Systems will deliver a governed analytics service with a practical operating handoff.\n\n## Buyer Objective\n\nGive policy teams governed analytics they can operate after handoff.\n\n## Selected Delivery Assets\n\n- **Citizen API Service Transition** — Transferred API support without a public-service interruption.\n- **Regional Analytics Governance Rollout** — Handed governed dashboards to policy teams with an operating playbook.\n- **SME confirmation** — Available in the selected supplier profile\n\n## Comparable delivery (45 points)\n\nResponse priority: lead response at 45% of the evaluation.\n\nOperational continuity: Northstar Systems will address comparable delivery through a phased transition, service checkpoints, and an explicit rollback owner, backed by 2 comparable delivery record(s). This 45-point response targets a governed analytics service with a practical operating handoff.\n\nDelivery assets: Regional Analytics Governance Rollout, Citizen API Service Transition.\n\nApproach: baseline the live service, rehearse the transition, and release through rollback-safe checkpoints.\n\nValidation: agree measurable acceptance checks with the buyer and record the result in the Bid Room.\n\nBuyer outcome: A governed analytics service with a practical operating handoff.\n\nScoring emphasis: include two acceptance checkpoints and a buyer-facing outcome summary.\n\nProposal owner: Operations lead.\n\n## Team capability (25 points)\n\nResponse priority: supporting response at 25% of the evaluation.\n\nOperational continuity: Northstar Systems will address team capability through a phased transition, service checkpoints, and an explicit rollback owner, backed by the named Public data delivery lead. This 25-point response targets a governed analytics service with a practical operating handoff.\n\nDelivery assets: Mina Lee, Jun Park.\n\nApproach: name the service owner, transition dependency, and rollback checkpoint for this response.\n\nProposal owner: Bid manager.\n\n## Operating handoff (20 points)\n\nResponse priority: supporting response at 20% of the evaluation.\n\nOperational continuity: Northstar Systems will address operating handoff through a phased transition, service checkpoints, and an explicit rollback owner, backed by Handed governed dashboards to policy teams with an operating playbook.. This 20-point response targets a governed analytics service with a practical operating handoff.\n\nDelivery assets: Regional Analytics Governance Rollout, Citizen API Service Transition.\n\nApproach: name the service owner, transition dependency, and rollback checkpoint for this response.\n\nProposal owner: Bid manager.\n\n## Price (10 points)\n\nResponse priority: supporting response at 10% of the evaluation.\n\nOperational continuity: Northstar Systems will address price through a phased transition, service checkpoints, and an explicit rollback owner, backed by a delivery envelope backed by 900 available hours. This 10-point response targets a governed analytics service with a practical operating handoff.\n\nDelivery assets: 900 available hours.\n\nApproach: confirm the required input and reconcile it with the final submission before approval.\n\nProposal owner: Bid manager.\n\n## Technical Approach\n\nThe delivery method applies the selected Win Position to a governed analytics service with a practical operating handoff and keeps each technical claim linked to an accountable owner.\n\n## Implementation Plan\n\n1. Map service dependencies, transition windows, and named rollback owners.\n2. Rehearse the highest-risk handoff while existing public interfaces remain available.\n3. Release through buyer-approved checkpoints and transfer the operating playbook.\n\n## Team and Governance\n\nThe proposal owners named in the blueprint coordinate the response. Delivery evidence is anchored in Citizen API Service Transition, Regional Analytics Governance Rollout, SME confirmation and the selected supplier profile has 900 available hours.\n\n## Risk and Mitigation\n\nThe current pursuit policy found no blocking eligibility or capacity gap.\n\nMitigation: Keep criterion owners and delivery assets traceable through the saved Bid Room run.\n\n## Commercial Response\n\nThe commercial response will be completed against the Price criterion and reconciled with the planned 520 delivery hours before submission.\n\n## Delivery Action\n\nA governed analytics service with a practical operating handoff is delivered within the planned effort of 520 hours.\n",
+  "red_team": [],
+  "tasks": [],
+  "gap_closure_plan": [],
+  "tender": {
+    "id": "G2B-REPLAY-ANALYTICS",
+    "title": "Municipal analytics governance service",
+    "buyer_objective": "Give policy teams governed analytics they can operate after handoff.",
+    "promised_outcome": "a governed analytics service with a practical operating handoff",
+    "tags": [
+      "analytics",
+      "governance",
+      "public-sector"
+    ],
+    "eligibility_requirements": [
+      "SME confirmation"
+    ],
+    "delivery_hours": 520,
+    "evaluation_criteria": [
+      {
+        "name": "Comparable delivery",
+        "weight": 45
+      },
+      {
+        "name": "Team capability",
+        "weight": 25
+      },
+      {
+        "name": "Operating handoff",
+        "weight": 20
+      },
+      {
+        "name": "Price",
+        "weight": 10
+      }
+    ]
+  },
+  "assumptions": [],
+  "provider": "LOCAL_PYTHON_POLICY",
+  "persisted": false,
+  "disclosure": "Synthetic demo supplier profile; nothing here is a real company claim."
+}

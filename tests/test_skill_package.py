@@ -48,23 +48,44 @@ def test_skill_states_hard_rules_and_examples() -> None:
     text = SKILL.read_text(encoding="utf-8")
     for rule in HARD_RULES:
         assert rule in text, rule
-    assert text.count("### Example") == 3
-    for command in ("list-tenders", "get-tender", "decide", "list-runs", "replay"):
+    assert text.count("### Example") == 4
+    for command in (
+        "list-tenders",
+        "get-tender",
+        "decide",
+        "list-runs",
+        "replay",
+        "draft-proposal",
+    ):
         assert f"bidpilot.sh {command}" in text
+    assert "--historical" in text
+    assert "ask" in text.lower()
 
 
 def test_script_is_executable_and_rejects_unknown_command() -> None:
     assert os.access(SCRIPT, os.X_OK)
-    result = subprocess.run([str(SCRIPT), "bogus"], capture_output=True, text=True, env={**os.environ, "BIDPILOT_API_URL": ""})
+    result = subprocess.run(
+        [str(SCRIPT), "bogus"],
+        capture_output=True,
+        text=True,
+        env={**os.environ, "BIDPILOT_API_URL": ""},
+        check=False,
+    )
     assert result.returncode == 1
     assert json.loads(result.stderr.strip())["error"].startswith("usage")
 
 
 def test_script_builds_remote_decide_body(tmp_path: Path) -> None:
     fake_curl = tmp_path / "curl"
-    fake_curl.write_text('#!/usr/bin/env bash\nprintf \'%s\\n\' "$@"\n', encoding="utf-8")
+    fake_curl.write_text(
+        "#!/usr/bin/env bash\nprintf '%s\\n' \"$@\"\n", encoding="utf-8"
+    )
     fake_curl.chmod(0o755)
-    env = {**os.environ, "PATH": f"{tmp_path}:{os.environ['PATH']}", "BIDPILOT_API_URL": "https://api.example/"}
+    env = {
+        **os.environ,
+        "PATH": f"{tmp_path}:{os.environ['PATH']}",
+        "BIDPILOT_API_URL": "https://api.example/",
+    }
     result = subprocess.run(
         [str(SCRIPT), "decide", "R26BK01680611-000", "--evidence", '{"0": true}'],
         capture_output=True,
@@ -75,7 +96,10 @@ def test_script_builds_remote_decide_body(tmp_path: Path) -> None:
     lines = result.stdout.splitlines()
     assert "https://api.example/decide" in lines
     body = json.loads(lines[-1])
-    assert body == {"notice_number": "R26BK01680611-000", "supplier_evidence": {"0": True}}
+    assert body == {
+        "notice_number": "R26BK01680611-000",
+        "supplier_evidence": {"0": True},
+    }
 
 
 def test_integration_configs_parse_and_name_bidpilot() -> None:
@@ -92,3 +116,64 @@ def test_readme_and_surface_docs_exist() -> None:
     assert "## 5 Mount BidPilot in your agent" in readme
     assert (ROOT / "integrations" / "chatgpt" / "README.md").exists()
     assert (ROOT / "integrations" / "cortex-code" / "README.md").exists()
+
+
+def test_script_builds_remote_draft_proposal_body(tmp_path: Path) -> None:
+    fake_curl = tmp_path / "curl"
+    fake_curl.write_text(
+        "#!/usr/bin/env bash\nprintf '%s\\n' \"$@\"\n", encoding="utf-8"
+    )
+    fake_curl.chmod(0o755)
+    env = {
+        **os.environ,
+        "PATH": f"{tmp_path}:{os.environ['PATH']}",
+        "BIDPILOT_API_URL": "https://api.example/",
+    }
+    result = subprocess.run(
+        [
+            str(SCRIPT),
+            "draft-proposal",
+            "R26BK01680611-000",
+            "--evidence",
+            '{"0": true}',
+            "--supplier",
+            "supplier-atlas",
+            "--position",
+            "1",
+            "--historical",
+        ],
+        capture_output=True,
+        text=True,
+        env=env,
+        check=True,
+    )
+    lines = result.stdout.splitlines()
+    assert "https://api.example/proposal" in lines
+    body = json.loads(lines[-1])
+    assert body == {
+        "notice_number": "R26BK01680611-000",
+        "supplier_evidence": {"0": True},
+        "supplier_id": "supplier-atlas",
+        "position_index": 1,
+        "historical_exercise": True,
+    }
+
+
+def test_script_drafts_locally_from_a_fixture_tender() -> None:
+    result = subprocess.run(
+        [str(SCRIPT), "draft-proposal", "G2B-REPLAY-DATA-QUALITY"],
+        capture_output=True,
+        text=True,
+        env={**os.environ, "BIDPILOT_API_URL": ""},
+        check=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["decision"] == "PURSUE"
+    assert payload["sections"]
+
+
+def test_readme_mount_table_mentions_proposal_drafting() -> None:
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    table = readme.split("## 5 Mount BidPilot in your agent", 1)[1]
+    assert "draft_proposal" in table
+    assert "POST /proposal" in table

@@ -1,0 +1,233 @@
+{
+  "notice_number": "G2B-REPLAY-DATA-QUALITY",
+  "decision": "PURSUE",
+  "proposal_gate": "OPEN",
+  "deadline_state": "open",
+  "deadline": null,
+  "supplier": {
+    "id": "supplier-northstar",
+    "name": "Northstar Systems",
+    "synthetic": true
+  },
+  "score_map": [
+    {
+      "name": "Technical approach",
+      "weight": 40
+    },
+    {
+      "name": "Comparable delivery",
+      "weight": 30
+    },
+    {
+      "name": "Delivery team",
+      "weight": 20
+    },
+    {
+      "name": "Price",
+      "weight": 10
+    }
+  ],
+  "win_positions": [
+    {
+      "title": "Technical approach",
+      "statement": "Win technical approach with City Open Data Reliability Program, Citizen API Service Transition: Northstar Systems will deliver a measured data-quality improvement and a maintained api operating model.",
+      "target_criteria": [
+        "Technical approach",
+        "Comparable delivery"
+      ],
+      "proof_cards": [
+        {
+          "label": "City Open Data Reliability Program",
+          "kind": "Past project",
+          "detail": "Reduced recurring data defects and introduced API change control."
+        },
+        {
+          "label": "Citizen API Service Transition",
+          "kind": "Past project",
+          "detail": "Transferred API support without a public-service interruption."
+        },
+        {
+          "label": "SME confirmation",
+          "kind": "Credential",
+          "detail": "Available in the selected supplier profile"
+        }
+      ],
+      "weakness": null,
+      "mitigation": null,
+      "summary": "Win technical approach with City Open Data Reliability Program, Citizen API Service Transition: Northstar Systems will deliver a measured data-quality improvement and a maintained api operating model.",
+      "index": 0
+    },
+    {
+      "title": "Operational continuity",
+      "statement": "Win operational continuity with City Open Data Reliability Program, Citizen API Service Transition: Northstar Systems will deliver a measured data-quality improvement and a maintained api operating model.",
+      "target_criteria": [
+        "Comparable delivery",
+        "Delivery team"
+      ],
+      "proof_cards": [
+        {
+          "label": "City Open Data Reliability Program",
+          "kind": "Past project",
+          "detail": "Reduced recurring data defects and introduced API change control."
+        },
+        {
+          "label": "Citizen API Service Transition",
+          "kind": "Past project",
+          "detail": "Transferred API support without a public-service interruption."
+        },
+        {
+          "label": "SME confirmation",
+          "kind": "Credential",
+          "detail": "Available in the selected supplier profile"
+        }
+      ],
+      "weakness": null,
+      "mitigation": null,
+      "summary": "Win operational continuity with City Open Data Reliability Program, Citizen API Service Transition: Northstar Systems will deliver a measured data-quality improvement and a maintained api operating model.",
+      "index": 1
+    }
+  ],
+  "selected_position": {
+    "title": "Technical approach",
+    "statement": "Win technical approach with City Open Data Reliability Program, Citizen API Service Transition: Northstar Systems will deliver a measured data-quality improvement and a maintained api operating model.",
+    "target_criteria": [
+      "Technical approach",
+      "Comparable delivery"
+    ],
+    "proof_cards": [
+      {
+        "label": "City Open Data Reliability Program",
+        "kind": "Past project",
+        "detail": "Reduced recurring data defects and introduced API change control."
+      },
+      {
+        "label": "Citizen API Service Transition",
+        "kind": "Past project",
+        "detail": "Transferred API support without a public-service interruption."
+      },
+      {
+        "label": "SME confirmation",
+        "kind": "Credential",
+        "detail": "Available in the selected supplier profile"
+      }
+    ],
+    "weakness": null,
+    "mitigation": null,
+    "summary": "Win technical approach with City Open Data Reliability Program, Citizen API Service Transition: Northstar Systems will deliver a measured data-quality improvement and a maintained api operating model.",
+    "index": 0
+  },
+  "sections": [
+    {
+      "criterion": null,
+      "heading": "Executive Summary",
+      "markdown": "## Executive Summary\n\nNorthstar Systems will pursue the buyer objective through the selected Win Position: Win technical approach with City Open Data Reliability Program, Citizen API Service Transition: Northstar Systems will deliver a measured data-quality improvement and a maintained api operating model. The response prioritizes the highest-weighted criteria and assigns each claim to an accountable proposal owner."
+    },
+    {
+      "criterion": null,
+      "heading": "Understanding of the Requirement",
+      "markdown": "## Understanding of the Requirement\n\nThe buyer needs improve public-data reliability while keeping citizen-facing apis stable. The proposed response must address the weighted evaluation matrix while remaining deliverable within 720 planned hours."
+    },
+    {
+      "criterion": null,
+      "heading": "Win Position",
+      "markdown": "## Win Position\n\nWin technical approach with City Open Data Reliability Program, Citizen API Service Transition: Northstar Systems will deliver a measured data-quality improvement and a maintained api operating model."
+    },
+    {
+      "criterion": null,
+      "heading": "Buyer Objective",
+      "markdown": "## Buyer Objective\n\nImprove public-data reliability while keeping citizen-facing APIs stable."
+    },
+    {
+      "criterion": null,
+      "heading": "Selected Delivery Assets",
+      "markdown": "## Selected Delivery Assets\n\n- **City Open Data Reliability Program** — Reduced recurring data defects and introduced API change control.\n- **Citizen API Service Transition** — Transferred API support without a public-service interruption.\n- **SME confirmation** — Available in the selected supplier profile"
+    },
+    {
+      "criterion": "Technical approach",
+      "heading": "Technical approach (40 points)",
+      "markdown": "## Technical approach (40 points)\n\nResponse priority: lead response at 40% of the evaluation.\n\nTechnical approach: Northstar Systems will address technical approach through recorded delivery outcomes, criterion-level acceptance checks, and traceable evidence owners, backed by Reduced recurring data defects and introduced API change control.. This 40-point response targets a measured data-quality improvement and a maintained api operating model.\n\nDelivery assets: City Open Data Reliability Program, Citizen API Service Transition.\n\nApproach: define the baseline, execute the selected delivery pattern, and assign acceptance ownership.\n\nValidation: agree measurable acceptance checks with the buyer and record the result in the Bid Room.\n\nBuyer outcome: A measured data-quality improvement and a maintained api operating model.\n\nProposal owner: Solution lead."
+    },
+    {
+      "criterion": "Comparable delivery",
+      "heading": "Comparable delivery (30 points)",
+      "markdown": "## Comparable delivery (30 points)\n\nResponse priority: lead response at 30% of the evaluation.\n\nTechnical approach: Northstar Systems will address comparable delivery through recorded delivery outcomes, criterion-level acceptance checks, and traceable evidence owners, backed by 2 comparable delivery record(s). This 30-point response targets a measured data-quality improvement and a maintained api operating model.\n\nDelivery assets: City Open Data Reliability Program, Citizen API Service Transition.\n\nApproach: name the accountable owner, delivery inputs, and acceptance checkpoint for this response.\n\nProposal owner: Solution lead."
+    },
+    {
+      "criterion": "Delivery team",
+      "heading": "Delivery team (20 points)",
+      "markdown": "## Delivery team (20 points)\n\nResponse priority: supporting response at 20% of the evaluation.\n\nTechnical approach: Northstar Systems will address delivery team through recorded delivery outcomes, criterion-level acceptance checks, and traceable evidence owners, backed by the named Public data delivery lead. This 20-point response targets a measured data-quality improvement and a maintained api operating model.\n\nDelivery assets: Mina Lee, Jun Park.\n\nApproach: name the accountable owner, delivery inputs, and acceptance checkpoint for this response.\n\nProposal owner: Bid manager."
+    },
+    {
+      "criterion": "Price",
+      "heading": "Price (10 points)",
+      "markdown": "## Price (10 points)\n\nResponse priority: supporting response at 10% of the evaluation.\n\nTechnical approach: Northstar Systems will address price through recorded delivery outcomes, criterion-level acceptance checks, and traceable evidence owners, backed by a delivery envelope backed by 900 available hours. This 10-point response targets a measured data-quality improvement and a maintained api operating model.\n\nDelivery assets: 900 available hours.\n\nApproach: confirm the required input and reconcile it with the final submission before approval.\n\nProposal owner: Bid manager."
+    },
+    {
+      "criterion": null,
+      "heading": "Implementation Plan",
+      "markdown": "## Implementation Plan\n\n1. Confirm the evaluation response plan and evidence owners.\n2. Develop the highest-weighted response first and attach the selected delivery assets.\n3. Validate delivery capacity, operating handoff, and criterion coverage before red-team review."
+    },
+    {
+      "criterion": null,
+      "heading": "Team and Governance",
+      "markdown": "## Team and Governance\n\nThe proposal owners named in the blueprint coordinate the response. Delivery evidence is anchored in City Open Data Reliability Program, Citizen API Service Transition, SME confirmation and the selected supplier profile has 900 available hours."
+    },
+    {
+      "criterion": null,
+      "heading": "Risk and Mitigation",
+      "markdown": "## Risk and Mitigation\n\nThe current pursuit policy found no blocking eligibility or capacity gap.\n\nMitigation: Keep criterion owners and delivery assets traceable through the saved Bid Room run."
+    },
+    {
+      "criterion": null,
+      "heading": "Commercial Response",
+      "markdown": "## Commercial Response\n\nThe commercial response will be completed against the Price criterion and reconciled with the planned 720 delivery hours before submission."
+    },
+    {
+      "criterion": null,
+      "heading": "Delivery Action",
+      "markdown": "## Delivery Action\n\nA measured data-quality improvement and a maintained api operating model is delivered within the planned effort of 720 hours."
+    }
+  ],
+  "markdown": "# Public data quality and API continuity service\n\n## Executive Summary\n\nNorthstar Systems will pursue the buyer objective through the selected Win Position: Win technical approach with City Open Data Reliability Program, Citizen API Service Transition: Northstar Systems will deliver a measured data-quality improvement and a maintained api operating model. The response prioritizes the highest-weighted criteria and assigns each claim to an accountable proposal owner.\n\n## Understanding of the Requirement\n\nThe buyer needs improve public-data reliability while keeping citizen-facing apis stable. The proposed response must address the weighted evaluation matrix while remaining deliverable within 720 planned hours.\n\n## Win Position\n\nWin technical approach with City Open Data Reliability Program, Citizen API Service Transition: Northstar Systems will deliver a measured data-quality improvement and a maintained api operating model.\n\n## Buyer Objective\n\nImprove public-data reliability while keeping citizen-facing APIs stable.\n\n## Selected Delivery Assets\n\n- **City Open Data Reliability Program** — Reduced recurring data defects and introduced API change control.\n- **Citizen API Service Transition** — Transferred API support without a public-service interruption.\n- **SME confirmation** — Available in the selected supplier profile\n\n## Technical approach (40 points)\n\nResponse priority: lead response at 40% of the evaluation.\n\nTechnical approach: Northstar Systems will address technical approach through recorded delivery outcomes, criterion-level acceptance checks, and traceable evidence owners, backed by Reduced recurring data defects and introduced API change control.. This 40-point response targets a measured data-quality improvement and a maintained api operating model.\n\nDelivery assets: City Open Data Reliability Program, Citizen API Service Transition.\n\nApproach: define the baseline, execute the selected delivery pattern, and assign acceptance ownership.\n\nValidation: agree measurable acceptance checks with the buyer and record the result in the Bid Room.\n\nBuyer outcome: A measured data-quality improvement and a maintained api operating model.\n\nProposal owner: Solution lead.\n\n## Comparable delivery (30 points)\n\nResponse priority: lead response at 30% of the evaluation.\n\nTechnical approach: Northstar Systems will address comparable delivery through recorded delivery outcomes, criterion-level acceptance checks, and traceable evidence owners, backed by 2 comparable delivery record(s). This 30-point response targets a measured data-quality improvement and a maintained api operating model.\n\nDelivery assets: City Open Data Reliability Program, Citizen API Service Transition.\n\nApproach: name the accountable owner, delivery inputs, and acceptance checkpoint for this response.\n\nProposal owner: Solution lead.\n\n## Delivery team (20 points)\n\nResponse priority: supporting response at 20% of the evaluation.\n\nTechnical approach: Northstar Systems will address delivery team through recorded delivery outcomes, criterion-level acceptance checks, and traceable evidence owners, backed by the named Public data delivery lead. This 20-point response targets a measured data-quality improvement and a maintained api operating model.\n\nDelivery assets: Mina Lee, Jun Park.\n\nApproach: name the accountable owner, delivery inputs, and acceptance checkpoint for this response.\n\nProposal owner: Bid manager.\n\n## Price (10 points)\n\nResponse priority: supporting response at 10% of the evaluation.\n\nTechnical approach: Northstar Systems will address price through recorded delivery outcomes, criterion-level acceptance checks, and traceable evidence owners, backed by a delivery envelope backed by 900 available hours. This 10-point response targets a measured data-quality improvement and a maintained api operating model.\n\nDelivery assets: 900 available hours.\n\nApproach: confirm the required input and reconcile it with the final submission before approval.\n\nProposal owner: Bid manager.\n\n\n\n## Implementation Plan\n\n1. Confirm the evaluation response plan and evidence owners.\n2. Develop the highest-weighted response first and attach the selected delivery assets.\n3. Validate delivery capacity, operating handoff, and criterion coverage before red-team review.\n\n## Team and Governance\n\nThe proposal owners named in the blueprint coordinate the response. Delivery evidence is anchored in City Open Data Reliability Program, Citizen API Service Transition, SME confirmation and the selected supplier profile has 900 available hours.\n\n## Risk and Mitigation\n\nThe current pursuit policy found no blocking eligibility or capacity gap.\n\nMitigation: Keep criterion owners and delivery assets traceable through the saved Bid Room run.\n\n## Commercial Response\n\nThe commercial response will be completed against the Price criterion and reconciled with the planned 720 delivery hours before submission.\n\n## Delivery Action\n\nA measured data-quality improvement and a maintained api operating model is delivered within the planned effort of 720 hours.\n",
+  "red_team": [],
+  "tasks": [],
+  "gap_closure_plan": [],
+  "tender": {
+    "id": "G2B-REPLAY-DATA-QUALITY",
+    "title": "Public data quality and API continuity service",
+    "buyer_objective": "Improve public-data reliability while keeping citizen-facing APIs stable.",
+    "promised_outcome": "a measured data-quality improvement and a maintained API operating model",
+    "tags": [
+      "public-data",
+      "data-quality",
+      "api-operations"
+    ],
+    "eligibility_requirements": [
+      "SME confirmation",
+      "Information-system maintenance certificate"
+    ],
+    "delivery_hours": 720,
+    "evaluation_criteria": [
+      {
+        "name": "Technical approach",
+        "weight": 40
+      },
+      {
+        "name": "Comparable delivery",
+        "weight": 30
+      },
+      {
+        "name": "Delivery team",
+        "weight": 20
+      },
+      {
+        "name": "Price",
+        "weight": 10
+      }
+    ]
+  },
+  "assumptions": [],
+  "provider": "LOCAL_PYTHON_POLICY",
+  "persisted": false,
+  "disclosure": "Synthetic demo supplier profile; nothing here is a real company claim."
+}

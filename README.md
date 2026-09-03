@@ -61,15 +61,15 @@ The replay records are synthetic contest fixtures. The included public G2B notic
 
 ## 5 Mount BidPilot in your agent
 
-BidPilot is a pursuit capability any agent can mount, not only a dashboard. Every surface is read-only and anonymous: it lists tenders, opens one notice, decides `PURSUE` / `REVIEW` / `NO-GO` from evidence the user supplies, and replays a completed run. None of them starts a Cortex run or writes to Snowflake.
+BidPilot is a pursuit capability any agent can mount, not only a dashboard. Every surface is read-only and anonymous: it lists tenders, opens one notice, decides `PURSUE` / `REVIEW` / `NO-GO` from evidence the user supplies, drafts a proposal only behind an open `PURSUE` gate (synthetic demo supplier, nothing persisted), and replays a completed run. None of them starts a Cortex run or writes to Snowflake.
 
 | Surface | How to mount | What you get |
 |---|---|---|
-| Cortex Code (CoCo CLI) | `cp -r skills/bidpilot ~/.snowflake/cortex/skills/bidpilot`; optional `cortex mcp add bidpilot <api>/mcp --transport http` — see [integrations/cortex-code](integrations/cortex-code/README.md) | `bidpilot` skill with hard rules and a JSON script; MCP tools |
-| Claude Code | copy [integrations/claude-code/.mcp.json](integrations/claude-code/.mcp.json) into the project, or `claude mcp add bidpilot -- uv run --project <checkout> python -m bidpilot.mcp_server` | `list_tenders`, `get_tender`, `decide`, `list_runs`, `replay` |
+| Cortex Code (CoCo CLI) | `cp -r skills/bidpilot ~/.snowflake/cortex/skills/bidpilot`; optional `cortex mcp add bidpilot <api>/mcp --transport http` — see [integrations/cortex-code](integrations/cortex-code/README.md) | `bidpilot` skill with hard rules and a JSON script (decide, then `draft-proposal` on PURSUE); MCP tools |
+| Claude Code | copy [integrations/claude-code/.mcp.json](integrations/claude-code/.mcp.json) into the project, or `claude mcp add bidpilot -- uv run --project <checkout> python -m bidpilot.mcp_server` | `list_tenders`, `get_tender`, `decide`, `draft_proposal`, `list_runs`, `replay` |
 | Cursor | [integrations/cursor/mcp.json](integrations/cursor/mcp.json) → `.cursor/mcp.json` | same MCP tools |
 | Gemini CLI | [integrations/gemini-cli/settings.json](integrations/gemini-cli/settings.json) → `~/.gemini/settings.json` | same MCP tools |
-| ChatGPT | Custom GPT Action importing `<api>/openapi.json`, or MCP connector `<api>/mcp` — see [integrations/chatgpt](integrations/chatgpt/README.md) | REST `GET /tenders`, `GET /tenders/{id}`, `POST /decide`, `GET /runs`, `GET /runs/{id}` |
+| ChatGPT | Custom GPT Action importing `<api>/openapi.json`, or MCP connector `<api>/mcp` — see [integrations/chatgpt](integrations/chatgpt/README.md) | REST `GET /tenders`, `GET /tenders/{id}`, `POST /decide`, `POST /proposal` (423 with the gaps when locked), `GET /runs`, `GET /runs/{id}` |
 | Any shell or agent | `skills/bidpilot/scripts/bidpilot.sh list-tenders` (local core) or with `BIDPILOT_API_URL` set (hosted REST) | one JSON document per call |
 
 ## 6 Submission and project records
