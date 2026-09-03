@@ -78,10 +78,12 @@ def render_proposal_panel(row: Mapping[str, object], *, now: datetime) -> None:
     )
     st.warning(str(draft.get("disclosure") or ""))
     for section in draft.get("sections") or []:
-        with st.expander(
-            str(section.get("heading") or section.get("criterion")), expanded=True
-        ):
-            st.markdown(str(section.get("markdown") or ""))
+        heading = str(section.get("heading") or section.get("criterion") or "")
+        body = str(section.get("markdown") or "")
+        if body.startswith("## "):
+            body = body.split("\n", 1)[1] if "\n" in body else ""
+        with st.expander(heading, expanded=True):
+            st.markdown(body.strip())
     findings = list(draft.get("red_team") or [])
     if findings:
         st.markdown("**Red-team findings**")
