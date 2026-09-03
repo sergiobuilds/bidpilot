@@ -317,7 +317,7 @@ def test_lean_koat_dashboard_shows_two_kpis_the_table_and_one_replay_button() ->
     for label in ("Needs review", "Open deadlines"):
         assert label in markup
     for gone in (
-        "Public sources</span>",
+        'kpi-lab">Public sources',
         'kpi-lab">PURSUE',
         "Pursuit funnel",
         "Recent activity",
