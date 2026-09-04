@@ -39,7 +39,7 @@ def main() -> None:
     checks["tests"] = {"passed_48": "48 passed" in tests, "tail": tests.splitlines()[-1]}
 
     node_env = dict(os.environ)
-    node_env["NODE_PATH"] = "~/projects/personal/products/youtube-digest/lilys-clone/node_modules"
+    node_env["NODE_PATH"] = os.path.expanduser("~/projects/personal/products/youtube-digest/lilys-clone/node_modules")
     live = json.loads(command(["node", str(FORGE / "verify-live.cjs"), APP_URL], env=node_env))
     checks["public_app"] = live
 

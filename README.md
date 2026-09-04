@@ -75,9 +75,7 @@ BidPilot is a pursuit capability any agent can mount, not only a dashboard. Ever
 ## 6 Submission and project records
 
 - [Submission package and final demo contract](docs/SUBMISSION-PACKAGE_2026-08-02_v2.md)
-- [Project map](docs/MASTER-MAP.md)
-- [Decision record](docs/CHRONICLE.md)
-- [Current handoff](PASSDOWN.md)
+- Built with Snowflake Cortex Code (CoCo CLI): the persisted run `cortex-final-20260802-a` was created through Cortex Code, and the `bidpilot` skill is installed and verified on a real Cortex Code CLI. See [snowflake/COCO_RUNBOOK.md](snowflake/COCO_RUNBOOK.md) and the Cortex Code discovery notes in [evidence/agent-surface](dev/active/grand-finale-product-20260903/evidence/agent-surface/cortex-code-discovery.md).
 - [MIT License](LICENSE)
 
 ## 7 Change history
