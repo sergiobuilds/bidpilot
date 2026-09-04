@@ -62,9 +62,7 @@ The replay records are synthetic contest fixtures. The included public G2B notic
 ## 5 Submission and project records
 
 - [Submission package and final demo contract](docs/SUBMISSION-PACKAGE_2026-08-02_v2.md)
-- [Project map](docs/MASTER-MAP.md)
-- [Decision record](docs/CHRONICLE.md)
-- [Current handoff](PASSDOWN.md)
+- Built with Snowflake Cortex Code (CoCo CLI): the persisted run `cortex-final-20260802-a` was created through Cortex Code, and the `bidpilot` skill is installed and verified on a real Cortex Code CLI. See [snowflake/COCO_RUNBOOK.md](snowflake/COCO_RUNBOOK.md).
 - [MIT License](LICENSE)
 
 ## 6 Change history
